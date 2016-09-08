@@ -1,9 +1,9 @@
 {
-    "name": "florianv/swap",
+    "name": "florianv/exchanger",
     "type": "library",
-    "description": "Exchange rates library for PHP",
+    "description": "Currency exchange rates framework for PHP",
     "keywords": ["currency", "money", "rate", "conversion", "exchange rates"],
-    "homepage": "https://github.com/florianv/swap",
+    "homepage": "https://github.com/florianv/exchanger",
     "license": "MIT",
     "authors": [
         {
@@ -14,12 +14,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Swap\\": "src/"
+            "Exchanger\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Swap\\": "tests/"
+            "Exchanger\\": "tests/"
         }
     },
     "require": {
@@ -35,15 +35,12 @@
         "php-http/message": "^1.0",
         "psr/cache": "^1.0"
     },
-    "config": {
-        "bin-dir": "bin"
-    },
     "scripts": {
-        "test": "phpunit"
+        "test": "vendor/bin/phpunit"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0-dev"
+            "dev-master": "0.1-dev"
         }
     }
 }

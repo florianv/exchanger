@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of Swap.
+ * This file is part of Exchanger.
  *
  * (c) Florian Voutzinos <florian@voutzinos.com>
  *
@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Swap\Exception;
+namespace Exchanger\Exception;
 
 /**
  * Generic exception thrown by the library.
