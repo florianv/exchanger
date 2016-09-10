@@ -1,16 +1,34 @@
 # Documentation
 
+## Index
+
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Usage](#usage)
+  * [Latest Rates](#latest-rates)
+  * [Historical Rates](#historical-rates)
+* [Chaining Services](#chaining-services)
+* [Caching](#caching)
+  * [Rates Caching](#rates-caching)
+    * [Query Cache Options](#query-cache-options)
+  * [Requests Caching](#requests-caching)
+* [Creating a Service](#creating-a-service)
+* [Supported Services](#supported-services)
+
 ## Installation
 
-`Exchanger` is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io/) which provides the http layer used to send requests to exchange rate services. This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use.
+Exchanger is decoupled from any library sending HTTP requests (like Guzzle), instead it uses an abstraction called [HTTPlug](http://httplug.io/) 
+which provides the http layer used to send requests to exchange rate services. 
+This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use.
 
-Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). Below is an example using Guzzle6:
+Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). 
+Below is an example using [Guzzle 6](http://docs.guzzlephp.org/en/latest/index.html):
 
 ```bash
 composer require florianv/exchanger php-http/message php-http/guzzle6-adapter
 ```
 
-## Usage
+## Configuration
 
 First, you need to create a **service** and add it to `Exchanger`. 
 
@@ -31,11 +49,12 @@ $service = new Fixer($client);
 $exchanger = new Exchanger($service);
 ```
 
-### Querying
+### Usage
 
-#### Latest rates
+#### Latest Rates
 
-`Exchanger` uses a concept of queries. In order to get an exchange rate, you need to build a **query** and `Exchanger` will process it to return the rate. The example below shows how to get the **latest** `EUR/USD` exchange rate.
+`Exchanger` uses a concept of queries. In order to get an exchange rate, you need to build a **query** and `Exchanger` will process it to return the rate. 
+The example below shows how to get the **latest** `EUR/USD` exchange rate.
 
 ```php
 use Exchanger\ExchangeRateQueryBuilder;
@@ -56,7 +75,7 @@ echo $rate->getDate()->format('Y-m-d');
 
 > Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
 
-#### Historical rates
+#### Historical Rates
 
 `Exchanger` allows you to retrieve **historical** exchange rates but not all services support this feature as you can see in this [table](https://github.com/florianv/exchanger/blob/master/README.md#services).
 
@@ -76,7 +95,7 @@ echo $rate->getValue();
 echo $rate->getDate()->format('Y-m-d');
 ```
 
-### Chaining services
+### Chaining Services
 
 It is possible to chain services in order to use fallbacks in case the previous ones don't support the currency or are unavailable.
 Simply create a `Chain` service to wrap the services you want to chain.
@@ -92,6 +111,8 @@ $service = new Chain([
 ```
 
 The rates will be first fetched using the `Fixer` service and will fallback to `Yahoo`.
+
+> You can consult the list of the supported services and their options [here](#supported-services)
 
 ### Caching
 
@@ -109,7 +130,7 @@ $exchanger = new Exchanger($service, new ApcuCachePool(), ['cache_ttl' => 3600])
 
 All rates will now be cached in Apcu during 3600 seconds.
 
-##### Query Cache Control
+##### Query Cache Options
 
 For more control, you can configure the cache per query.
 
@@ -227,4 +248,39 @@ $query = (new ExchangeRateQueryBuilder('EUR/USD'))->build();
 
 // 10
 $rate = $exchanger->getExchangeRate($query)->getValue();
+```
+
+### Supported Services
+
+Here is the complete list of supported services and their possible configurations:
+
+```php
+use Exchanger\Service\Fixer;
+use Exchanger\Service\Chain;
+use Exchanger\Service\CentralBankOfCzechRepublic;
+use Exchanger\Service\CentralBankOfRepublicTurkey;
+use Exchanger\Service\CurrencyLayer;
+use Exchanger\Service\EuropeanCentralBank;
+use Exchanger\Service\Google;
+use Exchanger\Service\NationalBankOfRomania;
+use Exchanger\Service\OpenExchangeRates;
+use Exchanger\Service\PhpArray;
+use Exchanger\Service\WebserviceX;
+use Exchanger\Service\Xignite;
+use Exchanger\Service\Yahoo;
+
+$service = new Chain([
+    new CentralBankOfCzechRepublic(),
+    new CentralBankOfRepublicTurkey(),
+    new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
+    new EuropeanCentralBank(),
+    new Fixer(),
+    new Google(),
+    new NationalBankOfRomania(),
+    new OpenExchangeRates($client, null, ['app_id' => 'app_id', 'enterprise' => false]),
+    new PhpArray(['EUR/USD' => new ExchangeRate('1.5')]),
+    new WebserviceX(),
+    new Xignite($client, null, ['token' => 'token']),
+    new Yahoo()
+]);
 ```
