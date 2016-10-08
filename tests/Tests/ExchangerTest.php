@@ -122,7 +122,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
         $pool
             ->expects($this->once())
             ->method('getItem')
-            ->with(spl_object_hash($exchangeRateQuery))
+            ->with(sha1(serialize($exchangeRateQuery)))
             ->will($this->returnValue($item));
 
         $exchanger = new Exchanger($service, $pool);
@@ -161,7 +161,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
         $pool
             ->expects($this->once())
             ->method('getItem')
-            ->with(spl_object_hash($exchangeRateQuery))
+            ->with(sha1(serialize($exchangeRateQuery)))
             ->will($this->returnValue($item));
 
         $exchanger = new Exchanger($service, $pool);
@@ -211,7 +211,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
         $pool
             ->expects($this->once())
             ->method('getItem')
-            ->with(spl_object_hash($exchangeRateQuery))
+            ->with(sha1(serialize($exchangeRateQuery)))
             ->will($this->returnValue($item));
 
         $pool
