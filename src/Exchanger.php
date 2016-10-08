@@ -54,7 +54,7 @@ class Exchanger implements ExchangeRateProviderContract
             return $this->service->getExchangeRate($exchangeQuery);
         }
 
-        $item = $this->cacheItemPool->getItem(spl_object_hash($exchangeQuery));
+        $item = $this->cacheItemPool->getItem(sha1(serialize($exchangeQuery)));
 
         if (!$exchangeQuery->getOption('cache_refresh') && $item->isHit()) {
             return $item->get();
