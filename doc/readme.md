@@ -140,9 +140,9 @@ $query = (new ExchangeRateQueryBuilder('JPY/GBP'))
     ->addOption('cache_ttl', 60)
     ->build();
     
-// Force refreshing the rate from the service for this query
+// Disable caching for this query
 $query = (new ExchangeRateQueryBuilder('JPY/GBP'))
-    ->addOption('cache_refresh', true)
+    ->addOption('cache', false)
     ->build();
 ```    
 
