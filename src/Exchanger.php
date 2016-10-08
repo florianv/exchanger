@@ -50,13 +50,13 @@ class Exchanger implements ExchangeRateProviderContract
             throw new UnsupportedExchangeQueryException($exchangeQuery, $this->service);
         }
 
-        if (null === $this->cacheItemPool) {
+        if (null === $this->cacheItemPool || false === $exchangeQuery->getOption('cache')) {
             return $this->service->getExchangeRate($exchangeQuery);
         }
 
         $item = $this->cacheItemPool->getItem(sha1(serialize($exchangeQuery)));
 
-        if (!$exchangeQuery->getOption('cache_refresh') && $item->isHit()) {
+        if ($item->isHit()) {
             return $item->get();
         }
 

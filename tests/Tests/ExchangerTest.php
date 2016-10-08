@@ -227,9 +227,9 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_does_not_use_cache_if_refresh()
+    public function it_does_not_use_cache_if_cache_false()
     {
-        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_refresh' => true]);
+        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache' => false]);
 
         $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
 
@@ -251,12 +251,12 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
         $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
 
         $pool
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('getItem')
             ->will($this->returnValue($item));
 
         $pool
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('save')
             ->with($item);
 
