@@ -52,7 +52,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/TRY')));
 
         $this->assertSame('3.2083', $rate->getValue());
         $this->assertEquals(new \DateTime('2016-03-15'), $rate->getDate());
