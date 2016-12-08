@@ -29,14 +29,14 @@ abstract class Service implements ExchangeRateService
      *
      * @var HttpClient
      */
-    private $httpClient;
+    protected $httpClient;
 
     /**
      * The request factory.
      *
      * @var RequestFactory
      */
-    private $requestFactory;
+    protected $requestFactory;
 
     /**
      * The options.
@@ -77,9 +77,9 @@ abstract class Service implements ExchangeRateService
      *
      * @return string
      */
-    protected function request($url)
+    protected function request($url, array $headers = [])
     {
-        $request = $this->requestFactory->createRequest('GET', $url);
+        $request = $this->requestFactory->createRequest('GET', $url, $headers);
 
         return $this->httpClient->sendRequest($request)->getBody()->__toString();
     }
