@@ -34,7 +34,7 @@ class RussianCentralBank extends HistoricalService
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
-        $date = \DateTime::createFromFormat('d.m.Y', (string) $element['Date']);
+        $date = \DateTime::createFromFormat('!d.m.Y', (string) $element['Date']);
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
 
         return new ExchangeRate($rate, $date);
@@ -46,7 +46,7 @@ class RussianCentralBank extends HistoricalService
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
     {
         $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
-        $formattedDate = $exchangeQuery->getDate()->format('d/m/Y');
+        $formattedDate = $exchangeQuery->getDate()->format('d.m.Y');
 
         $content = $this->request(self::URL . '?' . http_build_query(['date_req' => $formattedDate]));
         $element = StringUtil::xmlToElement($content);
