@@ -43,5 +43,9 @@
         "branch-alias": {
             "dev-master": "0.2-dev"
         }
+    },
+    "suggest": {
+        "php-http/message": "Required to use Guzzle for sending HTTP requests",
+        "php-http/guzzle6-adapter": "Required to use Guzzle for sending HTTP requests"
     }
 }
