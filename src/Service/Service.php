@@ -74,12 +74,13 @@ abstract class Service implements ExchangeRateService
      * Fetches the content of the given url.
      *
      * @param string $url
+     * @param array $headers
      *
      * @return string
      */
-    protected function request($url)
+    protected function request($url, array $headers = [])
     {
-        $request = $this->requestFactory->createRequest('GET', $url);
+        $request = $this->requestFactory->createRequest('GET', $url, $headers);
 
         return $this->httpClient->sendRequest($request)->getBody()->__toString();
     }
