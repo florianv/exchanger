@@ -41,6 +41,6 @@ class WebserviceXTest extends ServiceTestCase
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
         $this->assertEquals('1.3608', $rate->getValue());
-        $this->assertEquals(new \DateTime(), $rate->getDate());
+        $this->assertEquals((new \DateTime())->format('Y-m-d'), $rate->getDate()->format('Y-m-d'));
     }
 }
