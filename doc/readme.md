@@ -268,6 +268,7 @@ use Exchanger\Service\PhpArray;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\Yahoo;
+use Exchanger\Service\RussianCentralBank;
 
 $service = new Chain([
     new CentralBankOfCzechRepublic(),
@@ -282,5 +283,6 @@ $service = new Chain([
     new WebserviceX(),
     new Xignite($client, null, ['token' => 'token']),
     new Yahoo()
+    new RussianCentralBank()
 ]);
 ```
