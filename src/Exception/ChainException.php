@@ -27,6 +27,22 @@ class ChainException extends Exception
      */
     public function __construct(array $exceptions)
     {
+        $messages = array_map(function(\Exception $exception) {
+            return sprintf(
+                '%s: %s',
+                get_class($exception),
+                $exception->getMessage()
+            );
+        }, $exceptions);
+
+        parent::__construct(
+            sprintf(
+                "The chain resulted in %d exception(s):\r\n%s",
+                count($exceptions),
+                implode("\r\n", $messages)
+            )
+        );
+
         $this->exceptions = $exceptions;
     }
 
