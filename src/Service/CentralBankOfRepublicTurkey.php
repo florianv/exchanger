@@ -40,7 +40,7 @@ class CentralBankOfRepublicTurkey extends Service
         $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
         $elements = $element->xpath('//Currency[@CurrencyCode="'.$currencyPair->getBaseCurrency().'"]/ForexSelling');
 
-        if (!empty($elements)) {
+        if (!empty($elements) || !$date) {
             return new ExchangeRate((string) $elements[0], $date);
         }
 

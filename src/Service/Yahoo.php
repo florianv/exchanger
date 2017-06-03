@@ -53,7 +53,10 @@ class Yahoo extends Service
         }
 
         $dateString = $data['Date'].' '.$data['Time'];
-        $date = \DateTime::createFromFormat('m/d/Y H:ia', $dateString);
+
+        if (!$date = \DateTime::createFromFormat('m/d/Y H:ia', $dateString)) {
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
+        }
 
         return new ExchangeRate($data['Rate'], $date);
     }

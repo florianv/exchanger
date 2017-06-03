@@ -127,5 +127,7 @@ class CurrencyLayer extends HistoricalService
         if ($data['source'] === $currencyPair->getBaseCurrency() && isset($data['quotes'][$hash])) {
             return new ExchangeRate((string) $data['quotes'][$hash], $date);
         }
+
+        return null;
     }
 }

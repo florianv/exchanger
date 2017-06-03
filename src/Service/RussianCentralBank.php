@@ -27,12 +27,12 @@ class RussianCentralBank extends HistoricalService
         $element = StringUtil::xmlToElement($content);
 
         $elements = $element->xpath('./Valute[CharCode="'.$baseCurrency.'"]');
+        $date = \DateTime::createFromFormat('!d.m.Y', (string) $element['Date']);
 
-        if (empty($elements)) {
+        if (empty($elements) || !$date) {
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
-        $date = \DateTime::createFromFormat('!d.m.Y', (string) $element['Date']);
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
 
         return new ExchangeRate($rate, $date);

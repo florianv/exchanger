@@ -14,6 +14,8 @@ namespace Exchanger\Service;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 
@@ -55,16 +57,17 @@ class Xignite extends HistoricalService
         $json = StringUtil::jsonToArray($content);
         $data = $json[0];
 
-        if ('Success' === $data['Outcome']) {
-            $dateString = $data['Date'].' '.$data['Time'];
-
-            return new ExchangeRate(
-                (string) $data['Bid'],
-                \DateTime::createFromFormat('m/d/Y H:i:s A', $dateString, new \DateTimeZone('UTC'))
-            );
+        if ('Success' !== $data['Outcome']) {
+            throw new Exception($data['Message']);
         }
 
-        throw new Exception($data['Message']);
+        $dateString = $data['Date'].' '.$data['Time'];
+
+        if (!$date = \DateTime::createFromFormat('m/d/Y H:i:s A', $dateString, new \DateTimeZone('UTC'))) {
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
+        }
+
+        return new ExchangeRate((string) $data['Bid'], $date);
     }
 
     /**
@@ -73,12 +76,13 @@ class Xignite extends HistoricalService
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
+        $queryDate = $exchangeQuery->getDate();
         $symbol = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
 
         $url = sprintf(
             self::HISTORICAL_URL,
             $symbol,
-            $exchangeQuery->getDate()->format('m/d/Y'),
+            $queryDate->format('m/d/Y'),
             $this->options['token']
         );
 
@@ -87,14 +91,15 @@ class Xignite extends HistoricalService
         $json = StringUtil::jsonToArray($content);
         $data = $json[0];
 
-        if ('Success' === $data['Outcome']) {
-            return new ExchangeRate(
-                (string) $data['Average'],
-                \DateTime::createFromFormat('m/d/Y', $data['StartDate'], new \DateTimeZone('UTC'))
-            );
+        if ('Success' !== $data['Outcome']) {
+            throw new Exception($data['Message']);
         }
 
-        throw new Exception($data['Message']);
+        if (!$date = \DateTime::createFromFormat('m/d/Y', $data['StartDate'], new \DateTimeZone('UTC'))) {
+            throw new UnsupportedDateException($queryDate, $this);
+        }
+
+        return new ExchangeRate((string) $data['Average'], $date);
     }
 
     /**

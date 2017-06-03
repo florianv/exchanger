@@ -89,5 +89,7 @@ class Fixer extends HistoricalService
 
             return new ExchangeRate($rate, $date);
         }
+
+        return null;
     }
 }

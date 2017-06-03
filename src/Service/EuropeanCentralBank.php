@@ -40,12 +40,11 @@ class EuropeanCentralBank extends HistoricalService
 
         $quoteCurrency = $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
         $elements = $element->xpath('//xmlns:Cube[@currency="'.$quoteCurrency.'"]/@rate');
+        $date = new \DateTime((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
 
-        if (empty($elements)) {
+        if (empty($elements) || !$date) {
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
-
-        $date = new \DateTime((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
 
         return new ExchangeRate((string) $elements[0]['rate'], $date);
     }
