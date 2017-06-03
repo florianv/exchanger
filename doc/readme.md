@@ -279,7 +279,20 @@ $service = new Chain([
     new Google(),
     new NationalBankOfRomania(),
     new OpenExchangeRates($client, null, ['app_id' => 'app_id', 'enterprise' => false]),
-    new PhpArray(['EUR/USD' => new ExchangeRate('1.5')]),
+    new PhpArray(
+        [
+            'EUR/USD' => new ExchangeRate('1.1'),
+            'EUR/GBP' => 1.5
+        ],
+        [
+            '2017-01-01' => [
+                'EUR/USD' => new ExchangeRate('1.5')
+            ],
+            '2017-01-03' => [
+                'EUR/GBP' => 1.3
+            ],
+        ]
+    ),
     new WebserviceX(),
     new Xignite($client, null, ['token' => 'token']),
     new Yahoo()
