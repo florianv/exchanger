@@ -74,7 +74,7 @@ abstract class Service implements ExchangeRateService
      * Fetches the content of the given url.
      *
      * @param string $url
-     * @param array $headers
+     * @param array  $headers
      *
      * @return string
      */

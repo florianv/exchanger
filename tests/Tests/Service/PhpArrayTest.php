@@ -46,8 +46,8 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
         $service = new PhpArray([], [
             $now->format('Y-m-d') => [
                 'EUR/USD' => 1,
-                'EUR/GBP' => new ExchangeRate('2.0')
-            ]
+                'EUR/GBP' => new ExchangeRate('2.0'),
+            ],
         ]);
 
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $now)));
@@ -112,8 +112,8 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
 
         $arrayProvider = new PhpArray([], [
             $now->format('Y-m-d') => [
-                'EUR/USD' => []
-            ]
+                'EUR/USD' => [],
+            ],
         ]);
 
         $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $now));
@@ -129,7 +129,7 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
         $arrayProvider = new PhpArray([], [
             $now->format('Y-m-d') => [
                 'EUR/USD' => $rate = new ExchangeRate('1.50'),
-            ]
+            ],
         ]);
 
         $this->assertSame($rate, $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $now)));
@@ -147,7 +147,7 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
                 'EUR/USD' => 1.50,
                 'USD/GBP' => '1.25',
                 'JPY/GBP' => 1,
-            ]
+            ],
         ]);
 
         $eurUsd = $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $now));
