@@ -21,6 +21,7 @@ Here is the list of the currently implemented services.
 
 | Service | Base Currency | Quote Currency | Historical |
 |---------------------------------------------------------------------------|----------------------|----------------|----------------|
+| [1Forge](http://1forge.com) | * | * | No |
 | [Fixer](http://fixer.io) | * | * | Yes |
 | [European Central Bank](http://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
 | [Google](http://www.google.com/finance) | * | * | No |

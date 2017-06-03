@@ -255,6 +255,7 @@ $rate = $exchanger->getExchangeRate($query)->getValue();
 Here is the complete list of supported services and their possible configurations:
 
 ```php
+use Exchanger\Service\OneForge;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\Chain;
 use Exchanger\Service\CentralBankOfCzechRepublic;
@@ -271,6 +272,7 @@ use Exchanger\Service\Yahoo;
 use Exchanger\Service\RussianCentralBank;
 
 $service = new Chain([
+    new OneForge(),
     new CentralBankOfCzechRepublic(),
     new CentralBankOfRepublicTurkey(),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
