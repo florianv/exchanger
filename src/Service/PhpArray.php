@@ -78,7 +78,7 @@ final class PhpArray implements ExchangeRateService
      *
      * @throws InternalException
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    private function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -92,7 +92,7 @@ final class PhpArray implements ExchangeRateService
      *
      * @return ExchangeRate|null
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    private function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
     {
         $date = $exchangeQuery->getDate();
         $currencyPair = $exchangeQuery->getCurrencyPair();
