@@ -18,7 +18,7 @@ use Http\Message\RequestFactory;
 use Exchanger\Contract\ExchangeRateService;
 
 /**
- * Base class for services.
+ * Base class for http based services.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
