@@ -29,14 +29,14 @@ abstract class Service implements ExchangeRateService
      *
      * @var HttpClient
      */
-    private $httpClient;
+    protected $httpClient;
 
     /**
      * The request factory.
      *
      * @var RequestFactory
      */
-    private $requestFactory;
+    protected $requestFactory;
 
     /**
      * The options.
