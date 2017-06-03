@@ -30,10 +30,10 @@ class ChainExceptionTest extends \PHPUnit_Framework_TestCase
         $this->exception1 = new InternalException('Something bad happened.');
         $this->exception2 = new \Exception('General exception.');
 
-        $this->chainException = new ChainException(array(
+        $this->chainException = new ChainException([
             $this->exception1,
             $this->exception2,
-        ));
+        ]);
     }
 
     /**

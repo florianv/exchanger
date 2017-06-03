@@ -17,7 +17,7 @@ use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 
 /**
- * Base class for historical services.
+ * Base class for historical http based services.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */

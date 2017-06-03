@@ -18,7 +18,7 @@ use Http\Message\RequestFactory;
 use Exchanger\Contract\ExchangeRateService;
 
 /**
- * Base class for services.
+ * Base class for http based services.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -74,7 +74,7 @@ abstract class Service implements ExchangeRateService
      * Fetches the content of the given url.
      *
      * @param string $url
-     * @param array $headers
+     * @param array  $headers
      *
      * @return string
      */

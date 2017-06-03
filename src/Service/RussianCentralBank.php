@@ -7,12 +7,10 @@ use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRate;
-use Exchanger\Service\HistoricalService;
 use Exchanger\StringUtil;
 
 /**
  * Russian Central Bank Service.
- *
  */
 class RussianCentralBank extends HistoricalService
 {
@@ -48,7 +46,7 @@ class RussianCentralBank extends HistoricalService
         $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
         $formattedDate = $exchangeQuery->getDate()->format('d.m.Y');
 
-        $content = $this->request(self::URL . '?' . http_build_query(['date_req' => $formattedDate]));
+        $content = $this->request(self::URL.'?'.http_build_query(['date_req' => $formattedDate]));
         $element = StringUtil::xmlToElement($content);
 
         $elements = $element->xpath('./Valute[CharCode="'.$baseCurrency.'"]');
