@@ -126,5 +126,7 @@ class OpenExchangeRates extends HistoricalService
         ) {
             return new ExchangeRate((string) $data['rates'][$currencyPair->getQuoteCurrency()], $date);
         }
+
+        return null;
     }
 }

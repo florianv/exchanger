@@ -36,7 +36,10 @@ class CentralBankOfCzechRepublic extends Service
 
         $lines = explode("\n", $content);
 
-        $date = \DateTime::createFromFormat(self::DATE_FORMAT, $this->parseDate($lines[0]));
+        if (!$date = \DateTime::createFromFormat(self::DATE_FORMAT, $this->parseDate($lines[0]))) {
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
+        }
+
         $date->setTime(0, 0, 0);
 
         foreach (array_slice($lines, 2) as $currency) {

@@ -41,7 +41,7 @@ class NationalBankOfRomania extends Service
         $date = new \DateTime((string) $element->xpath('//xmlns:PublishingDate')[0]);
         $elements = $element->xpath('//xmlns:Rate[@currency="'.$currencyPair->getBaseCurrency().'"]');
 
-        if (empty($elements)) {
+        if (empty($elements) || !$date) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
