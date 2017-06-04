@@ -1,57 +1,57 @@
 <?php
 
-/*
- * This file is part of Exchanger.
- *
- * (c) Florian Voutzinos <florian@voutzinos.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+    /*
+     * This file is part of Exchanger.
+     *
+     * (c) Florian Voutzinos <florian@voutzinos.com>
+     *
+     * For the full copyright and license information, please view the LICENSE
+     * file that was distributed with this source code.
+     */
 
-namespace Exchanger\Service;
-use Exchanger\Exception\UnsupportedCurrencyPairException;
-use Exchanger\ExchangeRate;
-use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\Contract\HistoricalExchangeRateQuery;
+    namespace Exchanger\Service;
 
-/**
- * OneForge (1forge) Service.
- *
- * @author Jacob Davis <contact@1forge.com>
- */
-
-class OneForge extends Service
-{
-    const URL = 'http://1forge.com/forex-quotes/quotes?pairs=%s%s';
+    use Exchanger\Exception\UnsupportedCurrencyPairException;
+    use Exchanger\ExchangeRate;
+    use Exchanger\Contract\ExchangeRateQuery;
+    use Exchanger\Contract\HistoricalExchangeRateQuery;
 
     /**
-     * {@inheritdoc}
+     * OneForge (1forge) Service.
+     *
+     * @author Jacob Davis <contact@1forge.com>
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    class OneForge extends Service
     {
-        $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
-        $quoteCurrency = $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
+        const URL = 'http://1forge.com/forex-data-api/1.0.1/quotes?pairs=%s%s';
 
-        $url = sprintf(self::URL, $baseCurrency, $quoteCurrency);
-        $content = $this->request($url);
-        $content = json_decode($content);
-
-        if (count($content) <= 0)
+        /**
+         * {@inheritdoc}
+         */
+        public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
         {
-            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
+            $baseCurrency  = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
+            $quoteCurrency = $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
+
+            $url     = sprintf(self::URL, $baseCurrency, $quoteCurrency);
+            $content = $this->request($url);
+            $content = json_decode($content);
+
+            if (count($content) <= 0)
+            {
+                throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
+            }
+
+            $quote = $content[0];
+
+            return new ExchangeRate($quote->price, new \DateTime());
         }
 
-        $quote = $content[0];
-
-        return new ExchangeRate($quote->bid, new \DateTime());
+        /**
+         * {@inheritdoc}
+         */
+        public function supportQuery(ExchangeRateQuery $exchangeQuery)
+        {
+            return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
+        }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
-    {
-        return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
-    }
-}
