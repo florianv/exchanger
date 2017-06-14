@@ -11,11 +11,13 @@
 
 namespace Exchanger;
 
-use Psr\Cache\CacheItemPoolInterface;
 use Exchanger\Contract\ExchangeRateProvider as ExchangeRateProviderContract;
 use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\ExchangeRateService as ExchangeRateServiceContract;
+use Exchanger\Exception\CacheException;
+use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedExchangeQueryException;
+use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * Default implementation of the exchange rate provider with PSR-6 caching support.
@@ -54,7 +56,18 @@ class Exchanger implements ExchangeRateProviderContract
             return $this->service->getExchangeRate($exchangeQuery);
         }
 
-        $item = $this->cacheItemPool->getItem(sha1(serialize($exchangeQuery)));
+        $cacheKeyPrefix = isset($this->options['cache_key_prefix']) ? $this->options['cache_key_prefix'] : '';
+        $cacheKeyPrefix = $exchangeQuery->getOption('cache_key_prefix', $cacheKeyPrefix);
+
+        // Replace characters reserved in PSR-6
+        $cacheKeyPrefix = preg_replace('#[\{\}\(\)/\\\@\:]#', '-', $cacheKeyPrefix);
+
+        $cacheKey = $cacheKeyPrefix.sha1(serialize($exchangeQuery));
+        if (strlen($cacheKey) > 64) {
+            throw new CacheException("Cache key length exceeds 64 characters ('$cacheKey'). This violates PSR-6 standard");
+        }
+
+        $item = $this->cacheItemPool->getItem($cacheKey);
 
         if ($item->isHit()) {
             return $item->get();

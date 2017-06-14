@@ -320,6 +320,26 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Exchanger\Exception\CacheException
+     */
+    public function it_throws_an_exception_if_cache_key_is_too_long()
+    {
+        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
+
+        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+
+        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+        $service
+            ->expects($this->any())
+            ->method('supportQuery')
+            ->will($this->returnValue(true));
+
+        $exchanger = new Exchanger($service, $pool, ['cache_key_prefix' => 'prefix_longer_then_24_symbols']);
+        $exchanger->getExchangeRate($exchangeRateQuery);
+    }
+
+    /**
+     * @test
      * @expectedException \Exchanger\Exception\UnsupportedExchangeQueryException
      */
     public function it_throws_an_exception_if_service_cant_support_pair()
