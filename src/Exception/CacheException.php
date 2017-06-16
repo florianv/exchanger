@@ -4,7 +4,7 @@
 namespace Exchanger\Exception;
 
 /**
- * Exception thrown by problems with cache.
+ * Exception thrown in case of problems with cache.
  *
  * @author Hennadiy Verkh
  */
