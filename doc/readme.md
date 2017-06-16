@@ -125,24 +125,50 @@ The following example uses the Apcu cache from [php-cache.com](http://php-cache.
 ```php
 use Cache\Adapter\Apcu\ApcuCachePool;
 
-$exchanger = new Exchanger($service, new ApcuCachePool(), ['cache_ttl' => 3600]);
+$exchanger = new Exchanger($service, new ApcuCachePool(), ['cache_ttl' => 3600, 'cache_key_prefix' => 'myapp-']);
 ```
 
-All rates will now be cached in Apcu during 3600 seconds.
+All rates will now be cached in Apcu during 3600 seconds, and cache keys will be prefixed with 'myapp-'
 
 ##### Query Cache Options
 
 For more control, you can configure the cache per query.
+
+###### cache_ttl
+
+Set cache TTL in seconds. Default: `null` - cache entries permanently
 
 ```php
 // Override the global cache_ttl only for this query
 $query = (new ExchangeRateQueryBuilder('JPY/GBP'))
     ->addOption('cache_ttl', 60)
     ->build();
-    
+```
+
+###### cache
+
+Disable/Enable caching. Default: `true`
+
+```php
 // Disable caching for this query
 $query = (new ExchangeRateQueryBuilder('JPY/GBP'))
     ->addOption('cache', false)
+    ->build();
+```
+
+###### cache_key_prefix
+
+Set the cache key prefix. Default: empty string
+
+There is a limitation of 64 characters for the key length in PSR-6,
+ because of this, key prefix must not exceed 24 characters, as sha1() hash takes 40 symbols.
+
+PSR-6 do not allows characters `{}()/\@:` in key, these characters are replaced with `-`
+
+```php
+// Override cache key prefix for this query
+$query = (new ExchangeRateQueryBuilder('JPY/GBP'))
+    ->addOption('cache_key_prefix', 'currencies-special-')
     ->build();
 ```    
 

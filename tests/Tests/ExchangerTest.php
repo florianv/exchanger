@@ -320,6 +320,53 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function it_supports_overrding_cache_prefix_per_query()
+    {
+        $expectedKeyPrefix = 'expected-prefix';
+        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_key_prefix' => $expectedKeyPrefix]);
+
+        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+        $item = $this->getMock('Psr\Cache\CacheItemInterface');
+        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+
+        $service
+            ->expects($this->once())
+            ->method('supportQuery')
+            ->will($this->returnValue(true));
+
+        $pool
+            ->expects($this->once())
+            ->method('getItem')
+            ->with($this->stringStartsWith($expectedKeyPrefix))
+            ->will($this->returnValue($item));
+
+        $exchanger = new Exchanger($service, $pool);
+        $exchanger->getExchangeRate($exchangeRateQuery);
+    }
+
+    /**
+     * @test
+     * @expectedException \Exchanger\Exception\CacheException
+     */
+    public function it_throws_an_exception_if_cache_key_is_too_long()
+    {
+        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
+
+        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+
+        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+        $service
+            ->expects($this->any())
+            ->method('supportQuery')
+            ->will($this->returnValue(true));
+
+        $exchanger = new Exchanger($service, $pool, ['cache_key_prefix' => 'prefix_longer_then_24_symbols']);
+        $exchanger->getExchangeRate($exchangeRateQuery);
+    }
+
+    /**
+     * @test
      * @expectedException \Exchanger\Exception\UnsupportedExchangeQueryException
      */
     public function it_throws_an_exception_if_service_cant_support_pair()
