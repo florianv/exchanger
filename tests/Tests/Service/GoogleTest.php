@@ -35,7 +35,7 @@ class GoogleTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_rate_not_supported()
     {
-        $uri = 'http://www.google.com/finance/converter?a=1&from=EUR&to=XXL';
+        $uri = 'http://finance.google.com/finance/converter?a=1&from=EUR&to=XXL';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/unsupported.html');
 
         $service = new Google($this->getHttpAdapterMock($uri, $content));
@@ -47,7 +47,7 @@ class GoogleTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
-        $url = 'http://www.google.com/finance/converter?a=1&from=EUR&to=USD';
+        $url = 'http://finance.google.com/finance/converter?a=1&from=EUR&to=USD';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/success.html');
 
         $service = new Google($this->getHttpAdapterMock($url, $content));
@@ -62,7 +62,7 @@ class GoogleTest extends ServiceTestCase
      */
     public function it_has_no_php_errors()
     {
-        $url = 'http://www.google.com/finance/converter?a=1&from=EUR&to=USD';
+        $url = 'http://finance.google.com/finance/converter?a=1&from=EUR&to=USD';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/success.html');
 
         $service = new Google($this->getHttpAdapterMock($url, $content));
