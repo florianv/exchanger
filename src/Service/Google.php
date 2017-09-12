@@ -23,7 +23,7 @@ use Exchanger\ExchangeRate;
  */
 class Google extends Service
 {
-    const URL = 'http://www.google.com/finance/converter?a=1&from=%s&to=%s';
+    const URL = 'http://finance.google.com/finance/converter?a=1&from=%s&to=%s';
 
     /**
      * {@inheritdoc}
