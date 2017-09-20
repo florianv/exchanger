@@ -45,7 +45,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
      */
     public function it_throws_an_exception_with_error_response()
     {
-        $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret';
+        $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&show_alternative=1';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/error.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret']);
@@ -57,7 +57,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
      */
     public function it_fetches_a_rate_normal_mode()
     {
-        $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret';
+        $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&show_alternative=1';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/success.json');
@@ -74,7 +74,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
      */
     public function it_fetches_a_rate_enterprise_mode()
     {
-        $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&base=USD&symbols=EUR';
+        $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&base=USD&symbols=EUR&show_alternative=1';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/success.json');
@@ -91,7 +91,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate()
     {
-        $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret';
+        $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&show_alternative=1';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
@@ -111,7 +111,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate_enterprise()
     {
-        $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&base=USD&symbols=EUR';
+        $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&base=USD&symbols=EUR&show_alternative=1';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret', 'enterprise' => true]);
@@ -133,7 +133,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
-        $url = 'https://openexchangerates.org/api/historical/1900-08-23.json?app_id=secret';
+        $url = 'https://openexchangerates.org/api/historical/1900-08-23.json?app_id=secret&show_alternative=1';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_error.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
@@ -150,7 +150,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
-        $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret';
+        $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&show_alternative=1';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
