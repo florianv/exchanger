@@ -46,11 +46,12 @@ final class CurrencyPair implements CurrencyPairContract
      */
     public static function createFromString($string)
     {
-        $parts = explode('/', $string);
-
-        if (!isset($parts[0]) || 3 !== strlen($parts[0]) || !isset($parts[1]) || 3 !== strlen($parts[1])) {
+        $matches = [];
+        if (!preg_match('#^([A-Z0-9]{3,})\/([A-Z0-9]{3,})$#', $string, $matches)) {
             throw new \InvalidArgumentException('The currency pair must be in the form "EUR/USD".');
         }
+
+        $parts = explode('/', $string);
 
         return new self($parts[0], $parts[1]);
     }

@@ -31,6 +31,8 @@ class CurrencyPairTest extends \PHPUnit_Framework_TestCase
         return [
             ['EUR/USD', 'EUR', 'USD'],
             ['GBP/GBP', 'GBP', 'GBP'],
+            ['007/GBP', '007', 'GBP'],
+            ['1337/GBP', '1337', 'GBP'],
         ];
     }
 
@@ -47,7 +49,7 @@ class CurrencyPairTest extends \PHPUnit_Framework_TestCase
     public function invalidStringProvider()
     {
         return [
-            ['EUR'], ['EUR/'], ['EU/US'], ['EUR/US'], ['US/EUR'],
+            ['EUR'], ['EUR/'], ['EU/US'], ['EUR/US'], ['US/EUR'], ['00'], ['00/'], ['007/00'],
         ];
     }
 
