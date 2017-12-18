@@ -102,15 +102,15 @@ Simply create a `Chain` service to wrap the services you want to chain.
 
 ```php
 use Exchanger\Service\Chain;
-use Exchanger\Service\Yahoo;
+use Exchanger\Service\Google;
 
 $service = new Chain([
     new Fixer($client),
-    new Yahoo($client)
+    new Google($client)
 ]);
 ```
 
-The rates will be first fetched using the `Fixer` service and will fallback to `Yahoo`.
+The rates will be first fetched using the `Fixer` service and will fallback to `Google`.
 
 > You can consult the list of the supported services and their options [here](#supported-services)
 
@@ -293,7 +293,6 @@ use Exchanger\Service\OpenExchangeRates;
 use Exchanger\Service\PhpArray;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
-use Exchanger\Service\Yahoo;
 use Exchanger\Service\RussianCentralBank;
 
 $service = new Chain([
@@ -321,7 +320,6 @@ $service = new Chain([
     ),
     new WebserviceX(),
     new Xignite($client, null, ['token' => 'token']),
-    new Yahoo()
     new RussianCentralBank()
 ]);
 ```
