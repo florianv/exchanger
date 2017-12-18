@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Exchanger\Exception;
 
 /**
@@ -10,5 +9,4 @@ namespace Exchanger\Exception;
  */
 class CacheException extends Exception
 {
-
 }

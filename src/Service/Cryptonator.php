@@ -60,13 +60,14 @@ class Cryptonator extends Service
     }
 
     /**
-     * Array of codes supported according to
+     * Array of codes supported according to.
+     *
      * @url https://www.cryptonator.com/api/currencies
      *
      * @return array
      */
     private function getSupportedCodes()
     {
-        return require __DIR__ . '/resources/cryptonator-codes.php';
+        return require __DIR__.'/resources/cryptonator-codes.php';
     }
 }

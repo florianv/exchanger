@@ -22,6 +22,8 @@ use Exchanger\StringUtil;
  * Yahoo Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
+ *
+ * @deprecated The service was discontinued by Yahoo without notice
  */
 class Yahoo extends Service
 {
