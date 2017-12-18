@@ -15,7 +15,6 @@ use Exchanger\Contract\ExchangeRateProvider as ExchangeRateProviderContract;
 use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\ExchangeRateService as ExchangeRateServiceContract;
 use Exchanger\Exception\CacheException;
-use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedExchangeQueryException;
 use Psr\Cache\CacheItemPoolInterface;
 

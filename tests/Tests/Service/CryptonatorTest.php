@@ -19,8 +19,8 @@ use Exchanger\Service\Cryptonator;
 class CryptonatorTest extends ServiceTestCase
 {
     /**
-    * @test
-    */
+     * @test
+     */
     public function it_does_not_support_all_codes()
     {
         $service = new Cryptonator($this->getMock('Http\Client\HttpClient'));
@@ -65,19 +65,5 @@ class CryptonatorTest extends ServiceTestCase
 
         $this->assertSame('4194.86340277', $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
-    }
-
-    /**
-     * @test
-     */
-    public function it_has_no_php_errors()
-    {
-        $url = 'https://api.cryptonator.com/api/ticker/btc-usd';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Cryptonator/success.json');
-
-        $service = new Cryptonator($this->getHttpAdapterMock($url, $content));
-        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD')));
-
-        $this->assertNull(error_get_last());
     }
 }
