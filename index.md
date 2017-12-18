@@ -15,7 +15,6 @@ The documentation can be found [here](https://github.com/florianv/exchanger/blob
 
 Here is the list of the currently implemented services.
 
-
 | Service | Base Currency | Quote Currency | Historical |
 |---------------------------------------------------------------------------|----------------------|----------------|----------------|
 | [Fixer](http://fixer.io) | * | * | Yes |
