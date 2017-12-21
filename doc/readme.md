@@ -299,6 +299,7 @@ $service = new Chain([
     new CentralBankOfCzechRepublic(),
     new CentralBankOfRepublicTurkey(),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
+    new Forge($client, null, ['api_key' => 'api_key']),
     new EuropeanCentralBank(),
     new Fixer(),
     new Google(),
