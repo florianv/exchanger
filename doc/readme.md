@@ -286,6 +286,8 @@ use Exchanger\Service\Chain;
 use Exchanger\Service\CentralBankOfCzechRepublic;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\CurrencyLayer;
+use Exchanger\Service\Forge;
+use Exchanger\Service\CurrencyDataFeed;
 use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\Google;
 use Exchanger\Service\NationalBankOfRomania;
@@ -300,6 +302,7 @@ $service = new Chain([
     new CentralBankOfRepublicTurkey(),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new Forge($client, null, ['api_key' => 'api_key']),
+    new CurrencyDataFeed($client, null, ['api_key' => 'api_key']),
     new EuropeanCentralBank(),
     new Fixer(),
     new Google(),

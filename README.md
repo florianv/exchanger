@@ -34,6 +34,7 @@ Here is the list of the currently implemented services.
 | [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
 | [Cryptonator](https://www.cryptonator.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies)  | No |
 | [1Forge](https://1forge.com) | * | * | No |
+| [CurrencyDataFeed](https://currencydatafeed.com) | * (free | paid) | * (free | paid) | No implemented |
 | Array | * | * | Yes |
 
 ## Credits

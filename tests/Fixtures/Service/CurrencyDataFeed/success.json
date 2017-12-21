@@ -1,0 +1,9 @@
+{
+    "status": true,
+    "currency": [{
+            "currency": "EUR\/USD",
+            "value": "1.18765",
+            "date": "2017-12-21 21:38:22",
+            "type": "original"
+        }]
+}
