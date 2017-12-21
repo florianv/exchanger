@@ -21,7 +21,7 @@ class ForgeTest extends ServiceTestCase {
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
+     * @expectedException \Exchanger\Exception\Exception
      */
     public function it_throws_an_exception_when_rate_not_supported() {
         $url = 'https://forex.1forge.com/latest/quotes?pairs=EURZZZ&api_key=secret';
