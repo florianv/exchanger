@@ -4,7 +4,9 @@ namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\ExchangeRate;
+use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\StringUtil;
+use Exchanger\Exception\UnsupportedCurrencyPairException;
 
 /**
  * Forge Service
@@ -26,7 +28,7 @@ class Forge extends Service {
      * {@inheritdoc}
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery) {
-        return true;
+        return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
 
     /**
@@ -40,9 +42,8 @@ class Forge extends Service {
 
         $data = StringUtil::jsonToArray($content);
 
-        $date = (new \DateTime())->setTimestamp($data[0]['timestamp']);
-
         if (!empty($data)) {
+            $date = (new \DateTime())->setTimestamp($data[0]['timestamp']);
             return new ExchangeRate($data[0]['price'], $date);
         }
 
