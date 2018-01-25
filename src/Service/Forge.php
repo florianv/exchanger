@@ -9,16 +9,17 @@ use Exchanger\StringUtil;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 
 /**
- * Forge Service
+ * Forge Service.
  */
-class Forge extends Service {
-
+class Forge extends Service
+{
     const URL = 'https://forex.1forge.com/latest/quotes?pairs=%s&api_key=%s';
 
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options) {
+    public function processOptions(array &$options)
+    {
         if (!isset($options['api_key'])) {
             throw new \InvalidArgumentException('The "api_key" option must be provided.');
         }
@@ -27,16 +28,18 @@ class Forge extends Service {
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery) {
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery) {
+    public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery)
+    {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
-        $url = sprintf(self::URL, $currencyPair->getBaseCurrency() . $currencyPair->getQuoteCurrency(), $this->options['api_key']);
+        $url = sprintf(self::URL, $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(), $this->options['api_key']);
 
         $content = $this->request($url);
 
@@ -44,10 +47,10 @@ class Forge extends Service {
 
         if (!empty($data)) {
             $date = (new \DateTime())->setTimestamp($data[0]['timestamp']);
+
             return new ExchangeRate($data[0]['price'], $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
-
 }
