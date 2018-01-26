@@ -21,6 +21,7 @@ use Exchanger\Contract\ExchangeRateService;
 class UnsupportedDateException extends Exception
 {
     private $date;
+
     private $service;
 
     public function __construct(\DateTimeInterface $date, ExchangeRateService $service)

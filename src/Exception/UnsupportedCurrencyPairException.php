@@ -22,6 +22,7 @@ use Exchanger\Contract\ExchangeRateService;
 class UnsupportedCurrencyPairException extends Exception
 {
     private $currencyPair;
+
     private $service;
 
     public function __construct(CurrencyPair $currencyPair, ExchangeRateService $service)

@@ -24,6 +24,7 @@ use Exchanger\ExchangeRate;
 class CentralBankOfCzechRepublic extends Service
 {
     const URL = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
+
     const DATE_FORMAT = 'd.m.Y';
 
     /**

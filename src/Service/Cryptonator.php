@@ -37,6 +37,7 @@ class Cryptonator extends Service
 
         if (!$data['success']) {
             $message = !empty($data['error']) ? $data['error'] : 'Unknown error';
+
             throw new Exception($message);
         }
 
