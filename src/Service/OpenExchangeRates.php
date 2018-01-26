@@ -25,8 +25,11 @@ use Exchanger\StringUtil;
 class OpenExchangeRates extends HistoricalService
 {
     const FREE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&show_alternative=1';
+
     const ENTERPRISE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&base=%s&symbols=%s&show_alternative=1';
+
     const FREE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s&show_alternative=1';
+
     const ENTERPRISE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s&base=%s&symbols=%s&show_alternative=1';
 
     /**

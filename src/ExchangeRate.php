@@ -21,6 +21,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 final class ExchangeRate implements ExchangeRateContract
 {
     private $value;
+
     private $date;
 
     /**

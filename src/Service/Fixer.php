@@ -26,6 +26,7 @@ use Exchanger\StringUtil;
 class Fixer extends HistoricalService
 {
     const LATEST_URL = 'https://api.fixer.io/latest?base=%s';
+
     const HISTORICAL_URL = 'https://api.fixer.io/%s?base=%s';
 
     /**
