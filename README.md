@@ -27,7 +27,7 @@ Here is the list of the currently implemented services.
 | [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
 | [Xignite](https://www.xignite.com) | * | * | Yes |
 | [WebserviceX](http://www.webservicex.net/ws/default.aspx) | * | * | No |
-| [National Bank of Romania](http://www.bnr.ro) | RON | * | No |
+| [National Bank of Romania](http://www.bnr.ro) | RON | * | Yes |
 | [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | No |
 | [Central Bank of the Czech Republic](http://www.cnb.cz) | * | CZK | No |
 | [Russian Central Bank](http://http://www.cbr.ru) | * | RUB | Yes |

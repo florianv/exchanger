@@ -85,4 +85,21 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $this->assertSame('0.014356', $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-02'), $rate->getDate());
     }
+
+    /**
+     * @test
+     */
+    public function it_fetches_a_historical_rate()
+    {
+        $url = 'http://www.bnr.ro/files/xml/years/nbrfxrates2018.xml';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
+
+        $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
+        $rate = $service->getExchangeRate(
+            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/RON'), new \DateTime('2018-02-02'))
+        );
+
+        $this->assertSame('4.6526', $rate->getValue());
+        $this->assertEquals(new \DateTime('2018-02-02'), $rate->getDate());
+    }
 }
