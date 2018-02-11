@@ -1,0 +1,16 @@
+{
+    "status": true,
+    "currency":
+            [{
+                    "currency": "EUR/USD",
+                    "value": "1.0932",
+                    "change": "0.007",
+                    "change_percent": "0.6537",
+                    "ask": "1.0933",
+                    "bid": "1.0931",
+                    "daily_lowest": "1.08558",
+                    "daily_highest": "1.09345",
+                    "date": "2017-05-14 00:01:24",
+                    "type": "original"
+                }]
+}
