@@ -33,7 +33,7 @@ class RussianCentralBank extends HistoricalService
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
-        $rate = str_replace(',', '.', (string) $elements['0']->Value);
+        $rate = str_replace(',', '.', (string) ($elements['0']->Value / $elements['0']->Nominal));
 
         return new ExchangeRate($rate, $date);
     }
@@ -59,7 +59,7 @@ class RussianCentralBank extends HistoricalService
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
-        $rate = str_replace(',', '.', (string) $elements['0']->Value);
+        $rate = str_replace(',', '.', (string) ($elements['0']->Value / $elements['0']->Nominal));
 
         return new ExchangeRate($rate, $exchangeQuery->getDate());
     }
