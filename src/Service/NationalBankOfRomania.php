@@ -99,7 +99,6 @@ class NationalBankOfRomania extends HistoricalService
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
-        return !$exchangeQuery instanceof HistoricalExchangeRateQuery
-        && 'RON' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
+        return 'RON' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
 }
