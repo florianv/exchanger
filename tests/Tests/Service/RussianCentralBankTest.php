@@ -62,6 +62,21 @@ class RussianCentralBankTest extends ServiceTestCase
     /**
      * @test
      */
+    public function it_fetches_a_nominational_rate()
+    {
+        $url = 'http://www.cbr.ru/scripts/XML_daily.asp';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/RussianCentralBank/success.xml');
+
+        $service = new RussianCentralBank($this->getHttpAdapterMock($url, $content));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('AMD/RUB')));
+
+        $this->assertSame('0.131783', $rate->getValue());
+        $this->assertEquals(new \DateTime('2016-12-09'), $rate->getDate());
+    }
+
+    /**
+     * @test
+     */
     public function it_fetches_a_historical_rate()
     {
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=23.08.2016';
