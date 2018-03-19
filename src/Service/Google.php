@@ -23,7 +23,7 @@ use Exchanger\ExchangeRate;
  */
 class Google extends Service
 {
-    const URL = 'https://www.google.es/search?q=1+%s+to+%s';
+    const URL = 'https://www.google.com/search?q=1+%s+to+%s';
 
     /**
      * {@inheritdoc}
@@ -55,6 +55,7 @@ class Google extends Service
         }
 
         $nodeContent = $nodes->item(0)->textContent;
+
         // Beware of "3 417.36111 Colombian pesos", with a non breaking space
         $nodeContent = strtr($nodeContent,["\xc2\xa0" => '']);
         $bid = strstr($nodeContent, ' ', true);

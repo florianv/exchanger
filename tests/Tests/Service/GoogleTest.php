@@ -35,7 +35,7 @@ class GoogleTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_rate_not_supported()
     {
-        $uri = 'https://www.google.es/search?q=1+EUR+to+XXL';
+        $uri = 'https://www.google.com/search?q=1+EUR+to+XXL';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/unsupported.html');
 
         $service = new Google($this->getGoogleHttpAdapterMock($uri, $content));
@@ -47,13 +47,13 @@ class GoogleTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
-        $url = 'https://www.google.es/search?q=1+EUR+to+MXN';
+        $url = 'https://www.google.com/search?q=1+EUR+to+MXN';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/success.html');
 
         $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/MXN')));
 
-        $this->assertSame('23.1641875', $rate->getValue());
+        $this->assertSame('23.1021173', $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 
@@ -62,13 +62,13 @@ class GoogleTest extends ServiceTestCase
      */
     public function it_fetches_a_colombian_rate()
     {
-        $url = 'https://www.google.es/search?q=1+EUR+to+COP';
+        $url = 'https://www.google.com/search?q=1+EUR+to+COP';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/success_colombian.html');
 
         $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/COP')));
 
-        $this->assertSame('3417.36111', $rate->getValue());
+        $this->assertSame('3424.88889', $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 }
