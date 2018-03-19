@@ -23,7 +23,7 @@ use Exchanger\ExchangeRate;
  */
 class Google extends Service
 {
-    const URL = 'http://finance.google.com/finance/converter?a=1&from=%s&to=%s';
+    const URL = 'https://www.google.es/search?q=1+%s+to+%s';
 
     /**
      * {@inheritdoc}
@@ -32,7 +32,11 @@ class Google extends Service
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
-        $content = $this->request($url);
+
+        $content = $this->request($url, [
+            'Accept' => 'text/html',
+            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0'
+        ]);
 
         $internalErrors = libxml_use_internal_errors(true);
         $disableEntities = libxml_disable_entity_loader(true);
@@ -44,13 +48,15 @@ class Google extends Service
         }
 
         $xpath = new \DOMXPath($document);
-        $nodes = $xpath->query('//span[@class="bld"]');
+        $nodes = $xpath->query('//div[@class="vk_ans vk_bk"]');
 
-        if (0 === $nodes->length) {
+        if (1 !== $nodes->length) {
             throw new Exception('The currency is not supported or Google changed the response format');
         }
 
         $nodeContent = $nodes->item(0)->textContent;
+        // Beware of "3 417.36111 Colombian pesos", with a non breaking space
+        $nodeContent = strtr($nodeContent,["\xc2\xa0" => '']);
         $bid = strstr($nodeContent, ' ', true);
 
         if (!is_numeric($bid)) {
