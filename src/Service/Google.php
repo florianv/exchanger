@@ -24,6 +24,10 @@ use Exchanger\ExchangeRate;
 class Google extends Service
 {
     const URL = 'https://www.google.com/search?q=1+%s+to+%s';
+    const HEADERS = [
+        'Accept'     => 'text/html',
+        'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
+    ];
 
     /**
      * {@inheritdoc}
@@ -33,10 +37,14 @@ class Google extends Service
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
 
-        $content = $this->request($url, [
-            'Accept' => 'text/html',
-            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0'
-        ]);
+        $response = $this->getResponse($url, self::HEADERS);
+        
+        // Google may? redirect to your national domain
+        if ($response->getStatusCode() === 302) {
+            $response = $this->getResponse($response->getHeader('Location')[0], self::HEADERS);
+        }
+
+        $content = $response->getBody()->__toString();
 
         $internalErrors = libxml_use_internal_errors(true);
         $disableEntities = libxml_disable_entity_loader(true);
