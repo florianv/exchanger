@@ -38,7 +38,7 @@ class Google extends Service
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
 
         $response = $this->getResponse($url, self::$headers);
-        
+
         // Google may? redirect to your national domain
         if ($response->getStatusCode() === 302) {
             $response = $this->getResponse($response->getHeader('Location')[0], self::$headers);
@@ -56,7 +56,12 @@ class Google extends Service
         }
 
         $xpath = new \DOMXPath($document);
-        $nodes = $xpath->query('//div[@class="vk_ans vk_bk"]');
+
+        $nodes = $xpath->query('//span[@id="knowledge-currency__tgt-amount"]');
+
+        if (1 !== $nodes->length) {
+            $nodes = $xpath->query('//div[@class="vk_ans vk_bk"]');
+        }
 
         if (1 !== $nodes->length) {
             throw new Exception('The currency is not supported or Google changed the response format');
@@ -65,8 +70,16 @@ class Google extends Service
         $nodeContent = $nodes->item(0)->textContent;
 
         // Beware of "3 417.36111 Colombian pesos", with a non breaking space
-        $nodeContent = strtr($nodeContent,["\xc2\xa0" => '']);
-        $bid = strstr($nodeContent, ' ', true);
+        $bid = strtr($nodeContent, ["\xc2\xa0" => '']);
+
+        if (strpos($bid, ' ') !== false) {
+            $bid = strstr($bid, ' ', true);
+        }
+
+        // Does it have thousands separator?
+        if (strpos($bid, ',') && strpos($bid, '.')) {
+            $bid = str_replace(',', '', $bid);
+        }
 
         if (!is_numeric($bid)) {
             throw new Exception('The currency is not supported or Google changed the response format');

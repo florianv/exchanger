@@ -71,4 +71,19 @@ class GoogleTest extends ServiceTestCase
         $this->assertSame('3424.88889', $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
+
+    /**
+     * @test
+     */
+    public function it_fetches_a_colombian_rate_other()
+    {
+        $url = 'https://www.google.com/search?q=1+EUR+to+COP';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/success_colombian_other.html');
+
+        $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/COP')));
+
+        $this->assertSame('3529.33', $rate->getValue());
+        $this->assertInstanceOf('\DateTime', $rate->getDate());
+    }
 }
