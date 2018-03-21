@@ -51,7 +51,7 @@ class Google extends Service
 
         $document = new \DOMDocument();
 
-        if (false === @$document->loadHTML($content)) {
+        if (false === @$document->loadHTML('<?xml encoding="utf-8" ?>' . $content)) {
             throw new Exception('The page content is not loadable');
         }
 
