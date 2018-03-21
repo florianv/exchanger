@@ -55,6 +55,32 @@ class Google extends Service
         $internalErrors = libxml_use_internal_errors(true);
         $disableEntities = libxml_disable_entity_loader(true);
 
+        try {
+            $rate = $this->buildExchangeRate($content);
+
+            libxml_use_internal_errors($internalErrors);
+            libxml_disable_entity_loader($disableEntities);
+        } catch (\Exception $e) {
+            libxml_use_internal_errors($internalErrors);
+            libxml_disable_entity_loader($disableEntities);
+
+            throw $e;
+        }
+
+        return $rate;
+    }
+
+    /**
+     * Builds an exchange rate from the response content.
+     *
+     * @param string $content
+     *
+     * @return ExchangeRate
+     *
+     * @throws \Exception
+     */
+    private function buildExchangeRate($content)
+    {
         $document = new \DOMDocument();
 
         if (false === @$document->loadHTML('<?xml encoding="utf-8" ?>' . $content)) {
@@ -90,9 +116,6 @@ class Google extends Service
         if (!is_numeric($bid)) {
             throw new Exception('The currency is not supported or Google changed the response format');
         }
-
-        libxml_use_internal_errors($internalErrors);
-        libxml_disable_entity_loader($disableEntities);
 
         return new ExchangeRate($bid, new \DateTime());
     }
