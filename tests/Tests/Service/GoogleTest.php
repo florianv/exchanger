@@ -35,10 +35,10 @@ class GoogleTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_rate_not_supported()
     {
-        $uri = 'http://finance.google.com/finance/converter?a=1&from=EUR&to=XXL';
+        $uri = 'https://www.google.com/search?q=1+EUR+to+XXL';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/unsupported.html');
 
-        $service = new Google($this->getHttpAdapterMock($uri, $content));
+        $service = new Google($this->getGoogleHttpAdapterMock($uri, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/XXL')));
     }
 
@@ -47,13 +47,43 @@ class GoogleTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
-        $url = 'http://finance.google.com/finance/converter?a=1&from=EUR&to=USD';
+        $url = 'https://www.google.com/search?q=1+EUR+to+MXN';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/success.html');
 
-        $service = new Google($this->getHttpAdapterMock($url, $content));
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/MXN')));
 
-        $this->assertSame('1.1825', $rate->getValue());
+        $this->assertSame('23.1021173', $rate->getValue());
+        $this->assertInstanceOf('\DateTime', $rate->getDate());
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_a_colombian_rate()
+    {
+        $url = 'https://www.google.com/search?q=1+EUR+to+COP';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/success_colombian.html');
+
+        $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/COP')));
+
+        $this->assertSame('3424.88889', $rate->getValue());
+        $this->assertInstanceOf('\DateTime', $rate->getDate());
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_a_colombian_rate_other()
+    {
+        $url = 'https://www.google.com/search?q=1+EUR+to+COP';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/success_colombian_other.html');
+
+        $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/COP')));
+
+        $this->assertSame('3529.33', $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 }

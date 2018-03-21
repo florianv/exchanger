@@ -71,6 +71,18 @@ abstract class Service implements ExchangeRateService
     }
 
     /**
+     * 
+     * @param string $url
+     * @param array  $headers
+     *
+     * @return Request
+     */
+    private function buildRequest($url, array $headers = [])
+    {
+        return $this->requestFactory->createRequest('GET', $url, $headers);
+    }
+
+    /**
      * Fetches the content of the given url.
      *
      * @param string $url
@@ -80,8 +92,19 @@ abstract class Service implements ExchangeRateService
      */
     protected function request($url, array $headers = [])
     {
-        $request = $this->requestFactory->createRequest('GET', $url, $headers);
+        return $this->getResponse($url, $headers)->getBody()->__toString();
+    }
 
-        return $this->httpClient->sendRequest($request)->getBody()->__toString();
+    /**
+     * Fetches the content of the given url.
+     *
+     * @param string $url
+     * @param array  $headers
+     *
+     * @return Response
+     */
+    protected function getResponse($url, array $headers = [])
+    {
+        return $this->httpClient->sendRequest($this->buildRequest($url, $headers));
     }
 }

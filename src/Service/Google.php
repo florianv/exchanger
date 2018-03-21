@@ -23,7 +23,11 @@ use Exchanger\ExchangeRate;
  */
 class Google extends Service
 {
-    const URL = 'http://finance.google.com/finance/converter?a=1&from=%s&to=%s';
+    const URL = 'https://www.google.com/search?q=1+%s+to+%s';
+    private static $headers = [
+        'Accept'     => 'text/html',
+        'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
+    ];
 
     /**
      * {@inheritdoc}
@@ -32,7 +36,15 @@ class Google extends Service
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
-        $content = $this->request($url);
+
+        $response = $this->getResponse($url, self::$headers);
+
+        // Google may? redirect to your national domain
+        if ($response->getStatusCode() === 302) {
+            $response = $this->getResponse($response->getHeader('Location')[0], self::$headers);
+        }
+
+        $content = $response->getBody()->__toString();
 
         $internalErrors = libxml_use_internal_errors(true);
         $disableEntities = libxml_disable_entity_loader(true);
@@ -44,14 +56,30 @@ class Google extends Service
         }
 
         $xpath = new \DOMXPath($document);
-        $nodes = $xpath->query('//span[@class="bld"]');
 
-        if (0 === $nodes->length) {
+        $nodes = $xpath->query('//span[@id="knowledge-currency__tgt-amount"]');
+
+        if (1 !== $nodes->length) {
+            $nodes = $xpath->query('//div[@class="vk_ans vk_bk"]');
+        }
+
+        if (1 !== $nodes->length) {
             throw new Exception('The currency is not supported or Google changed the response format');
         }
 
         $nodeContent = $nodes->item(0)->textContent;
-        $bid = strstr($nodeContent, ' ', true);
+
+        // Beware of "3 417.36111 Colombian pesos", with a non breaking space
+        $bid = strtr($nodeContent, ["\xc2\xa0" => '']);
+
+        if (strpos($bid, ' ') !== false) {
+            $bid = strstr($bid, ' ', true);
+        }
+
+        // Does it have thousands separator?
+        if (strpos($bid, ',') && strpos($bid, '.')) {
+            $bid = str_replace(',', '', $bid);
+        }
 
         if (!is_numeric($bid)) {
             throw new Exception('The currency is not supported or Google changed the response format');
