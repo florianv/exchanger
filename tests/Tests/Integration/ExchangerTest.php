@@ -22,6 +22,13 @@ use Exchanger\Service\Fixer;
 
 class ExchangerTest extends \PHPUnit_Framework_TestCase
 {
+    private $fixerAccessKey;
+
+    public function setUp()
+    {
+        $this->fixerAccessKey = getenv('FIXER_ACCESS_KEY');
+    }
+
     public function testCacheWithExchangeQuery()
     {
         $this->cacheTest(function () {
@@ -38,6 +45,11 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
 
     private function cacheTest(callable $provideQuery)
     {
+        if (!$this->fixerAccessKey) {
+            fwrite(STDERR, "\nFIXER.IO ACCESS KEY IS NOT SET. SKIPPING THE CACHE INTEGRATION TEST.\n");
+            return;
+        }
+
         $firstStart = microtime(true);
         $firstRate = $this->createCachedExchanger()->getExchangeRate(call_user_func($provideQuery));
         $firstEnd = microtime(true) - $firstStart;
@@ -80,7 +92,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     private function createCachedExchanger($ttl = 3600)
     {
         return new Exchanger(
-            new Fixer(),
+            new Fixer(null, null, ['access_key' => $this->fixerAccessKey]),
             $this->createFileCacheItemPool(),
             ['cache_ttl' => $ttl]
         );
