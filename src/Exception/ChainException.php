@@ -18,6 +18,11 @@ namespace Exchanger\Exception;
  */
 class ChainException extends Exception
 {
+    /**
+     * The exceptions.
+     *
+     * @var Exception[]
+     */
     private $exceptions;
 
     /**

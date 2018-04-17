@@ -64,18 +64,18 @@ abstract class Service implements ExchangeRateService
      *
      * @param array &$options
      *
-     * @return array
+     * @return array|void
      */
     public function processOptions(array &$options)
     {
     }
 
     /**
-     * 
+     *
      * @param string $url
      * @param array  $headers
      *
-     * @return Request
+     * @return \Psr\Http\Message\RequestInterface
      */
     private function buildRequest($url, array $headers = [])
     {
@@ -101,7 +101,7 @@ abstract class Service implements ExchangeRateService
      * @param string $url
      * @param array  $headers
      *
-     * @return Response
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getResponse($url, array $headers = [])
     {

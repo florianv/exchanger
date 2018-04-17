@@ -43,7 +43,7 @@ use Exchanger\Exchanger;
 $client = new GuzzleClient();
 
 // Create the Fixer.io service
-$service = new Fixer($client);
+$service = new Fixer($client, null, ['access_key' => 'YOUR_KEY']);
 
 // Create Exchanger with the Fixer.io service
 $exchanger = new Exchanger($service);
@@ -105,7 +105,7 @@ use Exchanger\Service\Chain;
 use Exchanger\Service\Google;
 
 $service = new Chain([
-    new Fixer($client),
+    new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new Google($client)
 ]);
 ```
@@ -304,7 +304,7 @@ $service = new Chain([
     new Forge($client, null, ['api_key' => 'api_key']),
     new CurrencyDataFeed($client, null, ['api_key' => 'api_key']),
     new EuropeanCentralBank(),
-    new Fixer(),
+    new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new Google(),
     new NationalBankOfRomania(),
     new OpenExchangeRates($client, null, ['app_id' => 'app_id', 'enterprise' => false]),
