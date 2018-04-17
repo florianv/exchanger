@@ -20,6 +20,8 @@ use Exchanger\ExchangeRate;
  * Google Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
+ *
+ * @deprecated The service is not very reliable and should be used carefully
  */
 class Google extends Service
 {
