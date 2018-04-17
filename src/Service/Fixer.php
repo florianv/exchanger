@@ -25,8 +25,10 @@ use Exchanger\StringUtil;
  */
 class Fixer extends HistoricalService
 {
-    const LATEST_URL = 'https://api.fixer.io/latest?base=%s';
-    const HISTORICAL_URL = 'https://api.fixer.io/%s?base=%s';
+    const ACCESS_KEY_OPTION = 'access_key';
+
+    const LATEST_URL = 'https://api.fixer.io/latest?base=%s&access_key=%s';
+    const HISTORICAL_URL = 'https://api.fixer.io/%s?base=%s&access_key=%s';
 
     /**
      * {@inheritdoc}
@@ -35,9 +37,16 @@ class Fixer extends HistoricalService
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        $url = sprintf(self::LATEST_URL, $currencyPair->getBaseCurrency());
-
+        $accessKey = $this->options[self::ACCESS_KEY_OPTION];
+        $url = sprintf(self::LATEST_URL, $currencyPair->getBaseCurrency(), $accessKey);
         return $this->createRate($url, $currencyPair);
+    }
+
+    public function processOptions(array &$options)
+    {
+        if (!isset($options[self::ACCESS_KEY_OPTION])) {
+            throw new \InvalidArgumentException('The "access_key" option must be provided to use fixer.io');
+        }
     }
 
     /**
@@ -47,10 +56,12 @@ class Fixer extends HistoricalService
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
+        $accessKey = $this->options[self::ACCESS_KEY_OPTION];
         $url = sprintf(
             self::HISTORICAL_URL,
             $exchangeQuery->getDate()->format('Y-m-d'),
-            $currencyPair->getBaseCurrency()
+            $currencyPair->getBaseCurrency(),
+            $accessKey
         );
 
         return $this->createRate($url, $currencyPair);
