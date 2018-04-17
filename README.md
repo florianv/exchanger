@@ -21,7 +21,7 @@ Here is the list of the currently implemented services.
 
 | Service | Base Currency | Quote Currency | Historical |
 |---------------------------------------------------------------------------|----------------------|----------------|----------------|
-| [Fixer](http://fixer.io) | * | * | Yes |
+| [Fixer](http://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
 | [European Central Bank](http://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
 | [Google](http://www.google.com/finance) | * | * | No |
 | [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |

@@ -27,8 +27,8 @@ class Fixer extends HistoricalService
 {
     const ACCESS_KEY_OPTION = 'access_key';
 
-    const LATEST_URL = 'https://api.fixer.io/latest?base=%s&access_key=%s';
-    const HISTORICAL_URL = 'https://api.fixer.io/%s?base=%s&access_key=%s';
+    const LATEST_URL = 'http://data.fixer.io/api/latest?base=%s&access_key=%s';
+    const HISTORICAL_URL = 'http://data.fixer.io/api/%s?base=%s&access_key=%s';
 
     /**
      * {@inheritdoc}
