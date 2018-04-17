@@ -42,6 +42,9 @@ class Fixer extends HistoricalService
         return $this->createRate($url, $currencyPair);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function processOptions(array &$options)
     {
         if (!isset($options[self::ACCESS_KEY_OPTION])) {
