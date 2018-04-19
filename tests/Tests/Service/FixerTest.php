@@ -34,7 +34,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_throws_an_exception_with_error_response()
     {
-        $uri = 'https://api.fixer.io/latest?base=USD&access_key=x';
+        $uri = 'http://data.fixer.io/api/latest?base=USD&access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/error.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
@@ -46,7 +46,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
-        $uri = 'https://api.fixer.io/latest?base=EUR&access_key=x';
+        $uri = 'http://data.fixer.io/api/latest?base=EUR&access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/latest.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
@@ -61,7 +61,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate()
     {
-        $uri = 'https://api.fixer.io/2000-01-03?base=USD&access_key=x';
+        $uri = 'http://data.fixer.io/api/2000-01-03?base=USD&access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/historical.json');
         $date = new \DateTime('2000-01-03');
 
