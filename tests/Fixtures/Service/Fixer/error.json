@@ -1,3 +1,7 @@
 {
-  "error": "Invalid base"
+    "success": false,
+    "error": {
+        "code": 105,
+        "type": "base_currency_access_restricted"
+    }
 }

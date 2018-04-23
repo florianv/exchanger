@@ -31,6 +31,7 @@ class FixerTest extends ServiceTestCase
     /**
      * @test
      * @expectedException \Exchanger\Exception\Exception
+     * @expectedExceptionMessage The current subscription plan does not support this API endpoint.
      */
     public function it_throws_an_exception_with_error_response()
     {
