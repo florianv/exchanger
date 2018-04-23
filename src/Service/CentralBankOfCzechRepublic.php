@@ -11,6 +11,7 @@
 
 namespace Exchanger\Service;
 
+use DateTimeInterface;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
@@ -21,18 +22,41 @@ use Exchanger\ExchangeRate;
  *
  * @author Petr Kramar <petr.kramar@perlur.cz>
  */
-class CentralBankOfCzechRepublic extends Service
+class CentralBankOfCzechRepublic extends HistoricalService
 {
     const URL = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
     const DATE_FORMAT = 'd.m.Y';
+    const DATE_QUERY_PARAMETER_NAME = 'date';
+    const CURRENCY_LINE_PATTERN = '#^.*\|.*\|\d+\|\w{3}\|\d+(?:,\d+)?$#';
 
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    {
+        return $this->createRate($exchangeQuery);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    {
+        return $this->createRate($exchangeQuery, $exchangeQuery->getDate());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    {
+        return 'CZK' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
+    }
+
+    private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
-        $content = $this->request(self::URL);
+        $content = $this->request($this->buildUrl($requestedDate));
 
         $lines = explode("\n", $content);
 
@@ -41,9 +65,11 @@ class CentralBankOfCzechRepublic extends Service
         }
 
         $date->setTime(0, 0, 0);
-
-        foreach (array_slice($lines, 2) as $currency) {
-            list(, , $count, $code, $rate) = explode('|', $currency);
+        foreach (array_slice($lines, 2) as $line) {
+            if (!preg_match(self::CURRENCY_LINE_PATTERN, $line)) {
+                continue;
+            }
+            list(, , $count, $code, $rate) = explode('|', $line);
 
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
@@ -53,15 +79,6 @@ class CentralBankOfCzechRepublic extends Service
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
-    {
-        return !$exchangeQuery instanceof HistoricalExchangeRateQuery
-        && 'CZK' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
 
     /**
@@ -76,5 +93,19 @@ class CentralBankOfCzechRepublic extends Service
         $words = preg_split('/[\s]+/', $line);
 
         return $words[0];
+    }
+
+    /**
+     * @param DateTimeInterface|null $requestedDate
+     *
+     * @return string
+     */
+    private function buildUrl(DateTimeInterface $requestedDate = null)
+    {
+        if ($requestedDate === null) {
+            return self::URL;
+        }
+
+        return self::URL . '?' . http_build_query([self::DATE_QUERY_PARAMETER_NAME => $requestedDate->format(self::DATE_FORMAT)]);
     }
 }
