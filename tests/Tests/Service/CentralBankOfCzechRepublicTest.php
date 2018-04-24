@@ -11,9 +11,9 @@
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
-use Exchanger\CurrencyPair;
 use Exchanger\Service\CentralBankOfCzechRepublic;
 
 /**
@@ -32,14 +32,24 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     protected static $content;
 
     /**
+     * @var string URL of CNB historical exchange rates
+     */
+    protected static $historicalUrl;
+
+    /**
+     * @var string content of CNB historical exchange rates
+     */
+    protected static $historicalContent;
+
+    /**
      * Set up variables before TestCase is being initialized.
      */
     public static function setUpBeforeClass()
     {
-        $fixture_path = __DIR__.'/../../Fixtures/Service/CentralBankOfCzechRepublic/cnb_today.txt';
-
         self::$url = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
-        self::$content = file_get_contents($fixture_path);
+        self::$historicalUrl = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date=23.04.2000';
+        self::$content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfCzechRepublic/cnb_today.txt');
+        self::$historicalContent = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfCzechRepublic/cnb_historical.txt');
     }
 
     /**
@@ -94,6 +104,32 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     }
 
     /**
+     * @test
+     */
+    public function itFetchesAHistoricalFrfRate()
+    {
+        $requestedDate = new \DateTime('2000-04-23');
+        $service = $this->createServiceForHistoricalRates();
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('FRF/CZK'), $requestedDate));
+
+        $this->assertEquals('5.529', $rate->getValue());
+        $this->assertEquals(new \DateTime('2000-04-21'), $rate->getDate());
+    }
+
+    /**
+     * @test
+     */
+    public function itFetchesAHistoricalEurRate()
+    {
+        $requestedDate = new \DateTime('2000-04-23');
+        $service = $this->createServiceForHistoricalRates();
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/CZK'), $requestedDate));
+
+        $this->assertEquals('36.270', $rate->getValue());
+        $this->assertEquals(new \DateTime('2000-04-21'), $rate->getDate());
+    }
+
+    /**
      * Create bank service.
      *
      * @return CentralBankOfCzechRepublic
@@ -101,5 +137,15 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     protected function createService()
     {
         return new CentralBankOfCzechRepublic($this->getHttpAdapterMock(self::$url, self::$content));
+    }
+
+    /**
+     * Create bank service for historical rates.
+     *
+     * @return CentralBankOfCzechRepublic
+     */
+    protected function createServiceForHistoricalRates()
+    {
+        return new CentralBankOfCzechRepublic($this->getHttpAdapterMock(self::$historicalUrl, self::$historicalContent));
     }
 }

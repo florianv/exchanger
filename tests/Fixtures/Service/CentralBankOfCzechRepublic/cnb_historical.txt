@@ -1,0 +1,32 @@
+21.04.2000 #80
+země|měna|množství|kód|kurz
+Austrálie|dolar|1|AUD|22,978
+Dánsko|koruna|1|DKK|4,867
+EMU|euro|1|EUR|36,270
+Japonsko|jen|100|JPY|36,850
+Kanada|dolar|1|CAD|26,175
+Maďarsko|forint|100|HUF|14,054
+MMF|SDR|1|XDR|51,756
+Norsko|koruna|1|NOK|4,440
+Nový Zéland|dolar|1|NZD|19,188
+Polsko|zlotý|1|PLN|9,008
+Řecko|drachma|100|GRD|10,817
+Slovensko|koruna|100|SKK|87,331
+Slovinsko|tolar|100|SIT|17,780
+Švédsko|koruna|1|SEK|4,408
+Švýcarsko|frank|1|CHF|23,071
+USA|dolar|1|USD|38,595
+Velká Británie|libra|1|GBP|60,940
+
+země|denominace|množství|kód|poměr
+Belgie|frank|100|BEF|89,911
+Finsko|marka|1|FIM|6,100
+Francie|frank|1|FRF|5,529
+Irsko|libra|1|IEP|46,053
+Itálie|lira|1000|ITL|18,732
+Lucembursko|frank|100|LUF|89,911
+Nizozemí|gulden|1|NLG|16,459
+Portugalsko|eskudo|100|PTE|18,091
+Rakousko|šilink|1|ATS|2,636
+SRN|marka|1|DEM|18,545
+Španělsko|peseta|100|ESP|21,799
