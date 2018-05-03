@@ -53,6 +53,16 @@ class CentralBankOfCzechRepublic extends HistoricalService
         return 'CZK' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
 
+    /**
+     * Creates the rate.
+     *
+     * @param ExchangeRateQuery $exchangeQuery
+     * @param DateTimeInterface $requestedDate
+     *
+     * @return ExchangeRate
+     *
+     * @throws UnsupportedCurrencyPairException
+     */
     private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
