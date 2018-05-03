@@ -14,6 +14,7 @@
   * [Requests Caching](#requests-caching)
 * [Creating a Service](#creating-a-service)
 * [Supported Services](#supported-services)
+* [Sponsors](#sponsors)
 
 ## Installation
 
@@ -30,22 +31,32 @@ composer require florianv/exchanger php-http/message php-http/guzzle6-adapter
 
 ## Configuration
 
-First, you need to create a **service** and add it to `Exchanger`. 
+First, you need to create a **service** and add it to `Exchanger`.
 
-> You can consult the list of supported services [here](https://github.com/florianv/exchanger/blob/master/README.md#services).
+We recommand to use one of the [services that support our project](#sponsors), providing a free plan up to 1,000 requests per day.
+
+The complete list of all supported services is available [here](https://github.com/florianv/exchanger/blob/master/README.md#services).
 
 ```php
 use Http\Adapter\Guzzle6\Client as GuzzleClient;
 use Exchanger\Service\Fixer;
+use Exchanger\Service\CurrencyLayer;
+use Exchanger\Service\Forge;
 use Exchanger\Exchanger;
 
 // Create your http client (we choose Guzzle 6 here)
 $client = new GuzzleClient();
 
-// Create the Fixer.io service
+// Use the Fixer.io service
 $service = new Fixer($client, null, ['access_key' => 'YOUR_KEY']);
 
-// Create Exchanger with the Fixer.io service
+// Or use the currencylayer.com service
+$service = new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]);
+
+// Or use the 1forge.com service
+$service = new Forge($client, null, ['api_key' => 'api_key']);
+
+// Create Exchanger with your service
 $exchanger = new Exchanger($service);
 ```
 
@@ -102,15 +113,19 @@ Simply create a `Chain` service to wrap the services you want to chain.
 
 ```php
 use Exchanger\Service\Chain;
-use Exchanger\Service\Google;
+use Exchanger\Service\Fixer;
+use Exchanger\Service\CurrencyLayer;
+use Exchanger\Service\Forge;
 
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
-    new Google($client)
+    new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
+    new Forge($client, null, ['api_key' => 'api_key']),
 ]);
 ```
 
-The rates will be first fetched using the `Fixer` service and will fallback to `Google`.
+The rates will be first fetched using the `Fixer` service, will fallback to `CurrencyLayer` and
+then `Forge`.
 
 > You can consult the list of the supported services and their options [here](#supported-services)
 
@@ -281,12 +296,12 @@ $rate = $exchanger->getExchangeRate($query)->getValue();
 Here is the complete list of supported services and their possible configurations:
 
 ```php
-use Exchanger\Service\Fixer;
 use Exchanger\Service\Chain;
-use Exchanger\Service\CentralBankOfCzechRepublic;
-use Exchanger\Service\CentralBankOfRepublicTurkey;
+use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\Forge;
+use Exchanger\Service\CentralBankOfCzechRepublic;
+use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\CurrencyDataFeed;
 use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\Google;
@@ -296,18 +311,23 @@ use Exchanger\Service\PhpArray;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\RussianCentralBank;
+use Exchanger\Service\Cryptonator;
 
 $service = new Chain([
-    new CentralBankOfCzechRepublic(),
-    new CentralBankOfRepublicTurkey(),
+    new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new Forge($client, null, ['api_key' => 'api_key']),
-    new CurrencyDataFeed($client, null, ['api_key' => 'api_key']),
     new EuropeanCentralBank(),
-    new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
-    new Google(),
     new NationalBankOfRomania(),
+    new CentralBankOfRepublicTurkey(),
+    new CentralBankOfCzechRepublic(),
+    new RussianCentralBank(),
+    new WebserviceX(),
+    new Google(),
+    new Cryptonator(),
+    new CurrencyDataFeed($client, null, ['api_key' => 'api_key']),
     new OpenExchangeRates($client, null, ['app_id' => 'app_id', 'enterprise' => false]),
+    new Xignite($client, null, ['token' => 'token']),
     new PhpArray(
         [
             'EUR/USD' => new ExchangeRate('1.1'),
@@ -322,8 +342,24 @@ $service = new Chain([
             ],
         ]
     ),
-    new WebserviceX(),
-    new Xignite($client, null, ['token' => 'token']),
-    new RussianCentralBank()
 ]);
 ```
+
+### Sponsors
+
+We are proudly supported by the following echange rate providers offering *free plans up to 1,000 requests per day*:
+
+<img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" height="20px" width="20px"/> **[Fixer](https://fixer.io)**
+
+Fixer is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.
+They provide real-time rates and historical data, however, EUR is the only available base currency on the free plan.
+
+<img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" height="20px" width="20px"/> **[currencylayer](https://currencylayer.com)**
+
+Currencylayer provides reliable exchange rates and currency conversions for your business up to 168 world currencies.
+They provide real-time rates and historical data, however, USD is the only available base currency on the free plan.
+
+<img src="https://s3.amazonaws.com/swap.assets/1forge_icon.png" height="20px" width="20px"/> **[1Forge](https://1forge.com)**
+
+1Forge provides Forex and Cryptocurrency quotes for over 700 unique currency pairs. 
+They provide the fastest price updates available of any provider, however, they don’t support smaller currencies or historical data.
