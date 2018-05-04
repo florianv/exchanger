@@ -25,8 +25,11 @@ use Exchanger\ExchangeRate;
 class CentralBankOfCzechRepublic extends HistoricalService
 {
     const URL = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
+
     const DATE_FORMAT = 'd.m.Y';
+
     const DATE_QUERY_PARAMETER_NAME = 'date';
+
     const CURRENCY_LINE_PATTERN = '#^.*\|.*\|\d+\|\w{3}\|\d+(?:,\d+)?$#';
 
     /**
@@ -112,10 +115,10 @@ class CentralBankOfCzechRepublic extends HistoricalService
      */
     private function buildUrl(DateTimeInterface $requestedDate = null)
     {
-        if ($requestedDate === null) {
+        if (null === $requestedDate) {
             return self::URL;
         }
 
-        return self::URL . '?' . http_build_query([self::DATE_QUERY_PARAMETER_NAME => $requestedDate->format(self::DATE_FORMAT)]);
+        return self::URL.'?'.http_build_query([self::DATE_QUERY_PARAMETER_NAME => $requestedDate->format(self::DATE_FORMAT)]);
     }
 }

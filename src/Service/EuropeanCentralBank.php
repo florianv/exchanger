@@ -26,6 +26,7 @@ use Exchanger\StringUtil;
 class EuropeanCentralBank extends HistoricalService
 {
     const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
+
     const HISTORICAL_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
 
     /**

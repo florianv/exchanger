@@ -28,6 +28,7 @@ use Exchanger\StringUtil;
 class NationalBankOfRomania extends HistoricalService
 {
     const URL = 'http://www.bnr.ro/nbrfxrates.xml';
+
     const HISTORICAL_URL_TEMPLATE = 'http://www.bnr.ro/files/xml/years/nbrfxrates{year}.xml';
 
     /**

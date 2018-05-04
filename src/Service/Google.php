@@ -33,7 +33,7 @@ class Google extends Service
      * @var array
      */
     private static $headers = [
-        'Accept'     => 'text/html',
+        'Accept' => 'text/html',
         'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
     ];
 
@@ -48,7 +48,7 @@ class Google extends Service
         $response = $this->getResponse($url, self::$headers);
 
         // Google may? redirect to your national domain
-        if ($response->getStatusCode() === 302) {
+        if (302 === $response->getStatusCode()) {
             $response = $this->getResponse($response->getHeader('Location')[0], self::$headers);
         }
 
@@ -85,7 +85,7 @@ class Google extends Service
     {
         $document = new \DOMDocument();
 
-        if (false === @$document->loadHTML('<?xml encoding="utf-8" ?>' . $content)) {
+        if (false === @$document->loadHTML('<?xml encoding="utf-8" ?>'.$content)) {
             throw new Exception('The page content is not loadable');
         }
 
@@ -106,7 +106,7 @@ class Google extends Service
         // Beware of "3 417.36111 Colombian pesos", with a non breaking space
         $bid = strtr($nodeContent, ["\xc2\xa0" => '']);
 
-        if (strpos($bid, ' ') !== false) {
+        if (false !== strpos($bid, ' ')) {
             $bid = strstr($bid, ' ', true);
         }
 

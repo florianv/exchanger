@@ -63,7 +63,7 @@ abstract class ServiceTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create a mocked Http adapter for Google service
+     * Create a mocked Http adapter for Google service.
      *
      * @param string $url     The url
      * @param string $content The body content
@@ -81,9 +81,9 @@ abstract class ServiceTestCase extends \PHPUnit_Framework_TestCase
             ->method('sendRequest')
             ->with($this->callback(function ($arg) use ($url) {
                 return $arg->getUri()->__toString() === $url && $arg->getHeaders() === [
-                    'Host' => [ 0 => 'www.google.com'],
-                    'Accept' => [ 0 => 'text/html'],
-                    'User-Agent' => [ 0 => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0']
+                    'Host' => [0 => 'www.google.com'],
+                    'Accept' => [0 => 'text/html'],
+                    'User-Agent' => [0 => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0'],
                 ];
             }))
             ->will($this->returnValue($response));
