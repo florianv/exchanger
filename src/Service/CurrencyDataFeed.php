@@ -14,6 +14,7 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 class CurrencyDataFeed extends Service
 {
     const URL = 'https://currencydatafeed.com/api/data.php?token=%s&currency=%s';
+
     const HISTORICAL_URL = 'https://currencydatafeed.com/api/historical.php?token=%s&date=%s&currency=%s';
 
     /**

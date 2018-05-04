@@ -22,6 +22,7 @@ use Exchanger\Contract\ExchangeRateService;
 class UnsupportedExchangeQueryException extends Exception
 {
     private $exchangeRateQuery;
+
     private $service;
 
     public function __construct(ExchangeRateQuery $exchangeRateQuery, ExchangeRateService $service)

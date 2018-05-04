@@ -21,6 +21,7 @@ use Exchanger\Contract\CurrencyPair as CurrencyPairContract;
 final class CurrencyPair implements CurrencyPairContract
 {
     private $baseCurrency;
+
     private $quoteCurrency;
 
     /**
