@@ -71,7 +71,6 @@ abstract class Service implements ExchangeRateService
     }
 
     /**
-     *
      * @param string $url
      * @param array  $headers
      *

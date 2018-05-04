@@ -47,6 +47,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     {
         if (!$this->fixerAccessKey) {
             fwrite(STDERR, "\nFIXER.IO ACCESS KEY IS NOT SET. SKIPPING THE CACHE INTEGRATION TEST.\n");
+
             return;
         }
 

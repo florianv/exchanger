@@ -28,6 +28,7 @@ class Fixer extends HistoricalService
     const ACCESS_KEY_OPTION = 'access_key';
 
     const LATEST_URL = 'http://data.fixer.io/api/latest?base=%s&access_key=%s';
+
     const HISTORICAL_URL = 'http://data.fixer.io/api/%s?base=%s&access_key=%s';
 
     /**
@@ -39,6 +40,7 @@ class Fixer extends HistoricalService
 
         $accessKey = $this->options[self::ACCESS_KEY_OPTION];
         $url = sprintf(self::LATEST_URL, $currencyPair->getBaseCurrency(), $accessKey);
+
         return $this->createRate($url, $currencyPair);
     }
 

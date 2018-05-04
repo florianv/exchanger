@@ -26,7 +26,9 @@ use Psr\Cache\CacheItemPoolInterface;
 class Exchanger implements ExchangeRateProviderContract
 {
     private $service;
+
     private $cacheItemPool;
+
     private $options;
 
     public function __construct(ExchangeRateServiceContract $service, CacheItemPoolInterface $cacheItemPool = null, array $options = [])
