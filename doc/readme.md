@@ -33,7 +33,7 @@ composer require florianv/exchanger php-http/message php-http/guzzle6-adapter
 
 First, you need to create a **service** and add it to `Exchanger`.
 
-We recommand to use one of the [services that support our project](#sponsors), providing a free plan up to 1,000 requests per day.
+We recommend to use one of the [services that support our project](#sponsors), providing a free plan up to 1,000 requests per day.
 
 The complete list of all supported services is available [here](https://github.com/florianv/exchanger/blob/master/README.md#services).
 
