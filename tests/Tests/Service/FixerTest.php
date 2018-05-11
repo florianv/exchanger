@@ -81,7 +81,7 @@ class FixerTest extends ServiceTestCase
         $uri = 'http://data.fixer.io/api/latest?base=EUR&access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/latest.json');
 
-        $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true ]);
+        $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CHF')));
 
         $this->assertEquals('1.0933', $rate->getValue());
