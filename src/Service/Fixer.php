@@ -27,9 +27,13 @@ class Fixer extends HistoricalService
 {
     const ACCESS_KEY_OPTION = 'access_key';
 
-    const LATEST_URL = 'http://data.fixer.io/api/latest?base=%s&access_key=%s';
+    const ENTERPRISE_LATEST_URL = 'http://data.fixer.io/api/latest?base=%s&access_key=%s';
 
-    const HISTORICAL_URL = 'http://data.fixer.io/api/%s?base=%s&access_key=%s';
+    const ENTERPRISE_HISTORICAL_URL = 'http://data.fixer.io/api/%s?base=%s&access_key=%s';
+
+    const FREE_LATEST_URL = 'http://data.fixer.io/api/latest?access_key=%s';
+
+    const FREE_HISTORICAL_URL = 'http://data.fixer.io/api/%s?access_key=%s';
 
     /**
      * {@inheritdoc}
@@ -38,8 +42,18 @@ class Fixer extends HistoricalService
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        $accessKey = $this->options[self::ACCESS_KEY_OPTION];
-        $url = sprintf(self::LATEST_URL, $currencyPair->getBaseCurrency(), $accessKey);
+        if ($this->options['enterprise']) {
+            $url = sprintf(
+                self::ENTERPRISE_LATEST_URL,
+                $currencyPair->getBaseCurrency(),
+                $this->options[self::ACCESS_KEY_OPTION]
+            );
+        } else {
+            $url = sprintf(
+                self::FREE_LATEST_URL,
+                $this->options[self::ACCESS_KEY_OPTION]
+            );
+        }
 
         return $this->createRate($url, $currencyPair);
     }
@@ -52,6 +66,10 @@ class Fixer extends HistoricalService
         if (!isset($options[self::ACCESS_KEY_OPTION])) {
             throw new \InvalidArgumentException('The "access_key" option must be provided to use fixer.io');
         }
+
+        if (!isset($options['enterprise'])) {
+            $options['enterprise'] = false;
+        }
     }
 
     /**
@@ -61,13 +79,20 @@ class Fixer extends HistoricalService
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        $accessKey = $this->options[self::ACCESS_KEY_OPTION];
-        $url = sprintf(
-            self::HISTORICAL_URL,
-            $exchangeQuery->getDate()->format('Y-m-d'),
-            $currencyPair->getBaseCurrency(),
-            $accessKey
-        );
+        if ($this->options['enterprise']) {
+            $url = sprintf(
+                self::ENTERPRISE_HISTORICAL_URL,
+                $exchangeQuery->getDate()->format('Y-m-d'),
+                $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
+                $this->options[self::ACCESS_KEY_OPTION]
+            );
+        } else {
+            $url = sprintf(
+                self::FREE_HISTORICAL_URL,
+                $exchangeQuery->getDate()->format('Y-m-d'),
+                $this->options[self::ACCESS_KEY_OPTION]
+            );
+        }
 
         return $this->createRate($url, $currencyPair);
     }
@@ -77,7 +102,7 @@ class Fixer extends HistoricalService
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
-        return true;
+        return $this->options['enterprise'] || 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
 
     /**
