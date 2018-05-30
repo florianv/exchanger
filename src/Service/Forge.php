@@ -39,16 +39,18 @@ class Forge extends Service
     public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery)
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
-        $url = sprintf(self::URL, $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(), $this->options['api_key']);
+        $currencySymbol = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
+        $url = sprintf(self::URL, $currencySymbol, $this->options['api_key']);
 
         $content = $this->request($url);
-
         $data = StringUtil::jsonToArray($content);
 
-        if (!empty($data)) {
-            $date = (new \DateTime())->setTimestamp($data[0]['timestamp']);
+        if ($result = reset($data)) {
+            $date = (new \DateTime())->setTimestamp($result['timestamp']);
 
-            return new ExchangeRate($data[0]['price'], $date);
+            if ($result['symbol'] == $currencySymbol) {
+                return new ExchangeRate($result['price'], $date);
+            }
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
