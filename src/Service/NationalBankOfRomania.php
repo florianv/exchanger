@@ -33,6 +33,7 @@ class NationalBankOfRomania extends HistoricalService
 
     /**
      * {@inheritdoc}
+     *
      * @throws UnsupportedCurrencyPairException
      */
     public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
@@ -65,6 +66,7 @@ class NationalBankOfRomania extends HistoricalService
 
     /**
      * {@inheritdoc}
+     *
      * @throws UnsupportedDateException
      * @throws UnsupportedCurrencyPairException
      */
