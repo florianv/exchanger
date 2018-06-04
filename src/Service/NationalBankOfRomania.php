@@ -33,6 +33,7 @@ class NationalBankOfRomania extends HistoricalService
 
     /**
      * {@inheritdoc}
+     * @throws UnsupportedCurrencyPairException
      */
     public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
@@ -43,7 +44,9 @@ class NationalBankOfRomania extends HistoricalService
 
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $date = new \DateTime((string) $element->xpath('//xmlns:PublishingDate')[0]);
-        $elements = $element->xpath('//xmlns:Rate[@currency="'.$currencyPair->getBaseCurrency().'"]');
+        $xmlCurrency = 'RON' === $currencyPair->getBaseCurrency() ? $currencyPair->getQuoteCurrency() : $currencyPair->getBaseCurrency();
+
+        $elements = $element->xpath('//xmlns:Rate[@currency="'.$xmlCurrency.'"]');
 
         if (empty($elements) || !$date) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -51,13 +54,19 @@ class NationalBankOfRomania extends HistoricalService
 
         $element = $elements[0];
         $rate = (string) $element;
-        $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
+        $rateValue = !empty($element['multiplier']) ? $rate / (int) $element['multiplier'] : $rate;
+
+        if ('RON' === $currencyPair->getBaseCurrency()) {
+            $rateValue = number_format(1 / $rateValue, 4, '.', '');
+        }
 
         return new ExchangeRate((string) $rateValue, $date);
     }
 
     /**
      * {@inheritdoc}
+     * @throws UnsupportedDateException
+     * @throws UnsupportedCurrencyPairException
      */
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
     {
@@ -76,21 +85,26 @@ class NationalBankOfRomania extends HistoricalService
         $element->registerXPathNamespace('xmlns', 'http://www.bnr.ro/xsd');
 
         $formattedDate = $exchangeQuery->getDate()->format('Y-m-d');
-        $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+        $xmlCurrency = 'RON' === $currencyPair->getBaseCurrency() ? $currencyPair->getQuoteCurrency() : $currencyPair->getBaseCurrency();
 
-        $elements = $element->xpath('//xmlns:Cube[@date="'.$formattedDate.'"]/xmlns:Rate[@currency="'.$baseCurrency.'"]');
+        $elements = $element->xpath('//xmlns:Cube[@date="'.$formattedDate.'"]/xmlns:Rate[@currency="'.$xmlCurrency.'"]');
 
         if (empty($elements)) {
             if (empty($element->xpath('//xmlns:Cube[@date="'.$formattedDate.'"]'))) {
                 throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
             }
 
-            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
         $element = $elements[0];
         $rate = (string) $element;
-        $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
+        $rateValue = !empty($element['multiplier']) ? $rate / (int) $element['multiplier'] : $rate;
+
+        if ('RON' === $currencyPair->getBaseCurrency()) {
+            $rateValue = number_format(1 / $rateValue, 4, '.', '');
+        }
 
         return new ExchangeRate((string) $rateValue, $exchangeQuery->getDate());
     }
@@ -100,6 +114,7 @@ class NationalBankOfRomania extends HistoricalService
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery)
     {
-        return 'RON' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
+        return 'RON' === $exchangeQuery->getCurrencyPair()->getBaseCurrency()
+            || 'RON' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
 }
