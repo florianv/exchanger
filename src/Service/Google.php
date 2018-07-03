@@ -128,19 +128,16 @@ class Google extends Service
             return $bid;
         }
 
-        if (false !== $pos_comma) {
-            if (false !== $pos_point) {
-                if ($pos_comma > $pos_point) {
-                    $bid = str_replace(',', '@', $bid);
-                    $bid = str_replace('.', '', $bid);
-                    $bid = str_replace('@', '.', $bid);
-                } else {
-                    $bid = str_replace(',', '', $bid);
-                }
-            } else {
-                $bid = str_replace(',', '.', $bid);
-            }
+        if (false === $pos_comma) {
+            return str_replace(',', '.', $bid);
         }
+
+        if ($pos_comma < $pos_point) {
+            return str_replace(',', '', $bid);
+        }
+
+        $bid = str_replace([',', '.'], ['@', ''], $bid);
+        $bid = str_replace('@', '.', $bid);
 
         return $bid;
     }
