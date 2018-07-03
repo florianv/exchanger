@@ -130,7 +130,6 @@ class Google extends Service
 
         if (false !== $pos_comma) {
             if (false !== $pos_point) {
-
                 if ($pos_comma > $pos_point) {
                     $bid = str_replace(',', '@', $bid);
                     $bid = str_replace('.', '', $bid);
@@ -138,7 +137,6 @@ class Google extends Service
                 } else {
                     $bid = str_replace(',', '', $bid);
                 }
-
             } else {
                 $bid = str_replace(',', '.', $bid);
             }
