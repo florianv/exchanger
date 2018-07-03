@@ -124,12 +124,12 @@ class Google extends Service
         $pos_comma = strpos($bid, ',');
         $pos_point = strpos($bid, '.');
 
-        if ($pos_comma === false && $pos_point === false) {
+        if (false === $pos_comma && false === $pos_point) {
             return $bid;
         }
 
-        if ($pos_comma !== false) {
-            if ($pos_point !== false) {
+        if (false !== $pos_comma) {
+            if (false !== $pos_point) {
 
                 if ($pos_comma > $pos_point) {
                     $bid = str_replace(',', '@', $bid);

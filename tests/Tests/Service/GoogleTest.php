@@ -107,7 +107,7 @@ class GoogleTest extends ServiceTestCase
      */
     public function it_parses_the_bid()
     {
-        $service = new Google;
+        $service = new Google();
 
         $this->assertSame('1.10', $service->parseNumber('1.10'));
         $this->assertSame('1.10', $service->parseNumber('1,10'));
