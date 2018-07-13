@@ -297,6 +297,7 @@ Here is the complete list of supported services and their possible configuration
 
 ```php
 use Exchanger\Service\Chain;
+use Exchanger\Service\ExchangeRatesApi;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\Forge;
@@ -314,6 +315,7 @@ use Exchanger\Service\RussianCentralBank;
 use Exchanger\Service\Cryptonator;
 
 $service = new Chain([
+    new ExchangeRatesApi($client),
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new Forge($client, null, ['api_key' => 'api_key']),
