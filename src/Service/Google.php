@@ -110,16 +110,36 @@ class Google extends Service
             $bid = strstr($bid, ' ', true);
         }
 
-        // Does it have thousands separator?
-        if (strpos($bid, ',') && strpos($bid, '.')) {
-            $bid = str_replace(',', '', $bid);
-        }
+        $bid = $this->parseNumber($bid);
 
         if (!is_numeric($bid)) {
             throw new Exception('The currency is not supported or Google changed the response format');
         }
 
         return new ExchangeRate($bid, new \DateTime());
+    }
+
+    public function parseNumber($bid)
+    {
+        $pos_comma = strpos($bid, ',');
+        $pos_point = strpos($bid, '.');
+
+        if (false === $pos_comma && false === $pos_point) {
+            return $bid;
+        }
+
+        if (false === $pos_comma) {
+            return str_replace(',', '.', $bid);
+        }
+
+        if ($pos_comma < $pos_point) {
+            return str_replace(',', '', $bid);
+        }
+
+        $bid = str_replace([',', '.'], ['@', ''], $bid);
+        $bid = str_replace('@', '.', $bid);
+
+        return $bid;
     }
 
     /**

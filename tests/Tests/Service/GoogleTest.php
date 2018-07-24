@@ -60,6 +60,21 @@ class GoogleTest extends ServiceTestCase
     /**
      * @test
      */
+    public function it_fetches_a_rate_formated_with_coma()
+    {
+        $url = 'https://www.google.com/search?q=1+EUR+to+MXN';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/GoogleFinance/success2.html');
+
+        $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/MXN')));
+
+        $this->assertSame('23.10', $rate->getValue());
+        $this->assertInstanceOf('\DateTime', $rate->getDate());
+    }
+
+    /**
+     * @test
+     */
     public function it_fetches_a_colombian_rate()
     {
         $url = 'https://www.google.com/search?q=1+EUR+to+COP';
@@ -85,5 +100,21 @@ class GoogleTest extends ServiceTestCase
 
         $this->assertSame('3529.33', $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
+    }
+
+    /**
+     * @test
+     */
+    public function it_parses_the_bid()
+    {
+        $service = new Google();
+
+        $this->assertSame('1.10', $service->parseNumber('1.10'));
+        $this->assertSame('1.10', $service->parseNumber('1,10'));
+        $this->assertSame('1100.12', $service->parseNumber('1,100.12'));
+        $this->assertSame('1100.12', $service->parseNumber('1.100,12'));
+        $this->assertSame('1100.12', $service->parseNumber('1100,12'));
+        $this->assertSame('1100.12', $service->parseNumber('1100.12'));
+        $this->assertSame('1100', $service->parseNumber('1100'));
     }
 }
