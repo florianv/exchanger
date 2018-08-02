@@ -52,7 +52,7 @@ Here is the complete list of the currently implemented services:
 | [CurrencyDataFeed](https://currencydatafeed.com) | * (free but limited or paid) | * (free but limited or paid) | No |
 | [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
 | [Xignite](https://www.xignite.com) | * | * | Yes |
-| [CurrencyConverterApi](https://www.currencyconverterapi.com/) | * (free but limited or paid) | * | Yes (free but limited or paid) |
+| [CurrencyConverterApi](https://www.currencyconverterapi.com) | * | * | Yes (free but limited or paid) |
 | Array | * | * | Yes |
 
 ## Credits
