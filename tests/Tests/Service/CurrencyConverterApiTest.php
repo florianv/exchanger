@@ -113,7 +113,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
     /**
      * Create a mocked Response.
      *
-     * @param string $content The body content
+     * @param string $content    The body content
      * @param int    $statusCode HTTP status code
      *
      * @return \Psr\Http\Message\ResponseInterface
