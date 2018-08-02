@@ -14,6 +14,7 @@ use Exchanger\StringUtil;
 
 /**
  * CurrencyConverterApi service.
+ *
  * @see https://github.com/florianv/laravel-swap/tree/master/doc#creating-a-service
  *
  * Docs for free plan:
@@ -191,6 +192,7 @@ class CurrencyConverterApi extends HistoricalService
      * For this reason we should do some date-time corrections.
      *
      * @param DateTimeInterface $dateTime
+     *
      * @return DateTimeInterface
      */
     private function getAdoptedDateTime(DateTimeInterface $dateTime)
