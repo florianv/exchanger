@@ -13,7 +13,7 @@ use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 
 /**
- * This is an implementation of custom Swap service
+ * CurrencyConverterApi service.
  * @see https://github.com/florianv/laravel-swap/tree/master/doc#creating-a-service
  *
  * Docs for free plan:
@@ -51,7 +51,7 @@ class CurrencyConverterApi extends HistoricalService
             return true;
         }
 
-        if (! $exchangeRateQuery instanceof HistoricalExchangeRateQuery) {
+        if (!$exchangeRateQuery instanceof HistoricalExchangeRateQuery) {
             return true;
         }
 
@@ -66,7 +66,9 @@ class CurrencyConverterApi extends HistoricalService
      * Gets the latest rate.
      *
      * @param ExchangeRateQuery $exchangeQuery
+     *
      * @return ExchangeRate
+     *
      * @throws Exception
      */
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
@@ -91,7 +93,9 @@ class CurrencyConverterApi extends HistoricalService
      * Gets an historical rate.
      *
      * @param HistoricalExchangeRateQuery $exchangeQuery
+     *
      * @return ExchangeRate
+     *
      * @throws Exception
      */
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
@@ -117,10 +121,11 @@ class CurrencyConverterApi extends HistoricalService
     }
 
     /**
-     * Fetch online rate
+     * Fetch online rate.
      *
-     * @param string $url
+     * @param string            $url
      * @param ExchangeRateQuery $exchangeRateQuery
+     *
      * @return ExchangeRate
      *
      * @throws Exception
@@ -182,8 +187,8 @@ class CurrencyConverterApi extends HistoricalService
     }
 
     /**
-     * CurrencyConverter API service uses 'Asia/Manila' timezone (UTC+8)
-     * For this reason we should do some date-time corrections
+     * CurrencyConverter API service uses 'Asia/Manila' timezone (UTC+8).
+     * For this reason we should do some date-time corrections.
      *
      * @param DateTimeInterface $dateTime
      * @return DateTimeInterface

@@ -17,7 +17,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The "access_key" option must be provided.
      */
-    function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
+    public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
     {
         new CurrencyConverterApi($this->getMock(HttpClient::class), null, ['enterprise' => true]);
     }
@@ -26,7 +26,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \Exchanger\Exception\Exception
      */
-    function it_throws_an_exception_with_error_response()
+    public function it_throws_an_exception_with_error_response()
     {
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=XXX_YYY&date=2000-01-01';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/error.json');
@@ -36,7 +36,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    function it_fetches_a_rate_normal_mode()
+    public function it_fetches_a_rate_normal_mode()
     {
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/success.json');
@@ -48,7 +48,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    function it_fetches_a_rate_enterprise_mode()
+    public function it_fetches_a_rate_enterprise_mode()
     {
         $uri = 'https://api.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/success.json');
@@ -60,7 +60,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    function it_fetches_a_historical_rate_normal_mode()
+    public function it_fetches_a_historical_rate_normal_mode()
     {
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR&date=2017-01-01';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/historical_success.json');
@@ -74,7 +74,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    function it_fetches_a_historical_rate_enterprise_mode()
+    public function it_fetches_a_historical_rate_enterprise_mode()
     {
         $uri = 'https://api.currencyconverterapi.com/api/v6/convert?q=USD_EUR&date=2017-01-01';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/historical_success.json');
