@@ -1,0 +1,13 @@
+{
+  "query": {
+    "count": 1
+  },
+  "results": {
+    "USD_EUR": {
+      "id": "USD_EUR",
+      "val": 0.726804,
+      "to": "EUR",
+      "fr": "USD"
+    }
+  }
+}
