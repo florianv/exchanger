@@ -72,11 +72,11 @@ class CentralBankOfRepublicTurkey extends HistoricalService
 
         $element = StringUtil::xmlToElement($content);
 
-        $date = new \DateTime((string)$element->xpath('//Tarih_Date/@Date')[0]);
-        $elements = $element->xpath('//Currency[@CurrencyCode="' . $currencyPair->getBaseCurrency() . '"]/ForexSelling');
+        $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
+        $elements = $element->xpath('//Currency[@CurrencyCode="'.$currencyPair->getBaseCurrency().'"]/ForexSelling');
 
         if (!empty($elements) || !$date) {
-            return new ExchangeRate((string)$elements[0], $date);
+            return new ExchangeRate((string) $elements[0], $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -99,7 +99,6 @@ class CentralBankOfRepublicTurkey extends HistoricalService
             $fileName = "$yearMonth/$dayMonthYear";
         }
 
-        return self::BASE_URL . $fileName . self::FILE_EXTENSION;
+        return self::BASE_URL.$fileName.self::FILE_EXTENSION;
     }
-
 }

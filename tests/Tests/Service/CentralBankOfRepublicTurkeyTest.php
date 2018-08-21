@@ -130,5 +130,4 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $this->assertEquals('2.3544', $rate->getValue());
         $this->assertEquals(new \DateTime('2013-04-22'), $rate->getDate());
     }
-
 }
