@@ -145,7 +145,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
      *
      * @return \SimpleXMLElement
      */
-    private function fetchRate(DateTimeInterface $requestedDate)
+    private function fetchRate(DateTimeInterface $requestedDate = null)
     {
         try {
             $content = $this->request($this->buildUrl($requestedDate));
