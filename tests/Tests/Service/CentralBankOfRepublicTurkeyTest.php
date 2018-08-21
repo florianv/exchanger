@@ -46,7 +46,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         self::$url = 'http://www.tcmb.gov.tr/kurlar/today.xml';
         self::$historicalUrl = 'http://www.tcmb.gov.tr/kurlar/201304/23042013.xml';
         self::$content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
-        self::$historicalContent = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_historical.xml');
+        self::$historicalContent = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_historical.xml');
     }
 
     /**
