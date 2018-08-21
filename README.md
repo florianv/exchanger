@@ -43,7 +43,7 @@ Here is the complete list of the currently implemented services:
 | [1Forge](https://1forge.com) | * (free but limited or paid) | * (free but limited or paid) | No |
 | [European Central Bank](https://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
 | [National Bank of Romania](http://www.bnr.ro) | RON | * | Yes |
-| [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | No |
+| [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | Yes |
 | [Central Bank of the Czech Republic](https://www.cnb.cz) | * | CZK | Yes |
 | [Central Bank of Russia](https://cbr.ru) | * | RUB | Yes |
 | [WebserviceX](http://www.webservicex.net) | * | * | No |
