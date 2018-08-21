@@ -69,13 +69,13 @@ class CentralBankOfRepublicTurkey extends HistoricalService
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        $element = $this->getRate($requestedDate);
+        $element = $this->getLatestRate($requestedDate);
 
-        $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
-        $elements = $element->xpath('//Currency[@CurrencyCode="'.$currencyPair->getBaseCurrency().'"]/ForexSelling');
+        $date = new \DateTime((string)$element->xpath('//Tarih_Date/@Date')[0]);
+        $elements = $element->xpath('//Currency[@CurrencyCode="' . $currencyPair->getBaseCurrency() . '"]/ForexSelling');
 
         if (!empty($elements) || !$date) {
-            return new ExchangeRate((string) $elements[0], $date);
+            return new ExchangeRate((string)$elements[0], $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -88,16 +88,16 @@ class CentralBankOfRepublicTurkey extends HistoricalService
      *
      * @return \SimpleXMLElement
      */
-    private function getRate(DateTimeInterface $requestedDate)
+    private function getLatestRate(DateTimeInterface $requestedDate = null)
     {
-        if ($this->isFuture($requestedDate)) {
-            $requestedDate = new \DateTime();
-        }
-
         $rate = $this->fetchRate($requestedDate);
 
         if (null === $rate) {
-            for ($i = 0; $i <= 12; $i++) {
+            if (null === $requestedDate || $this->isFuture($requestedDate)) {
+                $requestedDate = new \DateTime();
+            }
+
+            for ($i = 0; $i <= 12; ++$i) {
                 $requestedDate->sub(new \DateInterval('P1D'));
 
                 if ($this->isWeekend($requestedDate)) {
@@ -135,7 +135,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
      */
     private function isWeekend(DateTimeInterface $date)
     {
-        return $date->format('w') == 0 || $date->format('w') == 6;
+        return 0 === $date->format('w') || 6 === $date->format('w');
     }
 
     /**
@@ -172,6 +172,6 @@ class CentralBankOfRepublicTurkey extends HistoricalService
             $fileName = "$yearMonth/$dayMonthYear";
         }
 
-        return self::BASE_URL.$fileName.self::FILE_EXTENSION;
+        return self::BASE_URL . $fileName . self::FILE_EXTENSION;
     }
 }
