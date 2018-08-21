@@ -149,6 +149,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
     {
         try {
             $content = $this->request($this->buildUrl($requestedDate));
+
             return StringUtil::xmlToElement($content);
         } catch (\Exception $exception) {
             return null;
