@@ -68,9 +68,8 @@ class CentralBankOfRepublicTurkey extends HistoricalService
     private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null)
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
-        $content = $this->request($this->buildUrl($requestedDate));
 
-        $element = StringUtil::xmlToElement($content);
+        $element = $this->getRate($requestedDate);
 
         $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
         $elements = $element->xpath('//Currency[@CurrencyCode="'.$currencyPair->getBaseCurrency().'"]/ForexSelling');
@@ -80,6 +79,80 @@ class CentralBankOfRepublicTurkey extends HistoricalService
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
+    }
+
+    /**
+     * Get the latest valid rate. CBRT does not have rates for holidays and weekends.
+     *
+     * @param DateTimeInterface $requestedDate
+     *
+     * @return \SimpleXMLElement
+     */
+    private function getRate(DateTimeInterface $requestedDate)
+    {
+        if ($this->isFuture($requestedDate)) {
+            $requestedDate = new \DateTime();
+        }
+
+        $rate = $this->fetchRate($requestedDate);
+
+        if (null === $rate) {
+            for ($i = 0; $i <= 12; $i++) {
+                $requestedDate->sub(new \DateInterval('P1D'));
+
+                if ($this->isWeekend($requestedDate)) {
+                    continue;
+                }
+
+                $rate = $this->fetchRate($requestedDate);
+                if (!is_null($rate)) {
+                    return $rate;
+                }
+            }
+        }
+
+        return $rate;
+    }
+
+    /**
+     * Checks whether the given date is in the future.
+     *
+     * @param $requestedDate
+     *
+     * @return bool
+     */
+    private function isFuture($requestedDate)
+    {
+        return $requestedDate > (new \DateTime());
+    }
+
+    /**
+     * Checks whether the given date is weekend.
+     *
+     * @param DateTimeInterface $date
+     *
+     * @return bool
+     */
+    private function isWeekend(DateTimeInterface $date)
+    {
+        return $date->format('w') == 0 || $date->format('w') == 6;
+    }
+
+    /**
+     * Fetch the rate from CBRT.
+     *
+     * @param DateTimeInterface $requestedDate
+     *
+     * @return \SimpleXMLElement
+     */
+    private function fetchRate(DateTimeInterface $requestedDate)
+    {
+        try {
+            $content = $this->request($this->buildUrl($requestedDate));
+            return StringUtil::xmlToElement($content);
+        } catch (\Exception $exception) {
+            return null;
+        }
     }
 
     /**
