@@ -26,7 +26,7 @@ Read more about the benefits of this and about what different HTTP clients you m
 Below is an example using [Guzzle 6](http://docs.guzzlephp.org/en/latest/index.html):
 
 ```bash
-composer require florianv/exchanger php-http/message php-http/guzzle6-adapter
+composer require florianv/exchanger php-http/message php-http/guzzle6-adapter ^1.0
 ```
 
 ## Configuration
