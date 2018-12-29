@@ -100,39 +100,6 @@ class ExchangerTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_null_if_rate_absent_in_cache()
-    {
-        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
-
-        $service
-            ->expects($this->any())
-            ->method('supportQuery')
-            ->will($this->returnValue(true));
-
-        $item = $this->createMock('Psr\Cache\CacheItemInterface');
-
-        $item
-            ->expects($this->once())
-            ->method('isHit')
-            ->will($this->returnValue(false));
-
-        $pool = $this->createMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
-            ->expects($this->once())
-            ->method('getItem')
-            ->with(sha1(serialize($exchangeRateQuery)))
-            ->will($this->returnValue($item));
-
-        $exchanger = new Exchanger($service, $pool);
-        $this->assertNull($exchanger->getExchangeRate($exchangeRateQuery));
-    }
-
-    /**
-     * @test
-     */
     public function it_fetches_a_rate_from_cache()
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
