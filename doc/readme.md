@@ -304,7 +304,6 @@ use Exchanger\Service\CentralBankOfCzechRepublic;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\CurrencyDataFeed;
 use Exchanger\Service\EuropeanCentralBank;
-use Exchanger\Service\Google;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
 use Exchanger\Service\PhpArray;
@@ -323,7 +322,6 @@ $service = new Chain([
     new CentralBankOfCzechRepublic(),
     new RussianCentralBank(),
     new WebserviceX(),
-    new Google(),
     new Cryptonator(),
     new CurrencyDataFeed($client, null, ['api_key' => 'api_key']),
     new OpenExchangeRates($client, null, ['app_id' => 'app_id', 'enterprise' => false]),

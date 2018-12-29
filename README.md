@@ -47,7 +47,6 @@ Here is the complete list of the currently implemented services:
 | [Central Bank of the Czech Republic](https://www.cnb.cz) | * | CZK | Yes |
 | [Central Bank of Russia](https://cbr.ru) | * | RUB | Yes |
 | [WebserviceX](http://www.webservicex.net) | * | * | No |
-| [Google](https://www.google.com/finance) | * | * | No |
 | [Cryptonator](https://www.cryptonator.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies)  | No |
 | [CurrencyDataFeed](https://currencydatafeed.com) | * (free but limited or paid) | * (free but limited or paid) | No |
 | [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
