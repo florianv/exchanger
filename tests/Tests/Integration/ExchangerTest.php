@@ -47,9 +47,7 @@ class ExchangerTest extends TestCase
     private function cacheTest(callable $provideQuery)
     {
         if (!$this->fixerAccessKey) {
-            fwrite(STDERR, "\nFIXER.IO ACCESS KEY IS NOT SET. SKIPPING THE CACHE INTEGRATION TEST.\n");
-
-            return;
+            $this->markTestSkipped('FIXER.IO ACCESS KEY IS NOT SET. SKIPPING THE CACHE INTEGRATION TEST');
         }
 
         $firstStart = microtime(true);

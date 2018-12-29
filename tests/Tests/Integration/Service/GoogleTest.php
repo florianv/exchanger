@@ -13,7 +13,7 @@ namespace Exchanger\Tests\Intergration\Service;
 
 use Exchanger\ExchangeRateQueryBuilder;
 use Exchanger\Service\Google;
-use Http\Discovery\HttpClientDiscovery;
+use Http\Adapter\Guzzle6\Client as GuzzleClient;
 use PHPUnit\Framework\TestCase;
 use Exchanger\Exchanger;
 use PHPUnit\Framework\Assert;
@@ -25,7 +25,7 @@ class GoogleTest extends TestCase
      */
     public function it_fetches_a_rate()
     {
-        $client = HttpClientDiscovery::find();
+        $client = new GuzzleClient();
         $service = new Google($client);
         $exchanger = new Exchanger($service);
 
