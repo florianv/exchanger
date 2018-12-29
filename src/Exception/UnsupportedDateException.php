@@ -18,7 +18,7 @@ use Exchanger\Contract\ExchangeRateService;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class UnsupportedDateException extends Exception
+final class UnsupportedDateException extends Exception
 {
     /**
      * The date.

@@ -19,7 +19,7 @@ use Exchanger\Contract\ExchangeRateService;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class UnsupportedCurrencyPairException extends Exception
+final class UnsupportedCurrencyPairException extends Exception
 {
     /**
      * The currency pair.

@@ -16,6 +16,6 @@ namespace Exchanger\Exception;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class InternalException extends Exception
+final class InternalException extends Exception
 {
 }

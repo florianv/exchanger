@@ -19,7 +19,7 @@ use Exchanger\Contract\ExchangeRateService;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class UnsupportedExchangeQueryException extends Exception
+final class UnsupportedExchangeQueryException extends Exception
 {
     /**
      * The query.

@@ -7,6 +7,6 @@ namespace Exchanger\Exception;
  *
  * @author Hennadiy Verkh
  */
-class CacheException extends Exception
+final class CacheException extends Exception
 {
 }

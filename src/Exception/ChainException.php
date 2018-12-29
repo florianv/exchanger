@@ -16,7 +16,7 @@ namespace Exchanger\Exception;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class ChainException extends Exception
+final class ChainException extends Exception
 {
     /**
      * The exceptions.
