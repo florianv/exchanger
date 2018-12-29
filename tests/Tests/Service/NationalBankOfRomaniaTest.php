@@ -69,6 +69,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
 
         $this->assertSame(4.5125, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-02'), $rate->getDate());
+        $this->assertEquals(NationalBankOfRomania::class, $rate->getProvider());
     }
 
     /**
@@ -84,6 +85,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
 
         $this->assertSame(0.014356, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-02'), $rate->getDate());
+        $this->assertEquals(NationalBankOfRomania::class, $rate->getProvider());
     }
 
     /**
@@ -101,6 +103,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
 
         $this->assertSame(4.6526, $rate->getValue());
         $this->assertEquals(new \DateTime('2018-02-02'), $rate->getDate());
+        $this->assertEquals(NationalBankOfRomania::class, $rate->getProvider());
     }
 
     /**

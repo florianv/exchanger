@@ -74,6 +74,7 @@ class XigniteTest extends ServiceTestCase
 
         $this->assertEquals(2.982308, $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-11 21:22:00', new \DateTimeZone('UTC')), $rate->getDate());
+        $this->assertEquals(Xignite::class, $rate->getProvider());
     }
 
     /**
@@ -90,5 +91,6 @@ class XigniteTest extends ServiceTestCase
 
         $this->assertEquals(1.130228, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals(Xignite::class, $rate->getProvider());
     }
 }

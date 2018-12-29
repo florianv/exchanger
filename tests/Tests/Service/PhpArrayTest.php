@@ -28,7 +28,7 @@ class PhpArrayTest extends TestCase
         $service = new PhpArray([]);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
 
-        $service = new PhpArray(['EUR/USD' => 1, 'EUR/GBP' => new ExchangeRate(2)]);
+        $service = new PhpArray(['EUR/USD' => 1, 'EUR/GBP' => new ExchangeRate(2, PhpArray::class)]);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/GBP'))));
@@ -47,7 +47,7 @@ class PhpArrayTest extends TestCase
         $service = new PhpArray([], [
             $now->format('Y-m-d') => [
                 'EUR/USD' => 1,
-                'EUR/GBP' => new ExchangeRate('2.0'),
+                'EUR/GBP' => new ExchangeRate('2.0', PhpArray::class),
             ],
         ]);
 
@@ -76,7 +76,7 @@ class PhpArrayTest extends TestCase
     public function it_fetches_a_latest_rate_from_rates()
     {
         $arrayProvider = new PhpArray([
-            'EUR/USD' => $rate = new ExchangeRate('1.50'),
+            'EUR/USD' => $rate = new ExchangeRate('1.50', PhpArray::class),
         ]);
 
         $this->assertSame($rate, $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
@@ -97,9 +97,13 @@ class PhpArrayTest extends TestCase
         $usdGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/GBP')));
         $jpyGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('JPY/GBP')));
 
-        $this->assertEquals('1.5', $eurUsd->getValue());
-        $this->assertEquals('1.25', $usdGbp->getValue());
-        $this->assertEquals('1', $jpyGbp->getValue());
+        $this->assertSame(1.5, $eurUsd->getValue());
+        $this->assertSame(1.25, $usdGbp->getValue());
+        $this->assertSame(1.0, $jpyGbp->getValue());
+
+        $this->assertEquals(PhpArray::class, $eurUsd->getProvider());
+        $this->assertEquals(PhpArray::class, $usdGbp->getProvider());
+        $this->assertEquals(PhpArray::class, $jpyGbp->getProvider());
     }
 
     /**
@@ -129,7 +133,7 @@ class PhpArrayTest extends TestCase
 
         $arrayProvider = new PhpArray([], [
             $now->format('Y-m-d') => [
-                'EUR/USD' => $rate = new ExchangeRate('1.50'),
+                'EUR/USD' => $rate = new ExchangeRate('1.50', PhpArray::class),
             ],
         ]);
 
@@ -155,8 +159,12 @@ class PhpArrayTest extends TestCase
         $usdGbp = $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/GBP'), $now));
         $jpyGbp = $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('JPY/GBP'), $now));
 
-        $this->assertEquals('1.5', $eurUsd->getValue());
-        $this->assertEquals('1.25', $usdGbp->getValue());
-        $this->assertEquals('1', $jpyGbp->getValue());
+        $this->assertSame(1.5, $eurUsd->getValue());
+        $this->assertSame(1.25, $usdGbp->getValue());
+        $this->assertSame(1.0, $jpyGbp->getValue());
+
+        $this->assertEquals(PhpArray::class, $eurUsd->getProvider());
+        $this->assertEquals(PhpArray::class, $usdGbp->getProvider());
+        $this->assertEquals(PhpArray::class, $jpyGbp->getProvider());
     }
 }

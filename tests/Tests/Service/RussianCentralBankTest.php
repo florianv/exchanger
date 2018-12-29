@@ -57,6 +57,7 @@ class RussianCentralBankTest extends ServiceTestCase
 
         $this->assertSame(68.2458, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-09'), $rate->getDate());
+        $this->assertEquals(RussianCentralBank::class, $rate->getProvider());
     }
 
     /**
@@ -72,6 +73,7 @@ class RussianCentralBankTest extends ServiceTestCase
 
         $this->assertSame(0.131783, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-09'), $rate->getDate());
+        $this->assertEquals(RussianCentralBank::class, $rate->getProvider());
     }
 
     /**
@@ -89,6 +91,7 @@ class RussianCentralBankTest extends ServiceTestCase
 
         $this->assertSame(64.2078, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-23'), $rate->getDate());
+        $this->assertEquals(RussianCentralBank::class, $rate->getProvider());
     }
 
     /**

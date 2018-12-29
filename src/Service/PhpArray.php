@@ -129,7 +129,7 @@ final class PhpArray implements ExchangeRateService
     private function processRateValue($rate): ExchangeRate
     {
         if (is_scalar($rate)) {
-            $rate = new ExchangeRate($rate);
+            $rate = new ExchangeRate($rate, __CLASS__);
         } elseif (!$rate instanceof ExchangeRate) {
             throw new InternalException(sprintf(
                 'Rates passed to the PhpArray service must be Rate instances or scalars "%s" given.',

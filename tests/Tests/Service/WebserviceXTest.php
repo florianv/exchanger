@@ -42,5 +42,6 @@ class WebserviceXTest extends ServiceTestCase
 
         $this->assertEquals(1.3608, $rate->getValue());
         $this->assertEquals((new \DateTime())->format('Y-m-d'), $rate->getDate()->format('Y-m-d'));
+        $this->assertEquals(WebserviceX::class, $rate->getProvider());
     }
 }

@@ -48,7 +48,7 @@ class EuropeanCentralBank extends HistoricalService
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
-        return new ExchangeRate((string) $elements[0]['rate'], $date);
+        return new ExchangeRate((string) $elements[0]['rate'], __CLASS__, $date);
     }
 
     /**
@@ -74,7 +74,7 @@ class EuropeanCentralBank extends HistoricalService
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
-        return new ExchangeRate((string) $elements[0]['rate'], $exchangeQuery->getDate());
+        return new ExchangeRate((string) $elements[0]['rate'], __CLASS__, $exchangeQuery->getDate());
     }
 
     /**

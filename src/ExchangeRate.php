@@ -35,14 +35,23 @@ final class ExchangeRate implements ExchangeRateContract
     private $date;
 
     /**
+     * The provider.
+     *
+     * @var string
+     */
+    private $provider;
+
+    /**
      * Creates a new rate.
      *
-     * @param float                   $value The rate value
-     * @param \DateTimeInterface|null $date  The date at which this rate was calculated
+     * @param float                   $value    The rate value
+     * @param string                  $provider The class name of the provider that returned this rate
+     * @param \DateTimeInterface|null $date     The date at which this rate was calculated
      */
-    public function __construct(float $value, \DateTimeInterface $date = null)
+    public function __construct(float $value, string $provider, \DateTimeInterface $date = null)
     {
         $this->value = $value;
+        $this->provider = $provider;
         $this->date = $date ?: new \DateTime();
     }
 
@@ -60,5 +69,13 @@ final class ExchangeRate implements ExchangeRateContract
     public function getDate(): \DateTimeInterface
     {
         return $this->date;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProvider(): string
+    {
+        return $this->provider;
     }
 }

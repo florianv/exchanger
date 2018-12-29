@@ -65,6 +65,7 @@ class CurrencyLayerTest extends ServiceTestCase
 
         $this->assertEquals(0.726804, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
+        $this->assertEquals(CurrencyLayer::class, $rate->getProvider());
     }
 
     /**
@@ -82,6 +83,7 @@ class CurrencyLayerTest extends ServiceTestCase
 
         $this->assertEquals(0.726804, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
+        $this->assertEquals(CurrencyLayer::class, $rate->getProvider());
     }
 
     /**
@@ -100,6 +102,7 @@ class CurrencyLayerTest extends ServiceTestCase
 
         $this->assertEquals(3.673069, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
+        $this->assertEquals(CurrencyLayer::class, $rate->getProvider());
     }
 
     /**
@@ -118,5 +121,6 @@ class CurrencyLayerTest extends ServiceTestCase
 
         $this->assertEquals(3.673069, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
+        $this->assertEquals(CurrencyLayer::class, $rate->getProvider());
     }
 }

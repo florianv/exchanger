@@ -18,6 +18,7 @@ use Exchanger\ExchangeRate;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\Chain;
+use Exchanger\Service\PhpArray;
 use PHPUnit\Framework\TestCase;
 
 class ChainTest extends TestCase
@@ -72,7 +73,7 @@ class ChainTest extends TestCase
     public function it_use_next_provider_in_the_chain()
     {
         $pair = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-        $rate = new ExchangeRate(1, new \DateTime());
+        $rate = new ExchangeRate(1, PhpArray::class, new \DateTime());
 
         $serviceOne = $this->createMock('Exchanger\Contract\ExchangeRateService');
 

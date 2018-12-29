@@ -46,5 +46,6 @@ class CurrencyDataFeedTest extends ServiceTestCase
 
         $this->assertSame(1.18765, $rate->getValue());
         $this->assertTrue('2017-12-21' == $rate->getDate()->format('Y-m-d'));
+        $this->assertEquals(CurrencyDataFeed::class, $rate->getProvider());
     }
 }

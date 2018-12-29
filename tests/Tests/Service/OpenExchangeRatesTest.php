@@ -67,6 +67,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
 
         $this->assertEquals(0.726804, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
+        $this->assertEquals(OpenExchangeRates::class, $rate->getProvider());
     }
 
     /**
@@ -84,6 +85,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
 
         $this->assertEquals(0.726804, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
+        $this->assertEquals(OpenExchangeRates::class, $rate->getProvider());
     }
 
     /**
@@ -104,6 +106,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
 
         $this->assertEquals(3.67246, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
+        $this->assertEquals(OpenExchangeRates::class, $rate->getProvider());
     }
 
     /**
@@ -124,6 +127,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
 
         $this->assertEquals(1.092882, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
+        $this->assertEquals(OpenExchangeRates::class, $rate->getProvider());
     }
 
     /**

@@ -117,7 +117,7 @@ class ExchangerTest extends TestCase
     /**
      * Creates an exchange rate query.
      *
-     * @return HistoricalExchangeRateQuery
+     * @return ExchangeRateQuery
      */
     private function createExchangeRateQuery()
     {

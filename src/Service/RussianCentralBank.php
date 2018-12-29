@@ -37,7 +37,7 @@ class RussianCentralBank extends HistoricalService
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
         $nominal = str_replace(',', '.', (string) $elements['0']->Nominal);
 
-        return new ExchangeRate($rate / $nominal, $date);
+        return new ExchangeRate($rate / $nominal, __CLASS__, $date);
     }
 
     /**
@@ -64,7 +64,7 @@ class RussianCentralBank extends HistoricalService
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
         $nominal = str_replace(',', '.', (string) $elements['0']->Nominal);
 
-        return new ExchangeRate($rate / $nominal, $exchangeQuery->getDate());
+        return new ExchangeRate($rate / $nominal, __CLASS__, $exchangeQuery->getDate());
     }
 
     /**

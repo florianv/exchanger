@@ -45,7 +45,7 @@ class ExchangerTest extends TestCase
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
-        $rate = new ExchangeRate('1', new \DateTime());
+        $rate = new ExchangeRate('1', __CLASS__, new \DateTime());
 
         $service
             ->expects($this->any())
@@ -103,7 +103,7 @@ class ExchangerTest extends TestCase
     public function it_fetches_a_rate_from_cache()
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-        $rate = new ExchangeRate('1', new \DateTime());
+        $rate = new ExchangeRate('1', __CLASS__, new \DateTime());
 
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
@@ -142,7 +142,7 @@ class ExchangerTest extends TestCase
     public function it_caches_a_rate()
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-        $rate = new ExchangeRate('1', new \DateTime());
+        $rate = new ExchangeRate('1', __CLASS__, new \DateTime());
         $ttl = 3600;
 
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
@@ -239,7 +239,7 @@ class ExchangerTest extends TestCase
     {
         $ttl = 3600;
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_ttl' => $ttl]);
-        $rate = new ExchangeRate('1', new \DateTime());
+        $rate = new ExchangeRate('1', __CLASS__, new \DateTime());
 
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 

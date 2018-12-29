@@ -51,7 +51,7 @@ class CurrencyDataFeed extends Service
         if (!empty($data) && $data['status'] && !isset($data['currency'][0]['error'])) {
             $date = (new \DateTime())->setTimestamp(strtotime($data['currency'][0]['date']));
 
-            return new ExchangeRate($data['currency'][0]['value'], $date);
+            return new ExchangeRate($data['currency'][0]['value'], __CLASS__, $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);

@@ -44,7 +44,7 @@ class Cryptonator extends Service
 
         $date = (new \DateTime())->setTimestamp($data['timestamp']);
 
-        return new ExchangeRate($data['ticker']['price'], $date);
+        return new ExchangeRate($data['ticker']['price'], __CLASS__, $date);
     }
 
     /**
