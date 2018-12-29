@@ -23,7 +23,7 @@ interface ExchangeRateQuery
      *
      * @return CurrencyPair
      */
-    public function getCurrencyPair();
+    public function getCurrencyPair(): CurrencyPair;
 
     /**
      * Gets an option by name.

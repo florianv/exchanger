@@ -39,7 +39,7 @@ final class ExchangeRateQueryBuilder
      *
      * @param string $currencyPair
      */
-    public function __construct($currencyPair)
+    public function __construct(string $currencyPair)
     {
         $this->currencyPair = CurrencyPair::createFromString($currencyPair);
     }
@@ -51,7 +51,7 @@ final class ExchangeRateQueryBuilder
      *
      * @return $this
      */
-    public function setDate(\DateTimeInterface $date)
+    public function setDate(\DateTimeInterface $date): ExchangeRateQueryBuilder
     {
         $this->date = $date;
 
@@ -66,7 +66,7 @@ final class ExchangeRateQueryBuilder
      *
      * @return $this
      */
-    public function addOption($name, $value)
+    public function addOption($name, $value): ExchangeRateQueryBuilder
     {
         $this->options[$name] = $value;
 

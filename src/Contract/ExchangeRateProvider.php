@@ -25,5 +25,5 @@ interface ExchangeRateProvider
      *
      * @return ExchangeRate
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery);
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate;
 }

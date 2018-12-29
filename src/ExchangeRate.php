@@ -39,7 +39,7 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * {@inheritdoc}
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -47,7 +47,7 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * {@inheritdoc}
      */
-    public function getDate()
+    public function getDate(): \DateTimeInterface
     {
         return $this->date;
     }

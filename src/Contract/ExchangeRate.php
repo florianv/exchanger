@@ -23,12 +23,12 @@ interface ExchangeRate
      *
      * @return string
      */
-    public function getValue();
+    public function getValue(): string;
 
     /**
      * Gets the date at which this rate was calculated.
      *
-     * @return \Datetime
+     * @return \DateTimeInterface
      */
-    public function getDate();
+    public function getDate(): \DateTimeInterface;
 }

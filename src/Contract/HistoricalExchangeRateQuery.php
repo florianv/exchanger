@@ -23,5 +23,5 @@ interface HistoricalExchangeRateQuery extends ExchangeRateQuery
      *
      * @return \DateTimeInterface
      */
-    public function getDate();
+    public function getDate(): \DateTimeInterface;
 }

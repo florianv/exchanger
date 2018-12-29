@@ -56,7 +56,7 @@ class ChainException extends Exception
      *
      * @return Exception[]
      */
-    public function getExceptions()
+    public function getExceptions(): array
     {
         return $this->exceptions;
     }

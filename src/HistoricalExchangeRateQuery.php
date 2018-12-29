@@ -40,7 +40,7 @@ class HistoricalExchangeRateQuery extends ExchangeRateQuery implements Historica
     /**
      * {@inheritdoc}
      */
-    public function getDate()
+    public function getDate(): \DateTimeInterface
     {
         return $this->date;
     }

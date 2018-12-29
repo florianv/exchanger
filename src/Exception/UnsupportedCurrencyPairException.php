@@ -44,7 +44,7 @@ class UnsupportedCurrencyPairException extends Exception
      *
      * @return CurrencyPair
      */
-    public function getCurrencyPair()
+    public function getCurrencyPair(): CurrencyPair
     {
         return $this->currencyPair;
     }
@@ -54,7 +54,7 @@ class UnsupportedCurrencyPairException extends Exception
      *
      * @return ExchangeRateService
      */
-    public function getService()
+    public function getService(): ExchangeRateService
     {
         return $this->service;
     }

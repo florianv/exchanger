@@ -30,7 +30,7 @@ final class CurrencyPair implements CurrencyPairContract
      * @param string $baseCurrency  The base currency ISO 4217 code
      * @param string $quoteCurrency The quote currency ISO 4217 code
      */
-    public function __construct($baseCurrency, $quoteCurrency)
+    public function __construct(string $baseCurrency, string $quoteCurrency)
     {
         $this->baseCurrency = $baseCurrency;
         $this->quoteCurrency = $quoteCurrency;
@@ -45,7 +45,7 @@ final class CurrencyPair implements CurrencyPairContract
      *
      * @return CurrencyPairContract
      */
-    public static function createFromString($string)
+    public static function createFromString(string $string): CurrencyPairContract
     {
         $matches = [];
         if (!preg_match('#^([A-Z0-9]{3,})\/([A-Z0-9]{3,})$#', $string, $matches)) {
@@ -60,7 +60,7 @@ final class CurrencyPair implements CurrencyPairContract
     /**
      * {@inheritdoc}
      */
-    public function getBaseCurrency()
+    public function getBaseCurrency(): string
     {
         return $this->baseCurrency;
     }
@@ -68,7 +68,7 @@ final class CurrencyPair implements CurrencyPairContract
     /**
      * {@inheritdoc}
      */
-    public function getQuoteCurrency()
+    public function getQuoteCurrency(): string
     {
         return $this->quoteCurrency;
     }
@@ -76,7 +76,7 @@ final class CurrencyPair implements CurrencyPairContract
     /**
      * {@inheritdoc}
      */
-    public function isIdentical()
+    public function isIdentical(): bool
     {
         return $this->baseCurrency === $this->quoteCurrency;
     }
@@ -84,7 +84,7 @@ final class CurrencyPair implements CurrencyPairContract
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf('%s/%s', $this->baseCurrency, $this->quoteCurrency);
     }

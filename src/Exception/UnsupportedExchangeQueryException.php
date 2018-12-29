@@ -42,7 +42,7 @@ class UnsupportedExchangeQueryException extends Exception
      *
      * @return ExchangeRateQuery
      */
-    public function getExchangeRateQuery()
+    public function getExchangeRateQuery(): ExchangeRateQuery
     {
         return $this->exchangeRateQuery;
     }
@@ -52,7 +52,7 @@ class UnsupportedExchangeQueryException extends Exception
      *
      * @return ExchangeRateService
      */
-    public function getService()
+    public function getService(): ExchangeRateService
     {
         return $this->service;
     }

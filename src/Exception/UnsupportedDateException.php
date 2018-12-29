@@ -42,7 +42,7 @@ class UnsupportedDateException extends Exception
      *
      * @return \DateTimeInterface
      */
-    public function getDate()
+    public function getDate(): \DateTimeInterface
     {
         return $this->date;
     }
@@ -52,7 +52,7 @@ class UnsupportedDateException extends Exception
      *
      * @return ExchangeRateService
      */
-    public function getService()
+    public function getService(): ExchangeRateService
     {
         return $this->service;
     }

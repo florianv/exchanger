@@ -25,5 +25,5 @@ interface ExchangeRateService extends ExchangeRateProvider
      *
      * @return bool
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery);
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool;
 }

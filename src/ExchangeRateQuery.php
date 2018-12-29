@@ -40,7 +40,7 @@ class ExchangeRateQuery implements ExchangeRateQueryContract
     /**
      * {@inheritdoc}
      */
-    public function getCurrencyPair()
+    public function getCurrencyPair(): CurrencyPairContract
     {
         return $this->currencyPair;
     }
