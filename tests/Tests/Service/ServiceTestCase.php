@@ -11,7 +11,9 @@
 
 namespace Exchanger\Tests\Service;
 
-abstract class ServiceTestCase extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+abstract class ServiceTestCase extends TestCase
 {
     /**
      * Create a mocked Response.
@@ -22,13 +24,13 @@ abstract class ServiceTestCase extends \PHPUnit_Framework_TestCase
      */
     private function getResponse($content)
     {
-        $body = $this->getMock('Psr\Http\Message\StreamInterface');
+        $body = $this->createMock('Psr\Http\Message\StreamInterface');
         $body
             ->expects($this->once())
             ->method('__toString')
             ->will($this->returnValue($content));
 
-        $response = $this->getMock('Psr\Http\Message\ResponseInterface');
+        $response = $this->createMock('Psr\Http\Message\ResponseInterface');
         $response
             ->expects($this->once())
             ->method('getBody')
@@ -49,7 +51,7 @@ abstract class ServiceTestCase extends \PHPUnit_Framework_TestCase
     {
         $response = $this->getResponse($content);
 
-        $adapter = $this->getMock('Http\Client\HttpClient');
+        $adapter = $this->createMock('Http\Client\HttpClient');
 
         $adapter
             ->expects($this->once())
@@ -74,7 +76,7 @@ abstract class ServiceTestCase extends \PHPUnit_Framework_TestCase
     {
         $response = $this->getResponse($content);
 
-        $adapter = $this->getMock('Http\Client\HttpClient');
+        $adapter = $this->createMock('Http\Client\HttpClient');
 
         $adapter
             ->expects($this->once())

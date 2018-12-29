@@ -12,8 +12,9 @@
 namespace Exchanger\Tests;
 
 use Exchanger\CurrencyPair;
+use PHPUnit\Framework\TestCase;
 
-class CurrencyPairTest extends \PHPUnit_Framework_TestCase
+class CurrencyPairTest extends TestCase
 {
     /**
      * @test

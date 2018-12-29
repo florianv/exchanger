@@ -12,8 +12,9 @@
 namespace Exchanger\Tests;
 
 use Exchanger\StringUtil;
+use PHPUnit\Framework\TestCase;
 
-class StringUtilTest extends \PHPUnit_Framework_TestCase
+class StringUtilTest extends TestCase
 {
     /**
      * @test

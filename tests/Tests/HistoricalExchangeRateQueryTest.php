@@ -13,8 +13,9 @@ namespace Exchanger\Tests;
 
 use Exchanger\CurrencyPair;
 use Exchanger\HistoricalExchangeRateQuery;
+use PHPUnit\Framework\TestCase;
 
-class HistoricalExchangeRateQueryTest extends \PHPUnit_Framework_TestCase
+class HistoricalExchangeRateQueryTest extends TestCase
 {
     /**
      * @test

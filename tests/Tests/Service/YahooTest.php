@@ -23,7 +23,7 @@ class YahooTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new Yahoo($this->getMock('Http\Client\HttpClient'));
+        $service = new Yahoo($this->createMock('Http\Client\HttpClient'));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));

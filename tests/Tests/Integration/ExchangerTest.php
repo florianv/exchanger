@@ -19,8 +19,9 @@ use League\Flysystem\Filesystem;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Exchanger\Exchanger;
 use Exchanger\Service\Fixer;
+use PHPUnit\Framework\TestCase;
 
-class ExchangerTest extends \PHPUnit_Framework_TestCase
+class ExchangerTest extends TestCase
 {
     private $fixerAccessKey;
 

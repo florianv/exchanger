@@ -23,7 +23,7 @@ class RussianCentralBankTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new RussianCentralBank($this->getMock('Http\Client\HttpClient'));
+        $service = new RussianCentralBank($this->createMock('Http\Client\HttpClient'));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/RUB'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));

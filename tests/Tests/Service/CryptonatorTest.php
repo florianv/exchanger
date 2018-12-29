@@ -23,7 +23,7 @@ class CryptonatorTest extends ServiceTestCase
      */
     public function it_does_not_support_all_codes()
     {
-        $service = new Cryptonator($this->getMock('Http\Client\HttpClient'));
+        $service = new Cryptonator($this->createMock('Http\Client\HttpClient'));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('NONCODE/NONCODE'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD'))));
     }
@@ -33,7 +33,7 @@ class CryptonatorTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new Cryptonator($this->getMock('Http\Client\HttpClient'));
+        $service = new Cryptonator($this->createMock('Http\Client\HttpClient'));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('BTC/USD'), new \DateTime())));

@@ -25,7 +25,7 @@ class CurrencyLayerTest extends ServiceTestCase
      */
     public function it_throws_an_exception_if_access_key_option_missing()
     {
-        new CurrencyLayer($this->getMock('Http\Client\HttpClient'));
+        new CurrencyLayer($this->createMock('Http\Client\HttpClient'));
     }
 
     /**
@@ -33,7 +33,7 @@ class CurrencyLayerTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new CurrencyLayer($this->getMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);
+        $service = new CurrencyLayer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
     }
 

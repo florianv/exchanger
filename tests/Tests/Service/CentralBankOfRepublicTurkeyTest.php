@@ -83,7 +83,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new CentralBankOfRepublicTurkey($this->getMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfRepublicTurkey($this->createMock('Http\Client\HttpClient'));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));

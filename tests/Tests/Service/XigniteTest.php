@@ -26,7 +26,7 @@ class XigniteTest extends ServiceTestCase
      */
     public function it_throws_an_exception_if_token_option_missing()
     {
-        new Xignite($this->getMock('Http\Client\HttpClient'));
+        new Xignite($this->createMock('Http\Client\HttpClient'));
     }
 
     /**
@@ -34,7 +34,7 @@ class XigniteTest extends ServiceTestCase
      */
     public function it_support_all_queries()
     {
-        $service = new Xignite($this->getMock('Http\Client\HttpClient'), null, ['token' => 'token']);
+        $service = new Xignite($this->createMock('Http\Client\HttpClient'), null, ['token' => 'token']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));

@@ -7,10 +7,11 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\CurrencyConverterApi;
 use Http\Client\HttpClient;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
+class CurrencyConverterApiTest extends TestCase
 {
     /**
      * @test
@@ -19,7 +20,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
      */
     public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
     {
-        new CurrencyConverterApi($this->getMock(HttpClient::class), null, ['enterprise' => true]);
+        new CurrencyConverterApi($this->createMock(HttpClient::class), null, ['enterprise' => true]);
     }
 
     /**
@@ -100,7 +101,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->getResponse($content, $statusCode);
 
-        $adapter = $this->getMock(HttpClient::class);
+        $adapter = $this->createMock(HttpClient::class);
 
         $adapter
             ->expects($this->once())
@@ -120,13 +121,13 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
      */
     private function getResponse($content, $statusCode)
     {
-        $body = $this->getMock(StreamInterface::class);
+        $body = $this->createMock(StreamInterface::class);
         $body
             ->expects($this->once())
             ->method('__toString')
             ->will($this->returnValue($content));
 
-        $response = $this->getMock(ResponseInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
         $response
             ->expects($this->once())
             ->method('getBody')

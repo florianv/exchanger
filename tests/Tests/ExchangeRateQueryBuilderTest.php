@@ -14,8 +14,9 @@ namespace Exchanger\Tests;
 use Exchanger\ExchangeRateQueryBuilder;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
+use PHPUnit\Framework\TestCase;
 
-class ExchangeRateQueryBuilderTest extends \PHPUnit_Framework_TestCase
+class ExchangeRateQueryBuilderTest extends TestCase
 {
     /**
      * @test

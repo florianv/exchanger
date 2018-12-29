@@ -16,8 +16,9 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\PhpArray;
+use PHPUnit\Framework\TestCase;
 
-class PhpArrayTest extends \PHPUnit_Framework_TestCase
+class PhpArrayTest extends TestCase
 {
     /**
      * @test
@@ -96,7 +97,7 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
         $usdGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/GBP')));
         $jpyGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('JPY/GBP')));
 
-        $this->assertEquals('1.50', $eurUsd->getValue());
+        $this->assertEquals('1.5', $eurUsd->getValue());
         $this->assertEquals('1.25', $usdGbp->getValue());
         $this->assertEquals('1', $jpyGbp->getValue());
     }
@@ -154,7 +155,7 @@ class PhpArrayTest extends \PHPUnit_Framework_TestCase
         $usdGbp = $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/GBP'), $now));
         $jpyGbp = $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('JPY/GBP'), $now));
 
-        $this->assertEquals('1.50', $eurUsd->getValue());
+        $this->assertEquals('1.5', $eurUsd->getValue());
         $this->assertEquals('1.25', $usdGbp->getValue());
         $this->assertEquals('1', $jpyGbp->getValue());
     }

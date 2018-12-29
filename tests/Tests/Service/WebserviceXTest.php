@@ -23,7 +23,7 @@ class WebserviceXTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new WebserviceX($this->getMock('Http\Client\HttpClient'));
+        $service = new WebserviceX($this->createMock('Http\Client\HttpClient'));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));

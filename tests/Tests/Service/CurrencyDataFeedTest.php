@@ -14,7 +14,7 @@ class CurrencyDataFeedTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new CurrencyDataFeed($this->getMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new CurrencyDataFeed($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));

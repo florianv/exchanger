@@ -66,7 +66,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new CentralBankOfCzechRepublic($this->getMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfCzechRepublic($this->createMock('Http\Client\HttpClient'));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('CZK/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY'))));
@@ -125,7 +125,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
         $service = $this->createServiceForHistoricalRates();
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/CZK'), $requestedDate));
 
-        $this->assertEquals('36.270', $rate->getValue());
+        $this->assertEquals('36.27', $rate->getValue());
         $this->assertEquals(new \DateTime('2000-04-21'), $rate->getDate());
     }
 

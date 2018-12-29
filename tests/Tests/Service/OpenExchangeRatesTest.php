@@ -25,7 +25,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
      */
     public function it_throws_an_exception_if_app_id_option_missing()
     {
-        new OpenExchangeRates($this->getMock('Http\Client\HttpClient'));
+        new OpenExchangeRates($this->createMock('Http\Client\HttpClient'));
     }
 
     /**
@@ -33,7 +33,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new OpenExchangeRates($this->getMock('Http\Client\HttpClient'), null, ['app_id' => 'secret']);
+        $service = new OpenExchangeRates($this->createMock('Http\Client\HttpClient'), null, ['app_id' => 'secret']);
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), new \DateTime())));

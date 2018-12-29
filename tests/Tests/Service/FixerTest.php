@@ -22,7 +22,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new Fixer($this->getMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
@@ -31,7 +31,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_supports_eur_base_normal_mode()
     {
-        $service = new Fixer($this->getMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CAD'))));
     }
 
@@ -40,7 +40,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_does_not_support_other_than_eur_base_in_normal_mode()
     {
-        $service = new Fixer($this->getMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/CAD'))));
     }
 

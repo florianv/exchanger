@@ -4,11 +4,12 @@ namespace Exchanger\Tests\Exception;
 
 use Exchanger\Exception\ChainException;
 use Exchanger\Exception\InternalException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Exchanger\Exception\ChainException
  */
-class ChainExceptionTest extends \PHPUnit_Framework_TestCase
+class ChainExceptionTest extends TestCase
 {
     /**
      * @var ChainException
