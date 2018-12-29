@@ -21,10 +21,26 @@ use Exchanger\Contract\ExchangeRateService;
  */
 class UnsupportedExchangeQueryException extends Exception
 {
+    /**
+     * The query.
+     *
+     * @var ExchangeRateQuery
+     */
     private $exchangeRateQuery;
 
+    /**
+     * The service.
+     *
+     * @var ExchangeRateService
+     */
     private $service;
 
+    /**
+     * Constructor.
+     *
+     * @param ExchangeRateQuery   $exchangeRateQuery
+     * @param ExchangeRateService $service
+     */
     public function __construct(ExchangeRateQuery $exchangeRateQuery, ExchangeRateService $service)
     {
         parent::__construct(sprintf(

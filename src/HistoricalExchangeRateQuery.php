@@ -21,6 +21,11 @@ use Exchanger\Contract\HistoricalExchangeRateQuery as HistoricalExchangeQueryCon
  */
 class HistoricalExchangeRateQuery extends ExchangeRateQuery implements HistoricalExchangeQueryContract
 {
+    /**
+     * The date.
+     *
+     * @var \DateTimeInterface
+     */
     private $date;
 
     /**

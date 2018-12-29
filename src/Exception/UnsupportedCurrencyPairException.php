@@ -21,10 +21,26 @@ use Exchanger\Contract\ExchangeRateService;
  */
 class UnsupportedCurrencyPairException extends Exception
 {
+    /**
+     * The currency pair.
+     *
+     * @var CurrencyPair
+     */
     private $currencyPair;
 
+    /**
+     * The service.
+     *
+     * @var ExchangeRateService
+     */
     private $service;
 
+    /**
+     * Constructor.
+     *
+     * @param CurrencyPair        $currencyPair
+     * @param ExchangeRateService $service
+     */
     public function __construct(CurrencyPair $currencyPair, ExchangeRateService $service)
     {
         parent::__construct(

@@ -38,7 +38,21 @@ class Fixer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function processOptions(array &$options): void
+    {
+        if (!isset($options[self::ACCESS_KEY_OPTION])) {
+            throw new \InvalidArgumentException('The "access_key" option must be provided to use fixer.io');
+        }
+
+        if (!isset($options['enterprise'])) {
+            $options['enterprise'] = false;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ?ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -61,21 +75,7 @@ class Fixer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options): void
-    {
-        if (!isset($options[self::ACCESS_KEY_OPTION])) {
-            throw new \InvalidArgumentException('The "access_key" option must be provided to use fixer.io');
-        }
-
-        if (!isset($options['enterprise'])) {
-            $options['enterprise'] = false;
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ?ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -115,7 +115,7 @@ class Fixer extends HistoricalService
      *
      * @throws Exception
      */
-    private function createRate($url, CurrencyPair $currencyPair)
+    private function createRate($url, CurrencyPair $currencyPair): ?ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
@@ -141,7 +141,7 @@ class Fixer extends HistoricalService
      *
      * @return string
      */
-    private function getErrorMessage($code)
+    private function getErrorMessage($code): string
     {
         $errors = [
             404 => 'The requested resource does not exist.',

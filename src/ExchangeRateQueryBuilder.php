@@ -18,6 +18,11 @@ namespace Exchanger;
  */
 final class ExchangeRateQueryBuilder
 {
+    /**
+     * The currency pair.
+     *
+     * @var CurrencyPair
+     */
     private $currencyPair;
 
     /**

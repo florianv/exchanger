@@ -20,10 +20,26 @@ use Exchanger\Contract\ExchangeRateService;
  */
 class UnsupportedDateException extends Exception
 {
+    /**
+     * The date.
+     *
+     * @var \DateTimeInterface
+     */
     private $date;
 
+    /**
+     * The service.
+     *
+     * @var ExchangeRateService
+     */
     private $service;
 
+    /**
+     * Constructor.
+     *
+     * @param \DateTimeInterface  $date
+     * @param ExchangeRateService $service
+     */
     public function __construct(\DateTimeInterface $date, ExchangeRateService $service)
     {
         parent::__construct(

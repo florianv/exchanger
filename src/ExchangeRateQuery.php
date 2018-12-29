@@ -21,8 +21,18 @@ use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
  */
 class ExchangeRateQuery implements ExchangeRateQueryContract
 {
+    /**
+     * The currency pair.
+     *
+     * @var CurrencyPairContract
+     */
     private $currencyPair;
 
+    /**
+     * The options.
+     *
+     * @var array
+     */
     private $options;
 
     /**
