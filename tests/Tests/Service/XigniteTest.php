@@ -72,7 +72,7 @@ class XigniteTest extends ServiceTestCase
         $service = new Xignite($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('GBP/AWG')));
 
-        $this->assertEquals('2.982308', $rate->getValue());
+        $this->assertEquals(2.982308, $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-11 21:22:00', new \DateTimeZone('UTC')), $rate->getDate());
     }
 
@@ -88,7 +88,7 @@ class XigniteTest extends ServiceTestCase
         $service = new Xignite($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $date));
 
-        $this->assertEquals('1.130228', $rate->getValue());
+        $this->assertEquals(1.130228, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
     }
 }

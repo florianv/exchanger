@@ -44,7 +44,7 @@ class ForgeTest extends ServiceTestCase
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
-        $this->assertSame('1.18711', $rate->getValue());
+        $this->assertSame(1.18711, $rate->getValue());
         $this->assertTrue('2017-12-21' == $rate->getDate()->format('Y-m-d'));
     }
 
@@ -58,7 +58,7 @@ class ForgeTest extends ServiceTestCase
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/HKD')));
-        $this->assertSame('9.12721', $rate->getValue());
+        $this->assertSame(9.12721, $rate->getValue());
         $this->assertTrue('2018-05-30' == $rate->getDate()->format('Y-m-d'));
     }
 

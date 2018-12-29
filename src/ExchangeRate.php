@@ -23,7 +23,7 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * The value.
      *
-     * @var mixed
+     * @var float
      */
     private $value;
 
@@ -37,19 +37,19 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * Creates a new rate.
      *
-     * @param mixed                   $value The rate value
+     * @param float                   $value The rate value
      * @param \DateTimeInterface|null $date  The date at which this rate was calculated
      */
-    public function __construct($value, \DateTimeInterface $date = null)
+    public function __construct(float $value, \DateTimeInterface $date = null)
     {
-        $this->value = (string) $value;
+        $this->value = $value;
         $this->date = $date ?: new \DateTime();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getValue(): string
+    public function getValue(): float
     {
         return $this->value;
     }

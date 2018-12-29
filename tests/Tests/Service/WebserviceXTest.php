@@ -40,7 +40,7 @@ class WebserviceXTest extends ServiceTestCase
         $service = new WebserviceX($this->getHttpAdapterMock($uri, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
-        $this->assertEquals('1.3608', $rate->getValue());
+        $this->assertEquals(1.3608, $rate->getValue());
         $this->assertEquals((new \DateTime())->format('Y-m-d'), $rate->getDate()->format('Y-m-d'));
     }
 }

@@ -21,9 +21,9 @@ interface ExchangeRate
     /**
      * Gets the rate value.
      *
-     * @return string
+     * @return float
      */
-    public function getValue(): string;
+    public function getValue(): float;
 
     /**
      * Gets the date at which this rate was calculated.

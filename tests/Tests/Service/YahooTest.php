@@ -53,7 +53,7 @@ class YahooTest extends ServiceTestCase
         $service = new Yahoo($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
-        $this->assertSame('1.3758', $rate->getValue());
+        $this->assertSame(1.3758, $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-10 07:23:00'), $rate->getDate());
     }
 

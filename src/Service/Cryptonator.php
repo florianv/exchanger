@@ -2,11 +2,12 @@
 
 namespace Exchanger\Service;
 
-use Exchanger\Contract\ExchangeRate;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 class Cryptonator extends Service
 {
@@ -17,11 +18,11 @@ class Cryptonator extends Service
      *
      * @param ExchangeRateQuery $exchangeQuery
      *
-     * @return ExchangeRate
+     * @return ExchangeRateContract
      *
      * @throws Exception
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -43,7 +44,7 @@ class Cryptonator extends Service
 
         $date = (new \DateTime())->setTimestamp($data['timestamp']);
 
-        return new \Exchanger\ExchangeRate($data['ticker']['price'], $date);
+        return new ExchangeRate($data['ticker']['price'], $date);
     }
 
     /**

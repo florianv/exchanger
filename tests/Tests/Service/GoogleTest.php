@@ -53,7 +53,7 @@ class GoogleTest extends ServiceTestCase
         $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/MXN')));
 
-        $this->assertSame('23.1021173', $rate->getValue());
+        $this->assertSame(23.1021173, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 
@@ -68,7 +68,7 @@ class GoogleTest extends ServiceTestCase
         $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/MXN')));
 
-        $this->assertSame('23.10', $rate->getValue());
+        $this->assertSame(23.10, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 
@@ -83,7 +83,7 @@ class GoogleTest extends ServiceTestCase
         $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/COP')));
 
-        $this->assertSame('3424.88889', $rate->getValue());
+        $this->assertSame(3424.88889, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 
@@ -98,7 +98,7 @@ class GoogleTest extends ServiceTestCase
         $service = new Google($this->getGoogleHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/COP')));
 
-        $this->assertSame('3529.33', $rate->getValue());
+        $this->assertSame(3529.33, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 }

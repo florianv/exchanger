@@ -129,7 +129,7 @@ class OpenExchangeRates extends HistoricalService
         if ($data['base'] === $currencyPair->getBaseCurrency()
             && isset($data['rates'][$currencyPair->getQuoteCurrency()])
         ) {
-            return new ExchangeRate((string) $data['rates'][$currencyPair->getQuoteCurrency()], $date);
+            return new ExchangeRate($data['rates'][$currencyPair->getQuoteCurrency()], $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);

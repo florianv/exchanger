@@ -63,7 +63,7 @@ class CryptonatorTest extends ServiceTestCase
         $service = new Cryptonator($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD')));
 
-        $this->assertSame('4194.86340277', $rate->getValue());
+        $this->assertSame(4194.86340277, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 }

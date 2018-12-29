@@ -55,7 +55,7 @@ class RussianCentralBankTest extends ServiceTestCase
         $service = new RussianCentralBank($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/RUB')));
 
-        $this->assertSame('68.2458', $rate->getValue());
+        $this->assertSame(68.2458, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-09'), $rate->getDate());
     }
 
@@ -70,7 +70,7 @@ class RussianCentralBankTest extends ServiceTestCase
         $service = new RussianCentralBank($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('AMD/RUB')));
 
-        $this->assertSame('0.131783', $rate->getValue());
+        $this->assertSame(0.131783, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-09'), $rate->getDate());
     }
 
@@ -87,7 +87,7 @@ class RussianCentralBankTest extends ServiceTestCase
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/RUB'), new \DateTime('2016-08-23'))
         );
 
-        $this->assertSame('64.2078', $rate->getValue());
+        $this->assertSame(64.2078, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-23'), $rate->getDate());
     }
 

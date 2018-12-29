@@ -69,7 +69,7 @@ class Xignite extends HistoricalService
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
-        return new ExchangeRate((string) $data['Bid'], $date);
+        return new ExchangeRate($data['Bid'], $date);
     }
 
     /**
@@ -101,7 +101,7 @@ class Xignite extends HistoricalService
             throw new UnsupportedDateException($queryDate, $this);
         }
 
-        return new ExchangeRate((string) $data['Average'], $date);
+        return new ExchangeRate($data['Average'], $date);
     }
 
     /**

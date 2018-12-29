@@ -45,7 +45,7 @@ class CurrencyConverterApiTest extends TestCase
         $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
-        $this->assertSame('0.726804', $rate->getValue());
+        $this->assertSame(0.726804, $rate->getValue());
     }
 
     /** @test */
@@ -57,7 +57,7 @@ class CurrencyConverterApiTest extends TestCase
         $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
-        $this->assertSame('0.726804', $rate->getValue());
+        $this->assertSame(0.726804, $rate->getValue());
     }
 
     /** @test */
@@ -70,7 +70,7 @@ class CurrencyConverterApiTest extends TestCase
         $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), $date));
 
-        $this->assertSame('0.726804', $rate->getValue());
+        $this->assertSame(0.726804, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
     }
 
@@ -84,7 +84,7 @@ class CurrencyConverterApiTest extends TestCase
         $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), $date));
 
-        $this->assertSame('0.726804', $rate->getValue());
+        $this->assertSame(0.726804, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
     }
 

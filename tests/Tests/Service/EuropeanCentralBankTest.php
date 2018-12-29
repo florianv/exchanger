@@ -53,7 +53,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/BGN')));
 
-        $this->assertSame('1.9558', $rate->getValue());
+        $this->assertSame(1.9558, $rate->getValue());
         $this->assertEquals(new \DateTime('2015-01-07'), $rate->getDate());
     }
 
@@ -70,7 +70,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/JPY'), new \DateTime('2016-08-23'))
         );
 
-        $this->assertSame('113.48', $rate->getValue());
+        $this->assertSame(113.48, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-23'), $rate->getDate());
     }
 

@@ -44,7 +44,7 @@ class CurrencyDataFeedTest extends ServiceTestCase
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
-        $this->assertSame('1.18765', $rate->getValue());
+        $this->assertSame(1.18765, $rate->getValue());
         $this->assertTrue('2017-12-21' == $rate->getDate()->format('Y-m-d'));
     }
 }

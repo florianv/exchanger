@@ -65,7 +65,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $service = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
-        $this->assertEquals('0.726804', $rate->getValue());
+        $this->assertEquals(0.726804, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
     }
 
@@ -82,7 +82,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $service = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
-        $this->assertEquals('0.726804', $rate->getValue());
+        $this->assertEquals(0.726804, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
     }
 
@@ -102,7 +102,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(982342800);
 
-        $this->assertEquals('3.67246', $rate->getValue());
+        $this->assertEquals(3.67246, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
     }
 
@@ -122,7 +122,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(982342800);
 
-        $this->assertEquals('1.092882', $rate->getValue());
+        $this->assertEquals(1.092882, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
     }
 

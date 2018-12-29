@@ -73,7 +73,7 @@ class ExchangerTest extends TestCase
         $exchanger = new Exchanger($service);
         $rate = $exchanger->getExchangeRate($exchangeRateQuery);
 
-        $this->assertSame('1', $rate->getValue());
+        $this->assertSame(1.0, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 
