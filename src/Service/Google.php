@@ -15,6 +15,7 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
 use Exchanger\ExchangeRate;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Google Service.
@@ -40,7 +41,7 @@ class Google extends Service
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
@@ -81,7 +82,7 @@ class Google extends Service
      *
      * @throws \Exception
      */
-    private function buildExchangeRate($content)
+    private function buildExchangeRate($content): ExchangeRate
     {
         $document = new \DOMDocument();
 
@@ -119,7 +120,14 @@ class Google extends Service
         return new ExchangeRate($bid, new \DateTime());
     }
 
-    public function parseNumber($bid)
+    /**
+     * Parses a number returned from google.
+     *
+     * @param string $bid
+     *
+     * @return string
+     */
+    private function parseNumber(string $bid): string
     {
         $pos_comma = strpos($bid, ',');
         $pos_point = strpos($bid, '.');
@@ -145,7 +153,7 @@ class Google extends Service
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }

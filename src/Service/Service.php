@@ -16,6 +16,8 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\RequestFactory;
 use Exchanger\Contract\ExchangeRateService;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Base class for http based services.
@@ -63,10 +65,8 @@ abstract class Service implements ExchangeRateService
      * Processes the service options.
      *
      * @param array &$options
-     *
-     * @return array|void
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
     }
 
@@ -76,7 +76,7 @@ abstract class Service implements ExchangeRateService
      *
      * @return \Psr\Http\Message\RequestInterface
      */
-    private function buildRequest($url, array $headers = [])
+    private function buildRequest($url, array $headers = []): RequestInterface
     {
         return $this->requestFactory->createRequest('GET', $url, $headers);
     }
@@ -89,7 +89,7 @@ abstract class Service implements ExchangeRateService
      *
      * @return string
      */
-    protected function request($url, array $headers = [])
+    protected function request($url, array $headers = []): string
     {
         return $this->getResponse($url, $headers)->getBody()->__toString();
     }
@@ -102,7 +102,7 @@ abstract class Service implements ExchangeRateService
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function getResponse($url, array $headers = [])
+    protected function getResponse($url, array $headers = []): ResponseInterface
     {
         return $this->httpClient->sendRequest($this->buildRequest($url, $headers));
     }

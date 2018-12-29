@@ -37,7 +37,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options['access_key'])) {
             throw new \InvalidArgumentException('The "access_key" option must be provided.');
@@ -51,7 +51,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -76,7 +76,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         if ($this->options['enterprise']) {
             $url = sprintf(
@@ -99,7 +99,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
@@ -114,7 +114,7 @@ class CurrencyLayer extends HistoricalService
      *
      * @throws Exception
      */
-    private function createRate($url, CurrencyPair $currencyPair)
+    private function createRate($url, CurrencyPair $currencyPair): ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);

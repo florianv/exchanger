@@ -35,7 +35,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->createRate($exchangeQuery);
     }
@@ -43,7 +43,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->createRate($exchangeQuery, $exchangeQuery->getDate());
     }
@@ -51,7 +51,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'CZK' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
@@ -66,7 +66,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
      *
      * @throws UnsupportedCurrencyPairException
      */
-    private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null)
+    private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request($this->buildUrl($requestedDate));
@@ -101,7 +101,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
      *
      * @return string The date
      */
-    private function parseDate($line)
+    private function parseDate($line): string
     {
         $words = preg_split('/[\s]+/', $line);
 
@@ -113,7 +113,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
      *
      * @return string
      */
-    private function buildUrl(DateTimeInterface $requestedDate = null)
+    private function buildUrl(DateTimeInterface $requestedDate = null): string
     {
         if (null === $requestedDate) {
             return self::URL;

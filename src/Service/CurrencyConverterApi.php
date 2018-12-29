@@ -33,8 +33,10 @@ class CurrencyConverterApi extends HistoricalService
 
     const ENTERPRISE_HISTORICAL_URL = 'https://api.currencyconverterapi.com/api/v6/convert?q=%s&date=%s&apiKey=%s';
 
-    /** {@inheritdoc} */
-    public function processOptions(array &$options)
+    /**
+     * {@inheritdoc}
+     */
+    public function processOptions(array &$options): void
     {
         if (!isset($options['enterprise'])) {
             $options['enterprise'] = false;
@@ -45,8 +47,10 @@ class CurrencyConverterApi extends HistoricalService
         }
     }
 
-    /** {@inheritdoc} */
-    public function supportQuery(ExchangeRateQuery $exchangeRateQuery)
+    /**
+     * {@inheritdoc}
+     */
+    public function supportQuery(ExchangeRateQuery $exchangeRateQuery): bool
     {
         if ($this->isEnterprise()) {
             return true;
@@ -72,7 +76,7 @@ class CurrencyConverterApi extends HistoricalService
      *
      * @throws Exception
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         if ($this->isEnterprise()) {
             $url = sprintf(
@@ -99,7 +103,7 @@ class CurrencyConverterApi extends HistoricalService
      *
      * @throws Exception
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $historicalDateTime = $this->getAdoptedDateTime($exchangeQuery->getDate());
 
@@ -131,7 +135,7 @@ class CurrencyConverterApi extends HistoricalService
      *
      * @throws Exception
      */
-    private function fetchOnlineRate($url, ExchangeRateQuery $exchangeRateQuery)
+    private function fetchOnlineRate($url, ExchangeRateQuery $exchangeRateQuery): ExchangeRate
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
 
@@ -167,12 +171,22 @@ class CurrencyConverterApi extends HistoricalService
         return new ExchangeRate((string) $rate, $date);
     }
 
-    private function isEnterprise()
+    /**
+     * Tells if the entreprise mode is used.
+     *
+     * @return bool
+     */
+    private function isEnterprise(): bool
     {
         return (bool) $this->options['enterprise'];
     }
 
-    private function getEarliestAvailableDateForHistoricalQuery()
+    /**
+     * Gets the earliest available date for the historical query.
+     *
+     * @return DateTime
+     */
+    private function getEarliestAvailableDateForHistoricalQuery(): DateTime
     {
         if ($this->isEnterprise()) {
             return (new DateTime())->setTimestamp(0);
@@ -182,7 +196,14 @@ class CurrencyConverterApi extends HistoricalService
         return new DateTime('-1 year 00:00');
     }
 
-    private function stringifyCurrencyPair(CurrencyPair $currencyPair)
+    /**
+     * Helper function to stringify a currency pair.
+     *
+     * @param CurrencyPair $currencyPair
+     *
+     * @return string
+     */
+    private function stringifyCurrencyPair(CurrencyPair $currencyPair): string
     {
         return "{$currencyPair->getBaseCurrency()}_{$currencyPair->getQuoteCurrency()}";
     }
@@ -193,9 +214,9 @@ class CurrencyConverterApi extends HistoricalService
      *
      * @param DateTimeInterface $dateTime
      *
-     * @return DateTimeInterface
+     * @return DateTime
      */
-    private function getAdoptedDateTime(DateTimeInterface $dateTime)
+    private function getAdoptedDateTime(DateTimeInterface $dateTime): DateTime
     {
         return (new DateTime())->setTimestamp($dateTime->getTimestamp())->setTimezone(new DateTimeZone('Asia/Manila'));
     }

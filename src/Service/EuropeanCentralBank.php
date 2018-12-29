@@ -32,7 +32,7 @@ class EuropeanCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $content = $this->request(self::DAILY_URL);
 
@@ -53,7 +53,7 @@ class EuropeanCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $content = $this->request(self::HISTORICAL_URL);
 
@@ -79,7 +79,7 @@ class EuropeanCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }

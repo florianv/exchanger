@@ -7,6 +7,7 @@ use Exchanger\ExchangeRate;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\StringUtil;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Forge Service.
@@ -18,7 +19,7 @@ class Forge extends Service
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options['api_key'])) {
             throw new \InvalidArgumentException('The "api_key" option must be provided.');
@@ -28,7 +29,7 @@ class Forge extends Service
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
@@ -36,7 +37,7 @@ class Forge extends Service
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
         $currencySymbol = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();

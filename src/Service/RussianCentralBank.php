@@ -19,7 +19,7 @@ class RussianCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
 
@@ -42,7 +42,7 @@ class RussianCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
         $formattedDate = $exchangeQuery->getDate()->format('d.m.Y');
@@ -69,7 +69,7 @@ class RussianCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'RUB' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }

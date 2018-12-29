@@ -11,6 +11,7 @@
 
 namespace Exchanger\Service;
 
+use Exchanger\Contract\ExchangeRate;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\ExchangeRateService;
 use Exchanger\Exception\ChainException;
@@ -43,7 +44,7 @@ class Chain implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $exceptions = [];
 
@@ -69,7 +70,7 @@ class Chain implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         foreach ($this->services as $service) {
             if ($service->supportQuery($exchangeQuery)) {

@@ -61,7 +61,7 @@ class Fixer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options[self::ACCESS_KEY_OPTION])) {
             throw new \InvalidArgumentException('The "access_key" option must be provided to use fixer.io');
@@ -100,7 +100,7 @@ class Fixer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }

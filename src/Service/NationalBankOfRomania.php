@@ -34,7 +34,7 @@ class NationalBankOfRomania extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $content = $this->request(self::URL);
 
@@ -59,7 +59,7 @@ class NationalBankOfRomania extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $year = $exchangeQuery->getDate()->format('Y');
         if ($year < 2005) {
@@ -98,7 +98,7 @@ class NationalBankOfRomania extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'RON' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }

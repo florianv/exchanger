@@ -15,6 +15,7 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * WebserviceX Service.
@@ -28,7 +29,7 @@ class WebserviceX extends Service
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -41,7 +42,7 @@ class WebserviceX extends Service
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }

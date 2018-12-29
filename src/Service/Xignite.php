@@ -33,7 +33,7 @@ class Xignite extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options['token'])) {
             throw new \InvalidArgumentException('The "token" option must be provided.');
@@ -43,7 +43,7 @@ class Xignite extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -74,7 +74,7 @@ class Xignite extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $queryDate = $exchangeQuery->getDate();
@@ -106,7 +106,7 @@ class Xignite extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
     }

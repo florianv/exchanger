@@ -51,7 +51,7 @@ final class ExchangeRateQueryBuilder
      *
      * @return $this
      */
-    public function setDate(\DateTimeInterface $date): ExchangeRateQueryBuilder
+    public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
 
@@ -66,7 +66,7 @@ final class ExchangeRateQueryBuilder
      *
      * @return $this
      */
-    public function addOption($name, $value): ExchangeRateQueryBuilder
+    public function addOption($name, $value): self
     {
         $this->options[$name] = $value;
 

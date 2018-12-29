@@ -7,6 +7,7 @@ use Exchanger\ExchangeRate;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\StringUtil;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * CurrencyDataFeed Service.
@@ -20,7 +21,7 @@ class CurrencyDataFeed extends Service
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options['api_key'])) {
             throw new \InvalidArgumentException('The "api_key" option must be provided.');
@@ -30,7 +31,7 @@ class CurrencyDataFeed extends Service
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
@@ -38,7 +39,7 @@ class CurrencyDataFeed extends Service
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
         $url = sprintf(self::URL, $this->options['api_key'], $currencyPair->getBaseCurrency().'/'.$currencyPair->getQuoteCurrency());

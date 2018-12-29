@@ -21,7 +21,7 @@ class Cryptonator extends Service
      *
      * @throws Exception
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -53,7 +53,7 @@ class Cryptonator extends Service
      *
      * @return bool
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery
             && in_array($exchangeQuery->getCurrencyPair()->getBaseCurrency(), $this->getSupportedCodes())
@@ -67,7 +67,7 @@ class Cryptonator extends Service
      *
      * @return array
      */
-    private function getSupportedCodes()
+    private function getSupportedCodes(): array
     {
         return require __DIR__.'/resources/cryptonator-codes.php';
     }

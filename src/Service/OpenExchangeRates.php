@@ -35,7 +35,7 @@ class OpenExchangeRates extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options['app_id'])) {
             throw new \InvalidArgumentException('The "app_id" option must be provided.');
@@ -49,7 +49,7 @@ class OpenExchangeRates extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ?ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -70,7 +70,7 @@ class OpenExchangeRates extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ?ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -96,7 +96,7 @@ class OpenExchangeRates extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
@@ -111,7 +111,7 @@ class OpenExchangeRates extends HistoricalService
      *
      * @throws Exception
      */
-    private function createRate($url, ExchangeRateQuery $exchangeQuery)
+    private function createRate(string $url, ExchangeRateQuery $exchangeQuery): ?ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
