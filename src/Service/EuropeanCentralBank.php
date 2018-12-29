@@ -17,6 +17,7 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * European Central Bank Service.
@@ -32,7 +33,7 @@ class EuropeanCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $content = $this->request(self::DAILY_URL);
 
@@ -53,7 +54,7 @@ class EuropeanCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $content = $this->request(self::HISTORICAL_URL);
 

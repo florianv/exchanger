@@ -101,20 +101,4 @@ class GoogleTest extends ServiceTestCase
         $this->assertSame('3529.33', $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
-
-    /**
-     * @test
-     */
-    public function it_parses_the_bid()
-    {
-        $service = new Google();
-
-        $this->assertSame('1.10', $service->parseNumber('1.10'));
-        $this->assertSame('1.10', $service->parseNumber('1,10'));
-        $this->assertSame('1100.12', $service->parseNumber('1,100.12'));
-        $this->assertSame('1100.12', $service->parseNumber('1.100,12'));
-        $this->assertSame('1100.12', $service->parseNumber('1100,12'));
-        $this->assertSame('1100.12', $service->parseNumber('1100.12'));
-        $this->assertSame('1100', $service->parseNumber('1100'));
-    }
 }

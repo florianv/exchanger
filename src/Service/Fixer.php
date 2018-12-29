@@ -15,8 +15,10 @@ use Exchanger\Contract\CurrencyPair;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Fixer Service.
@@ -52,7 +54,7 @@ class Fixer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ?ExchangeRate
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -75,7 +77,7 @@ class Fixer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ?ExchangeRate
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -111,11 +113,11 @@ class Fixer extends HistoricalService
      * @param string       $url
      * @param CurrencyPair $currencyPair
      *
-     * @return ExchangeRate|null
+     * @return ExchangeRate
      *
      * @throws Exception
      */
-    private function createRate($url, CurrencyPair $currencyPair): ?ExchangeRate
+    private function createRate($url, CurrencyPair $currencyPair): ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
@@ -131,7 +133,7 @@ class Fixer extends HistoricalService
             return new ExchangeRate($rate, $date);
         }
 
-        return null;
+        throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
     /**

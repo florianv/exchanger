@@ -18,6 +18,7 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Xignite Service.
@@ -43,7 +44,7 @@ class Xignite extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -74,7 +75,7 @@ class Xignite extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $queryDate = $exchangeQuery->getDate();

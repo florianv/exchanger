@@ -17,6 +17,7 @@ use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Central Bank of the Republic of Turkey (CBRT) Service.
@@ -34,7 +35,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->createRate($exchangeQuery);
     }
@@ -42,7 +43,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->createRate($exchangeQuery, $exchangeQuery->getDate());
     }

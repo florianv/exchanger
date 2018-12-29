@@ -11,6 +11,7 @@ use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * CurrencyConverterApi service.
@@ -72,11 +73,11 @@ class CurrencyConverterApi extends HistoricalService
      *
      * @param ExchangeRateQuery $exchangeQuery
      *
-     * @return ExchangeRate
+     * @return ExchangeRateContract
      *
      * @throws Exception
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         if ($this->isEnterprise()) {
             $url = sprintf(
@@ -99,11 +100,11 @@ class CurrencyConverterApi extends HistoricalService
      *
      * @param HistoricalExchangeRateQuery $exchangeQuery
      *
-     * @return ExchangeRate
+     * @return ExchangeRateContract
      *
      * @throws Exception
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $historicalDateTime = $this->getAdoptedDateTime($exchangeQuery->getDate());
 

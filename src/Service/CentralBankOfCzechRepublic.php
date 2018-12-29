@@ -16,6 +16,7 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Central Bank of Czech Republic (CNB) Service.
@@ -35,7 +36,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->createRate($exchangeQuery);
     }
@@ -43,7 +44,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->createRate($exchangeQuery, $exchangeQuery->getDate());
     }
@@ -101,7 +102,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
      *
      * @return string The date
      */
-    private function parseDate($line): string
+    private function parseDate(string $line): string
     {
         $words = preg_split('/[\s]+/', $line);
 

@@ -17,6 +17,7 @@ use Exchanger\Contract\ExchangeRateService as ExchangeRateServiceContract;
 use Exchanger\Exception\CacheException;
 use Exchanger\Exception\UnsupportedExchangeQueryException;
 use Psr\Cache\CacheItemPoolInterface;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Default implementation of the exchange rate provider with PSR-6 caching support.
@@ -25,12 +26,34 @@ use Psr\Cache\CacheItemPoolInterface;
  */
 class Exchanger implements ExchangeRateProviderContract
 {
+    /**
+     * The service.
+     *
+     * @var ExchangeRateServiceContract
+     */
     private $service;
 
+    /**
+     * The cache item pool.
+     *
+     * @var CacheItemPoolInterface
+     */
     private $cacheItemPool;
 
+    /**
+     * The options.
+     *
+     * @var array
+     */
     private $options;
 
+    /**
+     * Constructor.
+     *
+     * @param ExchangeRateServiceContract $service
+     * @param CacheItemPoolInterface|null $cacheItemPool
+     * @param array                       $options
+     */
     public function __construct(ExchangeRateServiceContract $service, CacheItemPoolInterface $cacheItemPool = null, array $options = [])
     {
         $this->service = $service;
@@ -41,7 +64,7 @@ class Exchanger implements ExchangeRateProviderContract
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): \Exchanger\Contract\ExchangeRate
+    public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 

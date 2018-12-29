@@ -20,8 +20,18 @@ use Exchanger\Contract\CurrencyPair as CurrencyPairContract;
  */
 final class CurrencyPair implements CurrencyPairContract
 {
+    /**
+     * The base currency.
+     *
+     * @var string
+     */
     private $baseCurrency;
 
+    /**
+     * The quote currency.
+     *
+     * @var string
+     */
     private $quoteCurrency;
 
     /**

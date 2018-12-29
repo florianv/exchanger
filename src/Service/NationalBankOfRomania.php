@@ -17,6 +17,7 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * National Bank of Romania Service.
@@ -34,7 +35,7 @@ class NationalBankOfRomania extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $content = $this->request(self::URL);
 
@@ -59,7 +60,7 @@ class NationalBankOfRomania extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $year = $exchangeQuery->getDate()->format('Y');
         if ($year < 2005) {

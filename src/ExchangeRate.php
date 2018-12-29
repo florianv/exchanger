@@ -20,14 +20,24 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  */
 final class ExchangeRate implements ExchangeRateContract
 {
+    /**
+     * The value.
+     *
+     * @var mixed
+     */
     private $value;
 
+    /**
+     * The date.
+     *
+     * @var \DateTimeInterface
+     */
     private $date;
 
     /**
      * Creates a new rate.
      *
-     * @param string                  $value The rate value
+     * @param mixed                   $value The rate value
      * @param \DateTimeInterface|null $date  The date at which this rate was calculated
      */
     public function __construct($value, \DateTimeInterface $date = null)

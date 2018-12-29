@@ -15,8 +15,10 @@ use Exchanger\Contract\CurrencyPair;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Currency Layer Service.
@@ -51,7 +53,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -76,7 +78,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         if ($this->options['enterprise']) {
             $url = sprintf(
@@ -131,6 +133,6 @@ class CurrencyLayer extends HistoricalService
             return new ExchangeRate((string) $data['quotes'][$hash], $date);
         }
 
-        return null;
+        throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 }

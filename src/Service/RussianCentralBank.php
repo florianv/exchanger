@@ -8,6 +8,7 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Russian Central Bank Service.
@@ -19,7 +20,7 @@ class RussianCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
 
@@ -42,7 +43,7 @@ class RussianCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
         $formattedDate = $exchangeQuery->getDate()->format('d.m.Y');
