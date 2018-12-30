@@ -35,7 +35,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  * Docs for paid/enterprise plans:
  * @see https://www.currencyconverterapi.com/docs
  */
-class CurrencyConverterApi extends HistoricalService
+final class CurrencyConverterApi extends HistoricalService
 {
     const FREE_LATEST_URL = 'https://free.currencyconverterapi.com/api/v6/convert?q=%s';
 

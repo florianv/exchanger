@@ -24,7 +24,7 @@ use Exchanger\Exception\InternalException;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Chain implements ExchangeRateService
+final class Chain implements ExchangeRateService
 {
     /**
      * The services.

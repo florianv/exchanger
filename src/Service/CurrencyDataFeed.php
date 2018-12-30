@@ -23,7 +23,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 /**
  * CurrencyDataFeed Service.
  */
-class CurrencyDataFeed extends Service
+final class CurrencyDataFeed extends Service
 {
     const URL = 'https://currencydatafeed.com/api/data.php?token=%s&currency=%s';
 

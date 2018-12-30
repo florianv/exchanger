@@ -20,7 +20,7 @@ use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
-class Cryptonator extends Service
+final class Cryptonator extends Service
 {
     const LATEST_URL = 'https://api.cryptonator.com/api/ticker/%s-%s';
 

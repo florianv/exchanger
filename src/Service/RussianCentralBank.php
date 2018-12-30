@@ -24,7 +24,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 /**
  * Russian Central Bank Service.
  */
-class RussianCentralBank extends HistoricalService
+final class RussianCentralBank extends HistoricalService
 {
     const URL = 'http://www.cbr.ru/scripts/XML_daily.asp';
 

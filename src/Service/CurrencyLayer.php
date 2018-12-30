@@ -28,7 +28,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  * @author Pascal Hofmann <mail@pascalhofmann.de>
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class CurrencyLayer extends HistoricalService
+final class CurrencyLayer extends HistoricalService
 {
     const FREE_LATEST_URL = 'http://www.apilayer.net/api/live?access_key=%s&currencies=%s';
 

@@ -28,7 +28,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  * @author Florian Voutzinos <florian@voutzinos.com>
  * @author Uğur Özkan
  */
-class CentralBankOfRepublicTurkey extends HistoricalService
+final class CentralBankOfRepublicTurkey extends HistoricalService
 {
     const BASE_URL = 'http://www.tcmb.gov.tr/kurlar/';
 

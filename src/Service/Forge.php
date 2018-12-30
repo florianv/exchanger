@@ -23,7 +23,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 /**
  * Forge Service.
  */
-class Forge extends Service
+final class Forge extends Service
 {
     const URL = 'https://forex.1forge.com/latest/quotes?pairs=%s&api_key=%s';
 

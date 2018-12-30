@@ -27,7 +27,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Fixer extends HistoricalService
+final class Fixer extends HistoricalService
 {
     const ACCESS_KEY_OPTION = 'access_key';
 

@@ -26,7 +26,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class OpenExchangeRates extends HistoricalService
+final class OpenExchangeRates extends HistoricalService
 {
     const FREE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&show_alternative=1';
 

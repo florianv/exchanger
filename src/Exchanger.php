@@ -26,7 +26,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Exchanger implements ExchangeRateProviderContract
+final class Exchanger implements ExchangeRateProviderContract
 {
     /**
      * The service.

@@ -28,7 +28,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  * @author Florian Voutzinos <florian@voutzinos.com>
  * @author Balazs Csaba <balazscsaba2006@gmail.com>
  */
-class NationalBankOfRomania extends HistoricalService
+final class NationalBankOfRomania extends HistoricalService
 {
     const URL = 'http://www.bnr.ro/nbrfxrates.xml';
 

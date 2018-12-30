@@ -21,7 +21,7 @@ use Exchanger\Contract\HistoricalExchangeRateQuery as HistoricalExchangeQueryCon
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class HistoricalExchangeRateQuery extends ExchangeRateQuery implements HistoricalExchangeQueryContract
+final class HistoricalExchangeRateQuery extends ExchangeRateQuery implements HistoricalExchangeQueryContract
 {
     /**
      * The date.

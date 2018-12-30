@@ -26,7 +26,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class EuropeanCentralBank extends HistoricalService
+final class EuropeanCentralBank extends HistoricalService
 {
     const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
 

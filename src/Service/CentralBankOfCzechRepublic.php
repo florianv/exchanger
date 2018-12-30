@@ -25,7 +25,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Petr Kramar <petr.kramar@perlur.cz>
  */
-class CentralBankOfCzechRepublic extends HistoricalService
+final class CentralBankOfCzechRepublic extends HistoricalService
 {
     const URL = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
 
