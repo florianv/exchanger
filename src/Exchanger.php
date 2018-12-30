@@ -18,8 +18,8 @@ use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\ExchangeRateService as ExchangeRateServiceContract;
 use Exchanger\Exception\CacheException;
 use Exchanger\Exception\UnsupportedExchangeQueryException;
-use Psr\Cache\CacheItemPoolInterface;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Default implementation of the exchange rate provider with PSR-6 caching support.
@@ -38,9 +38,9 @@ final class Exchanger implements ExchangeRateProviderContract
     /**
      * The cache item pool.
      *
-     * @var CacheItemPoolInterface
+     * @var CacheInterface
      */
-    private $cacheItemPool;
+    private $cache;
 
     /**
      * The options.
@@ -53,13 +53,13 @@ final class Exchanger implements ExchangeRateProviderContract
      * Constructor.
      *
      * @param ExchangeRateServiceContract $service
-     * @param CacheItemPoolInterface|null $cacheItemPool
+     * @param CacheInterface|null         $cache
      * @param array                       $options
      */
-    public function __construct(ExchangeRateServiceContract $service, CacheItemPoolInterface $cacheItemPool = null, array $options = [])
+    public function __construct(ExchangeRateServiceContract $service, CacheInterface $cache = null, array $options = [])
     {
         $this->service = $service;
-        $this->cacheItemPool = $cacheItemPool;
+        $this->cache = $cache;
         $this->options = $options;
     }
 
@@ -78,7 +78,7 @@ final class Exchanger implements ExchangeRateProviderContract
             throw new UnsupportedExchangeQueryException($exchangeQuery, $this->service);
         }
 
-        if (null === $this->cacheItemPool || false === $exchangeQuery->getOption('cache')) {
+        if (null === $this->cache || false === $exchangeQuery->getOption('cache')) {
             return $this->service->getExchangeRate($exchangeQuery);
         }
 
@@ -93,18 +93,16 @@ final class Exchanger implements ExchangeRateProviderContract
             throw new CacheException("Cache key length exceeds 64 characters ('$cacheKey'). This violates PSR-6 standard");
         }
 
-        $item = $this->cacheItemPool->getItem($cacheKey);
+        $item = $this->cache->get($cacheKey);
 
-        if ($item->isHit()) {
-            return $item->get();
+        if (null !== $item) {
+            return $item;
         }
 
         $rate = $this->service->getExchangeRate($exchangeQuery);
+        $ttl = $exchangeQuery->getOption('cache_ttl', isset($this->options['cache_ttl']) ? $this->options['cache_ttl'] : null);
 
-        $item->set($rate);
-        $item->expiresAfter($exchangeQuery->getOption('cache_ttl', isset($this->options['cache_ttl']) ? $this->options['cache_ttl'] : null));
-
-        $this->cacheItemPool->save($item);
+        $this->cache->set($cacheKey, $rate, $ttl);
 
         return $rate;
     }

@@ -35,7 +35,9 @@
         "psr/cache": "^1.0",
         "guzzlehttp/psr7": "^1.5",
         "php-http/guzzle6-adapter": "^2.0",
-        "php-http/message": "^1.7"
+        "php-http/message": "^1.7",
+        "psr/simple-cache": "^1.0",
+        "cache/simple-cache-bridge": "^1.0"
     },
     "scripts": {
         "test": "vendor/bin/phpunit"
