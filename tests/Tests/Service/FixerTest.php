@@ -18,6 +18,9 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\Fixer;
 
+/**
+ * @author Pascal Hofmann <mail@pascalhofmann.de>
+ */
 class FixerTest extends ServiceTestCase
 {
     /**

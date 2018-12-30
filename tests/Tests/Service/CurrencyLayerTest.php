@@ -18,6 +18,9 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\CurrencyLayer;
 
+/**
+ * @author Pascal Hofmann <mail@pascalhofmann.de>
+ */
 class CurrencyLayerTest extends ServiceTestCase
 {
     /**
