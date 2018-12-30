@@ -61,7 +61,7 @@ class Forge extends Service
             $date = (new \DateTime())->setTimestamp($result['timestamp']);
 
             if ($result['symbol'] == $currencySymbol) {
-                return new ExchangeRate($result['price'], __CLASS__, $date);
+                return new ExchangeRate((float) ($result['price']), __CLASS__, $date);
             }
         }
 

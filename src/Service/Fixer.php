@@ -132,7 +132,7 @@ class Fixer extends HistoricalService
             $date = new \DateTime($data['date']);
             $rate = $data['rates'][$currencyPair->getQuoteCurrency()];
 
-            return new ExchangeRate($rate, __CLASS__, $date);
+            return new ExchangeRate((float) $rate, __CLASS__, $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);

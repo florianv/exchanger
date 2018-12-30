@@ -79,7 +79,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
         $elements = $element->xpath('//Currency[@CurrencyCode="'.$currencyPair->getBaseCurrency().'"]/ForexSelling');
 
         if (!empty($elements) || !$date) {
-            return new ExchangeRate((string) $elements[0], __CLASS__, $date);
+            return new ExchangeRate((float) ($elements[0]), __CLASS__, $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);

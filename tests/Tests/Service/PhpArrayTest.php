@@ -49,7 +49,7 @@ class PhpArrayTest extends TestCase
         $service = new PhpArray([], [
             $now->format('Y-m-d') => [
                 'EUR/USD' => 1,
-                'EUR/GBP' => new ExchangeRate('2.0', PhpArray::class),
+                'EUR/GBP' => new ExchangeRate(2.0, PhpArray::class),
             ],
         ]);
 
@@ -78,7 +78,7 @@ class PhpArrayTest extends TestCase
     public function it_fetches_a_latest_rate_from_rates()
     {
         $arrayProvider = new PhpArray([
-            'EUR/USD' => $rate = new ExchangeRate('1.50', PhpArray::class),
+            'EUR/USD' => $rate = new ExchangeRate(1.50, PhpArray::class),
         ]);
 
         $this->assertSame($rate, $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
@@ -135,7 +135,7 @@ class PhpArrayTest extends TestCase
 
         $arrayProvider = new PhpArray([], [
             $now->format('Y-m-d') => [
-                'EUR/USD' => $rate = new ExchangeRate('1.50', PhpArray::class),
+                'EUR/USD' => $rate = new ExchangeRate(1.50, PhpArray::class),
             ],
         ]);
 

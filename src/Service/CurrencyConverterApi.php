@@ -180,7 +180,7 @@ class CurrencyConverterApi extends HistoricalService
             $rate = $responsePayload['results'][$keyAsCurrencyPair]['val'];
         }
 
-        return new ExchangeRate($rate, __CLASS__, $date);
+        return new ExchangeRate((float) $rate, __CLASS__, $date);
     }
 
     /**

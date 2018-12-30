@@ -38,7 +38,7 @@ class WebserviceX extends Service
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         $content = $this->request($url);
 
-        return new ExchangeRate((string) StringUtil::xmlToElement($content), __CLASS__, new \DateTime());
+        return new ExchangeRate((float) (StringUtil::xmlToElement($content)), __CLASS__, new \DateTime());
     }
 
     /**

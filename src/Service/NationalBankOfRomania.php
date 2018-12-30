@@ -56,7 +56,7 @@ class NationalBankOfRomania extends HistoricalService
         $rate = (string) $element;
         $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
 
-        return new ExchangeRate($rateValue, __CLASS__, $date);
+        return new ExchangeRate((float) $rateValue, __CLASS__, $date);
     }
 
     /**
@@ -95,7 +95,7 @@ class NationalBankOfRomania extends HistoricalService
         $rate = (string) $element;
         $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
 
-        return new ExchangeRate($rateValue, __CLASS__, $exchangeQuery->getDate());
+        return new ExchangeRate((float) $rateValue, __CLASS__, $exchangeQuery->getDate());
     }
 
     /**

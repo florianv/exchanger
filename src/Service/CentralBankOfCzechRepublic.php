@@ -90,7 +90,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
 
-                return new ExchangeRate(($rate / (int) $count), __CLASS__, $date);
+                return new ExchangeRate((float) ($rate / (int) $count), __CLASS__, $date);
             }
         }
 
