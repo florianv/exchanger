@@ -15,7 +15,6 @@ namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\ExchangeRateService;
-use Exchanger\Exception\InternalException;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\HistoricalExchangeRateQuery;
@@ -50,6 +49,9 @@ final class PhpArray implements ExchangeRateService
      */
     public function __construct(array $latestRates, array $historicalRates = [])
     {
+        $this->validateRates($latestRates);
+        $this->validateHistoricalRates($historicalRates);
+
         $this->latestRates = $latestRates;
         $this->historicalRates = $historicalRates;
     }
@@ -78,8 +80,6 @@ final class PhpArray implements ExchangeRateService
      * @param ExchangeRateQuery $exchangeQuery
      *
      * @return ExchangeRate
-     *
-     * @throws InternalException
      */
     private function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
@@ -120,25 +120,47 @@ final class PhpArray implements ExchangeRateService
     }
 
     /**
+     * Validate the rates array.
+     *
+     * @param array $rates
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function validateRates(array $rates)
+    {
+        foreach ($rates as $rate) {
+            if (!is_scalar($rate)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Rates passed to the PhpArray service must be scalars, "%s" given.',
+                    gettype($rate)
+                ));
+            }
+        }
+    }
+
+    /**
+     * Validate the historical rates array.
+     *
+     * @param array $rates
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function validateHistoricalRates(array $rates)
+    {
+        foreach ($rates as $rate) {
+            $this->validateRates($rate);
+        }
+    }
+
+    /**
      * Processes the rate value.
      *
      * @param mixed $rate
      *
      * @return ExchangeRate
-     *
-     * @throws InternalException
      */
     private function processRateValue($rate): ExchangeRate
     {
-        if (is_scalar($rate)) {
-            $rate = new ExchangeRate((float) $rate, __CLASS__);
-        } elseif (!$rate instanceof ExchangeRate) {
-            throw new InternalException(sprintf(
-                'Rates passed to the PhpArray service must be Rate instances or scalars "%s" given.',
-                gettype($rate)
-            ));
-        }
-
-        return $rate;
+        return new ExchangeRate((float) $rate, __CLASS__);
     }
 }

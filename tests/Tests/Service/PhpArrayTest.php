@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
-use Exchanger\ExchangeRate;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\HistoricalExchangeRateQuery;
@@ -30,7 +29,7 @@ class PhpArrayTest extends TestCase
         $service = new PhpArray([]);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
 
-        $service = new PhpArray(['EUR/USD' => 1, 'EUR/GBP' => new ExchangeRate(2, PhpArray::class)]);
+        $service = new PhpArray(['EUR/USD' => 1, 'EUR/GBP' => 2.0]);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/GBP'))));
@@ -49,7 +48,7 @@ class PhpArrayTest extends TestCase
         $service = new PhpArray([], [
             $now->format('Y-m-d') => [
                 'EUR/USD' => 1,
-                'EUR/GBP' => new ExchangeRate(2.0, PhpArray::class),
+                'EUR/GBP' => 2.0,
             ],
         ]);
 
@@ -60,16 +59,14 @@ class PhpArrayTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\InternalException
-     * @expectedExceptionMessage Rates passed to the PhpArray service must be Rate instances or scalars "array" given.
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Rates passed to the PhpArray service must be scalars, "array" given.
      */
     public function it_throws_an_exception_when_fetching_latest_invalid_rate()
     {
         $arrayProvider = new PhpArray([
             'EUR/USD' => [],
         ]);
-
-        $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
     }
 
     /**
@@ -78,10 +75,12 @@ class PhpArrayTest extends TestCase
     public function it_fetches_a_latest_rate_from_rates()
     {
         $arrayProvider = new PhpArray([
-            'EUR/USD' => $rate = new ExchangeRate(1.50, PhpArray::class),
+            'EUR/USD' => $rate = 1.50,
         ]);
 
-        $this->assertSame($rate, $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
+        $rate = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+
+        $this->assertSame(1.50, $rate->getValue());
     }
 
     /**
@@ -110,8 +109,8 @@ class PhpArrayTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\InternalException
-     * @expectedExceptionMessage Rates passed to the PhpArray service must be Rate instances or scalars "array" given.
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Rates passed to the PhpArray service must be scalars, "array" given.
      */
     public function it_throws_an_exception_when_fetching_historical_invalid_rate()
     {
@@ -135,11 +134,13 @@ class PhpArrayTest extends TestCase
 
         $arrayProvider = new PhpArray([], [
             $now->format('Y-m-d') => [
-                'EUR/USD' => $rate = new ExchangeRate(1.50, PhpArray::class),
+                'EUR/USD' => 1.50,
             ],
         ]);
 
-        $this->assertSame($rate, $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $now)));
+        $rate = $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $now));
+
+        $this->assertSame(1.50, $rate->getValue());
     }
 
     /**

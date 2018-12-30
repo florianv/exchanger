@@ -15,7 +15,6 @@ namespace Exchanger\Tests\Service;
 
 use Exchanger\Exception\ChainException;
 use Exchanger\Exception\Exception;
-use Exchanger\Exception\InternalException;
 use Exchanger\ExchangeRate;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\CurrencyPair;
@@ -125,7 +124,7 @@ class ChainTest extends TestCase
      */
     public function it_throws_an_exception_when_all_providers_fail()
     {
-        $exception = new Exception();
+        $exception = new Exception('Unsupported currency pair.');
         $serviceOne = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $serviceOne
@@ -158,38 +157,9 @@ class ChainTest extends TestCase
         } catch (ChainException $e) {
             $caught = true;
             $this->assertEquals([$exception, $exception], $e->getExceptions());
+            $this->assertEquals("The chain resulted in 2 exception(s):\r\nExchanger\Exception\Exception: Unsupported currency pair.\r\nExchanger\Exception\Exception: Unsupported currency pair.", $e->getMessage());
         }
 
         $this->assertTrue($caught);
-    }
-
-    /**
-     * @test
-     * @expectedException \Exchanger\Exception\InternalException
-     */
-    public function it_throws_an_exception_when_an_internal_exception_is_thrown()
-    {
-        $internalException = new InternalException();
-
-        $serviceOne = $this->createMock('Exchanger\Contract\ExchangeRateService');
-
-        $serviceOne
-            ->expects($this->once())
-            ->method('supportQuery')
-            ->will($this->returnValue(true));
-
-        $serviceOne
-            ->expects($this->once())
-            ->method('getExchangeRate')
-            ->will($this->throwException($internalException));
-
-        $serviceTwo = $this->createMock('Exchanger\Contract\ExchangeRateService');
-
-        $serviceTwo
-            ->expects($this->never())
-            ->method('getExchangeRate');
-
-        $chain = new Chain([$serviceOne, $serviceTwo]);
-        $chain->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
     }
 }

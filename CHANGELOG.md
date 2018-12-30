@@ -13,3 +13,7 @@
 - Fixed the exchange rate value to always be a float instead of a string
 
 - Added information about which service returned a rate with `ExchangeRate::getProvider()`
+
+- Removed the `InternalException` only used in the `PhpArray` service
+
+- Modified the PHPArray service to only support scalars as rates (rate objects are not compatible)

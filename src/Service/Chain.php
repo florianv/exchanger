@@ -17,7 +17,6 @@ use Exchanger\Contract\ExchangeRate;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\ExchangeRateService;
 use Exchanger\Exception\ChainException;
-use Exchanger\Exception\InternalException;
 
 /**
  * A service using other services in a chain.
@@ -57,11 +56,7 @@ final class Chain implements ExchangeRateService
 
             try {
                 return $service->getExchangeRate($exchangeQuery);
-            } catch (\Exception $e) {
-                if ($e instanceof InternalException) {
-                    throw $e;
-                }
-
+            } catch (\Throwable $e) {
                 $exceptions[] = $e;
             }
         }
