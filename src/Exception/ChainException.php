@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -16,7 +18,7 @@ namespace Exchanger\Exception;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class ChainException extends Exception
+final class ChainException extends Exception
 {
     /**
      * The exceptions.
@@ -56,7 +58,7 @@ class ChainException extends Exception
      *
      * @return Exception[]
      */
-    public function getExceptions()
+    public function getExceptions(): array
     {
         return $this->exceptions;
     }

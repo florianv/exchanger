@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -13,8 +15,9 @@ namespace Exchanger\Tests;
 
 use Exchanger\ExchangeRateQuery;
 use Exchanger\CurrencyPair;
+use PHPUnit\Framework\TestCase;
 
-class ExchangeRateQueryTest extends \PHPUnit_Framework_TestCase
+class ExchangeRateQueryTest extends TestCase
 {
     /**
      * @test

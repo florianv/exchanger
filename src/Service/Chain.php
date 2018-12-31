@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -11,17 +13,17 @@
 
 namespace Exchanger\Service;
 
+use Exchanger\Contract\ExchangeRate;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\ExchangeRateService;
 use Exchanger\Exception\ChainException;
-use Exchanger\Exception\InternalException;
 
 /**
  * A service using other services in a chain.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Chain implements ExchangeRateService
+final class Chain implements ExchangeRateService
 {
     /**
      * The services.
@@ -43,7 +45,7 @@ class Chain implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $exceptions = [];
 
@@ -54,11 +56,7 @@ class Chain implements ExchangeRateService
 
             try {
                 return $service->getExchangeRate($exchangeQuery);
-            } catch (\Exception $e) {
-                if ($e instanceof InternalException) {
-                    throw $e;
-                }
-
+            } catch (\Throwable $e) {
                 $exceptions[] = $e;
             }
         }
@@ -69,7 +67,7 @@ class Chain implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         foreach ($this->services as $service) {
             if ($service->supportQuery($exchangeQuery)) {

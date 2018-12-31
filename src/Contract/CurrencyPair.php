@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -23,26 +25,26 @@ interface CurrencyPair
      *
      * @return string
      */
-    public function getBaseCurrency();
+    public function getBaseCurrency(): string;
 
     /**
      * Gets the quote currency.
      *
      * @return string
      */
-    public function getQuoteCurrency();
+    public function getQuoteCurrency(): string;
 
     /**
      * Checks if the pair is identical.
      *
      * @return bool
      */
-    public function isIdentical();
+    public function isIdentical(): bool;
 
     /**
      * Returns a string representation of the pair.
      *
      * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 }

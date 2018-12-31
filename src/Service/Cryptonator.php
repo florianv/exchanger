@@ -1,14 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Exchanger.
+ *
+ * (c) Florian Voutzinos <florian@voutzinos.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Exchanger\Service;
 
-use Exchanger\Contract\ExchangeRate;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
-class Cryptonator extends Service
+final class Cryptonator extends Service
 {
     const LATEST_URL = 'https://api.cryptonator.com/api/ticker/%s-%s';
 
@@ -17,11 +29,11 @@ class Cryptonator extends Service
      *
      * @param ExchangeRateQuery $exchangeQuery
      *
-     * @return ExchangeRate
+     * @return ExchangeRateContract
      *
      * @throws Exception
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -43,7 +55,7 @@ class Cryptonator extends Service
 
         $date = (new \DateTime())->setTimestamp($data['timestamp']);
 
-        return new \Exchanger\ExchangeRate($data['ticker']['price'], $date);
+        return new ExchangeRate((float) ($data['ticker']['price']), __CLASS__, $date);
     }
 
     /**
@@ -53,7 +65,7 @@ class Cryptonator extends Service
      *
      * @return bool
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery
             && in_array($exchangeQuery->getCurrencyPair()->getBaseCurrency(), $this->getSupportedCodes())
@@ -67,7 +79,7 @@ class Cryptonator extends Service
      *
      * @return array
      */
-    private function getSupportedCodes()
+    private function getSupportedCodes(): array
     {
         return require __DIR__.'/resources/cryptonator-codes.php';
     }

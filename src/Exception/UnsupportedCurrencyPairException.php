@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -19,12 +21,28 @@ use Exchanger\Contract\ExchangeRateService;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class UnsupportedCurrencyPairException extends Exception
+final class UnsupportedCurrencyPairException extends Exception
 {
+    /**
+     * The currency pair.
+     *
+     * @var CurrencyPair
+     */
     private $currencyPair;
 
+    /**
+     * The service.
+     *
+     * @var ExchangeRateService
+     */
     private $service;
 
+    /**
+     * Constructor.
+     *
+     * @param CurrencyPair        $currencyPair
+     * @param ExchangeRateService $service
+     */
     public function __construct(CurrencyPair $currencyPair, ExchangeRateService $service)
     {
         parent::__construct(
@@ -44,7 +62,7 @@ class UnsupportedCurrencyPairException extends Exception
      *
      * @return CurrencyPair
      */
-    public function getCurrencyPair()
+    public function getCurrencyPair(): CurrencyPair
     {
         return $this->currencyPair;
     }
@@ -54,7 +72,7 @@ class UnsupportedCurrencyPairException extends Exception
      *
      * @return ExchangeRateService
      */
-    public function getService()
+    public function getService(): ExchangeRateService
     {
         return $this->service;
     }

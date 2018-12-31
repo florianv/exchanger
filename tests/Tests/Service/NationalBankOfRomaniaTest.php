@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -23,7 +25,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new NationalBankOfRomania($this->getMock('Http\Client\HttpClient'));
+        $service = new NationalBankOfRomania($this->createMock('Http\Client\HttpClient'));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/RON'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
@@ -67,8 +69,9 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/RON')));
 
-        $this->assertSame('4.5125', $rate->getValue());
+        $this->assertSame(4.5125, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-02'), $rate->getDate());
+        $this->assertEquals(NationalBankOfRomania::class, $rate->getProvider());
     }
 
     /**
@@ -82,8 +85,9 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('HUF/RON')));
 
-        $this->assertSame('0.014356', $rate->getValue());
+        $this->assertSame(0.014356, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-02'), $rate->getDate());
+        $this->assertEquals(NationalBankOfRomania::class, $rate->getProvider());
     }
 
     /**
@@ -99,8 +103,9 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/RON'), new \DateTime('2018-02-02'))
         );
 
-        $this->assertSame('4.6526', $rate->getValue());
+        $this->assertSame(4.6526, $rate->getValue());
         $this->assertEquals(new \DateTime('2018-02-02'), $rate->getDate());
+        $this->assertEquals(NationalBankOfRomania::class, $rate->getProvider());
     }
 
     /**

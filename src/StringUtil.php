@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -27,7 +29,7 @@ final class StringUtil
      *
      * @return \SimpleXMLElement
      */
-    public static function xmlToElement($string)
+    public static function xmlToElement(string $string): \SimpleXMLElement
     {
         $disableEntities = libxml_disable_entity_loader(true);
         $internalErrors = libxml_use_internal_errors(true);
@@ -57,7 +59,7 @@ final class StringUtil
      *
      * @return array
      */
-    public static function jsonToArray($string)
+    public static function jsonToArray(string $string): array
     {
         static $jsonErrors = [
             JSON_ERROR_DEPTH => 'JSON_ERROR_DEPTH - Maximum stack depth exceeded',

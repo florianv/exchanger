@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -25,5 +27,5 @@ interface ExchangeRateService extends ExchangeRateProvider
      *
      * @return bool
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery);
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool;
 }

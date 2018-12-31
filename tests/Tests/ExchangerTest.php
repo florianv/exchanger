@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -15,8 +17,9 @@ use Exchanger\ExchangeRate;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Exchanger;
+use PHPUnit\Framework\TestCase;
 
-class ExchangerTest extends \PHPUnit_Framework_TestCase
+class ExchangerTest extends TestCase
 {
     /**
      * @test
@@ -24,7 +27,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
      */
     public function it_throws_an_exception_when_service_does_not_support_query()
     {
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $service
             ->expects($this->any())
@@ -43,8 +46,8 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     public function it_quotes_a_pair()
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
-        $rate = new ExchangeRate('1', new \DateTime());
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $rate = new ExchangeRate(1, __CLASS__, new \DateTime());
 
         $service
             ->expects($this->any())
@@ -66,13 +69,13 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
      */
     public function it_quotes_an_identical_pair()
     {
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'));
 
         $exchanger = new Exchanger($service);
         $rate = $exchanger->getExchangeRate($exchangeRateQuery);
 
-        $this->assertSame('1', $rate->getValue());
+        $this->assertSame(1.0, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
     }
 
@@ -82,14 +85,14 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     public function it_does_not_cache_identical_pairs()
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'));
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
 
-        $pool
+        $cache
             ->expects($this->never())
-            ->method('getItem');
+            ->method('get');
 
-        $exchanger = new Exchanger($service, $pool);
+        $exchanger = new Exchanger($service, $cache);
         $rate1 = $exchanger->getExchangeRate($exchangeRateQuery);
         $rate2 = $exchanger->getExchangeRate($exchangeRateQuery);
 
@@ -99,72 +102,26 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_returns_null_if_rate_absent_in_cache()
-    {
-        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
-
-        $service
-            ->expects($this->any())
-            ->method('supportQuery')
-            ->will($this->returnValue(true));
-
-        $item = $this->getMock('Psr\Cache\CacheItemInterface');
-
-        $item
-            ->expects($this->once())
-            ->method('isHit')
-            ->will($this->returnValue(false));
-
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
-            ->expects($this->once())
-            ->method('getItem')
-            ->with(sha1(serialize($exchangeRateQuery)))
-            ->will($this->returnValue($item));
-
-        $exchanger = new Exchanger($service, $pool);
-        $this->assertNull($exchanger->getExchangeRate($exchangeRateQuery));
-    }
-
-    /**
-     * @test
-     */
     public function it_fetches_a_rate_from_cache()
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-        $rate = new ExchangeRate('1', new \DateTime());
+        $rate = new ExchangeRate(1, __CLASS__, new \DateTime());
 
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $service
             ->expects($this->any())
             ->method('supportQuery')
             ->will($this->returnValue(true));
 
-        $item = $this->getMock('Psr\Cache\CacheItemInterface');
+        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
 
-        $item
-            ->expects($this->once())
-            ->method('isHit')
-            ->will($this->returnValue(true));
-
-        $item
+        $cache
             ->expects($this->once())
             ->method('get')
             ->will($this->returnValue($rate));
 
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
-            ->expects($this->once())
-            ->method('getItem')
-            ->with(sha1(serialize($exchangeRateQuery)))
-            ->will($this->returnValue($item));
-
-        $exchanger = new Exchanger($service, $pool);
+        $exchanger = new Exchanger($service, $cache);
         $this->assertSame($rate, $exchanger->getExchangeRate($exchangeRateQuery));
     }
 
@@ -174,10 +131,11 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     public function it_caches_a_rate()
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-        $rate = new ExchangeRate('1', new \DateTime());
+        $rate = new ExchangeRate(1, __CLASS__, new \DateTime());
         $ttl = 3600;
+        $key = sha1(serialize($exchangeRateQuery));
 
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $service
             ->expects($this->any())
@@ -189,39 +147,23 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
             ->method('getExchangeRate')
             ->will($this->returnValue($rate));
 
-        $item = $this->getMock('Psr\Cache\CacheItemInterface');
+        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
 
-        $item
+        $cache
             ->expects($this->once())
-            ->method('isHit')
-            ->will($this->returnValue(false));
+            ->method('get')
+            ->will($this->returnValue(null));
 
-        $item
+        $cache
             ->expects($this->once())
             ->method('set')
-            ->with($rate);
+            ->with($key, $rate, $ttl);
 
-        $item
-            ->expects($this->once())
-            ->method('expiresAfter')
-            ->with($ttl);
+        $exchanger = new Exchanger($service, $cache, ['cache_ttl' => $ttl]);
 
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+        $returnedRate = $exchanger->getExchangeRate($exchangeRateQuery);
 
-        $pool
-            ->expects($this->once())
-            ->method('getItem')
-            ->with(sha1(serialize($exchangeRateQuery)))
-            ->will($this->returnValue($item));
-
-        $pool
-            ->expects($this->once())
-            ->method('save')
-            ->with($item);
-
-        $exchanger = new Exchanger($service, $pool, ['cache_ttl' => $ttl]);
-
-        $exchanger->getExchangeRate($exchangeRateQuery);
+        $this->assertSame($rate, $returnedRate);
     }
 
     /**
@@ -231,7 +173,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache' => false]);
 
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $service
             ->expects($this->once())
@@ -242,25 +184,17 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getExchangeRate');
 
-        $item = $this->getMock('Psr\Cache\CacheItemInterface');
+        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
 
-        $item
+        $cache
             ->expects($this->never())
             ->method('get');
 
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
+        $cache
             ->expects($this->never())
-            ->method('getItem')
-            ->will($this->returnValue($item));
+            ->method('set');
 
-        $pool
-            ->expects($this->never())
-            ->method('save')
-            ->with($item);
-
-        $exchanger = new Exchanger($service, $pool);
+        $exchanger = new Exchanger($service, $cache);
         $exchanger->getExchangeRate($exchangeRateQuery);
     }
 
@@ -271,9 +205,10 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     {
         $ttl = 3600;
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_ttl' => $ttl]);
-        $rate = new ExchangeRate('1', new \DateTime());
+        $rate = new ExchangeRate(1, __CLASS__, new \DateTime());
+        $key = sha1(serialize($exchangeRateQuery));
 
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $service
             ->expects($this->any())
@@ -285,36 +220,19 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
             ->method('getExchangeRate')
             ->will($this->returnValue($rate));
 
-        $item = $this->getMock('Psr\Cache\CacheItemInterface');
+        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
 
-        $item
+        $cache
             ->expects($this->once())
-            ->method('isHit')
-            ->will($this->returnValue(false));
+            ->method('get')
+            ->will($this->returnValue(null));
 
-        $item
+        $cache
             ->expects($this->once())
             ->method('set')
-            ->with($rate);
+            ->with($key, $rate, $ttl);
 
-        $item
-            ->expects($this->once())
-            ->method('expiresAfter')
-            ->with($ttl);
-
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
-
-        $pool
-            ->expects($this->once())
-            ->method('getItem')
-            ->will($this->returnValue($item));
-
-        $pool
-            ->expects($this->once())
-            ->method('save')
-            ->with($item);
-
-        $exchanger = new Exchanger($service, $pool, ['cache_ttl' => 60]);
+        $exchanger = new Exchanger($service, $cache, ['cache_ttl' => 60]);
         $exchanger->getExchangeRate($exchangeRateQuery);
     }
 
@@ -326,22 +244,20 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
         $expectedKeyPrefix = 'expected-prefix';
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_key_prefix' => $expectedKeyPrefix]);
 
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
-        $item = $this->getMock('Psr\Cache\CacheItemInterface');
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
 
         $service
             ->expects($this->once())
             ->method('supportQuery')
             ->will($this->returnValue(true));
 
-        $pool
+        $cache
             ->expects($this->once())
-            ->method('getItem')
-            ->with($this->stringStartsWith($expectedKeyPrefix))
-            ->will($this->returnValue($item));
+            ->method('get')
+            ->with($this->stringStartsWith($expectedKeyPrefix));
 
-        $exchanger = new Exchanger($service, $pool);
+        $exchanger = new Exchanger($service, $cache);
         $exchanger->getExchangeRate($exchangeRateQuery);
     }
 
@@ -353,15 +269,16 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
 
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
-        $pool = $this->getMock('Psr\Cache\CacheItemPoolInterface');
+        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
+
         $service
             ->expects($this->any())
             ->method('supportQuery')
             ->will($this->returnValue(true));
 
-        $exchanger = new Exchanger($service, $pool, ['cache_key_prefix' => 'prefix_longer_then_24_symbols']);
+        $exchanger = new Exchanger($service, $cache, ['cache_key_prefix' => 'prefix_longer_then_24_symbols']);
         $exchanger->getExchangeRate($exchangeRateQuery);
     }
 
@@ -373,7 +290,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
 
-        $service = $this->getMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $service
             ->expects($this->once())

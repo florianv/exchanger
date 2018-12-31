@@ -1,8 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
- * (c) Pascal Hofmann <mail@pascalhofmann.de>
+ * (c) Florian Voutzinos <florian@voutzinos.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,6 +18,9 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\Fixer;
 
+/**
+ * @author Pascal Hofmann <mail@pascalhofmann.de>
+ */
 class FixerTest extends ServiceTestCase
 {
     /**
@@ -22,7 +28,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new Fixer($this->getMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
@@ -31,7 +37,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_supports_eur_base_normal_mode()
     {
-        $service = new Fixer($this->getMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CAD'))));
     }
 
@@ -40,7 +46,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_does_not_support_other_than_eur_base_in_normal_mode()
     {
-        $service = new Fixer($this->getMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/CAD'))));
     }
 
@@ -69,8 +75,9 @@ class FixerTest extends ServiceTestCase
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CHF')));
 
-        $this->assertEquals('1.0933', $rate->getValue());
+        $this->assertEquals(1.0933, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-26'), $rate->getDate());
+        $this->assertEquals(Fixer::class, $rate->getProvider());
     }
 
     /**
@@ -84,8 +91,9 @@ class FixerTest extends ServiceTestCase
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CHF')));
 
-        $this->assertEquals('1.0933', $rate->getValue());
+        $this->assertEquals(1.0933, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-26'), $rate->getDate());
+        $this->assertEquals(Fixer::class, $rate->getProvider());
     }
 
     /**
@@ -100,8 +108,9 @@ class FixerTest extends ServiceTestCase
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/AUD'), $date));
 
-        $this->assertEquals('1.5209', $rate->getValue());
+        $this->assertEquals(1.5209, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals(Fixer::class, $rate->getProvider());
     }
 
     /**
@@ -116,7 +125,8 @@ class FixerTest extends ServiceTestCase
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/AUD'), $date));
 
-        $this->assertEquals('1.5209', $rate->getValue());
+        $this->assertEquals(1.5209, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals(Fixer::class, $rate->getProvider());
     }
 }

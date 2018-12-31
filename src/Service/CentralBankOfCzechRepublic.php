@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -16,13 +18,14 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Central Bank of Czech Republic (CNB) Service.
  *
  * @author Petr Kramar <petr.kramar@perlur.cz>
  */
-class CentralBankOfCzechRepublic extends HistoricalService
+final class CentralBankOfCzechRepublic extends HistoricalService
 {
     const URL = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
 
@@ -35,7 +38,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->createRate($exchangeQuery);
     }
@@ -43,7 +46,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->createRate($exchangeQuery, $exchangeQuery->getDate());
     }
@@ -51,7 +54,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'CZK' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
@@ -66,7 +69,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
      *
      * @throws UnsupportedCurrencyPairException
      */
-    private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null)
+    private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request($this->buildUrl($requestedDate));
@@ -87,7 +90,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
 
-                return new ExchangeRate((string) ($rate / (int) $count), $date);
+                return new ExchangeRate((float) ($rate / (int) $count), __CLASS__, $date);
             }
         }
 
@@ -101,7 +104,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
      *
      * @return string The date
      */
-    private function parseDate($line)
+    private function parseDate(string $line): string
     {
         $words = preg_split('/[\s]+/', $line);
 
@@ -113,7 +116,7 @@ class CentralBankOfCzechRepublic extends HistoricalService
      *
      * @return string
      */
-    private function buildUrl(DateTimeInterface $requestedDate = null)
+    private function buildUrl(DateTimeInterface $requestedDate = null): string
     {
         if (null === $requestedDate) {
             return self::URL;

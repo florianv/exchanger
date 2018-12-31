@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -14,15 +16,17 @@ namespace Exchanger\Service;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Open Exchange Rates Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class OpenExchangeRates extends HistoricalService
+final class OpenExchangeRates extends HistoricalService
 {
     const FREE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&show_alternative=1';
 
@@ -35,7 +39,7 @@ class OpenExchangeRates extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options['app_id'])) {
             throw new \InvalidArgumentException('The "app_id" option must be provided.');
@@ -49,7 +53,7 @@ class OpenExchangeRates extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -70,7 +74,7 @@ class OpenExchangeRates extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -96,7 +100,7 @@ class OpenExchangeRates extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
@@ -107,11 +111,11 @@ class OpenExchangeRates extends HistoricalService
      * @param string            $url
      * @param ExchangeRateQuery $exchangeQuery
      *
-     * @return ExchangeRate|null
+     * @return ExchangeRate
      *
      * @throws Exception
      */
-    private function createRate($url, ExchangeRateQuery $exchangeQuery)
+    private function createRate(string $url, ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
@@ -127,9 +131,9 @@ class OpenExchangeRates extends HistoricalService
         if ($data['base'] === $currencyPair->getBaseCurrency()
             && isset($data['rates'][$currencyPair->getQuoteCurrency()])
         ) {
-            return new ExchangeRate((string) $data['rates'][$currencyPair->getQuoteCurrency()], $date);
+            return new ExchangeRate((float) ($data['rates'][$currencyPair->getQuoteCurrency()]), __CLASS__, $date);
         }
 
-        return null;
+        throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -19,12 +21,28 @@ use Exchanger\Contract\ExchangeRateService;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class UnsupportedExchangeQueryException extends Exception
+final class UnsupportedExchangeQueryException extends Exception
 {
+    /**
+     * The query.
+     *
+     * @var ExchangeRateQuery
+     */
     private $exchangeRateQuery;
 
+    /**
+     * The service.
+     *
+     * @var ExchangeRateService
+     */
     private $service;
 
+    /**
+     * Constructor.
+     *
+     * @param ExchangeRateQuery   $exchangeRateQuery
+     * @param ExchangeRateService $service
+     */
     public function __construct(ExchangeRateQuery $exchangeRateQuery, ExchangeRateService $service)
     {
         parent::__construct(sprintf(
@@ -42,7 +60,7 @@ class UnsupportedExchangeQueryException extends Exception
      *
      * @return ExchangeRateQuery
      */
-    public function getExchangeRateQuery()
+    public function getExchangeRateQuery(): ExchangeRateQuery
     {
         return $this->exchangeRateQuery;
     }
@@ -52,7 +70,7 @@ class UnsupportedExchangeQueryException extends Exception
      *
      * @return ExchangeRateService
      */
-    public function getService()
+    public function getService(): ExchangeRateService
     {
         return $this->service;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -66,7 +68,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new CentralBankOfCzechRepublic($this->getMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfCzechRepublic($this->createMock('Http\Client\HttpClient'));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('CZK/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY'))));
@@ -81,8 +83,9 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
         $service = $this->createService();
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CZK')));
 
-        $this->assertSame('27.035', $rate->getValue());
+        $this->assertSame(27.035, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-04-05'), $rate->getDate());
+        $this->assertEquals(CentralBankOfCzechRepublic::class, $rate->getProvider());
     }
 
     /**
@@ -91,7 +94,8 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     public function itFetchesAPhpRate()
     {
         $rate = $this->createService()->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('PHP/CZK')));
-        $this->assertSame('0.51384', $rate->getValue());
+        $this->assertSame(0.51384, $rate->getValue());
+        $this->assertEquals(CentralBankOfCzechRepublic::class, $rate->getProvider());
     }
 
     /**
@@ -100,7 +104,8 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     public function itFetchesAIdrRate()
     {
         $rate = $this->createService()->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('IDR/CZK')));
-        $this->assertSame('0.001798', $rate->getValue());
+        $this->assertSame(0.001798, $rate->getValue());
+        $this->assertEquals(CentralBankOfCzechRepublic::class, $rate->getProvider());
     }
 
     /**
@@ -112,8 +117,9 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
         $service = $this->createServiceForHistoricalRates();
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('FRF/CZK'), $requestedDate));
 
-        $this->assertEquals('5.529', $rate->getValue());
+        $this->assertEquals(5.529, $rate->getValue());
         $this->assertEquals(new \DateTime('2000-04-21'), $rate->getDate());
+        $this->assertEquals(CentralBankOfCzechRepublic::class, $rate->getProvider());
     }
 
     /**
@@ -125,8 +131,9 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
         $service = $this->createServiceForHistoricalRates();
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/CZK'), $requestedDate));
 
-        $this->assertEquals('36.270', $rate->getValue());
+        $this->assertEquals(36.27, $rate->getValue());
         $this->assertEquals(new \DateTime('2000-04-21'), $rate->getDate());
+        $this->assertEquals(CentralBankOfCzechRepublic::class, $rate->getProvider());
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -23,7 +25,7 @@ class WebserviceXTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new WebserviceX($this->getMock('Http\Client\HttpClient'));
+        $service = new WebserviceX($this->createMock('Http\Client\HttpClient'));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -40,7 +42,8 @@ class WebserviceXTest extends ServiceTestCase
         $service = new WebserviceX($this->getHttpAdapterMock($uri, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
-        $this->assertEquals('1.3608', $rate->getValue());
+        $this->assertEquals(1.3608, $rate->getValue());
         $this->assertEquals((new \DateTime())->format('Y-m-d'), $rate->getDate()->format('Y-m-d'));
+        $this->assertEquals(WebserviceX::class, $rate->getProvider());
     }
 }

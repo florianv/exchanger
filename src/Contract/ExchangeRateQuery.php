@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -23,7 +25,7 @@ interface ExchangeRateQuery
      *
      * @return CurrencyPair
      */
-    public function getCurrencyPair();
+    public function getCurrencyPair(): CurrencyPair;
 
     /**
      * Gets an option by name.

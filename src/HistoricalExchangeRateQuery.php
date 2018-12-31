@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -19,8 +21,13 @@ use Exchanger\Contract\HistoricalExchangeRateQuery as HistoricalExchangeQueryCon
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class HistoricalExchangeRateQuery extends ExchangeRateQuery implements HistoricalExchangeQueryContract
+final class HistoricalExchangeRateQuery extends ExchangeRateQuery implements HistoricalExchangeQueryContract
 {
+    /**
+     * The date.
+     *
+     * @var \DateTimeInterface
+     */
     private $date;
 
     /**
@@ -40,7 +47,7 @@ class HistoricalExchangeRateQuery extends ExchangeRateQuery implements Historica
     /**
      * {@inheritdoc}
      */
-    public function getDate()
+    public function getDate(): \DateTimeInterface
     {
         return $this->date;
     }

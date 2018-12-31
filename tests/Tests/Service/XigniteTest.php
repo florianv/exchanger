@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -26,7 +28,7 @@ class XigniteTest extends ServiceTestCase
      */
     public function it_throws_an_exception_if_token_option_missing()
     {
-        new Xignite($this->getMock('Http\Client\HttpClient'));
+        new Xignite($this->createMock('Http\Client\HttpClient'));
     }
 
     /**
@@ -34,7 +36,7 @@ class XigniteTest extends ServiceTestCase
      */
     public function it_support_all_queries()
     {
-        $service = new Xignite($this->getMock('Http\Client\HttpClient'), null, ['token' => 'token']);
+        $service = new Xignite($this->createMock('Http\Client\HttpClient'), null, ['token' => 'token']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -72,8 +74,9 @@ class XigniteTest extends ServiceTestCase
         $service = new Xignite($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('GBP/AWG')));
 
-        $this->assertEquals('2.982308', $rate->getValue());
+        $this->assertEquals(2.982308, $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-11 21:22:00', new \DateTimeZone('UTC')), $rate->getDate());
+        $this->assertEquals(Xignite::class, $rate->getProvider());
     }
 
     /**
@@ -88,7 +91,8 @@ class XigniteTest extends ServiceTestCase
         $service = new Xignite($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $date));
 
-        $this->assertEquals('1.130228', $rate->getValue());
+        $this->assertEquals(1.130228, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals(Xignite::class, $rate->getProvider());
     }
 }

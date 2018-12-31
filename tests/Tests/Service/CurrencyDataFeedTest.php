@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Exchanger.
+ *
+ * (c) Florian Voutzinos <florian@voutzinos.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Exchanger\Tests\Service;
 
 use Exchanger\HistoricalExchangeRateQuery;
@@ -14,7 +25,7 @@ class CurrencyDataFeedTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new CurrencyDataFeed($this->getMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new CurrencyDataFeed($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -44,7 +55,8 @@ class CurrencyDataFeedTest extends ServiceTestCase
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
 
-        $this->assertSame('1.18765', $rate->getValue());
+        $this->assertSame(1.18765, $rate->getValue());
         $this->assertTrue('2017-12-21' == $rate->getDate()->format('Y-m-d'));
+        $this->assertEquals(CurrencyDataFeed::class, $rate->getProvider());
     }
 }

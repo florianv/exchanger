@@ -1,14 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Exchanger.
+ *
+ * (c) Florian Voutzinos <florian@voutzinos.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Exchanger\Tests\Exception;
 
 use Exchanger\Exception\ChainException;
-use Exchanger\Exception\InternalException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Exchanger\Exception\ChainException
  */
-class ChainExceptionTest extends \PHPUnit_Framework_TestCase
+class ChainExceptionTest extends TestCase
 {
     /**
      * @var ChainException
@@ -27,7 +38,7 @@ class ChainExceptionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->exception1 = new InternalException('Something bad happened.');
+        $this->exception1 = new \Exception('Something bad happened.');
         $this->exception2 = new \Exception('General exception.');
 
         $this->chainException = new ChainException([
@@ -41,7 +52,7 @@ class ChainExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function it_should_have_a_descriptive_error_message()
     {
-        $this->assertSame("The chain resulted in 2 exception(s):\r\nExchanger\\Exception\\InternalException: Something bad happened.\r\nException: General exception.", $this->chainException->getMessage());
+        $this->assertSame("The chain resulted in 2 exception(s):\r\nException: Something bad happened.\r\nException: General exception.", $this->chainException->getMessage());
         $this->assertCount(2, $this->chainException->getExceptions());
     }
 }

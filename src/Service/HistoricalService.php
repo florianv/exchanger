@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -26,7 +28,7 @@ abstract class HistoricalService extends Service
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -46,16 +48,16 @@ abstract class HistoricalService extends Service
      *
      * @param ExchangeRateQuery $exchangeQuery
      *
-     * @return ExchangeRate|null
+     * @return ExchangeRate
      */
-    abstract protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery);
+    abstract protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate;
 
     /**
      * Gets an historical rate.
      *
      * @param HistoricalExchangeRateQuery $exchangeQuery
      *
-     * @return ExchangeRate|null
+     * @return ExchangeRate
      */
-    abstract protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery);
+    abstract protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate;
 }

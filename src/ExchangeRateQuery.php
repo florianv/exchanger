@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -21,8 +23,18 @@ use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
  */
 class ExchangeRateQuery implements ExchangeRateQueryContract
 {
+    /**
+     * The currency pair.
+     *
+     * @var CurrencyPairContract
+     */
     private $currencyPair;
 
+    /**
+     * The options.
+     *
+     * @var array
+     */
     private $options;
 
     /**
@@ -40,7 +52,7 @@ class ExchangeRateQuery implements ExchangeRateQueryContract
     /**
      * {@inheritdoc}
      */
-    public function getCurrencyPair()
+    public function getCurrencyPair(): CurrencyPairContract
     {
         return $this->currencyPair;
     }

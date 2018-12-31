@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -15,15 +17,17 @@ use Exchanger\Contract\CurrencyPair;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Fixer Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Fixer extends HistoricalService
+final class Fixer extends HistoricalService
 {
     const ACCESS_KEY_OPTION = 'access_key';
 
@@ -38,7 +42,21 @@ class Fixer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function processOptions(array &$options): void
+    {
+        if (!isset($options[self::ACCESS_KEY_OPTION])) {
+            throw new \InvalidArgumentException('The "access_key" option must be provided to use fixer.io');
+        }
+
+        if (!isset($options['enterprise'])) {
+            $options['enterprise'] = false;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -61,21 +79,7 @@ class Fixer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options)
-    {
-        if (!isset($options[self::ACCESS_KEY_OPTION])) {
-            throw new \InvalidArgumentException('The "access_key" option must be provided to use fixer.io');
-        }
-
-        if (!isset($options['enterprise'])) {
-            $options['enterprise'] = false;
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -100,7 +104,7 @@ class Fixer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
@@ -111,11 +115,11 @@ class Fixer extends HistoricalService
      * @param string       $url
      * @param CurrencyPair $currencyPair
      *
-     * @return ExchangeRate|null
+     * @return ExchangeRate
      *
      * @throws Exception
      */
-    private function createRate($url, CurrencyPair $currencyPair)
+    private function createRate($url, CurrencyPair $currencyPair): ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
@@ -128,10 +132,10 @@ class Fixer extends HistoricalService
             $date = new \DateTime($data['date']);
             $rate = $data['rates'][$currencyPair->getQuoteCurrency()];
 
-            return new ExchangeRate($rate, $date);
+            return new ExchangeRate((float) $rate, __CLASS__, $date);
         }
 
-        return null;
+        throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
     /**
@@ -141,7 +145,7 @@ class Fixer extends HistoricalService
      *
      * @return string
      */
-    private function getErrorMessage($code)
+    private function getErrorMessage($code): string
     {
         $errors = [
             404 => 'The requested resource does not exist.',

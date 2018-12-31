@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -19,8 +21,9 @@ use League\Flysystem\Filesystem;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Exchanger\Exchanger;
 use Exchanger\Service\Fixer;
+use PHPUnit\Framework\TestCase;
 
-class ExchangerTest extends \PHPUnit_Framework_TestCase
+class ExchangerTest extends TestCase
 {
     private $fixerAccessKey;
 
@@ -46,9 +49,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     private function cacheTest(callable $provideQuery)
     {
         if (!$this->fixerAccessKey) {
-            fwrite(STDERR, "\nFIXER.IO ACCESS KEY IS NOT SET. SKIPPING THE CACHE INTEGRATION TEST.\n");
-
-            return;
+            $this->markTestSkipped('FIXER.IO ACCESS KEY IS NOT SET. SKIPPING THE CACHE INTEGRATION TEST');
         }
 
         $firstStart = microtime(true);
@@ -118,7 +119,7 @@ class ExchangerTest extends \PHPUnit_Framework_TestCase
     /**
      * Creates an exchange rate query.
      *
-     * @return HistoricalExchangeRateQuery
+     * @return ExchangeRateQuery
      */
     private function createExchangeRateQuery()
     {

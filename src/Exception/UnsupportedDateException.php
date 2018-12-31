@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -18,12 +20,28 @@ use Exchanger\Contract\ExchangeRateService;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class UnsupportedDateException extends Exception
+final class UnsupportedDateException extends Exception
 {
+    /**
+     * The date.
+     *
+     * @var \DateTimeInterface
+     */
     private $date;
 
+    /**
+     * The service.
+     *
+     * @var ExchangeRateService
+     */
     private $service;
 
+    /**
+     * Constructor.
+     *
+     * @param \DateTimeInterface  $date
+     * @param ExchangeRateService $service
+     */
     public function __construct(\DateTimeInterface $date, ExchangeRateService $service)
     {
         parent::__construct(
@@ -42,7 +60,7 @@ class UnsupportedDateException extends Exception
      *
      * @return \DateTimeInterface
      */
-    public function getDate()
+    public function getDate(): \DateTimeInterface
     {
         return $this->date;
     }
@@ -52,7 +70,7 @@ class UnsupportedDateException extends Exception
      *
      * @return ExchangeRateService
      */
-    public function getService()
+    public function getService(): ExchangeRateService
     {
         return $this->service;
     }

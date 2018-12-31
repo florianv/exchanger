@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -83,7 +85,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new CentralBankOfRepublicTurkey($this->getMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfRepublicTurkey($this->createMock('Http\Client\HttpClient'));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
@@ -113,8 +115,9 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/TRY')));
 
-        $this->assertSame('3.2083', $rate->getValue());
+        $this->assertSame(3.2083, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-03-15'), $rate->getDate());
+        $this->assertEquals(CentralBankOfRepublicTurkey::class, $rate->getProvider());
     }
 
     /**
@@ -126,7 +129,8 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $service = $this->createServiceForHistoricalRates();
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/TRY'), $requestedDate));
 
-        $this->assertEquals('2.3544', $rate->getValue());
+        $this->assertEquals(2.3544, $rate->getValue());
         $this->assertEquals(new \DateTime('2013-04-22'), $rate->getDate());
+        $this->assertEquals(CentralBankOfRepublicTurkey::class, $rate->getProvider());
     }
 }

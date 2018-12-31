@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -15,8 +17,10 @@ use Exchanger\Contract\CurrencyPair;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Currency Layer Service.
@@ -24,7 +28,7 @@ use Exchanger\StringUtil;
  * @author Pascal Hofmann <mail@pascalhofmann.de>
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class CurrencyLayer extends HistoricalService
+final class CurrencyLayer extends HistoricalService
 {
     const FREE_LATEST_URL = 'http://www.apilayer.net/api/live?access_key=%s&currencies=%s';
 
@@ -37,7 +41,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options['access_key'])) {
             throw new \InvalidArgumentException('The "access_key" option must be provided.');
@@ -51,7 +55,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -76,7 +80,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         if ($this->options['enterprise']) {
             $url = sprintf(
@@ -99,7 +103,7 @@ class CurrencyLayer extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
@@ -114,7 +118,7 @@ class CurrencyLayer extends HistoricalService
      *
      * @throws Exception
      */
-    private function createRate($url, CurrencyPair $currencyPair)
+    private function createRate($url, CurrencyPair $currencyPair): ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
@@ -128,9 +132,9 @@ class CurrencyLayer extends HistoricalService
         $hash = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
 
         if ($data['source'] === $currencyPair->getBaseCurrency() && isset($data['quotes'][$hash])) {
-            return new ExchangeRate((string) $data['quotes'][$hash], $date);
+            return new ExchangeRate((float) ($data['quotes'][$hash]), __CLASS__, $date);
         }
 
-        return null;
+        throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 }

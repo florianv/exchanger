@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -17,6 +19,7 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * National Bank of Romania Service.
@@ -25,7 +28,7 @@ use Exchanger\StringUtil;
  * @author Florian Voutzinos <florian@voutzinos.com>
  * @author Balazs Csaba <balazscsaba2006@gmail.com>
  */
-class NationalBankOfRomania extends HistoricalService
+final class NationalBankOfRomania extends HistoricalService
 {
     const URL = 'http://www.bnr.ro/nbrfxrates.xml';
 
@@ -34,7 +37,7 @@ class NationalBankOfRomania extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $content = $this->request(self::URL);
 
@@ -53,13 +56,13 @@ class NationalBankOfRomania extends HistoricalService
         $rate = (string) $element;
         $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
 
-        return new ExchangeRate((string) $rateValue, $date);
+        return new ExchangeRate((float) $rateValue, __CLASS__, $date);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $year = $exchangeQuery->getDate()->format('Y');
         if ($year < 2005) {
@@ -92,13 +95,13 @@ class NationalBankOfRomania extends HistoricalService
         $rate = (string) $element;
         $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
 
-        return new ExchangeRate((string) $rateValue, $exchangeQuery->getDate());
+        return new ExchangeRate((float) $rateValue, __CLASS__, $exchangeQuery->getDate());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'RON' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -17,6 +19,7 @@ use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Central Bank of the Republic of Turkey (CBRT) Service.
@@ -25,7 +28,7 @@ use Exchanger\StringUtil;
  * @author Florian Voutzinos <florian@voutzinos.com>
  * @author Uğur Özkan
  */
-class CentralBankOfRepublicTurkey extends HistoricalService
+final class CentralBankOfRepublicTurkey extends HistoricalService
 {
     const BASE_URL = 'http://www.tcmb.gov.tr/kurlar/';
 
@@ -34,7 +37,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->createRate($exchangeQuery);
     }
@@ -42,7 +45,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->createRate($exchangeQuery, $exchangeQuery->getDate());
     }
@@ -50,7 +53,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeRateQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeRateQuery): bool
     {
         return 'TRY' === $exchangeRateQuery->getCurrencyPair()->getQuoteCurrency();
     }
@@ -65,7 +68,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
      *
      * @throws UnsupportedCurrencyPairException
      */
-    private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null)
+    private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request($this->buildUrl($requestedDate));
@@ -76,7 +79,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
         $elements = $element->xpath('//Currency[@CurrencyCode="'.$currencyPair->getBaseCurrency().'"]/ForexSelling');
 
         if (!empty($elements) || !$date) {
-            return new ExchangeRate((string) $elements[0], $date);
+            return new ExchangeRate((float) ($elements[0]), __CLASS__, $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -89,7 +92,7 @@ class CentralBankOfRepublicTurkey extends HistoricalService
      *
      * @return string
      */
-    private function buildUrl(DateTimeInterface $requestedDate = null)
+    private function buildUrl(DateTimeInterface $requestedDate = null): string
     {
         if (null === $requestedDate) {
             $fileName = 'today';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -20,26 +22,45 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  */
 final class ExchangeRate implements ExchangeRateContract
 {
+    /**
+     * The value.
+     *
+     * @var float
+     */
     private $value;
 
+    /**
+     * The date.
+     *
+     * @var \DateTimeInterface
+     */
     private $date;
+
+    /**
+     * The provider.
+     *
+     * @var string
+     */
+    private $provider;
 
     /**
      * Creates a new rate.
      *
-     * @param string                  $value The rate value
-     * @param \DateTimeInterface|null $date  The date at which this rate was calculated
+     * @param float                   $value    The rate value
+     * @param string                  $provider The class name of the provider that returned this rate
+     * @param \DateTimeInterface|null $date     The date at which this rate was calculated
      */
-    public function __construct($value, \DateTimeInterface $date = null)
+    public function __construct(float $value, string $provider, \DateTimeInterface $date = null)
     {
-        $this->value = (string) $value;
+        $this->value = $value;
+        $this->provider = $provider;
         $this->date = $date ?: new \DateTime();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getValue()
+    public function getValue(): float
     {
         return $this->value;
     }
@@ -47,8 +68,16 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * {@inheritdoc}
      */
-    public function getDate()
+    public function getDate(): \DateTimeInterface
     {
         return $this->date;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProvider(): string
+    {
+        return $this->provider;
     }
 }

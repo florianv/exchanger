@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -21,14 +23,21 @@ interface ExchangeRate
     /**
      * Gets the rate value.
      *
-     * @return string
+     * @return float
      */
-    public function getValue();
+    public function getValue(): float;
 
     /**
      * Gets the date at which this rate was calculated.
      *
-     * @return \Datetime
+     * @return \DateTimeInterface
      */
-    public function getDate();
+    public function getDate(): \DateTimeInterface;
+
+    /**
+     * Gets the class of the service that returned this rate.
+     *
+     * @return string
+     */
+    public function getProvider(): string;
 }

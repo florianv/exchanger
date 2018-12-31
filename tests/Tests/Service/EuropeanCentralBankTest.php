@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -23,7 +25,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new EuropeanCentralBank($this->getMock('Http\Client\HttpClient'));
+        $service = new EuropeanCentralBank($this->createMock('Http\Client\HttpClient'));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
@@ -53,8 +55,9 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/BGN')));
 
-        $this->assertSame('1.9558', $rate->getValue());
+        $this->assertSame(1.9558, $rate->getValue());
         $this->assertEquals(new \DateTime('2015-01-07'), $rate->getDate());
+        $this->assertEquals(EuropeanCentralBank::class, $rate->getProvider());
     }
 
     /**
@@ -70,8 +73,9 @@ class EuropeanCentralBankTest extends ServiceTestCase
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/JPY'), new \DateTime('2016-08-23'))
         );
 
-        $this->assertSame('113.48', $rate->getValue());
+        $this->assertSame(113.48, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-23'), $rate->getDate());
+        $this->assertEquals(EuropeanCentralBank::class, $rate->getProvider());
     }
 
     /**

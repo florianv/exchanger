@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Exchanger.
+ *
+ * (c) Florian Voutzinos <florian@voutzinos.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Exchanger\Tests\Service;
 
 use Exchanger\CurrencyPair;
@@ -7,10 +18,11 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\CurrencyConverterApi;
 use Http\Client\HttpClient;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
+class CurrencyConverterApiTest extends TestCase
 {
     /**
      * @test
@@ -19,7 +31,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
      */
     public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
     {
-        new CurrencyConverterApi($this->getMock(HttpClient::class), null, ['enterprise' => true]);
+        new CurrencyConverterApi($this->createMock(HttpClient::class), null, ['enterprise' => true]);
     }
 
     /**
@@ -44,7 +56,8 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
         $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
-        $this->assertSame('0.726804', $rate->getValue());
+        $this->assertSame(0.726804, $rate->getValue());
+        $this->assertEquals(CurrencyConverterApi::class, $rate->getProvider());
     }
 
     /** @test */
@@ -56,7 +69,8 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
         $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
-        $this->assertSame('0.726804', $rate->getValue());
+        $this->assertSame(0.726804, $rate->getValue());
+        $this->assertEquals(CurrencyConverterApi::class, $rate->getProvider());
     }
 
     /** @test */
@@ -69,8 +83,9 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
         $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), $date));
 
-        $this->assertSame('0.726804', $rate->getValue());
+        $this->assertSame(0.726804, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals(CurrencyConverterApi::class, $rate->getProvider());
     }
 
     /** @test */
@@ -83,8 +98,9 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
         $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), $date));
 
-        $this->assertSame('0.726804', $rate->getValue());
+        $this->assertSame(0.726804, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals(CurrencyConverterApi::class, $rate->getProvider());
     }
 
     /**
@@ -100,7 +116,7 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->getResponse($content, $statusCode);
 
-        $adapter = $this->getMock(HttpClient::class);
+        $adapter = $this->createMock(HttpClient::class);
 
         $adapter
             ->expects($this->once())
@@ -120,13 +136,13 @@ class CurrencyConverterApiTest extends \PHPUnit_Framework_TestCase
      */
     private function getResponse($content, $statusCode)
     {
-        $body = $this->getMock(StreamInterface::class);
+        $body = $this->createMock(StreamInterface::class);
         $body
             ->expects($this->once())
             ->method('__toString')
             ->will($this->returnValue($content));
 
-        $response = $this->getMock(ResponseInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
         $response
             ->expects($this->once())
             ->method('getBody')

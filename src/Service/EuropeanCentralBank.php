@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -17,13 +19,14 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * European Central Bank Service.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class EuropeanCentralBank extends HistoricalService
+final class EuropeanCentralBank extends HistoricalService
 {
     const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
 
@@ -32,7 +35,7 @@ class EuropeanCentralBank extends HistoricalService
     /**
      * {@inheritdoc}
      */
-    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $content = $this->request(self::DAILY_URL);
 
@@ -47,13 +50,13 @@ class EuropeanCentralBank extends HistoricalService
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
-        return new ExchangeRate((string) $elements[0]['rate'], $date);
+        return new ExchangeRate((float) ($elements[0]['rate']), __CLASS__, $date);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery)
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $content = $this->request(self::HISTORICAL_URL);
 
@@ -73,13 +76,13 @@ class EuropeanCentralBank extends HistoricalService
             throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
         }
 
-        return new ExchangeRate((string) $elements[0]['rate'], $exchangeQuery->getDate());
+        return new ExchangeRate((float) ($elements[0]['rate']), __CLASS__, $exchangeQuery->getDate());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }

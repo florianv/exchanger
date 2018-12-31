@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -23,7 +25,7 @@ class CryptonatorTest extends ServiceTestCase
      */
     public function it_does_not_support_all_codes()
     {
-        $service = new Cryptonator($this->getMock('Http\Client\HttpClient'));
+        $service = new Cryptonator($this->createMock('Http\Client\HttpClient'));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('NONCODE/NONCODE'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD'))));
     }
@@ -33,7 +35,7 @@ class CryptonatorTest extends ServiceTestCase
      */
     public function it_does_not_support_all_queries()
     {
-        $service = new Cryptonator($this->getMock('Http\Client\HttpClient'));
+        $service = new Cryptonator($this->createMock('Http\Client\HttpClient'));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('BTC/USD'), new \DateTime())));
@@ -63,7 +65,8 @@ class CryptonatorTest extends ServiceTestCase
         $service = new Cryptonator($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD')));
 
-        $this->assertSame('4194.86340277', $rate->getValue());
+        $this->assertSame(4194.86340277, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
+        $this->assertEquals(Cryptonator::class, $rate->getProvider());
     }
 }

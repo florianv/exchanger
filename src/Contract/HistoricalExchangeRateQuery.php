@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -23,5 +25,5 @@ interface HistoricalExchangeRateQuery extends ExchangeRateQuery
      *
      * @return \DateTimeInterface
      */
-    public function getDate();
+    public function getDate(): \DateTimeInterface;
 }

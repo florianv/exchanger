@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Exchanger.
  *
@@ -18,6 +20,11 @@ namespace Exchanger;
  */
 final class ExchangeRateQueryBuilder
 {
+    /**
+     * The currency pair.
+     *
+     * @var CurrencyPair
+     */
     private $currencyPair;
 
     /**
@@ -39,7 +46,7 @@ final class ExchangeRateQueryBuilder
      *
      * @param string $currencyPair
      */
-    public function __construct($currencyPair)
+    public function __construct(string $currencyPair)
     {
         $this->currencyPair = CurrencyPair::createFromString($currencyPair);
     }
@@ -51,7 +58,7 @@ final class ExchangeRateQueryBuilder
      *
      * @return $this
      */
-    public function setDate(\DateTimeInterface $date)
+    public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
 
@@ -66,7 +73,7 @@ final class ExchangeRateQueryBuilder
      *
      * @return $this
      */
-    public function addOption($name, $value)
+    public function addOption($name, $value): self
     {
         $this->options[$name] = $value;
 
