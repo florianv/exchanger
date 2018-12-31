@@ -8,6 +8,7 @@
   * [Latest Rates](#latest-rates)
   * [Historical Rates](#historical-rates)
 * [Chaining Services](#chaining-services)
+    * [Rate Provider](#rate-provider)
 * [Caching](#caching)
   * [Rates Caching](#rates-caching)
     * [Query Cache Options](#query-cache-options)
@@ -128,6 +129,18 @@ The rates will be first fetched using the `Fixer` service, will fallback to `Cur
 then `Forge`.
 
 > You can consult the list of the supported services and their options [here](#supported-services)
+
+#### Rate provider
+
+When using the chain service, it can be useful to know which service provided the rate.
+
+You can use the `getProvider()` function on a rate that returns the class name of the service that returned it:
+
+```php
+$class = $rate->getProvider();
+```
+
+For example, if Fixer returned the rate, it will be identical to `Exchanger\Service\Fixer::class`.
 
 ### Caching
 
