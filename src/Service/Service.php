@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Exchanger\Service;
 
-use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Message\RequestFactory;
 use Exchanger\Contract\ExchangeRateService;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -31,14 +31,14 @@ abstract class Service implements ExchangeRateService
     /**
      * The client.
      *
-     * @var HttpClient
+     * @var ClientInterface
      */
     private $httpClient;
 
     /**
      * The request factory.
      *
-     * @var RequestFactory
+     * @var RequestFactoryInterface
      */
     private $requestFactory;
 
@@ -50,14 +50,14 @@ abstract class Service implements ExchangeRateService
     protected $options = [];
 
     /**
-     * @param HttpClient|null     $httpClient
-     * @param RequestFactory|null $requestFactory
-     * @param array               $options
+     * @param ClientInterface|null         $httpClient
+     * @param RequestFactoryInterface|null $requestFactory
+     * @param array                        $options
      */
-    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null, array $options = [])
+    public function __construct(ClientInterface $httpClient = null, RequestFactoryInterface $requestFactory = null, array $options = [])
     {
-        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
-        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
+        $this->httpClient = $httpClient ?: Psr18ClientDiscovery::find();
+        $this->requestFactory = $requestFactory ?: Psr17FactoryDiscovery::findRequestFactory();
 
         $this->processOptions($options);
         $this->options = $options;
@@ -80,7 +80,12 @@ abstract class Service implements ExchangeRateService
      */
     private function buildRequest($url, array $headers = []): RequestInterface
     {
-        return $this->requestFactory->createRequest('GET', $url, $headers);
+        $request = $this->requestFactory->createRequest('GET', $url);
+        foreach ($headers as $header => $value) {
+            $request = $request->withHeader($header, $value);
+        }
+
+        return $request;
     }
 
     /**
