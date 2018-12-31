@@ -133,14 +133,20 @@ then `Forge`.
 
 #### Rates Caching
 
-`Exchanger` provides a [PSR-6 Caching Interface](http://www.php-fig.org/psr/psr-6) integration allowing you to cache rates during a given time using the adapter of your choice.
+`Exchanger` provides a [PSR-16 Simple Cache](http://www.php-fig.org/psr/psr-16) integration allowing you to cache rates during a given time using the adapter of your choice.
 
 The following example uses the Apcu cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/apcu-adapter`.
 
+You will also need to install a "bridge" that allows to adapt the PSR-6 adapters to PSR-16 using `composer require cache/simple-cache-bridge` (https://github.com/php-cache/simple-cache-bridge).
+
 ```php
 use Cache\Adapter\Apcu\ApcuCachePool;
+use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 
-$exchanger = new Exchanger($service, new ApcuCachePool(), ['cache_ttl' => 3600, 'cache_key_prefix' => 'myapp-']);
+$psr6pool = new ApcuCachePool();
+$simpleCache = new SimpleCacheBridge($psr6pool);
+
+$exchanger = new Exchanger($service, $simpleCache, ['cache_ttl' => 3600, 'cache_key_prefix' => 'myapp-']);
 ```
 
 All rates will now be cached in Apcu during 3600 seconds, and cache keys will be prefixed with 'myapp-'
