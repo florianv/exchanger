@@ -18,4 +18,5 @@
 
 - Modified the PHPArray service to only support scalars as rates (rate objects are not compatible)
 
-- We now rely on PSR-16 Simple Cache instead of PSR-6 Cache
+- We now rely on PSR-16 Simple Cache instead of PSR-6 Cache. You can use https://github.com/php-cache/simple-cache-bridge
+as a bridge between PSR-6 and PSR-16.
