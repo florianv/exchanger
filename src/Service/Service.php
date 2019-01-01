@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateService;
+use Http\Client\HttpClient;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface;
@@ -31,7 +32,7 @@ abstract class Service implements ExchangeRateService
     /**
      * The client.
      *
-     * @var ClientInterface
+     * @var ClientInterface|HttpClient
      */
     private $httpClient;
 
@@ -50,13 +51,19 @@ abstract class Service implements ExchangeRateService
     protected $options = [];
 
     /**
-     * @param ClientInterface|null         $httpClient
-     * @param RequestFactoryInterface|null $requestFactory
-     * @param array                        $options
+     * @param ClientInterface|HttpClient|null $httpClient
+     * @param RequestFactoryInterface|null    $requestFactory
+     * @param array                           $options
      */
-    public function __construct(ClientInterface $httpClient = null, RequestFactoryInterface $requestFactory = null, array $options = [])
+    public function __construct($httpClient = null, RequestFactoryInterface $requestFactory = null, array $options = [])
     {
-        $this->httpClient = $httpClient ?: Psr18ClientDiscovery::find();
+        if ($httpClient === null) {
+            $this->httpClient = $httpClient ?: Psr18ClientDiscovery::find();
+        } else {
+            if (!$httpClient instanceof ClientInterface && !$httpClient instanceof HttpClient) {
+                throw new \LogicException('Client must be an instance of Http\\Client\\HttpClient or Psr\\Http\\Client\\ClientInterface');
+            }
+        }
         $this->requestFactory = $requestFactory ?: Psr17FactoryDiscovery::findRequestFactory();
 
         $this->processOptions($options);
