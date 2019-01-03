@@ -1,18 +1,21 @@
 language: php
 
-php:
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
-  - 7.2
+sudo: false
 
 env:
-  matrix:
-    - PREFER="--prefer-lowest"
+  global:
     - PREFER="--prefer-dist"
 
-sudo: false
+matrix:
+    fast_finish: true
+    include:
+        - php: 5.5
+          env: PREFER="--prefer-lowest"
+        - php: 5.5
+        - php: 5.6
+        - php: 7.0
+        - php: 7.1
+        - php: 7.2
 
 cache:
   directories:
