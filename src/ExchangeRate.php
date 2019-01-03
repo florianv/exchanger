@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Exchanger;
 
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
+use Exchanger\Contract\CurrencyPair as CurrencyPairContract;
 
 /**
  * Represents a rate.
@@ -22,6 +23,13 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  */
 final class ExchangeRate implements ExchangeRateContract
 {
+    /**
+     * The currency pair.
+     *
+     * @var CurrencyPairContract
+     */
+    private $currencyPair;
+
     /**
      * The value.
      *
@@ -46,15 +54,17 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * Creates a new rate.
      *
-     * @param float                   $value    The rate value
-     * @param string                  $provider The class name of the provider that returned this rate
-     * @param \DateTimeInterface|null $date     The date at which this rate was calculated
+     * @param CurrencyPairContract $currencyPair The currency pair
+     * @param float                $value        The rate value
+     * @param \DateTimeInterface   $date         The date at which this rate was calculated
+     * @param string               $provider     The class name of the provider that returned this rate
      */
-    public function __construct(float $value, string $provider, \DateTimeInterface $date = null)
+    public function __construct(CurrencyPairContract $currencyPair, float $value, \DateTimeInterface $date, string $provider)
     {
+        $this->currencyPair = $currencyPair;
         $this->value = $value;
+        $this->date = $date;
         $this->provider = $provider;
-        $this->date = $date ?: new \DateTime();
     }
 
     /**
@@ -79,5 +89,13 @@ final class ExchangeRate implements ExchangeRateContract
     public function getProvider(): string
     {
         return $this->provider;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCurrencyPair(): CurrencyPairContract
+    {
+        return $this->currencyPair;
     }
 }

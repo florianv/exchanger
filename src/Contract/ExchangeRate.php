@@ -40,4 +40,11 @@ interface ExchangeRate
      * @return string
      */
     public function getProvider(): string;
+
+    /**
+     * Gets the currency pair.
+     *
+     * @return CurrencyPair
+     */
+    public function getCurrencyPair(): CurrencyPair;
 }
