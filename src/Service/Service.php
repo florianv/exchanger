@@ -58,12 +58,14 @@ abstract class Service implements ExchangeRateService
     public function __construct($httpClient = null, RequestFactoryInterface $requestFactory = null, array $options = [])
     {
         if ($httpClient === null) {
-            $this->httpClient = $httpClient ?: Psr18ClientDiscovery::find();
+            $httpClient = Psr18ClientDiscovery::find();
         } else {
             if (!$httpClient instanceof ClientInterface && !$httpClient instanceof HttpClient) {
                 throw new \LogicException('Client must be an instance of Http\\Client\\HttpClient or Psr\\Http\\Client\\ClientInterface');
             }
         }
+
+        $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory ?: Psr17FactoryDiscovery::findRequestFactory();
 
         $this->processOptions($options);
