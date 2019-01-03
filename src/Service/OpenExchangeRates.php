@@ -126,14 +126,14 @@ final class OpenExchangeRates extends HttpService
             throw new Exception($data['description']);
         }
 
-        $date = new \DateTimeImmutable();
+        $date = new \DateTime();
         $date->setTimestamp($data['timestamp']);
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
         if ($data['base'] === $currencyPair->getBaseCurrency()
             && isset($data['rates'][$currencyPair->getQuoteCurrency()])
         ) {
-            return $this->createRate($date, (float) ($data['rates'][$currencyPair->getQuoteCurrency()]), $date);
+            return $this->createRate($currencyPair, (float) ($data['rates'][$currencyPair->getQuoteCurrency()]), $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);

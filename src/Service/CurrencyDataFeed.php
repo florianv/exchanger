@@ -59,7 +59,7 @@ final class CurrencyDataFeed extends HttpService
         $data = StringUtil::jsonToArray($content);
 
         if (!empty($data) && $data['status'] && !isset($data['currency'][0]['error'])) {
-            $date = (new \DateTimeImmutable())->setTimestamp(strtotime($data['currency'][0]['date']));
+            $date = (new \DateTime())->setTimestamp(strtotime($data['currency'][0]['date']));
 
             return $this->createRate($currencyPair, (float) ($data['currency'][0]['value']), $date);
         }

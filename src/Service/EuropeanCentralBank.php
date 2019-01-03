@@ -46,7 +46,7 @@ final class EuropeanCentralBank extends HttpService
 
         $quoteCurrency = $currencyPair->getQuoteCurrency();
         $elements = $element->xpath('//xmlns:Cube[@currency="'.$quoteCurrency.'"]/@rate');
-        $date = new \DateTimeImmutable((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
+        $date = new \DateTime((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
 
         if (empty($elements) || !$date) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);

@@ -177,10 +177,10 @@ final class CurrencyConverterApi extends HttpService
 
         if ($exchangeRateQuery instanceof HistoricalExchangeRateQuery) {
             $dateStringified = $responsePayload['date'];
-            $date = new \DateTimeImmutable($dateStringified);
+            $date = new \DateTime($dateStringified);
             $rate = $responsePayload['results'][$keyAsCurrencyPair]['val'][$dateStringified];
         } else {
-            $date = new \DateTimeImmutable('now');
+            $date = new \DateTime('now');
             $rate = $responsePayload['results'][$keyAsCurrencyPair]['val'];
         }
 
@@ -200,16 +200,16 @@ final class CurrencyConverterApi extends HttpService
     /**
      * Gets the earliest available date for the historical query.
      *
-     * @return \DateTimeImmutable
+     * @return \DateTime
      */
-    private function getEarliestAvailableDateForHistoricalQuery(): \DateTimeImmutable
+    private function getEarliestAvailableDateForHistoricalQuery(): \DateTime
     {
         if ($this->isEnterprise()) {
-            return (new \DateTimeImmutable())->setTimestamp(0);
+            return (new \DateTime())->setTimestamp(0);
         }
 
         // Historical rates for free plan is available only for the past year.
-        return new \DateTimeImmutable('-1 year 00:00');
+        return new \DateTime('-1 year 00:00');
     }
 
     /**
@@ -230,11 +230,11 @@ final class CurrencyConverterApi extends HttpService
      *
      * @param DateTimeInterface $dateTime
      *
-     * @return \DateTimeImmutable
+     * @return \DateTime
      */
-    private function getAdoptedDateTime(DateTimeInterface $dateTime): \DateTimeImmutable
+    private function getAdoptedDateTime(DateTimeInterface $dateTime): \DateTime
     {
-        return (new \DateTimeImmutable())
+        return (new \DateTime())
             ->setTimestamp($dateTime->getTimestamp())
             ->setTimezone(new DateTimeZone('Asia/Manila'));
     }

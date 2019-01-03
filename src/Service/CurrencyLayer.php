@@ -129,7 +129,7 @@ final class CurrencyLayer extends HttpService
             throw new Exception($data['error']['info']);
         }
 
-        $date = (new \DateTimeImmutable())->setTimestamp($data['timestamp']);
+        $date = (new \DateTime())->setTimestamp($data['timestamp']);
         $hash = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
 
         if ($data['source'] === $currencyPair->getBaseCurrency() && isset($data['quotes'][$hash])) {

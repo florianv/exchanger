@@ -78,7 +78,7 @@ final class CentralBankOfCzechRepublic extends HttpService
 
         $lines = explode("\n", $content);
 
-        if (!$date = \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $this->parseDate($lines[0]))) {
+        if (!$date = \DateTime::createFromFormat(self::DATE_FORMAT, $this->parseDate($lines[0]))) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 

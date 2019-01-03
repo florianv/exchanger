@@ -131,7 +131,7 @@ final class Fixer extends HttpService
         }
 
         if (isset($data['rates'][$currencyPair->getQuoteCurrency()])) {
-            $date = new \DateTimeImmutable($data['date']);
+            $date = new \DateTime($data['date']);
             $rate = $data['rates'][$currencyPair->getQuoteCurrency()];
 
             return $this->createRate($currencyPair, (float) $rate, $date);

@@ -45,9 +45,10 @@ class ExchangerTest extends TestCase
      */
     public function it_quotes_a_pair()
     {
-        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
+        $pair = CurrencyPair::createFromString('EUR/USD');
+        $exchangeRateQuery = new ExchangeRateQuery($pair);
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
-        $rate = new ExchangeRate(1, __CLASS__, new \DateTime());
+        $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
 
         $service
             ->expects($this->any())
@@ -104,8 +105,9 @@ class ExchangerTest extends TestCase
      */
     public function it_fetches_a_rate_from_cache()
     {
-        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-        $rate = new ExchangeRate(1, __CLASS__, new \DateTime());
+        $pair = CurrencyPair::createFromString('EUR/USD');
+        $exchangeRateQuery = new ExchangeRateQuery($pair);
+        $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
 
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
@@ -130,8 +132,9 @@ class ExchangerTest extends TestCase
      */
     public function it_caches_a_rate()
     {
-        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-        $rate = new ExchangeRate(1, __CLASS__, new \DateTime());
+        $pair = CurrencyPair::createFromString('EUR/USD');
+        $exchangeRateQuery = new ExchangeRateQuery($pair);
+        $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
         $ttl = 3600;
         $key = sha1(serialize($exchangeRateQuery));
 
@@ -204,8 +207,9 @@ class ExchangerTest extends TestCase
     public function it_supports_overrding_ttl_per_query()
     {
         $ttl = 3600;
-        $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_ttl' => $ttl]);
-        $rate = new ExchangeRate(1, __CLASS__, new \DateTime());
+        $pair = CurrencyPair::createFromString('EUR/USD');
+        $exchangeRateQuery = new ExchangeRateQuery($pair, ['cache_ttl' => $ttl]);
+        $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
         $key = sha1(serialize($exchangeRateQuery));
 
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');

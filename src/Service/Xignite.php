@@ -68,7 +68,7 @@ final class Xignite extends HttpService
 
         $dateString = $data['Date'].' '.$data['Time'];
 
-        if (!$date = \DateTimeImmutable::createFromFormat('m/d/Y H:i:s A', $dateString, new \DateTimeZone('UTC'))) {
+        if (!$date = \DateTime::createFromFormat('m/d/Y H:i:s A', $dateString, new \DateTimeZone('UTC'))) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
@@ -100,7 +100,7 @@ final class Xignite extends HttpService
             throw new Exception($data['Message']);
         }
 
-        if (!$date = \DateTimeImmutable::createFromFormat('m/d/Y', $data['StartDate'], new \DateTimeZone('UTC'))) {
+        if (!$date = \DateTime::createFromFormat('m/d/Y', $data['StartDate'], new \DateTimeZone('UTC'))) {
             throw new UnsupportedDateException($queryDate, $this);
         }
 

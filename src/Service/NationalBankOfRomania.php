@@ -46,7 +46,7 @@ final class NationalBankOfRomania extends HttpService
         $element->registerXPathNamespace('xmlns', 'http://www.bnr.ro/xsd');
 
         $currencyPair = $exchangeQuery->getCurrencyPair();
-        $date = new \DateTimeImmutable((string) $element->xpath('//xmlns:PublishingDate')[0]);
+        $date = new \DateTime((string) $element->xpath('//xmlns:PublishingDate')[0]);
         $elements = $element->xpath('//xmlns:Rate[@currency="'.$currencyPair->getBaseCurrency().'"]');
 
         if (empty($elements) || !$date) {

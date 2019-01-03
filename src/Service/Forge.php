@@ -57,7 +57,7 @@ final class Forge extends HttpService
         $data = StringUtil::jsonToArray($content);
 
         if ($result = reset($data)) {
-            $date = (new \DateTimeImmutable())->setTimestamp($result['timestamp']);
+            $date = (new \DateTime())->setTimestamp($result['timestamp']);
 
             if ($result['symbol'] == $currencySymbol) {
                 return $this->createRate($currencyPair, (float) ($result['price']), $date);

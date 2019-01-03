@@ -52,7 +52,7 @@ final class Cryptonator extends HttpService
             throw new Exception($message);
         }
 
-        $date = (new \DateTimeImmutable())->setTimestamp($data['timestamp']);
+        $date = (new \DateTime())->setTimestamp($data['timestamp']);
 
         return $this->createRate($currencyPair, (float) ($data['ticker']['price']), $date);
     }
