@@ -30,7 +30,7 @@ They provide the fastest price updates available of any provider, however, they 
 
 ## Documentation
 
-The documentation for the current branch can be found [here](https://github.com/florianv/exchanger/blob/master/doc/readme.md).
+The documentation for the current branch can be found [here](https://github.com/florianv/exchanger/blob/1.x/doc/readme.md).
 
 ## Services
 
@@ -62,4 +62,4 @@ Here is the complete list of the currently implemented services:
 
 ## License
 
-The MIT License (MIT). Please see [LICENSE](https://github.com/florianv/exchanger/blob/master/LICENSE) for more information.
+The MIT License (MIT). Please see [LICENSE](https://github.com/florianv/exchanger/blob/1.x/LICENSE) for more information.

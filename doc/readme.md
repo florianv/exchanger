@@ -35,7 +35,7 @@ First, you need to create a **service** and add it to `Exchanger`.
 
 We recommend to use one of the [services that support our project](#sponsors), providing a free plan up to 1,000 requests per day.
 
-The complete list of all supported services is available [here](https://github.com/florianv/exchanger/blob/master/README.md#services).
+The complete list of all supported services is available [here](https://github.com/florianv/exchanger/blob/1.x/README.md#services).
 
 ```php
 use Http\Adapter\Guzzle6\Client as GuzzleClient;
@@ -88,7 +88,7 @@ echo $rate->getDate()->format('Y-m-d');
 
 #### Historical Rates
 
-`Exchanger` allows you to retrieve **historical** exchange rates but not all services support this feature as you can see in this [table](https://github.com/florianv/exchanger/blob/master/README.md#services).
+`Exchanger` allows you to retrieve **historical** exchange rates but not all services support this feature as you can see in this [table](https://github.com/florianv/exchanger/blob/1.x/README.md#services).
 
 ```php
 // Create the query to get the EUR/USD rate 15 days ago
