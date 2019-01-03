@@ -15,8 +15,8 @@ namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateService;
 use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -58,7 +58,7 @@ abstract class Service implements ExchangeRateService
     public function __construct($httpClient = null, RequestFactoryInterface $requestFactory = null, array $options = [])
     {
         if (null === $httpClient) {
-            $httpClient = Psr18ClientDiscovery::find();
+            $httpClient = HttpClientDiscovery::find();
         } else {
             if (!$httpClient instanceof ClientInterface && !$httpClient instanceof HttpClient) {
                 throw new \LogicException('Client must be an instance of Http\\Client\\HttpClient or Psr\\Http\\Client\\ClientInterface');
