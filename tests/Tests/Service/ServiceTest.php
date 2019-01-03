@@ -48,6 +48,15 @@ class ServiceTest extends TestCase
     /**
      * @test
      */
+    public function initialize_with_null_as_client()
+    {
+        $this->expectNotToPerformAssertions();
+        $this->createAnonymousClass(null);
+    }
+
+    /**
+     * @test
+     */
     public function initialize_with_invalid_client()
     {
         $httpClient = new \stdClass();
@@ -58,8 +67,7 @@ class ServiceTest extends TestCase
 
     private function createAnonymousClass($httpClient)
     {
-        return new class($httpClient) extends Service
-        {
+        return new class($httpClient) extends Service {
             public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
             {
                 return new \Exchanger\ExchangeRate(1, 'mock');
