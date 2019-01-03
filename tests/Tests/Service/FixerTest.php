@@ -69,15 +69,17 @@ class FixerTest extends ServiceTestCase
      */
     public function it_fetches_a_rate_normal_mode()
     {
+        $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'http://data.fixer.io/api/latest?access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/latest.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CHF')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertEquals(1.0933, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-26'), $rate->getDate());
         $this->assertEquals(Fixer::class, $rate->getProvider());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -85,15 +87,17 @@ class FixerTest extends ServiceTestCase
      */
     public function it_fetches_a_rate_enterprise_mode()
     {
+        $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'http://data.fixer.io/api/latest?base=EUR&access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/latest.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true]);
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CHF')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertEquals(1.0933, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-26'), $rate->getDate());
         $this->assertEquals(Fixer::class, $rate->getProvider());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -101,16 +105,18 @@ class FixerTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate_normal_mode()
     {
+        $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'http://data.fixer.io/api/2000-01-03?access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
-        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/AUD'), $date));
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertEquals(1.5209, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
         $this->assertEquals(Fixer::class, $rate->getProvider());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -118,15 +124,17 @@ class FixerTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate_enterprise_mode()
     {
+        $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'http://data.fixer.io/api/2000-01-03?base=EUR&access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true]);
-        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/AUD'), $date));
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertEquals(1.5209, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
         $this->assertEquals(Fixer::class, $rate->getProvider());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 }

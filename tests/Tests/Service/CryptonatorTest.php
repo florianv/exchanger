@@ -59,14 +59,16 @@ class CryptonatorTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
+        $pair = CurrencyPair::createFromString('BTC/USD');
         $url = 'https://api.cryptonator.com/api/ticker/btc-usd';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Cryptonator/success.json');
 
         $service = new Cryptonator($this->getHttpAdapterMock($url, $content));
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(4194.86340277, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
         $this->assertEquals(Cryptonator::class, $rate->getProvider());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 }
