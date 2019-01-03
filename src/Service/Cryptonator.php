@@ -16,11 +16,10 @@ namespace Exchanger\Service;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
-use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
-final class Cryptonator extends Service
+final class Cryptonator extends HttpService
 {
     const LATEST_URL = 'https://api.cryptonator.com/api/ticker/%s-%s';
 
@@ -53,9 +52,9 @@ final class Cryptonator extends Service
             throw new Exception($message);
         }
 
-        $date = (new \DateTime())->setTimestamp($data['timestamp']);
+        $date = (new \DateTimeImmutable())->setTimestamp($data['timestamp']);
 
-        return new ExchangeRate((float) ($data['ticker']['price']), __CLASS__, $date);
+        return $this->createRate($currencyPair, (float) ($data['ticker']['price']), $date);
     }
 
     /**
@@ -67,9 +66,11 @@ final class Cryptonator extends Service
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery
-            && in_array($exchangeQuery->getCurrencyPair()->getBaseCurrency(), $this->getSupportedCodes())
-            && in_array($exchangeQuery->getCurrencyPair()->getQuoteCurrency(), $this->getSupportedCodes());
+            && in_array($currencyPair->getBaseCurrency(), $this->getSupportedCodes())
+            && in_array($currencyPair->getQuoteCurrency(), $this->getSupportedCodes());
     }
 
     /**

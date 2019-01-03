@@ -13,26 +13,26 @@ declare(strict_types=1);
 
 namespace Exchanger\Service;
 
-use Exchanger\Contract\ExchangeRate;
-use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\Contract\HistoricalExchangeRateQuery;
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
+use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
+use Exchanger\Contract\HistoricalExchangeRateQuery as HistoricalExchangeRateQueryContract;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 
 /**
- * Base class for historical http based services.
+ * Trait to implement to add historical service support.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-abstract class HistoricalService extends Service
+trait SupportsHistoricalQueries
 {
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        if ($exchangeQuery instanceof HistoricalExchangeRateQuery) {
+        if ($exchangeQuery instanceof HistoricalExchangeRateQueryContract) {
             if ($rate = $this->getHistoricalExchangeRate($exchangeQuery)) {
                 return $rate;
             }
@@ -46,18 +46,18 @@ abstract class HistoricalService extends Service
     /**
      * Gets the latest rate.
      *
-     * @param ExchangeRateQuery $exchangeQuery
+     * @param ExchangeRateQueryContract $exchangeQuery
      *
-     * @return ExchangeRate
+     * @return ExchangeRateContract
      */
-    abstract protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate;
+    abstract protected function getLatestExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract;
 
     /**
      * Gets an historical rate.
      *
-     * @param HistoricalExchangeRateQuery $exchangeQuery
+     * @param HistoricalExchangeRateQueryContract $exchangeQuery
      *
-     * @return ExchangeRate
+     * @return ExchangeRateContract
      */
-    abstract protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate;
+    abstract protected function getHistoricalExchangeRate(HistoricalExchangeRateQueryContract $exchangeQuery): ExchangeRateContract;
 }

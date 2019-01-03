@@ -26,8 +26,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class OpenExchangeRates extends HistoricalService
+final class OpenExchangeRates extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const FREE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&show_alternative=1';
 
     const ENTERPRISE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&base=%s&symbols=%s&show_alternative=1';
@@ -68,7 +70,7 @@ final class OpenExchangeRates extends HistoricalService
             $url = sprintf(self::FREE_LATEST_URL, $this->options['app_id']);
         }
 
-        return $this->createRate($url, $exchangeQuery);
+        return $this->doCreateRate($url, $exchangeQuery);
     }
 
     /**
@@ -94,7 +96,7 @@ final class OpenExchangeRates extends HistoricalService
             );
         }
 
-        return $this->createRate($url, $exchangeQuery);
+        return $this->doCreateRate($url, $exchangeQuery);
     }
 
     /**
@@ -115,7 +117,7 @@ final class OpenExchangeRates extends HistoricalService
      *
      * @throws Exception
      */
-    private function createRate(string $url, ExchangeRateQuery $exchangeQuery): ExchangeRate
+    private function doCreateRate(string $url, ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
@@ -124,14 +126,14 @@ final class OpenExchangeRates extends HistoricalService
             throw new Exception($data['description']);
         }
 
-        $date = new \DateTime();
+        $date = new \DateTimeImmutable();
         $date->setTimestamp($data['timestamp']);
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
         if ($data['base'] === $currencyPair->getBaseCurrency()
             && isset($data['rates'][$currencyPair->getQuoteCurrency()])
         ) {
-            return new ExchangeRate((float) ($data['rates'][$currencyPair->getQuoteCurrency()]), __CLASS__, $date);
+            return $this->createRate($date, (float) ($data['rates'][$currencyPair->getQuoteCurrency()]), $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);

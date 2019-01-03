@@ -17,7 +17,6 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
-use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
@@ -26,8 +25,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class EuropeanCentralBank extends HistoricalService
+final class EuropeanCentralBank extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
 
     const HISTORICAL_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
@@ -37,20 +38,21 @@ final class EuropeanCentralBank extends HistoricalService
      */
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request(self::DAILY_URL);
 
         $element = StringUtil::xmlToElement($content);
         $element->registerXPathNamespace('xmlns', 'http://www.ecb.int/vocabulary/2002-08-01/eurofxref');
 
-        $quoteCurrency = $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
+        $quoteCurrency = $currencyPair->getQuoteCurrency();
         $elements = $element->xpath('//xmlns:Cube[@currency="'.$quoteCurrency.'"]/@rate');
-        $date = new \DateTime((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
+        $date = new \DateTimeImmutable((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
 
         if (empty($elements) || !$date) {
-            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
-        return new ExchangeRate((float) ($elements[0]['rate']), __CLASS__, $date);
+        return $this->createRate($currencyPair, (float) ($elements[0]['rate']), $date);
     }
 
     /**
@@ -58,13 +60,14 @@ final class EuropeanCentralBank extends HistoricalService
      */
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request(self::HISTORICAL_URL);
 
         $element = StringUtil::xmlToElement($content);
         $element->registerXPathNamespace('xmlns', 'http://www.ecb.int/vocabulary/2002-08-01/eurofxref');
 
         $formattedDate = $exchangeQuery->getDate()->format('Y-m-d');
-        $quoteCurrency = $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
+        $quoteCurrency = $currencyPair->getQuoteCurrency();
 
         $elements = $element->xpath('//xmlns:Cube[@time="'.$formattedDate.'"]/xmlns:Cube[@currency="'.$quoteCurrency.'"]/@rate');
 
@@ -73,10 +76,10 @@ final class EuropeanCentralBank extends HistoricalService
                 throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
             }
 
-            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
-        return new ExchangeRate((float) ($elements[0]['rate']), __CLASS__, $exchangeQuery->getDate());
+        return $this->createRate($currencyPair, (float) ($elements[0]['rate']), $exchangeQuery->getDate());
     }
 
     /**

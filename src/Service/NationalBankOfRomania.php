@@ -17,7 +17,6 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
-use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
@@ -28,8 +27,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  * @author Florian Voutzinos <florian@voutzinos.com>
  * @author Balazs Csaba <balazscsaba2006@gmail.com>
  */
-final class NationalBankOfRomania extends HistoricalService
+final class NationalBankOfRomania extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const URL = 'http://www.bnr.ro/nbrfxrates.xml';
 
     const HISTORICAL_URL_TEMPLATE = 'http://www.bnr.ro/files/xml/years/nbrfxrates{year}.xml';
@@ -45,7 +46,7 @@ final class NationalBankOfRomania extends HistoricalService
         $element->registerXPathNamespace('xmlns', 'http://www.bnr.ro/xsd');
 
         $currencyPair = $exchangeQuery->getCurrencyPair();
-        $date = new \DateTime((string) $element->xpath('//xmlns:PublishingDate')[0]);
+        $date = new \DateTimeImmutable((string) $element->xpath('//xmlns:PublishingDate')[0]);
         $elements = $element->xpath('//xmlns:Rate[@currency="'.$currencyPair->getBaseCurrency().'"]');
 
         if (empty($elements) || !$date) {
@@ -56,7 +57,7 @@ final class NationalBankOfRomania extends HistoricalService
         $rate = (string) $element;
         $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
 
-        return new ExchangeRate((float) $rateValue, __CLASS__, $date);
+        return $this->createRate($currencyPair, (float) $rateValue, $date);
     }
 
     /**
@@ -64,9 +65,12 @@ final class NationalBankOfRomania extends HistoricalService
      */
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        $year = $exchangeQuery->getDate()->format('Y');
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+        $date = $exchangeQuery->getDate();
+        $year = $date->format('Y');
+
         if ($year < 2005) {
-            throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
+            throw new UnsupportedDateException($date, $this);
         }
 
         $url = str_replace('{year}', $year, self::HISTORICAL_URL_TEMPLATE);
@@ -78,24 +82,24 @@ final class NationalBankOfRomania extends HistoricalService
         $element = StringUtil::xmlToElement($content);
         $element->registerXPathNamespace('xmlns', 'http://www.bnr.ro/xsd');
 
-        $formattedDate = $exchangeQuery->getDate()->format('Y-m-d');
-        $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
+        $formattedDate = $date->format('Y-m-d');
+        $baseCurrency = $currencyPair->getBaseCurrency();
 
         $elements = $element->xpath('//xmlns:Cube[@date="'.$formattedDate.'"]/xmlns:Rate[@currency="'.$baseCurrency.'"]');
 
         if (empty($elements)) {
             if (empty($element->xpath('//xmlns:Cube[@date="'.$formattedDate.'"]'))) {
-                throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
+                throw new UnsupportedDateException($date, $this);
             }
 
-            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
         $element = $elements[0];
         $rate = (string) $element;
         $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
 
-        return new ExchangeRate((float) $rateValue, __CLASS__, $exchangeQuery->getDate());
+        return $this->createRate($currencyPair, (float) $rateValue, $date);
     }
 
     /**

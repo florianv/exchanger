@@ -28,8 +28,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  * @author Florian Voutzinos <florian@voutzinos.com>
  * @author Uğur Özkan
  */
-final class CentralBankOfRepublicTurkey extends HistoricalService
+final class CentralBankOfRepublicTurkey extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const BASE_URL = 'http://www.tcmb.gov.tr/kurlar/';
 
     const FILE_EXTENSION = '.xml';
@@ -39,7 +41,7 @@ final class CentralBankOfRepublicTurkey extends HistoricalService
      */
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        return $this->createRate($exchangeQuery);
+        return $this->doCreateRate($exchangeQuery);
     }
 
     /**
@@ -47,7 +49,7 @@ final class CentralBankOfRepublicTurkey extends HistoricalService
      */
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        return $this->createRate($exchangeQuery, $exchangeQuery->getDate());
+        return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());
     }
 
     /**
@@ -68,18 +70,18 @@ final class CentralBankOfRepublicTurkey extends HistoricalService
      *
      * @throws UnsupportedCurrencyPairException
      */
-    private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
+    private function doCreateRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request($this->buildUrl($requestedDate));
 
         $element = StringUtil::xmlToElement($content);
 
-        $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
+        $date = new \DateTimeImmutable((string) $element->xpath('//Tarih_Date/@Date')[0]);
         $elements = $element->xpath('//Currency[@CurrencyCode="'.$currencyPair->getBaseCurrency().'"]/ForexSelling');
 
         if (!empty($elements) || !$date) {
-            return new ExchangeRate((float) ($elements[0]), __CLASS__, $date);
+            return $this->createRate($currencyPair, (float) ($elements[0]), $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);

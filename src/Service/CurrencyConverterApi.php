@@ -35,8 +35,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  * Docs for paid/enterprise plans:
  * @see https://www.currencyconverterapi.com/docs
  */
-final class CurrencyConverterApi extends HistoricalService
+final class CurrencyConverterApi extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const FREE_LATEST_URL = 'https://free.currencyconverterapi.com/api/v6/convert?q=%s';
 
     const ENTERPRISE_LATEST_URL = 'https://api.currencyconverterapi.com/api/v6/convert?q=%s&apiKey=%s';
@@ -152,6 +154,7 @@ final class CurrencyConverterApi extends HistoricalService
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
 
         $response = $this->getResponse($url);
+
         if (200 !== $response->getStatusCode()) {
             throw new Exception("Unexpected response status {$response->getReasonPhrase()}, $url");
         }
@@ -159,6 +162,7 @@ final class CurrencyConverterApi extends HistoricalService
         $responsePayload = StringUtil::jsonToArray($response->getBody()->__toString());
 
         $keyAsCurrencyPair = $this->stringifyCurrencyPair($currencyPair);
+
         if (empty($responsePayload['results'][$keyAsCurrencyPair]['val'])) {
             throw new Exception("Unexpected response body {$response->getReasonPhrase()}");
         }
@@ -173,14 +177,14 @@ final class CurrencyConverterApi extends HistoricalService
 
         if ($exchangeRateQuery instanceof HistoricalExchangeRateQuery) {
             $dateStringified = $responsePayload['date'];
-            $date = new DateTime($dateStringified);
+            $date = new \DateTimeImmutable($dateStringified);
             $rate = $responsePayload['results'][$keyAsCurrencyPair]['val'][$dateStringified];
         } else {
-            $date = new DateTime('now');
+            $date = new \DateTimeImmutable('now');
             $rate = $responsePayload['results'][$keyAsCurrencyPair]['val'];
         }
 
-        return new ExchangeRate((float) $rate, __CLASS__, $date);
+        return $this->createRate($currencyPair, (float) $rate, $date);
     }
 
     /**
@@ -196,16 +200,16 @@ final class CurrencyConverterApi extends HistoricalService
     /**
      * Gets the earliest available date for the historical query.
      *
-     * @return DateTime
+     * @return \DateTimeImmutable
      */
-    private function getEarliestAvailableDateForHistoricalQuery(): DateTime
+    private function getEarliestAvailableDateForHistoricalQuery(): \DateTimeImmutable
     {
         if ($this->isEnterprise()) {
-            return (new DateTime())->setTimestamp(0);
+            return (new \DateTimeImmutable())->setTimestamp(0);
         }
 
         // Historical rates for free plan is available only for the past year.
-        return new DateTime('-1 year 00:00');
+        return new \DateTimeImmutable('-1 year 00:00');
     }
 
     /**
@@ -226,10 +230,12 @@ final class CurrencyConverterApi extends HistoricalService
      *
      * @param DateTimeInterface $dateTime
      *
-     * @return DateTime
+     * @return \DateTimeImmutable
      */
-    private function getAdoptedDateTime(DateTimeInterface $dateTime): DateTime
+    private function getAdoptedDateTime(DateTimeInterface $dateTime): \DateTimeImmutable
     {
-        return (new DateTime())->setTimestamp($dateTime->getTimestamp())->setTimezone(new DateTimeZone('Asia/Manila'));
+        return (new \DateTimeImmutable())
+            ->setTimestamp($dateTime->getTimestamp())
+            ->setTimezone(new DateTimeZone('Asia/Manila'));
     }
 }

@@ -15,7 +15,6 @@ namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
-use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
@@ -24,7 +23,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class WebserviceX extends Service
+final class WebserviceX extends HttpService
 {
     const URL = 'http://www.webservicex.net/currencyconvertor.asmx/ConversionRate?FromCurrency=%s&ToCurrency=%s';
 
@@ -38,7 +37,7 @@ final class WebserviceX extends Service
         $url = sprintf(self::URL, $currencyPair->getBaseCurrency(), $currencyPair->getQuoteCurrency());
         $content = $this->request($url);
 
-        return new ExchangeRate((float) (StringUtil::xmlToElement($content)), __CLASS__, new \DateTime());
+        return $this->createInstantRate($currencyPair, (float) (StringUtil::xmlToElement($content)));
     }
 
     /**
