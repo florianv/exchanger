@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Exchanger\Tests\Service;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Client\ClientInterface;
 
 abstract class ServiceTestCase extends TestCase
 {
@@ -48,13 +47,13 @@ abstract class ServiceTestCase extends TestCase
      * @param string $url     The url
      * @param string $content The body content
      *
-     * @return ClientInterface
+     * @return \Http\Client\HttpClient
      */
-    protected function getHttpAdapterMock($url, $content): ClientInterface
+    protected function getHttpAdapterMock($url, $content)
     {
         $response = $this->getResponse($content);
 
-        $adapter = $this->createMock(ClientInterface::class);
+        $adapter = $this->createMock('Http\Client\HttpClient');
 
         $adapter
             ->expects($this->once())
