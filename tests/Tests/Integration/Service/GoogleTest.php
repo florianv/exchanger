@@ -13,12 +13,10 @@ namespace Exchanger\Tests\Intergration\Service;
 
 use Exchanger\ExchangeRateQueryBuilder;
 use Exchanger\Service\Google;
-use PHPUnit\Framework\TestCase;
 use Http\Adapter\Guzzle6\Client as GuzzleClient;
 use Exchanger\Exchanger;
-use PHPUnit\Framework\Assert;
 
-class GoogleTest extends TestCase
+class GoogleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -34,7 +32,7 @@ class GoogleTest extends TestCase
 
         $rate = $exchanger->getExchangeRate($query);
 
-        Assert::assertNotNull($rate->getValue());
-        Assert::assertInstanceOf('\DateTimeInterface', $rate->getDate());
+        $this->assertNotNull($rate->getValue());
+        $this->assertInstanceOf('\DateTimeInterface', $rate->getDate());
     }
 }
