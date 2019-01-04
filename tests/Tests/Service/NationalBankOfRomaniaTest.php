@@ -145,4 +145,14 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('RON/XXL'), new \DateTime('2018-02-02'))
         );
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new NationalBankOfRomania($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('national_bank_of_romania', $service->getName());
+    }
 }

@@ -110,4 +110,14 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/XXL'), new \DateTime('2016-08-23')));
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new EuropeanCentralBank($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('european_central_bank', $service->getName());
+    }
 }

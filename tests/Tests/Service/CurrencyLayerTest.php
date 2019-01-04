@@ -136,4 +136,14 @@ class CurrencyLayerTest extends ServiceTestCase
         $this->assertEquals(CurrencyLayer::class, $rate->getProvider());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new CurrencyLayer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret', 'enterprise' => true]);
+
+        $this->assertSame('currency_layer', $service->getName());
+    }
 }

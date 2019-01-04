@@ -181,4 +181,14 @@ class PhpArrayTest extends TestCase
         $this->assertEquals(PhpArray::class, $usdGbp->getProvider());
         $this->assertEquals(PhpArray::class, $jpyGbp->getProvider());
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new PhpArray([], []);
+
+        $this->assertSame('array', $service->getName());
+    }
 }

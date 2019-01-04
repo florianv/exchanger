@@ -71,4 +71,14 @@ class CryptonatorTest extends ServiceTestCase
         $this->assertEquals(Cryptonator::class, $rate->getProvider());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new Cryptonator($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('cryptonator', $service->getName());
+    }
 }

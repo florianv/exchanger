@@ -129,4 +129,14 @@ class RussianCentralBankTest extends ServiceTestCase
         $service = new RussianCentralBank($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('XXL/RUB'), new \DateTime('2016-08-23')));
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new RussianCentralBank($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('russian_central_bank', $service->getName());
+    }
 }

@@ -173,4 +173,14 @@ class OpenExchangeRatesTest extends ServiceTestCase
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/XXL'), new \DateTime('2016-08-23'))
         );
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new OpenExchangeRates($this->createMock('Http\Client\HttpClient'), null, ['app_id' => 'secret']);
+
+        $this->assertSame('open_exchange_rates', $service->getName());
+    }
 }

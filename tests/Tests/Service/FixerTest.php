@@ -137,4 +137,14 @@ class FixerTest extends ServiceTestCase
         $this->assertEquals(Fixer::class, $rate->getProvider());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x', 'enterprise' => true]);
+
+        $this->assertSame('fixer', $service->getName());
+    }
 }

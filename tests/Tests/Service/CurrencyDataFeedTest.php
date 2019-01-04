@@ -61,4 +61,14 @@ class CurrencyDataFeedTest extends ServiceTestCase
         $this->assertEquals(CurrencyDataFeed::class, $rate->getProvider());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new CurrencyDataFeed($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+
+        $this->assertSame('currency_data_feed', $service->getName());
+    }
 }

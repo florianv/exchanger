@@ -149,6 +149,16 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     }
 
     /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new CentralBankOfCzechRepublic($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('central_bank_of_czech_republic', $service->getName());
+    }
+
+    /**
      * Create bank service.
      *
      * @return CentralBankOfCzechRepublic

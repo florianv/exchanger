@@ -99,4 +99,14 @@ class XigniteTest extends ServiceTestCase
         $this->assertEquals(Xignite::class, $rate->getProvider());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new Xignite($this->createMock('Http\Client\HttpClient'), null, ['token' => 'token']);
+
+        $this->assertSame('xignite', $service->getName());
+    }
 }

@@ -163,4 +163,14 @@ class ChainTest extends TestCase
 
         $this->assertTrue($caught);
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new Chain();
+
+        $this->assertSame('chain', $service->getName());
+    }
 }

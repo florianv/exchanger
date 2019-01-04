@@ -91,4 +91,14 @@ class ForgeTest extends ServiceTestCase
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/AED')));
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new Forge($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+
+        $this->assertSame('forge', $service->getName());
+    }
 }

@@ -112,6 +112,16 @@ class CurrencyConverterApiTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new CurrencyConverterApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);
+
+        $this->assertSame('currency_converter', $service->getName());
+    }
+
+    /**
      * Create a mocked Http adapter.
      *
      * @param string $url        The url
@@ -120,7 +130,7 @@ class CurrencyConverterApiTest extends TestCase
      *
      * @return HttpClient
      */
-    protected function getHttpAdapterMock($url, $content, $statusCode)
+    protected function getHttpAdapterMock($url, $content, $statusCode = 200)
     {
         $response = $this->getResponse($content, $statusCode);
 

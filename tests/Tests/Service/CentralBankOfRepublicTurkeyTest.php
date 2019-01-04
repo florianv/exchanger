@@ -137,4 +137,14 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $this->assertEquals(CentralBankOfRepublicTurkey::class, $rate->getProvider());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new CentralBankOfRepublicTurkey($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('central_bank_of_republic_turkey', $service->getName());
+    }
 }
