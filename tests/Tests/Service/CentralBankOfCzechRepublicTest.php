@@ -78,7 +78,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     /**
      * @test
      */
-    public function itFetchesAEurRate()
+    public function it_fetches_eur_rate()
     {
         $service = $this->createService();
         $pair = CurrencyPair::createFromString('EUR/CZK');
@@ -93,7 +93,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     /**
      * @test
      */
-    public function itFetchesAPhpRate()
+    public function it_fetches_php_rate()
     {
         $pair = CurrencyPair::createFromString('PHP/CZK');
         $rate = $this->createService()->getExchangeRate(new ExchangeRateQuery($pair));
@@ -106,7 +106,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     /**
      * @test
      */
-    public function itFetchesAIdrRate()
+    public function it_fetches_idr_rate()
     {
         $pair = CurrencyPair::createFromString('IDR/CZK');
         $rate = $this->createService()->getExchangeRate(new ExchangeRateQuery($pair));
@@ -119,7 +119,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     /**
      * @test
      */
-    public function itFetchesAHistoricalFrfRate()
+    public function it_fetches_historical_frf_rate()
     {
         $requestedDate = new \DateTime('2000-04-23');
         $service = $this->createServiceForHistoricalRates();
@@ -135,7 +135,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     /**
      * @test
      */
-    public function itFetchesAHistoricalEurRate()
+    public function it_fetches_historical_eur_rate()
     {
         $requestedDate = new \DateTime('2000-04-23');
         $service = $this->createServiceForHistoricalRates();
