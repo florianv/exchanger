@@ -78,7 +78,7 @@ class FixerTest extends ServiceTestCase
 
         $this->assertEquals(1.0933, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-26'), $rate->getDate());
-        $this->assertEquals(Fixer::class, $rate->getProvider());
+        $this->assertEquals('fixer', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
@@ -96,7 +96,7 @@ class FixerTest extends ServiceTestCase
 
         $this->assertEquals(1.0933, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-26'), $rate->getDate());
-        $this->assertEquals(Fixer::class, $rate->getProvider());
+        $this->assertEquals('fixer', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
@@ -115,7 +115,7 @@ class FixerTest extends ServiceTestCase
 
         $this->assertEquals(1.5209, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
-        $this->assertEquals(Fixer::class, $rate->getProvider());
+        $this->assertEquals('fixer', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
@@ -134,7 +134,7 @@ class FixerTest extends ServiceTestCase
 
         $this->assertEquals(1.5209, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
-        $this->assertEquals(Fixer::class, $rate->getProvider());
+        $this->assertEquals('fixer', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 

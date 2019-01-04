@@ -68,7 +68,7 @@ class CryptonatorTest extends ServiceTestCase
 
         $this->assertSame(4194.86340277, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
-        $this->assertEquals(Cryptonator::class, $rate->getProvider());
+        $this->assertEquals('cryptonator', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 

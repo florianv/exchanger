@@ -86,7 +86,7 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * {@inheritdoc}
      */
-    public function getProvider(): string
+    public function getProviderName(): string
     {
         return $this->provider;
     }

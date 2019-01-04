@@ -35,11 +35,11 @@ interface ExchangeRate
     public function getDate(): \DateTimeInterface;
 
     /**
-     * Gets the class of the service that returned this rate.
+     * Gets the name of the provider that returned this rate.
      *
      * @return string
      */
-    public function getProvider(): string;
+    public function getProviderName(): string;
 
     /**
      * Gets the currency pair.

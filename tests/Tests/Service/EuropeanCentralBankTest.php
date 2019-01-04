@@ -58,7 +58,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
 
         $this->assertSame(1.9558, $rate->getValue());
         $this->assertEquals(new \DateTime('2015-01-07'), $rate->getDate());
-        $this->assertEquals(EuropeanCentralBank::class, $rate->getProvider());
+        $this->assertEquals('european_central_bank', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
@@ -79,7 +79,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
 
         $this->assertSame(113.48, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-23'), $rate->getDate());
-        $this->assertEquals(EuropeanCentralBank::class, $rate->getProvider());
+        $this->assertEquals('european_central_bank', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 

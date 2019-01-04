@@ -58,7 +58,7 @@ class CurrencyConverterApiTest extends TestCase
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(0.726804, $rate->getValue());
-        $this->assertEquals(CurrencyConverterApi::class, $rate->getProvider());
+        $this->assertEquals('currency_converter', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
@@ -73,7 +73,7 @@ class CurrencyConverterApiTest extends TestCase
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(0.726804, $rate->getValue());
-        $this->assertEquals(CurrencyConverterApi::class, $rate->getProvider());
+        $this->assertEquals('currency_converter', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
@@ -90,7 +90,7 @@ class CurrencyConverterApiTest extends TestCase
 
         $this->assertSame(0.726804, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
-        $this->assertEquals(CurrencyConverterApi::class, $rate->getProvider());
+        $this->assertEquals('currency_converter', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
@@ -107,7 +107,7 @@ class CurrencyConverterApiTest extends TestCase
 
         $this->assertSame(0.726804, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
-        $this->assertEquals(CurrencyConverterApi::class, $rate->getProvider());
+        $this->assertEquals('currency_converter', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 

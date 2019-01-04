@@ -118,7 +118,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
 
         $this->assertSame(3.2083, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-03-15'), $rate->getDate());
-        $this->assertEquals(CentralBankOfRepublicTurkey::class, $rate->getProvider());
+        $this->assertEquals('central_bank_of_republic_turkey', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
@@ -134,7 +134,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
 
         $this->assertEquals(2.3544, $rate->getValue());
         $this->assertEquals(new \DateTime('2013-04-22'), $rate->getDate());
-        $this->assertEquals(CentralBankOfRepublicTurkey::class, $rate->getProvider());
+        $this->assertEquals('central_bank_of_republic_turkey', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 

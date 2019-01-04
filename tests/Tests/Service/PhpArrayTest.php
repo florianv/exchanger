@@ -109,9 +109,9 @@ class PhpArrayTest extends TestCase
         $this->assertSame(1.25, $usdGbp->getValue());
         $this->assertSame(1.0, $jpyGbp->getValue());
 
-        $this->assertEquals(PhpArray::class, $eurUsd->getProvider());
-        $this->assertEquals(PhpArray::class, $usdGbp->getProvider());
-        $this->assertEquals(PhpArray::class, $jpyGbp->getProvider());
+        $this->assertEquals('array', $eurUsd->getProviderName());
+        $this->assertEquals('array', $usdGbp->getProviderName());
+        $this->assertEquals('array', $jpyGbp->getProviderName());
 
         $this->assertSame($eurUsdPair, $eurUsd->getCurrencyPair());
         $this->assertSame($usdGbpPair, $usdGbp->getCurrencyPair());
@@ -177,9 +177,9 @@ class PhpArrayTest extends TestCase
         $this->assertSame(1.25, $usdGbp->getValue());
         $this->assertSame(1.0, $jpyGbp->getValue());
 
-        $this->assertEquals(PhpArray::class, $eurUsd->getProvider());
-        $this->assertEquals(PhpArray::class, $usdGbp->getProvider());
-        $this->assertEquals(PhpArray::class, $jpyGbp->getProvider());
+        $this->assertEquals('array', $eurUsd->getProviderName());
+        $this->assertEquals('array', $usdGbp->getProviderName());
+        $this->assertEquals('array', $jpyGbp->getProviderName());
     }
 
     /**

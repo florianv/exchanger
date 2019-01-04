@@ -62,7 +62,7 @@ abstract class Service implements ExchangeRateService
      */
     protected function createRate(CurrencyPairContract $currencyPair, float $rate, \DateTimeInterface $date): ExchangeRate
     {
-        return new ExchangeRate($currencyPair, $rate, $date, get_class($this));
+        return new ExchangeRate($currencyPair, $rate, $date, $this->getName());
     }
 
     /**
@@ -75,6 +75,6 @@ abstract class Service implements ExchangeRateService
      */
     protected function createInstantRate(CurrencyPairContract $currencyPair, float $rate): ExchangeRate
     {
-        return new ExchangeRate($currencyPair, $rate, new \DateTime(), get_class($this));
+        return new ExchangeRate($currencyPair, $rate, new \DateTime(), $this->getName());
     }
 }

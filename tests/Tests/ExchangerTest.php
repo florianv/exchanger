@@ -78,6 +78,7 @@ class ExchangerTest extends TestCase
 
         $this->assertSame(1.0, $rate->getValue());
         $this->assertInstanceOf('\DateTime', $rate->getDate());
+        $this->assertEquals('null', $rate->getProviderName());
     }
 
     /**
