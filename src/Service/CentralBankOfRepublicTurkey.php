@@ -106,4 +106,12 @@ final class CentralBankOfRepublicTurkey extends HttpService
 
         return self::BASE_URL.$fileName.self::FILE_EXTENSION;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'central_bank_of_republic_turkey';
+    }
 }

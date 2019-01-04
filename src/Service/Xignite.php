@@ -114,4 +114,12 @@ final class Xignite extends HttpService
     {
         return true;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'xignite';
+    }
 }

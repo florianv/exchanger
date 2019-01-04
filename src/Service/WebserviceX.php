@@ -47,4 +47,12 @@ final class WebserviceX extends HttpService
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'webservicex';
+    }
 }

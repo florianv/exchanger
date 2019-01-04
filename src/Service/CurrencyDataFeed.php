@@ -66,4 +66,12 @@ final class CurrencyDataFeed extends HttpService
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'currency_data_feed';
+    }
 }

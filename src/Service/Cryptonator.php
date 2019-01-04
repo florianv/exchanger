@@ -84,4 +84,12 @@ final class Cryptonator extends HttpService
     {
         return require __DIR__.'/resources/cryptonator-codes.php';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'cryptonator';
+    }
 }

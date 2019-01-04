@@ -109,4 +109,12 @@ final class NationalBankOfRomania extends HttpService
     {
         return 'RON' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'national_bank_of_romania';
+    }
 }

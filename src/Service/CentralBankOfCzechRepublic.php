@@ -126,4 +126,12 @@ final class CentralBankOfCzechRepublic extends HttpService
 
         return self::URL.'?'.http_build_query([self::DATE_QUERY_PARAMETER_NAME => $requestedDate->format(self::DATE_FORMAT)]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'central_bank_of_czech_republic';
+    }
 }

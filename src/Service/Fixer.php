@@ -171,4 +171,12 @@ final class Fixer extends HttpService
 
         return isset($errors[$code]) ? $errors[$code] : '';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'fixer';
+    }
 }

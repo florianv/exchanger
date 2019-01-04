@@ -77,4 +77,12 @@ final class Chain implements ExchangeRateService
 
         return false;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'chain';
+    }
 }

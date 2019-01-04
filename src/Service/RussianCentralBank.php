@@ -89,4 +89,12 @@ final class RussianCentralBank extends HttpService
     {
         return 'RUB' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'russian_central_bank';
+    }
 }

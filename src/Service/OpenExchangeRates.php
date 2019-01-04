@@ -138,4 +138,12 @@ final class OpenExchangeRates extends HttpService
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'open_exchange_rates';
+    }
 }

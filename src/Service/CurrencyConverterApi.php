@@ -238,4 +238,12 @@ final class CurrencyConverterApi extends HttpService
             ->setTimestamp($dateTime->getTimestamp())
             ->setTimezone(new DateTimeZone('Asia/Manila'));
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'currency_converter';
+    }
 }

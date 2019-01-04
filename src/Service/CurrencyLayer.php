@@ -138,4 +138,12 @@ final class CurrencyLayer extends HttpService
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'currency_layer';
+    }
 }

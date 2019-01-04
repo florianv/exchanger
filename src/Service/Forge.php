@@ -66,4 +66,12 @@ final class Forge extends HttpService
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'forge';
+    }
 }

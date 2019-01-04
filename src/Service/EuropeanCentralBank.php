@@ -89,4 +89,12 @@ final class EuropeanCentralBank extends HttpService
     {
         return 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'european_central_bank';
+    }
 }

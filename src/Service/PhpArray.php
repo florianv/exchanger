@@ -152,4 +152,12 @@ final class PhpArray extends Service
             $this->validateRates($rate);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'array';
+    }
 }
