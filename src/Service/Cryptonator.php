@@ -19,6 +19,11 @@ use Exchanger\Exception\Exception;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
+/**
+ * The Cryptonator service.
+ *
+ * @author Danny Weeks
+ */
 final class Cryptonator extends HttpService
 {
     const LATEST_URL = 'https://api.cryptonator.com/api/ticker/%s-%s';

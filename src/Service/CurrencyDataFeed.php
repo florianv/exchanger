@@ -21,6 +21,8 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * CurrencyDataFeed Service.
+ *
+ * @author Alberto Diaz
  */
 final class CurrencyDataFeed extends HttpService
 {

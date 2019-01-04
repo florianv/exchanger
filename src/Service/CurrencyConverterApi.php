@@ -27,13 +27,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 /**
  * CurrencyConverterApi service.
  *
- * @see https://github.com/florianv/laravel-swap/tree/master/doc#creating-a-service
- *
- * Docs for free plan:
- * @see https://free.currencyconverterapi.com/
- *
- * Docs for paid/enterprise plans:
- * @see https://www.currencyconverterapi.com/docs
+ * @author Aliaksandr lptn
  */
 final class CurrencyConverterApi extends HttpService
 {

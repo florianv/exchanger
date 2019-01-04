@@ -21,6 +21,8 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Forge Service.
+ *
+ * @author Alberto Diaz
  */
 final class Forge extends HttpService
 {

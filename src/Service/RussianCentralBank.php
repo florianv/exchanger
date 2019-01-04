@@ -22,6 +22,8 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Russian Central Bank Service.
+ *
+ * @author Maksim Platonov
  */
 final class RussianCentralBank extends HttpService
 {
