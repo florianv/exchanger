@@ -17,15 +17,18 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
-use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Russian Central Bank Service.
+ *
+ * @author Maksim Platonov
  */
-final class RussianCentralBank extends HistoricalService
+final class RussianCentralBank extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const URL = 'http://www.cbr.ru/scripts/XML_daily.asp';
 
     /**
@@ -33,7 +36,8 @@ final class RussianCentralBank extends HistoricalService
      */
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+        $baseCurrency = $currencyPair->getBaseCurrency();
 
         $content = $this->request(self::URL);
         $element = StringUtil::xmlToElement($content);
@@ -42,13 +46,13 @@ final class RussianCentralBank extends HistoricalService
         $date = \DateTime::createFromFormat('!d.m.Y', (string) $element['Date']);
 
         if (empty($elements) || !$date) {
-            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
         $nominal = str_replace(',', '.', (string) $elements['0']->Nominal);
 
-        return new ExchangeRate((float) $rate / $nominal, __CLASS__, $date);
+        return $this->createRate($currencyPair, (float) $rate / $nominal, $date);
     }
 
     /**
@@ -56,8 +60,10 @@ final class RussianCentralBank extends HistoricalService
      */
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        $baseCurrency = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
-        $formattedDate = $exchangeQuery->getDate()->format('d.m.Y');
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+        $baseCurrency = $currencyPair->getBaseCurrency();
+        $date = $exchangeQuery->getDate();
+        $formattedDate = $date->format('d.m.Y');
 
         $content = $this->request(self::URL.'?'.http_build_query(['date_req' => $formattedDate]));
         $element = StringUtil::xmlToElement($content);
@@ -65,17 +71,17 @@ final class RussianCentralBank extends HistoricalService
         $elements = $element->xpath('./Valute[CharCode="'.$baseCurrency.'"]');
 
         if (empty($elements)) {
-            if ((string) $element['Date'] !== $exchangeQuery->getDate()->format('d.m.Y')) {
-                throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
+            if ((string) $element['Date'] !== $date->format('d.m.Y')) {
+                throw new UnsupportedDateException($date, $this);
             }
 
-            throw new UnsupportedCurrencyPairException($exchangeQuery->getCurrencyPair(), $this);
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
         $nominal = str_replace(',', '.', (string) $elements['0']->Nominal);
 
-        return new ExchangeRate((float) ($rate / $nominal), __CLASS__, $exchangeQuery->getDate());
+        return $this->createRate($currencyPair, (float) ($rate / $nominal), $date);
     }
 
     /**
@@ -84,5 +90,13 @@ final class RussianCentralBank extends HistoricalService
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'RUB' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'russian_central_bank';
     }
 }

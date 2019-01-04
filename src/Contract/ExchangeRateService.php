@@ -28,4 +28,11 @@ interface ExchangeRateService extends ExchangeRateProvider
      * @return bool
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool;
+
+    /**
+     * Gets the name of the exchange rate service.
+     *
+     * @return string
+     */
+    public function getName(): string;
 }

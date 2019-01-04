@@ -51,15 +51,17 @@ class RussianCentralBankTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
+        $pair = CurrencyPair::createFromString('EUR/RUB');
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/RussianCentralBank/success.xml');
 
         $service = new RussianCentralBank($this->getHttpAdapterMock($url, $content));
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/RUB')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(68.2458, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-09'), $rate->getDate());
-        $this->assertEquals(RussianCentralBank::class, $rate->getProvider());
+        $this->assertEquals('russian_central_bank', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -67,15 +69,17 @@ class RussianCentralBankTest extends ServiceTestCase
      */
     public function it_fetches_a_nominational_rate()
     {
+        $pair = CurrencyPair::createFromString('AMD/RUB');
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/RussianCentralBank/success.xml');
 
         $service = new RussianCentralBank($this->getHttpAdapterMock($url, $content));
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('AMD/RUB')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(0.131783, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-09'), $rate->getDate());
-        $this->assertEquals(RussianCentralBank::class, $rate->getProvider());
+        $this->assertEquals('russian_central_bank', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -83,17 +87,19 @@ class RussianCentralBankTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate()
     {
+        $pair = CurrencyPair::createFromString('USD/RUB');
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=23.08.2016';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/RussianCentralBank/historical.xml');
 
         $service = new RussianCentralBank($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(
-            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/RUB'), new \DateTime('2016-08-23'))
+            new HistoricalExchangeRateQuery($pair, new \DateTime('2016-08-23'))
         );
 
         $this->assertSame(64.2078, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-23'), $rate->getDate());
-        $this->assertEquals(RussianCentralBank::class, $rate->getProvider());
+        $this->assertEquals('russian_central_bank', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -122,5 +128,15 @@ class RussianCentralBankTest extends ServiceTestCase
 
         $service = new RussianCentralBank($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('XXL/RUB'), new \DateTime('2016-08-23')));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new RussianCentralBank($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('russian_central_bank', $service->getName());
     }
 }

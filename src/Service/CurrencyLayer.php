@@ -28,8 +28,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  * @author Pascal Hofmann <mail@pascalhofmann.de>
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class CurrencyLayer extends HistoricalService
+final class CurrencyLayer extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const FREE_LATEST_URL = 'http://www.apilayer.net/api/live?access_key=%s&currencies=%s';
 
     const ENTERPRISE_LATEST_URL = 'https://www.apilayer.net/api/live?access_key=%s&source=%s&currencies=%s';
@@ -74,7 +76,7 @@ final class CurrencyLayer extends HistoricalService
             );
         }
 
-        return $this->createRate($url, $currencyPair);
+        return $this->doCreateRate($url, $currencyPair);
     }
 
     /**
@@ -97,7 +99,7 @@ final class CurrencyLayer extends HistoricalService
             );
         }
 
-        return $this->createRate($url, $exchangeQuery->getCurrencyPair());
+        return $this->doCreateRate($url, $exchangeQuery->getCurrencyPair());
     }
 
     /**
@@ -118,7 +120,7 @@ final class CurrencyLayer extends HistoricalService
      *
      * @throws Exception
      */
-    private function createRate($url, CurrencyPair $currencyPair): ExchangeRate
+    private function doCreateRate($url, CurrencyPair $currencyPair): ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
@@ -127,14 +129,21 @@ final class CurrencyLayer extends HistoricalService
             throw new Exception($data['error']['info']);
         }
 
-        $date = new \DateTime();
-        $date->setTimestamp($data['timestamp']);
+        $date = (new \DateTime())->setTimestamp($data['timestamp']);
         $hash = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
 
         if ($data['source'] === $currencyPair->getBaseCurrency() && isset($data['quotes'][$hash])) {
-            return new ExchangeRate((float) ($data['quotes'][$hash]), __CLASS__, $date);
+            return $this->createRate($currencyPair, (float) ($data['quotes'][$hash]), $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'currency_layer';
     }
 }

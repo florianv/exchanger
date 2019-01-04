@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\Contract\ExchangeRateService;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\HistoricalExchangeRateQuery;
@@ -25,7 +24,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class PhpArray implements ExchangeRateService
+final class PhpArray extends Service
 {
     /**
      * The latest rates.
@@ -84,8 +83,9 @@ final class PhpArray implements ExchangeRateService
     private function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
+        $rate = (float) $this->latestRates[(string) $currencyPair];
 
-        return $this->processRateValue($this->latestRates[(string) $currencyPair]);
+        return $this->createInstantRate($currencyPair, $rate);
     }
 
     /**
@@ -99,8 +99,9 @@ final class PhpArray implements ExchangeRateService
     {
         $date = $exchangeQuery->getDate();
         $currencyPair = $exchangeQuery->getCurrencyPair();
+        $rate = (float) $this->historicalRates[$date->format('Y-m-d')][(string) $currencyPair];
 
-        return $this->processRateValue($this->historicalRates[$date->format('Y-m-d')][(string) $currencyPair]);
+        return $this->createRate($currencyPair, $rate, $date);
     }
 
     /**
@@ -153,14 +154,10 @@ final class PhpArray implements ExchangeRateService
     }
 
     /**
-     * Processes the rate value.
-     *
-     * @param mixed $rate
-     *
-     * @return ExchangeRate
+     * {@inheritdoc}
      */
-    private function processRateValue($rate): ExchangeRate
+    public function getName(): string
     {
-        return new ExchangeRate((float) $rate, __CLASS__);
+        return 'array';
     }
 }

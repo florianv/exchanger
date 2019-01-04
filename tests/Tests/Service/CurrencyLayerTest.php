@@ -65,12 +65,14 @@ class CurrencyLayerTest extends ServiceTestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyLayer/success.json');
 
+        $pair = CurrencyPair::createFromString('USD/EUR');
         $service = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertEquals(0.726804, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
-        $this->assertEquals(CurrencyLayer::class, $rate->getProvider());
+        $this->assertEquals('currency_layer', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -83,12 +85,14 @@ class CurrencyLayerTest extends ServiceTestCase
         $expectedDate->setTimestamp(1399748450);
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyLayer/success.json');
 
+        $pair = CurrencyPair::createFromString('USD/EUR');
         $service = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'enterprise' => true]);
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertEquals(0.726804, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
-        $this->assertEquals(CurrencyLayer::class, $rate->getProvider());
+        $this->assertEquals('currency_layer', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -96,6 +100,7 @@ class CurrencyLayerTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate_normal_mode()
     {
+        $pair = CurrencyPair::createFromString('USD/AED');
         $uri = 'http://apilayer.net/api/historical?access_key=secret&date=2015-05-06';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyLayer/historical_success.json');
         $date = new \DateTime('2015-05-06');
@@ -103,11 +108,12 @@ class CurrencyLayerTest extends ServiceTestCase
         $expectedDate->setTimestamp(1430870399);
 
         $service = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
-        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), $date));
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertEquals(3.673069, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
-        $this->assertEquals(CurrencyLayer::class, $rate->getProvider());
+        $this->assertEquals('currency_layer', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -121,11 +127,23 @@ class CurrencyLayerTest extends ServiceTestCase
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1430870399);
 
+        $pair = CurrencyPair::createFromString('USD/AED');
         $service = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'enterprise' => true]);
-        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), $date));
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertEquals(3.673069, $rate->getValue());
         $this->assertEquals($expectedDate, $rate->getDate());
-        $this->assertEquals(CurrencyLayer::class, $rate->getProvider());
+        $this->assertEquals('currency_layer', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new CurrencyLayer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret', 'enterprise' => true]);
+
+        $this->assertSame('currency_layer', $service->getName());
     }
 }

@@ -112,12 +112,14 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $url = 'http://www.tcmb.gov.tr/kurlar/today.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
+        $pair = CurrencyPair::createFromString('EUR/TRY');
         $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/TRY')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(3.2083, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-03-15'), $rate->getDate());
-        $this->assertEquals(CentralBankOfRepublicTurkey::class, $rate->getProvider());
+        $this->assertEquals('central_bank_of_republic_turkey', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -125,12 +127,24 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate()
     {
+        $pair = CurrencyPair::createFromString('EUR/TRY');
         $requestedDate = new \DateTime('2013-04-23');
         $service = $this->createServiceForHistoricalRates();
-        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/TRY'), $requestedDate));
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $requestedDate));
 
         $this->assertEquals(2.3544, $rate->getValue());
         $this->assertEquals(new \DateTime('2013-04-22'), $rate->getDate());
-        $this->assertEquals(CentralBankOfRepublicTurkey::class, $rate->getProvider());
+        $this->assertEquals('central_bank_of_republic_turkey', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new CentralBankOfRepublicTurkey($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('central_bank_of_republic_turkey', $service->getName());
     }
 }

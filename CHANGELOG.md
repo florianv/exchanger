@@ -12,7 +12,7 @@
 
 - Fixed the exchange rate value to always be a float instead of a string
 
-- Added information about which service returned a rate with `ExchangeRate::getProvider()`
+- Added information about which service returned a rate with `ExchangeRate::getProviderName()`
 
 - Removed the `InternalException` only used in the `PhpArray` service
 
@@ -20,3 +20,7 @@
 
 - We now rely on PSR-16 Simple Cache instead of PSR-6 Cache. You can use https://github.com/php-cache/simple-cache-bridge
 as a bridge between PSR-6 and PSR-16.
+
+- Added a `getCurrencyPair()` to the exchange rate objects
+
+- Removed the Historical service class in favor of the `SupportsHistoricalQueries` trait

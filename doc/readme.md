@@ -134,10 +134,10 @@ then `Forge`.
 
 When using the chain service, it can be useful to know which service provided the rate.
 
-You can use the `getProvider()` function on a rate that returns the class name of the service that returned it:
+You can use the `getProviderName()` function on a rate that gives you the name of the service that returned it:
 
 ```php
-$class = $rate->getProvider();
+$name = $rate->getProviderName();
 ```
 
 For example, if Fixer returned the rate, it will be identical to `Exchanger\Service\Fixer::class`.

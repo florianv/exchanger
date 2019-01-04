@@ -13,35 +13,17 @@ declare(strict_types=1);
 
 namespace Exchanger\Service;
 
-use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Message\RequestFactory;
 use Exchanger\Contract\ExchangeRateService;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Exchanger\ExchangeRate;
+use Exchanger\Contract\CurrencyPair as CurrencyPairContract;
 
 /**
- * Base class for http based services.
+ * Base class for exchanger services.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 abstract class Service implements ExchangeRateService
 {
-    /**
-     * The client.
-     *
-     * @var HttpClient
-     */
-    private $httpClient;
-
-    /**
-     * The request factory.
-     *
-     * @var RequestFactory
-     */
-    private $requestFactory;
-
     /**
      * The options.
      *
@@ -50,15 +32,12 @@ abstract class Service implements ExchangeRateService
     protected $options = [];
 
     /**
-     * @param HttpClient|null     $httpClient
-     * @param RequestFactory|null $requestFactory
-     * @param array               $options
+     * Constructor.
+     *
+     * @param array $options
      */
-    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null, array $options = [])
+    public function __construct(array $options = [])
     {
-        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
-        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
-
         $this->processOptions($options);
         $this->options = $options;
     }
@@ -73,39 +52,29 @@ abstract class Service implements ExchangeRateService
     }
 
     /**
-     * @param string $url
-     * @param array  $headers
+     * Creates an instant rate.
      *
-     * @return \Psr\Http\Message\RequestInterface
+     * @param CurrencyPairContract $currencyPair
+     * @param float                $rate
+     * @param \DateTimeInterface   $date
+     *
+     * @return ExchangeRate
      */
-    private function buildRequest($url, array $headers = []): RequestInterface
+    protected function createRate(CurrencyPairContract $currencyPair, float $rate, \DateTimeInterface $date): ExchangeRate
     {
-        return $this->requestFactory->createRequest('GET', $url, $headers);
+        return new ExchangeRate($currencyPair, $rate, $date, $this->getName());
     }
 
     /**
-     * Fetches the content of the given url.
+     * Creates an instant rate.
      *
-     * @param string $url
-     * @param array  $headers
+     * @param CurrencyPairContract $currencyPair
+     * @param float                $rate
      *
-     * @return string
+     * @return ExchangeRate
      */
-    protected function request($url, array $headers = []): string
+    protected function createInstantRate(CurrencyPairContract $currencyPair, float $rate): ExchangeRate
     {
-        return $this->getResponse($url, $headers)->getBody()->__toString();
-    }
-
-    /**
-     * Fetches the content of the given url.
-     *
-     * @param string $url
-     * @param array  $headers
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function getResponse($url, array $headers = []): ResponseInterface
-    {
-        return $this->httpClient->sendRequest($this->buildRequest($url, $headers));
+        return new ExchangeRate($currencyPair, $rate, new \DateTime(), $this->getName());
     }
 }

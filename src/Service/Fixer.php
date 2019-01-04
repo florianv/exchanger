@@ -27,8 +27,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Fixer extends HistoricalService
+final class Fixer extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const ACCESS_KEY_OPTION = 'access_key';
 
     const ENTERPRISE_LATEST_URL = 'http://data.fixer.io/api/latest?base=%s&access_key=%s';
@@ -73,7 +75,7 @@ final class Fixer extends HistoricalService
             );
         }
 
-        return $this->createRate($url, $currencyPair);
+        return $this->doCreateRate($url, $currencyPair);
     }
 
     /**
@@ -98,7 +100,7 @@ final class Fixer extends HistoricalService
             );
         }
 
-        return $this->createRate($url, $currencyPair);
+        return $this->doCreateRate($url, $currencyPair);
     }
 
     /**
@@ -119,7 +121,7 @@ final class Fixer extends HistoricalService
      *
      * @throws Exception
      */
-    private function createRate($url, CurrencyPair $currencyPair): ExchangeRate
+    private function doCreateRate($url, CurrencyPair $currencyPair): ExchangeRate
     {
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
@@ -132,7 +134,7 @@ final class Fixer extends HistoricalService
             $date = new \DateTime($data['date']);
             $rate = $data['rates'][$currencyPair->getQuoteCurrency()];
 
-            return new ExchangeRate((float) $rate, __CLASS__, $date);
+            return $this->createRate($currencyPair, (float) $rate, $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -168,5 +170,13 @@ final class Fixer extends HistoricalService
         ];
 
         return isset($errors[$code]) ? $errors[$code] : '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'fixer';
     }
 }

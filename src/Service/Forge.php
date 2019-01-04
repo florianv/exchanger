@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\ExchangeRate;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\StringUtil;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
@@ -22,8 +21,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * Forge Service.
+ *
+ * @author Alberto Diaz
  */
-final class Forge extends Service
+final class Forge extends HttpService
 {
     const URL = 'https://forex.1forge.com/latest/quotes?pairs=%s&api_key=%s';
 
@@ -61,10 +62,18 @@ final class Forge extends Service
             $date = (new \DateTime())->setTimestamp($result['timestamp']);
 
             if ($result['symbol'] == $currencySymbol) {
-                return new ExchangeRate((float) ($result['price']), __CLASS__, $date);
+                return $this->createRate($currencyPair, (float) ($result['price']), $date);
             }
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'forge';
     }
 }

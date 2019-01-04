@@ -71,7 +71,7 @@ final class Exchanger implements ExchangeRateProviderContract
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
         if ($currencyPair->isIdentical()) {
-            return new ExchangeRate(1, __CLASS__);
+            return new ExchangeRate($currencyPair, 1, new \DateTime(), 'null');
         }
 
         if (!$this->service->supportQuery($exchangeQuery)) {

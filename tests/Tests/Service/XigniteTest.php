@@ -68,15 +68,17 @@ class XigniteTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
+        $pair = CurrencyPair::createFromString('GBP/AWG');
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Xignite/success.json');
 
         $service = new Xignite($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('GBP/AWG')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertEquals(2.982308, $rate->getValue());
         $this->assertEquals(new \DateTime('2014-05-11 21:22:00', new \DateTimeZone('UTC')), $rate->getDate());
-        $this->assertEquals(Xignite::class, $rate->getProvider());
+        $this->assertEquals('xignite', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -84,15 +86,27 @@ class XigniteTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate()
     {
+        $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'http://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetHistoricalRates?Symbols=EURUSD&AsOfDate=08/17/2016&_Token=token&FixingTime=&PriceType=Mid';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Xignite/historical_success.json');
 
         $date = \DateTime::createFromFormat('m/d/Y', '08/17/2016', new \DateTimeZone('UTC'));
         $service = new Xignite($this->getHttpAdapterMock($uri, $content), null, ['token' => 'token']);
-        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $date));
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertEquals(1.130228, $rate->getValue());
         $this->assertEquals($date, $rate->getDate());
-        $this->assertEquals(Xignite::class, $rate->getProvider());
+        $this->assertEquals('xignite', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new Xignite($this->createMock('Http\Client\HttpClient'), null, ['token' => 'token']);
+
+        $this->assertSame('xignite', $service->getName());
     }
 }

@@ -25,8 +25,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Petr Kramar <petr.kramar@perlur.cz>
  */
-final class CentralBankOfCzechRepublic extends HistoricalService
+final class CentralBankOfCzechRepublic extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const URL = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
 
     const DATE_FORMAT = 'd.m.Y';
@@ -40,7 +42,7 @@ final class CentralBankOfCzechRepublic extends HistoricalService
      */
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        return $this->createRate($exchangeQuery);
+        return $this->doCreateRate($exchangeQuery);
     }
 
     /**
@@ -48,7 +50,7 @@ final class CentralBankOfCzechRepublic extends HistoricalService
      */
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        return $this->createRate($exchangeQuery, $exchangeQuery->getDate());
+        return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());
     }
 
     /**
@@ -69,7 +71,7 @@ final class CentralBankOfCzechRepublic extends HistoricalService
      *
      * @throws UnsupportedCurrencyPairException
      */
-    private function createRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
+    private function doCreateRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request($this->buildUrl($requestedDate));
@@ -90,7 +92,7 @@ final class CentralBankOfCzechRepublic extends HistoricalService
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
 
-                return new ExchangeRate((float) ($rate / (int) $count), __CLASS__, $date);
+                return $this->createRate($currencyPair, (float) ($rate / (int) $count), $date);
             }
         }
 
@@ -123,5 +125,13 @@ final class CentralBankOfCzechRepublic extends HistoricalService
         }
 
         return self::URL.'?'.http_build_query([self::DATE_QUERY_PARAMETER_NAME => $requestedDate->format(self::DATE_FORMAT)]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'central_bank_of_czech_republic';
     }
 }

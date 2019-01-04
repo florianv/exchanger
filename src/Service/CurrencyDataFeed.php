@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\ExchangeRate;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\StringUtil;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
@@ -22,8 +21,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * CurrencyDataFeed Service.
+ *
+ * @author Alberto Diaz
  */
-final class CurrencyDataFeed extends Service
+final class CurrencyDataFeed extends HttpService
 {
     const URL = 'https://currencydatafeed.com/api/data.php?token=%s&currency=%s';
 
@@ -62,9 +63,17 @@ final class CurrencyDataFeed extends Service
         if (!empty($data) && $data['status'] && !isset($data['currency'][0]['error'])) {
             $date = (new \DateTime())->setTimestamp(strtotime($data['currency'][0]['date']));
 
-            return new ExchangeRate((float) ($data['currency'][0]['value']), __CLASS__, $date);
+            return $this->createRate($currencyPair, (float) ($data['currency'][0]['value']), $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'currency_data_feed';
     }
 }
