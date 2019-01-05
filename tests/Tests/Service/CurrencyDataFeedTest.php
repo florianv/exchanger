@@ -49,14 +49,26 @@ class CurrencyDataFeedTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
+        $pair = CurrencyPair::createFromString('EUR/USD');
         $url = 'https://currencydatafeed.com/api/data.php?token=secret&currency=EUR/USD';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyDataFeed/success.json');
         $service = new CurrencyDataFeed($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(1.18765, $rate->getValue());
         $this->assertTrue('2017-12-21' == $rate->getDate()->format('Y-m-d'));
-        $this->assertEquals(CurrencyDataFeed::class, $rate->getProvider());
+        $this->assertEquals('currency_data_feed', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new CurrencyDataFeed($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+
+        $this->assertSame('currency_data_feed', $service->getName());
     }
 }

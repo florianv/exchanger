@@ -73,8 +73,9 @@ class ChainTest extends TestCase
      */
     public function it_use_next_provider_in_the_chain()
     {
-        $pair = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
-        $rate = new ExchangeRate(1, PhpArray::class, new \DateTime());
+        $pair = CurrencyPair::createFromString('EUR/USD');
+        $query = new ExchangeRateQuery($pair);
+        $rate = new ExchangeRate($pair, 1.0, new \DateTime(), PhpArray::class);
 
         $serviceOne = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
@@ -86,7 +87,7 @@ class ChainTest extends TestCase
         $serviceOne
             ->expects($this->once())
             ->method('getExchangeRate')
-            ->with($pair)
+            ->with($query)
             ->will($this->throwException(new Exception()));
 
         $serviceTwo = $this->createMock('Exchanger\Contract\ExchangeRateService');
@@ -99,7 +100,7 @@ class ChainTest extends TestCase
         $serviceTwo
             ->expects($this->once())
             ->method('getExchangeRate')
-            ->with($pair)
+            ->with($query)
             ->will($this->returnValue($rate));
 
         $serviceThree = $this->createMock('Exchanger\Contract\ExchangeRateService');
@@ -114,7 +115,7 @@ class ChainTest extends TestCase
             ->method('getExchangeRate');
 
         $chain = new Chain([$serviceOne, $serviceTwo, $serviceThree]);
-        $fetchedRate = $chain->getExchangeRate($pair);
+        $fetchedRate = $chain->getExchangeRate($query);
 
         $this->assertSame($rate, $fetchedRate);
     }
@@ -161,5 +162,15 @@ class ChainTest extends TestCase
         }
 
         $this->assertTrue($caught);
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new Chain();
+
+        $this->assertSame('chain', $service->getName());
     }
 }

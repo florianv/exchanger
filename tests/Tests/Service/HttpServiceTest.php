@@ -15,11 +15,11 @@ namespace Exchanger\Tests\Service;
 
 use Exchanger\Contract\ExchangeRate;
 use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\Service\Service;
+use Exchanger\Service\HttpService;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 
-class ServiceTest extends TestCase
+class HttpServiceTest extends TestCase
 {
     /**
      * @test
@@ -50,7 +50,8 @@ class ServiceTest extends TestCase
      */
     public function initialize_with_null_as_client()
     {
-        $this->expectNotToPerformAssertions();
+        $this->expectException(\Http\Discovery\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('No HTTPlug clients found. Make sure to install a package providing "php-http/client-implementation"');
         $this->createAnonymousClass(null);
     }
 
@@ -67,15 +68,26 @@ class ServiceTest extends TestCase
 
     private function createAnonymousClass($httpClient)
     {
-        return new class($httpClient) extends Service {
+        return new class($httpClient) extends HttpService
+        {
             public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
             {
-                return new \Exchanger\ExchangeRate(1, 'mock');
+                return new \Exchanger\ExchangeRate(
+                    $exchangeQuery->getCurrencyPair(),
+                    1,
+                    new \DateTimeImmutable(),
+                    $this->getName()
+                );
             }
 
             public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
             {
                 return true;
+            }
+
+            public function getName(): string
+            {
+                return 'mock';
             }
         };
     }

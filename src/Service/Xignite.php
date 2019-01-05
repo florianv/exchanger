@@ -18,7 +18,6 @@ use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
-use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
@@ -27,8 +26,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-final class Xignite extends HistoricalService
+final class Xignite extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const LATEST_URL = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=%s&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=%s';
 
     const HISTORICAL_URL = 'http://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetHistoricalRates?Symbols=%s&AsOfDate=%s&_Token=%s&FixingTime=&PriceType=Mid';
@@ -71,7 +72,7 @@ final class Xignite extends HistoricalService
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
-        return new ExchangeRate((float) ($data['Bid']), __CLASS__, $date);
+        return $this->createRate($currencyPair, (float) ($data['Bid']), $date);
     }
 
     /**
@@ -103,7 +104,7 @@ final class Xignite extends HistoricalService
             throw new UnsupportedDateException($queryDate, $this);
         }
 
-        return new ExchangeRate((float) ($data['Average']), __CLASS__, $date);
+        return $this->createRate($currencyPair, (float) ($data['Average']), $date);
     }
 
     /**
@@ -112,5 +113,13 @@ final class Xignite extends HistoricalService
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'xignite';
     }
 }

@@ -52,12 +52,14 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/success.xml');
 
+        $pair = CurrencyPair::createFromString('EUR/BGN');
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/BGN')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(1.9558, $rate->getValue());
         $this->assertEquals(new \DateTime('2015-01-07'), $rate->getDate());
-        $this->assertEquals(EuropeanCentralBank::class, $rate->getProvider());
+        $this->assertEquals('european_central_bank', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -68,14 +70,17 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
 
+        $pair = CurrencyPair::createFromString('EUR/JPY');
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
+
         $rate = $service->getExchangeRate(
-            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/JPY'), new \DateTime('2016-08-23'))
+            new HistoricalExchangeRateQuery($pair, new \DateTime('2016-08-23'))
         );
 
         $this->assertSame(113.48, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-08-23'), $rate->getDate());
-        $this->assertEquals(EuropeanCentralBank::class, $rate->getProvider());
+        $this->assertEquals('european_central_bank', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -104,5 +109,15 @@ class EuropeanCentralBankTest extends ServiceTestCase
 
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/XXL'), new \DateTime('2016-08-23')));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new EuropeanCentralBank($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('european_central_bank', $service->getName());
     }
 }

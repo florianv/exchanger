@@ -63,15 +63,17 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
+        $pair = CurrencyPair::createFromString('EUR/RON');
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/RON')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(4.5125, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-02'), $rate->getDate());
-        $this->assertEquals(NationalBankOfRomania::class, $rate->getProvider());
+        $this->assertEquals('national_bank_of_romania', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -79,15 +81,17 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
      */
     public function it_fetches_a_multiplier_rate()
     {
+        $pair = CurrencyPair::createFromString('HUF/RON');
         $url = 'http://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('HUF/RON')));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(0.014356, $rate->getValue());
         $this->assertEquals(new \DateTime('2016-12-02'), $rate->getDate());
-        $this->assertEquals(NationalBankOfRomania::class, $rate->getProvider());
+        $this->assertEquals('national_bank_of_romania', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -95,17 +99,19 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
      */
     public function it_fetches_a_historical_rate()
     {
+        $pair = CurrencyPair::createFromString('EUR/RON');
         $url = 'http://www.bnr.ro/files/xml/years/nbrfxrates2018.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(
-            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/RON'), new \DateTime('2018-02-02'))
+            new HistoricalExchangeRateQuery($pair, new \DateTime('2018-02-02'))
         );
 
         $this->assertSame(4.6526, $rate->getValue());
         $this->assertEquals(new \DateTime('2018-02-02'), $rate->getDate());
-        $this->assertEquals(NationalBankOfRomania::class, $rate->getProvider());
+        $this->assertEquals('national_bank_of_romania', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -120,7 +126,8 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(
-            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/RON'), new \DateTime('2018-02-25')));
+            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/RON'), new \DateTime('2018-02-25'))
+        );
     }
 
     /**
@@ -137,5 +144,15 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $service->getExchangeRate(
             new HistoricalExchangeRateQuery(CurrencyPair::createFromString('RON/XXL'), new \DateTime('2018-02-02'))
         );
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new NationalBankOfRomania($this->createMock('Http\Client\HttpClient'));
+
+        $this->assertSame('national_bank_of_romania', $service->getName());
     }
 }

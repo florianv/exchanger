@@ -74,13 +74,16 @@ class PhpArrayTest extends TestCase
      */
     public function it_fetches_a_latest_rate_from_rates()
     {
+        $pair = CurrencyPair::createFromString('EUR/USD');
+
         $arrayProvider = new PhpArray([
             'EUR/USD' => $rate = 1.50,
         ]);
 
-        $rate = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
+        $rate = $arrayProvider->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(1.50, $rate->getValue());
+        $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     /**
@@ -94,17 +97,25 @@ class PhpArrayTest extends TestCase
             'JPY/GBP' => 1,
         ]);
 
-        $eurUsd = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
-        $usdGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/GBP')));
-        $jpyGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('JPY/GBP')));
+        $eurUsdPair = CurrencyPair::createFromString('EUR/USD');
+        $usdGbpPair = CurrencyPair::createFromString('USD/GBP');
+        $jpyGbpPair = CurrencyPair::createFromString('JPY/GBP');
+
+        $eurUsd = $arrayProvider->getExchangeRate(new ExchangeRateQuery($eurUsdPair));
+        $usdGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery($usdGbpPair));
+        $jpyGbp = $arrayProvider->getExchangeRate(new ExchangeRateQuery($jpyGbpPair));
 
         $this->assertSame(1.5, $eurUsd->getValue());
         $this->assertSame(1.25, $usdGbp->getValue());
         $this->assertSame(1.0, $jpyGbp->getValue());
 
-        $this->assertEquals(PhpArray::class, $eurUsd->getProvider());
-        $this->assertEquals(PhpArray::class, $usdGbp->getProvider());
-        $this->assertEquals(PhpArray::class, $jpyGbp->getProvider());
+        $this->assertEquals('array', $eurUsd->getProviderName());
+        $this->assertEquals('array', $usdGbp->getProviderName());
+        $this->assertEquals('array', $jpyGbp->getProviderName());
+
+        $this->assertSame($eurUsdPair, $eurUsd->getCurrencyPair());
+        $this->assertSame($usdGbpPair, $usdGbp->getCurrencyPair());
+        $this->assertSame($jpyGbpPair, $jpyGbp->getCurrencyPair());
     }
 
     /**
@@ -166,8 +177,18 @@ class PhpArrayTest extends TestCase
         $this->assertSame(1.25, $usdGbp->getValue());
         $this->assertSame(1.0, $jpyGbp->getValue());
 
-        $this->assertEquals(PhpArray::class, $eurUsd->getProvider());
-        $this->assertEquals(PhpArray::class, $usdGbp->getProvider());
-        $this->assertEquals(PhpArray::class, $jpyGbp->getProvider());
+        $this->assertEquals('array', $eurUsd->getProviderName());
+        $this->assertEquals('array', $usdGbp->getProviderName());
+        $this->assertEquals('array', $jpyGbp->getProviderName());
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_name()
+    {
+        $service = new PhpArray([], []);
+
+        $this->assertSame('array', $service->getName());
     }
 }
