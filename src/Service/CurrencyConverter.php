@@ -25,11 +25,11 @@ use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
- * CurrencyConverterApi service.
+ * Currency Converter API service.
  *
  * @author Aliaksandr lptn
  */
-final class CurrencyConverterApi extends HttpService
+final class CurrencyConverter extends HttpService
 {
     use SupportsHistoricalQueries;
 

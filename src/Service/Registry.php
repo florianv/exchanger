@@ -31,7 +31,7 @@ final class Registry
             'central_bank_of_czech_republic' => CentralBankOfCzechRepublic::class,
             'central_bank_of_republic_turkey' => CentralBankOfRepublicTurkey::class,
             'cryptonator' => Cryptonator::class,
-            'currency_converter' => CurrencyConverterApi::class,
+            'currency_converter' => CurrencyConverter::class,
             'currency_data_feed' => CurrencyDataFeed::class,
             'currency_layer' => CurrencyLayer::class,
             'european_central_bank' => EuropeanCentralBank::class,

@@ -16,13 +16,13 @@ namespace Exchanger\Tests\Service;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
-use Exchanger\Service\CurrencyConverterApi;
+use Exchanger\Service\CurrencyConverter;
 use Http\Client\HttpClient;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class CurrencyConverterApiTest extends TestCase
+class CurrencyConverterTest extends TestCase
 {
     /**
      * @test
@@ -31,7 +31,7 @@ class CurrencyConverterApiTest extends TestCase
      */
     public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
     {
-        new CurrencyConverterApi($this->createMock(HttpClient::class), null, ['enterprise' => true]);
+        new CurrencyConverter($this->createMock(HttpClient::class), null, ['enterprise' => true]);
     }
 
     /**
@@ -41,9 +41,9 @@ class CurrencyConverterApiTest extends TestCase
     public function it_throws_an_exception_with_error_response()
     {
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=XXX_YYY&date=2000-01-01';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/error.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/error.json');
 
-        $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200));
+        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/YYY')));
     }
 
@@ -52,9 +52,9 @@ class CurrencyConverterApiTest extends TestCase
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/success.json');
 
-        $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200));
+        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(0.726804, $rate->getValue());
@@ -67,9 +67,9 @@ class CurrencyConverterApiTest extends TestCase
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $uri = 'https://api.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/success.json');
 
-        $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
+        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(0.726804, $rate->getValue());
@@ -82,10 +82,10 @@ class CurrencyConverterApiTest extends TestCase
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR&date=2017-01-01';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/historical_success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/historical_success.json');
         $date = new \DateTime('2017-01-01 UTC');
 
-        $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
+        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertSame(0.726804, $rate->getValue());
@@ -99,10 +99,10 @@ class CurrencyConverterApiTest extends TestCase
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $uri = 'https://api.currencyconverterapi.com/api/v6/convert?q=USD_EUR&date=2017-01-01';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/historical_success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/historical_success.json');
         $date = new \DateTime('2017-01-01 UTC');
 
-        $service = new CurrencyConverterApi($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
+        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertSame(0.726804, $rate->getValue());
@@ -116,7 +116,7 @@ class CurrencyConverterApiTest extends TestCase
      */
     public function it_has_a_name()
     {
-        $service = new CurrencyConverterApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);
+        $service = new CurrencyConverter($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);
 
         $this->assertSame('currency_converter', $service->getName());
     }
