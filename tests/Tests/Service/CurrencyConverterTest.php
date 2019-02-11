@@ -10,7 +10,7 @@ use Http\Client\HttpClient;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class CurrencyConverterTest extends \PHPUnit_Framework_TestCase
+class CurrencyConverterTest extends ServiceTestCase
 {
     /**
      * @test
@@ -29,7 +29,7 @@ class CurrencyConverterTest extends \PHPUnit_Framework_TestCase
     public function it_throws_an_exception_with_error_response()
     {
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=XXX_YYY&date=2000-01-01';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/error.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/error.json');
 
         $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/YYY')));
@@ -39,7 +39,7 @@ class CurrencyConverterTest extends \PHPUnit_Framework_TestCase
     public function it_fetches_a_rate_normal_mode()
     {
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/success.json');
 
         $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200));
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -51,7 +51,7 @@ class CurrencyConverterTest extends \PHPUnit_Framework_TestCase
     public function it_fetches_a_rate_enterprise_mode()
     {
         $uri = 'https://api.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/success.json');
 
         $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -63,7 +63,7 @@ class CurrencyConverterTest extends \PHPUnit_Framework_TestCase
     public function it_fetches_a_historical_rate_normal_mode()
     {
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR&date=2017-01-01';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/historical_success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/historical_success.json');
         $date = new \DateTime('2017-01-01 UTC');
 
         $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
@@ -77,7 +77,7 @@ class CurrencyConverterTest extends \PHPUnit_Framework_TestCase
     public function it_fetches_a_historical_rate_enterprise_mode()
     {
         $uri = 'https://api.currencyconverterapi.com/api/v6/convert?q=USD_EUR&date=2017-01-01';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverterApi/historical_success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/historical_success.json');
         $date = new \DateTime('2017-01-01 UTC');
 
         $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
