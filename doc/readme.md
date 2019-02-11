@@ -14,6 +14,8 @@
    * [Query Cache Options](#query-cache-options)
   * [Requests Caching](#requests-caching)
 * [Creating a Service](#creating-a-service)
+ * [Standard Service](#standard-service)
+ * [Historical Service](#historical-service)
 * [Supported Services](#supported-services)
 * [Sponsors](#sponsors)
 
@@ -39,14 +41,14 @@ We recommend to use one of the [services that support our project](#sponsors), p
 The complete list of all supported services is available [here](https://github.com/florianv/exchanger/blob/master/README.md#services).
 
 ```php
-use Http\Adapter\Guzzle6\Client as GuzzleClient;
+use Http\Client\Curl\Client as CurlClient;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\Forge;
 use Exchanger\Exchanger;
 
-// Create your http client (we choose Guzzle 6 here)
-$client = new GuzzleClient();
+// Create your http client (we choose curl here)
+$client = new CurlClient();
 
 // Use the Fixer.io service
 $service = new Fixer($client, null, ['access_key' => 'YOUR_KEY']);
@@ -248,6 +250,8 @@ $rate = $exchanger->getExchangeRate((new ExchangeRateQueryBuilder('EUR/GBP'))->b
 
 If your service must send http requests to retrieve rates, your class must extend the `HttpService` class, otherwise you can extend the more generic `Service` class.
 
+#### Standard service
+
 In the following example, we are creating a `Constant` service that returns a configurable constant rate value.
 
 ```php
@@ -319,7 +323,7 @@ $query = (new ExchangeRateQueryBuilder('EUR/USD'))->build();
 $rate = $exchanger->getExchangeRate($query)->getValue();
 ```
 
-#### Historical rates
+#### Historical service
 
 If your service supports retrieving historical rates, you need to use the `SupportsHistoricalQueries` trait.
 
