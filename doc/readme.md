@@ -148,21 +148,22 @@ For example, if Fixer returned the rate, it will be identical to `fixer`.
 
 `Exchanger` provides a [PSR-16 Simple Cache](http://www.php-fig.org/psr/psr-16) integration allowing you to cache rates during a given time using the adapter of your choice.
 
-The following example uses the Apcu cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/apcu-adapter`.
+The following example uses the `Predis` cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/predis-adapter`.
 
 You will also need to install a "bridge" that allows to adapt the PSR-6 adapters to PSR-16 using `composer require cache/simple-cache-bridge` (https://github.com/php-cache/simple-cache-bridge).
 
 ```php
-use Cache\Adapter\Apcu\ApcuCachePool;
+use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 
-$psr6pool = new ApcuCachePool();
+$client = new \Predis\Client('tcp:/127.0.0.1:6379');
+$psr6pool = new PredisCachePool($client);
 $simpleCache = new SimpleCacheBridge($psr6pool);
 
 $exchanger = new Exchanger($service, $simpleCache, ['cache_ttl' => 3600, 'cache_key_prefix' => 'myapp-']);
 ```
 
-All rates will now be cached in Apcu during 3600 seconds, and cache keys will be prefixed with 'myapp-'
+All rates will now be cached in Redis during 3600 seconds, and cache keys will be prefixed with 'myapp-'
 
 ##### Query Cache Options
 
@@ -194,8 +195,7 @@ $query = (new ExchangeRateQueryBuilder('JPY/GBP'))
 
 Set the cache key prefix. Default: empty string
 
-There is a limitation of 64 characters for the key length in PSR-6,
- because of this, key prefix must not exceed 24 characters, as sha1() hash takes 40 symbols.
+There is a limitation of 64 characters for the key length in PSR-6, because of this, key prefix must not exceed 24 characters, as sha1() hash takes 40 symbols.
 
 PSR-6 do not allows characters `{}()/\@:` in key, these characters are replaced with `-`
 
@@ -252,11 +252,11 @@ otherwise use the `Service` class.
 In the following example, we are creating a `Constant` service that returns a constant rate value.
 
 ```php
-use Exchanger\Service\Service;
 use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\ExchangeRate;
+use Exchanger\Contract\ExchangeRate;
+use Exchanger\Service\HttpService;
 
-class ConstantService extends Service
+class ConstantService extends HttpService
 {
     /**
      * Gets the exchange rate.
@@ -265,12 +265,12 @@ class ConstantService extends Service
      *
      * @return ExchangeRate
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         // If you want to make a request you can use
-        $content = $this->request('http://example.com');
+        // $content = $this->request('http://example.com');
 
-        return new ExchangeRate($this->options['value']);
+        return $this->createInstantRate($exchangeQuery->getCurrencyPair(), $this->options['value']);
     }
 
     /**
@@ -278,9 +278,9 @@ class ConstantService extends Service
      *
      * @param array &$options
      *
-     * @return array
+     * @return void
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options['value'])) {
             throw new \InvalidArgumentException('The "value" option must be provided.');
@@ -294,10 +294,20 @@ class ConstantService extends Service
      *
      * @return bool
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         // For example, our service only supports EUR as base currency
         return 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
+    }
+
+    /**
+     * Gets the name of the exchange rate service.
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'constant';
     }
 }
 
