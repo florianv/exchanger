@@ -140,7 +140,7 @@ You can use the `getProviderName()` function on a rate that gives you the name o
 $name = $rate->getProviderName();
 ```
 
-For example, if Fixer returned the rate, it will be identical to `Exchanger\Service\Fixer::class`.
+For example, if Fixer returned the rate, it will be identical to `fixer`.
 
 ### Caching
 
