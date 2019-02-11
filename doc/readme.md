@@ -24,10 +24,10 @@ which provides the http layer used to send requests to exchange rate services.
 This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use.
 
 Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). 
-Below is an example using [Guzzle 6](http://docs.guzzlephp.org/en/latest/index.html):
+Below is an example using the curl client:
 
 ```bash
-composer require florianv/exchanger php-http/message php-http/guzzle6-adapter ^1.0
+composer require php-http/curl-client nyholm/psr7 php-http/message florianv/exchanger
 ```
 
 ## Configuration
