@@ -325,7 +325,7 @@ If your service supports retrieving historical rates, you need to use the `Suppo
 
 You will need to rename the `getExchangeRate` method to `getLatestExchangeRate` and switch its visibility to protected, and implement a new `getHistoricalExchangeRate` method:
 
-```
+```php
 use Exchanger\Service\SupportsHistoricalQueries;
 
 class ConstantService extends HttpService
