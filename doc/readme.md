@@ -11,7 +11,7 @@
     * [Rate Provider](#rate-provider)
 * [Caching](#caching)
   * [Rates Caching](#rates-caching)
-    * [Query Cache Options](#query-cache-options)
+   * [Query Cache Options](#query-cache-options)
   * [Requests Caching](#requests-caching)
 * [Creating a Service](#creating-a-service)
 * [Supported Services](#supported-services)
@@ -357,12 +357,12 @@ $service = new Chain([
     new Xignite($client, null, ['token' => 'token']),
     new PhpArray(
         [
-            'EUR/USD' => new ExchangeRate('1.1'),
+            'EUR/USD' => 1.1,
             'EUR/GBP' => 1.5
         ],
         [
             '2017-01-01' => [
-                'EUR/USD' => new ExchangeRate('1.5')
+                'EUR/USD' => 1.5
             ],
             '2017-01-03' => [
                 'EUR/GBP' => 1.3
