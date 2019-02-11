@@ -13,7 +13,7 @@ use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 
 /**
- * CurrencyConverterApi service.
+ * Currency Converter API service.
  *
  * @see https://github.com/florianv/laravel-swap/tree/master/doc#creating-a-service
  *
@@ -23,7 +23,7 @@ use Exchanger\StringUtil;
  * Docs for paid/enterprise plans:
  * @see https://www.currencyconverterapi.com/docs
  */
-class CurrencyConverterApi extends HistoricalService
+class CurrencyConverter extends HistoricalService
 {
     const FREE_LATEST_URL = 'https://free.currencyconverterapi.com/api/v6/convert?q=%s';
 
