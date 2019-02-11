@@ -14,8 +14,8 @@
    * [Query Cache Options](#query-cache-options)
   * [Requests Caching](#requests-caching)
 * [Creating a Service](#creating-a-service)
- * [Standard Service](#standard-service)
- * [Historical Service](#historical-service)
+  * [Standard Service](#standard-service)
+  * [Historical Service](#historical-service)
 * [Supported Services](#supported-services)
 * [Sponsors](#sponsors)
 
