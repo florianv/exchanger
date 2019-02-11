@@ -11,9 +11,11 @@
     * [Rate Provider](#rate-provider)
 * [Caching](#caching)
   * [Rates Caching](#rates-caching)
-    * [Query Cache Options](#query-cache-options)
+   * [Query Cache Options](#query-cache-options)
   * [Requests Caching](#requests-caching)
 * [Creating a Service](#creating-a-service)
+  * [Standard Service](#standard-service)
+  * [Historical Service](#historical-service)
 * [Supported Services](#supported-services)
 * [Sponsors](#sponsors)
 
@@ -24,10 +26,10 @@ which provides the http layer used to send requests to exchange rate services.
 This gives you the flexibility to choose what HTTP client and PSR-7 implementation you want to use.
 
 Read more about the benefits of this and about what different HTTP clients you may use in the [HTTPlug documentation](http://docs.php-http.org/en/latest/httplug/users.html). 
-Below is an example using [Guzzle 6](http://docs.guzzlephp.org/en/latest/index.html):
+Below is an example using the curl client:
 
 ```bash
-composer require florianv/exchanger php-http/message php-http/guzzle6-adapter ^1.0
+composer require php-http/curl-client nyholm/psr7 php-http/message florianv/exchanger
 ```
 
 ## Configuration
@@ -39,14 +41,14 @@ We recommend to use one of the [services that support our project](#sponsors), p
 The complete list of all supported services is available [here](https://github.com/florianv/exchanger/blob/master/README.md#services).
 
 ```php
-use Http\Adapter\Guzzle6\Client as GuzzleClient;
+use Http\Client\Curl\Client as CurlClient;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\Forge;
 use Exchanger\Exchanger;
 
-// Create your http client (we choose Guzzle 6 here)
-$client = new GuzzleClient();
+// Create your http client (we choose curl here)
+$client = new CurlClient();
 
 // Use the Fixer.io service
 $service = new Fixer($client, null, ['access_key' => 'YOUR_KEY']);
@@ -140,7 +142,7 @@ You can use the `getProviderName()` function on a rate that gives you the name o
 $name = $rate->getProviderName();
 ```
 
-For example, if Fixer returned the rate, it will be identical to `Exchanger\Service\Fixer::class`.
+For example, if Fixer returned the rate, it will be identical to `fixer`.
 
 ### Caching
 
@@ -148,21 +150,22 @@ For example, if Fixer returned the rate, it will be identical to `Exchanger\Serv
 
 `Exchanger` provides a [PSR-16 Simple Cache](http://www.php-fig.org/psr/psr-16) integration allowing you to cache rates during a given time using the adapter of your choice.
 
-The following example uses the Apcu cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/apcu-adapter`.
+The following example uses the `Predis` cache from [php-cache.com](http://php-cache.com) PSR-6 implementation installable using `composer require cache/predis-adapter`.
 
 You will also need to install a "bridge" that allows to adapt the PSR-6 adapters to PSR-16 using `composer require cache/simple-cache-bridge` (https://github.com/php-cache/simple-cache-bridge).
 
 ```php
-use Cache\Adapter\Apcu\ApcuCachePool;
+use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 
-$psr6pool = new ApcuCachePool();
+$client = new \Predis\Client('tcp:/127.0.0.1:6379');
+$psr6pool = new PredisCachePool($client);
 $simpleCache = new SimpleCacheBridge($psr6pool);
 
 $exchanger = new Exchanger($service, $simpleCache, ['cache_ttl' => 3600, 'cache_key_prefix' => 'myapp-']);
 ```
 
-All rates will now be cached in Apcu during 3600 seconds, and cache keys will be prefixed with 'myapp-'
+All rates will now be cached in Redis during 3600 seconds, and cache keys will be prefixed with 'myapp-'
 
 ##### Query Cache Options
 
@@ -194,8 +197,7 @@ $query = (new ExchangeRateQueryBuilder('JPY/GBP'))
 
 Set the cache key prefix. Default: empty string
 
-There is a limitation of 64 characters for the key length in PSR-6,
- because of this, key prefix must not exceed 24 characters, as sha1() hash takes 40 symbols.
+There is a limitation of 64 characters for the key length in PSR-6, because of this, key prefix must not exceed 24 characters, as sha1() hash takes 40 symbols.
 
 PSR-6 do not allows characters `{}()/\@:` in key, these characters are replaced with `-`
 
@@ -246,17 +248,18 @@ $rate = $exchanger->getExchangeRate((new ExchangeRateQueryBuilder('EUR/GBP'))->b
 
 ### Creating a Service
 
-First you must check if the service supports retrieval of historical rates. If it's the case, you must extend the `HistoricalService` class,
-otherwise use the `Service` class.
+If your service must send http requests to retrieve rates, your class must extend the `HttpService` class, otherwise you can extend the more generic `Service` class.
 
-In the following example, we are creating a `Constant` service that returns a constant rate value.
+#### Standard service
+
+In the following example, we are creating a `Constant` service that returns a configurable constant rate value.
 
 ```php
-use Exchanger\Service\Service;
 use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\ExchangeRate;
+use Exchanger\Contract\ExchangeRate;
+use Exchanger\Service\HttpService;
 
-class ConstantService extends Service
+class ConstantService extends HttpService
 {
     /**
      * Gets the exchange rate.
@@ -265,12 +268,12 @@ class ConstantService extends Service
      *
      * @return ExchangeRate
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeQuery)
+    public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         // If you want to make a request you can use
-        $content = $this->request('http://example.com');
+        // $content = $this->request('http://example.com');
 
-        return new ExchangeRate($this->options['value']);
+        return $this->createInstantRate($exchangeQuery->getCurrencyPair(), $this->options['value']);
     }
 
     /**
@@ -278,9 +281,9 @@ class ConstantService extends Service
      *
      * @param array &$options
      *
-     * @return array
+     * @return void
      */
-    public function processOptions(array &$options)
+    public function processOptions(array &$options): void
     {
         if (!isset($options['value'])) {
             throw new \InvalidArgumentException('The "value" option must be provided.');
@@ -294,10 +297,20 @@ class ConstantService extends Service
      *
      * @return bool
      */
-    public function supportQuery(ExchangeRateQuery $exchangeQuery)
+    public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         // For example, our service only supports EUR as base currency
         return 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
+    }
+
+    /**
+     * Gets the name of the exchange rate service.
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'constant';
     }
 }
 
@@ -308,6 +321,45 @@ $query = (new ExchangeRateQueryBuilder('EUR/USD'))->build();
 
 // 10
 $rate = $exchanger->getExchangeRate($query)->getValue();
+```
+
+#### Historical service
+
+If your service supports retrieving historical rates, you need to use the `SupportsHistoricalQueries` trait.
+
+You will need to rename the `getExchangeRate` method to `getLatestExchangeRate` and switch its visibility to protected, and implement a new `getHistoricalExchangeRate` method:
+
+```php
+use Exchanger\Service\SupportsHistoricalQueries;
+
+class ConstantService extends HttpService
+{
+    use SupportsHistoricalQueries;
+    
+    /**
+     * Gets the exchange rate.
+     *
+     * @param ExchangeRateQuery $exchangeQuery
+     *
+     * @return ExchangeRate
+     */
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    {
+        return $this->createInstantRate($exchangeQuery->getCurrencyPair(), $this->options['value']);
+    }
+
+    /**
+     * Gets an historical rate.
+     *
+     * @param HistoricalExchangeRateQuery $exchangeQuery
+     *
+     * @return ExchangeRate
+     */
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    {
+        return $this->createInstantRate($exchangeQuery->getCurrencyPair(), $this->options['value']);
+    }
+}    
 ```
 
 ### Supported Services
@@ -347,12 +399,12 @@ $service = new Chain([
     new Xignite($client, null, ['token' => 'token']),
     new PhpArray(
         [
-            'EUR/USD' => new ExchangeRate('1.1'),
+            'EUR/USD' => 1.1,
             'EUR/GBP' => 1.5
         ],
         [
             '2017-01-01' => [
-                'EUR/USD' => new ExchangeRate('1.5')
+                'EUR/USD' => 1.5
             ],
             '2017-01-03' => [
                 'EUR/GBP' => 1.3
