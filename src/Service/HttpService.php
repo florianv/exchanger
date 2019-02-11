@@ -15,8 +15,9 @@ namespace Exchanger\Service;
 
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Message\RequestFactory;
+use Http\Discovery\Psr17FactoryDiscovery;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -30,26 +31,34 @@ abstract class HttpService extends Service
     /**
      * The client.
      *
-     * @var HttpClient
+     * @var HttpClient|ClientInterface
      */
     private $httpClient;
 
     /**
      * The request factory.
      *
-     * @var RequestFactory
+     * @var RequestFactoryInterface
      */
     private $requestFactory;
 
     /**
-     * @param HttpClient|null     $httpClient
-     * @param RequestFactory|null $requestFactory
-     * @param array               $options
+     * @param HttpClient|ClientInterface|null $httpClient
+     * @param RequestFactoryInterface|null    $requestFactory
+     * @param array                           $options
      */
-    public function __construct(HttpClient $httpClient = null, RequestFactory $requestFactory = null, array $options = [])
+    public function __construct($httpClient = null, RequestFactoryInterface $requestFactory = null, array $options = [])
     {
-        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
-        $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
+        if (null === $httpClient) {
+            $httpClient = HttpClientDiscovery::find();
+        } else {
+            if (!$httpClient instanceof ClientInterface && !$httpClient instanceof HttpClient) {
+                throw new \LogicException('Client must be an instance of Http\\Client\\HttpClient or Psr\\Http\\Client\\ClientInterface');
+            }
+        }
+
+        $this->httpClient = $httpClient;
+        $this->requestFactory = $requestFactory ?: Psr17FactoryDiscovery::findRequestFactory();
 
         parent::__construct($options);
     }
@@ -62,7 +71,12 @@ abstract class HttpService extends Service
      */
     private function buildRequest($url, array $headers = []): RequestInterface
     {
-        return $this->requestFactory->createRequest('GET', $url, $headers);
+        $request = $this->requestFactory->createRequest('GET', $url);
+        foreach ($headers as $header => $value) {
+            $request = $request->withHeader($header, $value);
+        }
+
+        return $request;
     }
 
     /**

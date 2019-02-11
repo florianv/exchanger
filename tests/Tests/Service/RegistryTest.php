@@ -37,6 +37,7 @@ class RegistryTest extends TestCase
 
             if (!in_array($class, $excludedServices) &&
                 false === strpos($class, 'Mock') &&
+                false === $reflect->isAnonymous() &&
                 $reflect->implementsInterface('Exchanger\Contract\ExchangeRateService')
             ) {
                 $services[] = $class;
