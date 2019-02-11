@@ -246,10 +246,9 @@ $rate = $exchanger->getExchangeRate((new ExchangeRateQueryBuilder('EUR/GBP'))->b
 
 ### Creating a Service
 
-First you must check if the service supports retrieval of historical rates. If it's the case, you must extend the `HistoricalService` class,
-otherwise use the `Service` class.
+If your service must send http requests to retrieve rates, your class must extend the `HttpService` class, otherwise you can extend the more generic `Service` class.
 
-In the following example, we are creating a `Constant` service that returns a constant rate value.
+In the following example, we are creating a `Constant` service that returns a configurable constant rate value.
 
 ```php
 use Exchanger\Contract\ExchangeRateQuery;
@@ -318,6 +317,45 @@ $query = (new ExchangeRateQueryBuilder('EUR/USD'))->build();
 
 // 10
 $rate = $exchanger->getExchangeRate($query)->getValue();
+```
+
+#### Historical rates
+
+If your service supports retrieving historical rates, you need to use the `SupportsHistoricalQueries` trait.
+
+You will need to rename the `getExchangeRate` method to `getLatestExchangeRate` and switch its visibility to protected, and implement a new `getHistoricalExchangeRate` method:
+
+```
+use Exchanger\Service\SupportsHistoricalQueries;
+
+class ConstantService extends HttpService
+{
+    use SupportsHistoricalQueries;
+    
+    /**
+     * Gets the exchange rate.
+     *
+     * @param ExchangeRateQuery $exchangeQuery
+     *
+     * @return ExchangeRate
+     */
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
+    {
+        return $this->createInstantRate($exchangeQuery->getCurrencyPair(), $this->options['value']);
+    }
+
+    /**
+     * Gets an historical rate.
+     *
+     * @param HistoricalExchangeRateQuery $exchangeQuery
+     *
+     * @return ExchangeRate
+     */
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
+    {
+        return $this->createInstantRate($exchangeQuery->getCurrencyPair(), $this->options['value']);
+    }
+}    
 ```
 
 ### Supported Services
