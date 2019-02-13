@@ -79,7 +79,7 @@ class CurrencyConverter extends HistoricalService
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
         $url = sprintf(
-            self::ENTERPRISE_LATEST_URL,
+            $this->isEnterprise() ? self::ENTERPRISE_LATEST_URL : self::FREE_LATEST_URL,
             $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
             $this->options['access_key']
         );
@@ -101,7 +101,7 @@ class CurrencyConverter extends HistoricalService
         $historicalDateTime = $this->getAdoptedDateTime($exchangeQuery->getDate());
 
         $url = sprintf(
-            self::ENTERPRISE_HISTORICAL_URL,
+            $this->isEnterprise() ? self::ENTERPRISE_HISTORICAL_URL : self::ENTERPRISE_HISTORICAL_URL,
             $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
             $historicalDateTime->format('Y-m-d'),
             $this->options['access_key']
