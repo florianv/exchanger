@@ -15,7 +15,17 @@ class CurrencyConverterTest extends ServiceTestCase
     /**
      * @test
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "access_key" option must be provided.
+     * @expectedExceptionMessageRegExp /The "access_key" option must be provided+/
+     */
+    public function it_throws_an_exception_if_access_key_option_missing_in_free_mode()
+    {
+        new CurrencyConverter($this->getMock(HttpClient::class), null, ['enterprise' => false]);
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessageRegExp /The "access_key" option must be provided+/
      */
     public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
     {

@@ -41,11 +41,11 @@ class CurrencyConverter extends HistoricalService
         }
 
         if (!$options['enterprise'] && !isset($options['access_key'])) {
-            throw new \InvalidArgumentException('The "access_key" option must be provided, please use https://free.currencyconverterapi.com/free-api-key to ask for a KEY');
+            throw new \InvalidArgumentException('The "access_key" option must be provided, please use https://free.currencyconverterapi.com/free-api-key to ask for a KEY.');
         }
 
         if ($options['enterprise'] && !isset($options['access_key'])) {
-            throw new \InvalidArgumentException('The "access_key" option must be provided');
+            throw new \InvalidArgumentException('The "access_key" option must be provided.');
         }
     }
 
