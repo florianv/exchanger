@@ -39,7 +39,7 @@ class CurrencyConverterTest extends ServiceTestCase
     public function it_throws_an_exception_with_error_response()
     {
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=XXX_YYY&date=2000-01-01';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/>error.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/error.json');
 
         $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/YYY')));
