@@ -25,11 +25,11 @@ use Exchanger\StringUtil;
  */
 class CurrencyConverter extends HistoricalService
 {
-    const FREE_LATEST_URL = 'https://free.currencyconverterapi.com/api/v6/convert?q=%s';
+    const FREE_LATEST_URL = 'https://free.currencyconverterapi.com/api/v6/convert?q=%s&apiKey=%s';
 
     const ENTERPRISE_LATEST_URL = 'https://api.currencyconverterapi.com/api/v6/convert?q=%s&apiKey=%s';
 
-    const FREE_HISTORICAL_URL = 'https://free.currencyconverterapi.com/api/v6/convert?q=%s&date=%s';
+    const FREE_HISTORICAL_URL = 'https://free.currencyconverterapi.com/api/v6/convert?q=%s&date=%s&apiKey=%s';
 
     const ENTERPRISE_HISTORICAL_URL = 'https://api.currencyconverterapi.com/api/v6/convert?q=%s&date=%s&apiKey=%s';
 
@@ -38,6 +38,10 @@ class CurrencyConverter extends HistoricalService
     {
         if (!isset($options['enterprise'])) {
             $options['enterprise'] = false;
+        }
+
+        if (!$options['enterprise'] && !isset($options['access_key'])) {
+            throw new \InvalidArgumentException('The "access_key" option must be provided, please use https://free.currencyconverterapi.com/free-api-key to ask for a KEY.');
         }
 
         if ($options['enterprise'] && !isset($options['access_key'])) {
@@ -74,18 +78,11 @@ class CurrencyConverter extends HistoricalService
      */
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery)
     {
-        if ($this->isEnterprise()) {
-            $url = sprintf(
-                self::ENTERPRISE_LATEST_URL,
-                $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
-                $this->options['access_key']
-            );
-        } else {
-            $url = sprintf(
-                self::FREE_LATEST_URL,
-                $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair())
-            );
-        }
+        $url = sprintf(
+            $this->isEnterprise() ? self::ENTERPRISE_LATEST_URL : self::FREE_LATEST_URL,
+            $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
+            $this->options['access_key']
+        );
 
         return $this->fetchOnlineRate($url, $exchangeQuery);
     }
@@ -103,20 +100,12 @@ class CurrencyConverter extends HistoricalService
     {
         $historicalDateTime = $this->getAdoptedDateTime($exchangeQuery->getDate());
 
-        if ($this->isEnterprise()) {
-            $url = sprintf(
-                self::ENTERPRISE_HISTORICAL_URL,
-                $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
-                $historicalDateTime->format('Y-m-d'),
-                $this->options['access_key']
-            );
-        } else {
-            $url = sprintf(
-                self::FREE_HISTORICAL_URL,
-                $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
-                $historicalDateTime->format('Y-m-d')
-            );
-        }
+        $url = sprintf(
+            $this->isEnterprise() ? self::ENTERPRISE_HISTORICAL_URL : self::ENTERPRISE_HISTORICAL_URL,
+            $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
+            $historicalDateTime->format('Y-m-d'),
+            $this->options['access_key']
+        );
 
         return $this->fetchOnlineRate($url, $exchangeQuery);
     }

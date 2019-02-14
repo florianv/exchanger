@@ -15,7 +15,17 @@ class CurrencyConverterTest extends ServiceTestCase
     /**
      * @test
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "access_key" option must be provided.
+     * @expectedExceptionMessageRegExp /The "access_key" option must be provided+/
+     */
+    public function it_throws_an_exception_if_access_key_option_missing_in_free_mode()
+    {
+        new CurrencyConverter($this->getMock(HttpClient::class), null, ['enterprise' => false]);
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessageRegExp /The "access_key" option must be provided+/
      */
     public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
     {
@@ -31,7 +41,7 @@ class CurrencyConverterTest extends ServiceTestCase
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=XXX_YYY&date=2000-01-01';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/error.json');
 
-        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200));
+        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/YYY')));
     }
 
@@ -41,7 +51,7 @@ class CurrencyConverterTest extends ServiceTestCase
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/success.json');
 
-        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200));
+        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
 
         $this->assertSame('0.726804', $rate->getValue());
