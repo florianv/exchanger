@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<exchange>
+    <error>
+        <message>Wrong parameters format</message>
+    </error>
+</exchange>
