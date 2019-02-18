@@ -43,6 +43,7 @@ final class Registry
             'russian_central_bank' => RussianCentralBank::class,
             'webservicex' => WebserviceX::class,
             'xignite' => Xignite::class,
+            'national_bank_of_ukraine' => NationalBankOfUkraine::class,
         ];
     }
 }
