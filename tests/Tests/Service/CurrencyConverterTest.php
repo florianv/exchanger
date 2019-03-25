@@ -43,7 +43,7 @@ class CurrencyConverterTest extends TestCase
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=XXX_YYY&date=2000-01-01';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/error.json');
 
-        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200));
+        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/YYY')));
     }
 
@@ -54,7 +54,7 @@ class CurrencyConverterTest extends TestCase
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/success.json');
 
-        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200));
+        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(0.726804, $rate->getValue());
