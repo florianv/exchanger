@@ -62,15 +62,15 @@ final class PhpArray extends Service
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        if ($exchangeQuery instanceof HistoricalExchangeRateQuery) {
-            if ($rate = $this->getHistoricalExchangeRate($exchangeQuery)) {
-                return $rate;
-            }
-        } elseif ($rate = $this->getLatestExchangeRate($exchangeQuery)) {
-            return $rate;
+        if (!$this->supportQuery($exchangeQuery)) {
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
-        throw new UnsupportedCurrencyPairException($currencyPair, $this);
+        if ($exchangeQuery instanceof HistoricalExchangeRateQuery) {
+            return $this->getHistoricalExchangeRate($exchangeQuery);
+        }
+
+        return $this->getLatestExchangeRate($exchangeQuery);
     }
 
     /**
