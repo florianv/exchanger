@@ -48,8 +48,8 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$url = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
-        self::$historicalUrl = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date=23.04.2000';
+        self::$url = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt';
+        self::$historicalUrl = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=23.04.2000';
         self::$content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfCzechRepublic/cnb_today.txt');
         self::$historicalContent = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfCzechRepublic/cnb_historical.txt');
     }

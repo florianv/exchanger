@@ -29,7 +29,7 @@ final class CentralBankOfCzechRepublic extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const URL = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
+    const URL = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt';
 
     const DATE_FORMAT = 'd.m.Y';
 
