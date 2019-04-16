@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Service;
 
+use DateTimeImmutable;
 use DateTimeInterface;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
@@ -29,7 +30,7 @@ final class CentralBankOfCzechRepublic extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const URL = 'http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt';
+    const URL = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt';
 
     const DATE_FORMAT = 'd.m.Y';
 
@@ -42,7 +43,7 @@ final class CentralBankOfCzechRepublic extends HttpService
      */
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        return $this->doCreateRate($exchangeQuery);
+        return $this->doCreateRate($exchangeQuery, new DateTimeImmutable());
     }
 
     /**
@@ -71,7 +72,7 @@ final class CentralBankOfCzechRepublic extends HttpService
      *
      * @throws UnsupportedCurrencyPairException
      */
-    private function doCreateRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
+    private function doCreateRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request($this->buildUrl($requestedDate));
@@ -114,16 +115,12 @@ final class CentralBankOfCzechRepublic extends HttpService
     }
 
     /**
-     * @param DateTimeInterface|null $requestedDate
+     * @param DateTimeInterface $requestedDate
      *
      * @return string
      */
-    private function buildUrl(DateTimeInterface $requestedDate = null): string
+    private function buildUrl(DateTimeInterface $requestedDate): string
     {
-        if (null === $requestedDate) {
-            return self::URL;
-        }
-
         return self::URL.'?'.http_build_query([self::DATE_QUERY_PARAMETER_NAME => $requestedDate->format(self::DATE_FORMAT)]);
     }
 
