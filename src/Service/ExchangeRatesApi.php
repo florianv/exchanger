@@ -76,8 +76,8 @@ final class ExchangeRatesApi extends HttpService
     /**
      * Creates a rate.
      *
-     * @param  string  $url
-     * @param  CurrencyPair  $currencyPair
+     * @param string       $url
+     * @param CurrencyPair $currencyPair
      *
      * @return ExchangeRate
      *

@@ -82,6 +82,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $this->assertEquals('exchange_rates_api', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
+    
     /**
      * @test
      */
