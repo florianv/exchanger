@@ -375,6 +375,7 @@ use Exchanger\Service\CentralBankOfCzechRepublic;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\CurrencyDataFeed;
 use Exchanger\Service\EuropeanCentralBank;
+use Exchanger\Service\ExchangeRatesApi;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
 use Exchanger\Service\PhpArray;
@@ -388,6 +389,7 @@ $service = new Chain([
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new Forge($client, null, ['api_key' => 'api_key']),
     new EuropeanCentralBank(),
+    new ExchangeRatesApi(),
     new NationalBankOfRomania(),
     new CentralBankOfRepublicTurkey(),
     new CentralBankOfCzechRepublic(),

@@ -35,6 +35,7 @@ final class Registry
             'currency_data_feed' => CurrencyDataFeed::class,
             'currency_layer' => CurrencyLayer::class,
             'european_central_bank' => EuropeanCentralBank::class,
+            'exchange_rates_api' => ExchangeRatesApi::class,
             'fixer' => Fixer::class,
             'forge' => Forge::class,
             'national_bank_of_romania' => NationalBankOfRomania::class,
