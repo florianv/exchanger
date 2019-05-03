@@ -32,7 +32,7 @@ final class ExchangeRatesApi extends HttpService
     use SupportsHistoricalQueries;
 
     const LATEST_URL = 'https://api.exchangeratesapi.io/latest?base=%s';
-    
+
     const HISTORICAL_URL = 'https://api.exchangeratesapi.io/%s?base=%s';
 
     /**
