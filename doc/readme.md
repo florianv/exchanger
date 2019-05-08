@@ -42,7 +42,6 @@ The complete list of all supported services is available [here](https://github.c
 use Http\Adapter\Guzzle6\Client as GuzzleClient;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
-use Exchanger\Service\Forge;
 use Exchanger\Exchanger;
 
 // Create your http client (we choose Guzzle 6 here)
@@ -53,9 +52,6 @@ $service = new Fixer($client, null, ['access_key' => 'YOUR_KEY']);
 
 // Or use the currencylayer.com service
 $service = new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]);
-
-// Or use the 1forge.com service
-$service = new Forge($client, null, ['api_key' => 'api_key']);
 
 // Create Exchanger with your service
 $exchanger = new Exchanger($service);
@@ -116,17 +112,14 @@ Simply create a `Chain` service to wrap the services you want to chain.
 use Exchanger\Service\Chain;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
-use Exchanger\Service\Forge;
 
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
-    new Forge($client, null, ['api_key' => 'api_key']),
 ]);
 ```
 
-The rates will be first fetched using the `Fixer` service, will fallback to `CurrencyLayer` and
-then `Forge`.
+The rates will be first fetched using the `Fixer` service, will fallback to `CurrencyLayer`.
 
 > You can consult the list of the supported services and their options [here](#supported-services)
 
@@ -318,7 +311,6 @@ Here is the complete list of supported services and their possible configuration
 use Exchanger\Service\Chain;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
-use Exchanger\Service\Forge;
 use Exchanger\Service\CentralBankOfCzechRepublic;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\CurrencyDataFeed;
@@ -326,6 +318,7 @@ use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
 use Exchanger\Service\PhpArray;
+use Exchanger\Service\Forge;
 use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\RussianCentralBank;
@@ -334,12 +327,12 @@ use Exchanger\Service\Cryptonator;
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
-    new Forge($client, null, ['api_key' => 'api_key']),
     new EuropeanCentralBank(),
     new NationalBankOfRomania(),
     new CentralBankOfRepublicTurkey(),
     new CentralBankOfCzechRepublic(),
     new RussianCentralBank(),
+    new Forge($client, null, ['api_key' => 'api_key']),
     new WebserviceX(),
     new Cryptonator(),
     new CurrencyDataFeed($client, null, ['api_key' => 'api_key']),
@@ -375,8 +368,3 @@ They provide real-time rates and historical data, however, EUR is the only avail
 
 Currencylayer provides reliable exchange rates and currency conversions for your business up to 168 world currencies.
 They provide real-time rates and historical data, however, USD is the only available base currency on the free plan.
-
-<img src="https://s3.amazonaws.com/swap.assets/1forge_icon.png" height="20px" width="20px"/> **[1Forge](https://1forge.com)**
-
-1Forge provides Forex and Cryptocurrency quotes for over 700 unique currency pairs. 
-They provide the fastest price updates available of any provider, however, they don’t support smaller currencies or historical data.
