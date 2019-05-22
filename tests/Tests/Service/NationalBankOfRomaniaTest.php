@@ -38,7 +38,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_quote_is_not_ron()
     {
-        $url = 'http://www.bnr.ro/nbrfxrates.xml';
+        $url = 'https://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
@@ -51,7 +51,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
-        $url = 'http://www.bnr.ro/nbrfxrates.xml';
+        $url = 'https://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
@@ -64,7 +64,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/RON');
-        $url = 'http://www.bnr.ro/nbrfxrates.xml';
+        $url = 'https://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
@@ -82,7 +82,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     public function it_fetches_a_multiplier_rate()
     {
         $pair = CurrencyPair::createFromString('HUF/RON');
-        $url = 'http://www.bnr.ro/nbrfxrates.xml';
+        $url = 'https://www.bnr.ro/nbrfxrates.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
@@ -100,7 +100,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/RON');
-        $url = 'http://www.bnr.ro/files/xml/years/nbrfxrates2018.xml';
+        $url = 'https://www.bnr.ro/files/xml/years/nbrfxrates2018.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
@@ -121,7 +121,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
-        $url = 'http://www.bnr.ro/files/xml/years/nbrfxrates2018.xml';
+        $url = 'https://www.bnr.ro/files/xml/years/nbrfxrates2018.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
@@ -137,7 +137,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
-        $url = 'http://www.bnr.ro/files/xml/years/nbrfxrates2018.xml';
+        $url = 'https://www.bnr.ro/files/xml/years/nbrfxrates2018.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
