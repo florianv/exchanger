@@ -31,9 +31,9 @@ final class NationalBankOfRomania extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const URL = 'http://www.bnr.ro/nbrfxrates.xml';
+    const URL = 'https://www.bnr.ro/nbrfxrates.xml';
 
-    const HISTORICAL_URL_TEMPLATE = 'http://www.bnr.ro/files/xml/years/nbrfxrates{year}.xml';
+    const HISTORICAL_URL_TEMPLATE = 'https://www.bnr.ro/files/xml/years/nbrfxrates{year}.xml';
 
     /**
      * {@inheritdoc}
