@@ -95,7 +95,7 @@ final class Exchanger implements ExchangeRateProviderContract
 
         $item = $this->cache->get($cacheKey);
 
-        if (null !== $item) {
+        if (null !== $item && $item instanceof ExchangeRateContract) {
             return $item;
         }
 
