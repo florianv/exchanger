@@ -1,0 +1,336 @@
+﻿<?xml version="1.0"?>
+<ROWSET>
+    <ROW>
+        <GOLD>0</GOLD>
+        <TITLE>Курсове на българския лев към отделни чуждестранни валути и цена на златото, валидни за 01.02.2019</TITLE>
+        <CURR_DATE>Date</CURR_DATE>
+        <NAME_>Наименование</NAME_>
+        <CODE>Код</CODE>
+        <RATIO>За единица валута/злато</RATIO>
+        <REVERSERATE>Обратен курс: за един лев</REVERSERATE>
+        <RATE>Лева (BGN)</RATE>
+        <EXTRAINFO>Забележка: Валутните курсове се определят на основание чл. 12 от Валутния закон и се използват за целите, предвидени по закон.</EXTRAINFO>
+        <PERIOD_>Период</PERIOD_>
+        <PER_RATE>(за\курс)</PER_RATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Австралийски долар</NAME_>
+        <CODE>AUD</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>0.807278</REVERSERATE>
+        <RATE>1.23873</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Бразилски реал</NAME_>
+        <CODE>BRL</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>2.15305</REVERSERATE>
+        <RATE>4.64457</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Канадски долар</NAME_>
+        <CODE>CAD</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>0.770772</REVERSERATE>
+        <RATE>1.2974</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Швейцарски франк</NAME_>
+        <CODE>CHF</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>0.582669</REVERSERATE>
+        <RATE>1.71624</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Китайски ренминби юан</NAME_>
+        <CODE>CNY</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>3.95034</REVERSERATE>
+        <RATE>2.53143</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Чешка крона</NAME_>
+        <CODE>CZK</CODE>
+        <RATIO>100</RATIO>
+        <REVERSERATE>13.1377</REVERSERATE>
+        <RATE>7.61171</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Датска крона</NAME_>
+        <CODE>DKK</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>3.817</REVERSERATE>
+        <RATE>2.61986</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Британска лира</NAME_>
+        <CODE>GBP</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>0.449363</REVERSERATE>
+        <RATE>2.22537</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Хонконгски  долар</NAME_>
+        <CODE>HKD</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>4.60225</REVERSERATE>
+        <RATE>2.17285</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Хърватска куна</NAME_>
+        <CODE>HRK</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>3.79122</REVERSERATE>
+        <RATE>2.63767</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Унгарски форинт</NAME_>
+        <CODE>HUF</CODE>
+        <RATIO>1000</RATIO>
+        <REVERSERATE>162.402</REVERSERATE>
+        <RATE>6.15757</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Индонезийска рупия</NAME_>
+        <CODE>IDR</CODE>
+        <RATIO>10000</RATIO>
+        <REVERSERATE>8185.52</REVERSERATE>
+        <RATE>1.22167</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Израелски шекел</NAME_>
+        <CODE>ILS</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>2.12948</REVERSERATE>
+        <RATE>4.69598</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Индийска рупия</NAME_>
+        <CODE>INR</CODE>
+        <RATIO>100</RATIO>
+        <REVERSERATE>41.8088</REVERSERATE>
+        <RATE>2.39184</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Исландска крона</NAME_>
+        <CODE>ISK</CODE>
+        <RATIO>100</RATIO>
+        <REVERSERATE>70.4558</REVERSERATE>
+        <RATE>1.41933</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Японска йена</NAME_>
+        <CODE>JPY</CODE>
+        <RATIO>100</RATIO>
+        <REVERSERATE>63.8655</REVERSERATE>
+        <RATE>1.56579</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Южнокорейски вон</NAME_>
+        <CODE>KRW</CODE>
+        <RATIO>1000</RATIO>
+        <REVERSERATE>655.132</REVERSERATE>
+        <RATE>1.52641</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Мексиканско песо</NAME_>
+        <CODE>MXN</CODE>
+        <RATIO>100</RATIO>
+        <REVERSERATE>11.2206</REVERSERATE>
+        <RATE>8.91221</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Малайзийски рингит</NAME_>
+        <CODE>MYR</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>2.39484</REVERSERATE>
+        <RATE>4.17564</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Норвежка крона</NAME_>
+        <CODE>NOK</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>4.94342</REVERSERATE>
+        <RATE>2.02289</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Новозеландски долар</NAME_>
+        <CODE>NZD</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>0.847056</REVERSERATE>
+        <RATE>1.18056</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Филипинско песо</NAME_>
+        <CODE>PHP</CODE>
+        <RATIO>100</RATIO>
+        <REVERSERATE>30.6345</REVERSERATE>
+        <RATE>3.26429</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Полска злота</NAME_>
+        <CODE>PLN</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>2.18521</REVERSERATE>
+        <RATE>4.57622</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Румънска лея</NAME_>
+        <CODE>RON</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>2.43155</REVERSERATE>
+        <RATE>4.1126</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Руска рубла</NAME_>
+        <CODE>RUB</CODE>
+        <RATIO>100</RATIO>
+        <REVERSERATE>38.407</REVERSERATE>
+        <RATE>2.60369</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Шведска крона</NAME_>
+        <CODE>SEK</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>5.31121</REVERSERATE>
+        <RATE>1.88281</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Сингапурски долар</NAME_>
+        <CODE>SGD</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>0.79107</REVERSERATE>
+        <RATE>1.26411</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Тайландски бат</NAME_>
+        <CODE>THB</CODE>
+        <RATIO>100</RATIO>
+        <REVERSERATE>18.3518</REVERSERATE>
+        <RATE>5.44906</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Турска лира</NAME_>
+        <CODE>TRY</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>3.06182</REVERSERATE>
+        <RATE>3.26603</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Щатски долар</NAME_>
+        <CODE>USD</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>0.586503</REVERSERATE>
+        <RATE>1.70502</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Южноафрикански ранд</NAME_>
+        <CODE>ZAR</CODE>
+        <RATIO>10</RATIO>
+        <REVERSERATE>7.81568</REVERSERATE>
+        <RATE>1.27948</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>2</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Злато (в трой унции)</NAME_>
+        <CODE>XAU</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>n/a</REVERSERATE>
+        <RATE>2250.83</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+</ROWSET>
