@@ -175,6 +175,98 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
+     * @expectedException \Exchanger\Exception\UnsupportedDateException
+     */
+    public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected()
+    {
+        $expectedExceptionMessage = 'The date "%s" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
+        $this->expectExceptionMessage(sprintf($expectedExceptionMessage, date('Y-m-d')));
+
+        $pair = CurrencyPair::createFromString('AUD/BGN');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+
+        $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
+        $service->getExchangeRate(new ExchangeRateQuery($pair));
+    }
+
+    /**
+     * @test
+     * @expectedException \Exchanger\Exception\UnsupportedDateException
+     * @expectedExceptionMessage The date "2019-02-01" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
+     */
+    public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected_historical()
+    {
+        $pair = CurrencyPair::createFromString('AUD/BGN');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+
+        $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
+        $service->getExchangeRate(
+            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01'))
+        );
+    }
+
+    /**
+     * @test
+     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
+     * @expectedExceptionMessage The currency pair "CAD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
+     */
+    public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected()
+    {
+        $pair = CurrencyPair::createFromString('CAD/BGN');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+
+        $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
+        $service->getExchangeRate(new ExchangeRateQuery($pair));
+    }
+
+    /**
+     * @test
+     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
+     * @expectedExceptionMessage The currency pair "CAD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
+     */
+    public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected_historical()
+    {
+        $pair = CurrencyPair::createFromString('CAD/BGN');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+
+        $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
+        $service->getExchangeRate(
+            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01'))
+        );
+    }
+
+    /**
+     * @test
+     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
+     * @expectedExceptionMessage The currency pair "USD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
+     */
+    public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected()
+    {
+        $pair = CurrencyPair::createFromString('USD/BGN');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+
+        $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
+        $service->getExchangeRate(new ExchangeRateQuery($pair));
+    }
+
+    /**
+     * @test
+     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
+     * @expectedExceptionMessage The currency pair "USD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
+     */
+    public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected_historical()
+    {
+        $pair = CurrencyPair::createFromString('USD/BGN');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+
+        $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
+        $service->getExchangeRate(
+            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01'))
+        );
+    }
+
+    /**
+     * @test
      */
     public function it_has_a_name()
     {

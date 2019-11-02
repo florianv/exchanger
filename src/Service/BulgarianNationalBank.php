@@ -74,13 +74,21 @@ final class BulgarianNationalBank extends HttpService
             throw new UnsupportedDateException($requestedDate, $this);
         }
         $elements = $element->xpath('./ROW[CODE="'.$baseCurrency.'"]');
-        $date = \DateTime::createFromFormat('!d.m.Y', (string) $elements['0']->CURR_DATE);
 
-        if (empty($elements) || !$date) {
+        if (!isset($elements['0'])) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
+        $date = \DateTime::createFromFormat('!d.m.Y', (string) $elements['0']->CURR_DATE);
         $rate = str_replace(',', '.', (string) $elements['0']->RATE);
         $ratio = str_replace(',', '.', (string) $elements['0']->RATIO);
+
+        if (!$date) {
+            throw new UnsupportedDateException($requestedDate, $this);
+        }
+
+        if (!$rate || !$ratio) {
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
+        }
 
         return $this->createRate($currencyPair, (float) $rate / $ratio, $date);
     }

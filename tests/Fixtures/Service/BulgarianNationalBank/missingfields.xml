@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<ROWSET>
+    <ROW>
+        <GOLD>1</GOLD>
+        <NAME_>Австралийски долар</NAME_>
+        <CODE>AUD</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>0.807278</REVERSERATE>
+        <RATE>1.23873</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Канадски долар</NAME_>
+        <CODE>CAD</CODE>
+        <REVERSERATE>0.770772</REVERSERATE>
+        <RATE>1.2974</RATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+    <ROW>
+        <GOLD>1</GOLD>
+        <CURR_DATE>01.02.2019</CURR_DATE>
+        <NAME_>Щатски долар</NAME_>
+        <CODE>USD</CODE>
+        <RATIO>1</RATIO>
+        <REVERSERATE>0.586503</REVERSERATE>
+        <S2_CURR_DATE>01-FEB-19</S2_CURR_DATE>
+    </ROW>
+</ROWSET>
