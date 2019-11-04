@@ -28,6 +28,7 @@ final class Registry
     public static function getServices(): array
     {
         return [
+            'bulgarian_national_bank' => BulgarianNationalBank::class,
             'central_bank_of_czech_republic' => CentralBankOfCzechRepublic::class,
             'central_bank_of_republic_turkey' => CentralBankOfRepublicTurkey::class,
             'cryptonator' => Cryptonator::class,
