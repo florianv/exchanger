@@ -68,11 +68,11 @@ class EuropeanCentralBankTest extends ServiceTestCase
     public function it_fetches_a_historical_rate_within_90_days_back()
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
-        $content = file_get_contents($url);
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/historical-90d.xml');
 
         $pair = CurrencyPair::createFromString('EUR/JPY');
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
-        $date = new \DateTime('-1 day');
+        $date = new \DateTime('2019-11-29');
 
         $rate = $service->getExchangeRate(
             new HistoricalExchangeRateQuery($pair, $date)
