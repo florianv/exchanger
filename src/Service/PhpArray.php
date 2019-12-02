@@ -131,10 +131,7 @@ final class PhpArray extends Service
     {
         foreach ($rates as $rate) {
             if (!is_scalar($rate)) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Rates passed to the PhpArray service must be scalars, "%s" given.',
-                    gettype($rate)
-                ));
+                throw new \InvalidArgumentException(sprintf('Rates passed to the PhpArray service must be scalars, "%s" given.', gettype($rate)));
             }
         }
     }
