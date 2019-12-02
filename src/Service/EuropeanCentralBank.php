@@ -31,7 +31,9 @@ final class EuropeanCentralBank extends HttpService
 
     const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
 
-    const HISTORICAL_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
+    const HISTORICAL_URL_LIMITED_TO_90_DAYS_BACK = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
+
+    const HISTORICAL_URL_OLDER_THAN_90_DAYS = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
 
     /**
      * {@inheritdoc}
@@ -61,7 +63,8 @@ final class EuropeanCentralBank extends HttpService
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
-        $content = $this->request(self::HISTORICAL_URL);
+        $historicalUrl = $this->getHistoricalUrl($exchangeQuery->getDate());
+        $content = $this->request($historicalUrl);
 
         $element = StringUtil::xmlToElement($content);
         $element->registerXPathNamespace('xmlns', 'http://www.ecb.int/vocabulary/2002-08-01/eurofxref');
@@ -96,5 +99,22 @@ final class EuropeanCentralBank extends HttpService
     public function getName(): string
     {
         return 'european_central_bank';
+    }
+
+    /**
+     * @param \DateTimeInterface $date
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private function getHistoricalUrl(\DateTimeInterface $date): string
+    {
+        $dateDiffInDays = $date->diff(new \DateTime('now'))->days;
+        if ($dateDiffInDays > 90) {
+            return self::HISTORICAL_URL_OLDER_THAN_90_DAYS;
+        }
+
+        return self::HISTORICAL_URL_LIMITED_TO_90_DAYS_BACK;
     }
 }
