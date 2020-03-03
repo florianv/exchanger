@@ -72,7 +72,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
 
         $pair = CurrencyPair::createFromString('EUR/JPY');
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
-        $date = (new \DateTime)->modify('2019-11-29');
+        $date = (new \DateTime())->modify('2019-11-29');
 
         $rate = $service->getExchangeRate(
             new HistoricalExchangeRateQuery($pair, $date)
