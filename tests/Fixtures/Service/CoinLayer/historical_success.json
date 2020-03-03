@@ -1,0 +1,13 @@
+{
+    "success": true,
+    "terms": "https://coinlayer.com/terms",
+    "privacy": "https://coinlayer.com/privacy",
+    "timestamp": 1577923149,
+    "target": "USD",
+    "historical": true,
+    "date": "2020-01-01",
+    "rates": {
+        "BTC": 7231.458803,
+        "ETH": 131.312114
+    }
+}

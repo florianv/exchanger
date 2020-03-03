@@ -376,10 +376,12 @@ use Exchanger\Service\WebserviceX;
 use Exchanger\Service\Xignite;
 use Exchanger\Service\RussianCentralBank;
 use Exchanger\Service\Cryptonator;
+use Exchanger\Service\CoinLayer;
 
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
+    new CoinLayer($client, null, ['access_key' => 'access_key', 'paid' => false]),
     new EuropeanCentralBank(),
     new ExchangeRatesApi(),
     new NationalBankOfRomania(),

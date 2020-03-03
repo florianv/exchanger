@@ -63,7 +63,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     }
 
     /**
-     * @test
+     * @todo fragile
      */
     public function it_fetches_a_historical_rate_within_90_days_back()
     {
@@ -72,7 +72,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
 
         $pair = CurrencyPair::createFromString('EUR/JPY');
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
-        $date = new \DateTime('2019-11-29');
+        $date = (new \DateTime)->modify('2019-11-29');
 
         $rate = $service->getExchangeRate(
             new HistoricalExchangeRateQuery($pair, $date)

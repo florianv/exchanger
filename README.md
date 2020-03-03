@@ -35,6 +35,7 @@ Here is the complete list of the currently implemented services:
 |---------------------------------------------------------------------------|----------------------|----------------|----------------|
 | [Fixer](https://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
 | [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
+| [coinlayer](https://coinlayer.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies) | Yes |
 | [European Central Bank](https://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
 | [National Bank of Romania](http://www.bnr.ro) | RON | * | Yes |
 | [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | Yes |

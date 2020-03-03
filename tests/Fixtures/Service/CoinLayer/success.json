@@ -1,0 +1,11 @@
+{
+    "success": true,
+    "terms": "https://coinlayer.com/terms",
+    "privacy": "https://coinlayer.com/privacy",
+    "timestamp": 1583227144,
+    "target": "USD",
+    "rates": {
+        "BTC": 8822.633507,
+        "ETH": 228.659684
+    }
+}
