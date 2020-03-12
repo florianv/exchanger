@@ -13,7 +13,7 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
  */
 class Forge extends Service
 {
-    const URL = 'https://forex.1forge.com/latest/quotes?pairs=%s&api_key=%s';
+    const URL = 'https://api.1forge.com/quotes?pairs=%s&api_key=%s';
 
     /**
      * {@inheritdoc}
