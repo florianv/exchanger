@@ -37,7 +37,7 @@ final class Chain implements ExchangeRateService
      *
      * @param ExchangeRateService[] $services
      */
-    public function __construct(array $services = [])
+    public function __construct(iterable $services = [])
     {
         $this->services = $services;
     }
