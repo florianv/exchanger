@@ -33,9 +33,9 @@ final class Fixer extends HttpService
 
     const ACCESS_KEY_OPTION = 'access_key';
 
-    const ENTERPRISE_LATEST_URL = 'http://data.fixer.io/api/latest?base=%s&access_key=%s';
+    const ENTERPRISE_LATEST_URL = 'https://data.fixer.io/api/latest?base=%s&access_key=%s';
 
-    const ENTERPRISE_HISTORICAL_URL = 'http://data.fixer.io/api/%s?base=%s&access_key=%s';
+    const ENTERPRISE_HISTORICAL_URL = 'https://data.fixer.io/api/%s?base=%s&access_key=%s';
 
     const FREE_LATEST_URL = 'http://data.fixer.io/api/latest?access_key=%s';
 
