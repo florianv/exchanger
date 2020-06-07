@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Contract\ExchangeRateService;
 use Exchanger\Exception\ChainException;
 use Exchanger\Exception\Exception;
 use Exchanger\ExchangeRate;
@@ -172,5 +173,46 @@ class ChainTest extends TestCase
         $service = new Chain();
 
         $this->assertSame('chain', $service->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_convert_multiple_times()
+    {
+        $generator = function(): \Generator
+        {
+            $serviceOne = $this->createMock(ExchangeRateService::class);
+            $serviceOne
+                ->method("supportQuery")
+                ->willReturn(false);
+
+            yield $serviceOne;
+
+            $serviceTwo = $this->createMock(ExchangeRateService::class);
+            $serviceTwo
+                ->method("supportQuery")
+                ->willReturn(true);
+
+            $exchangeRate = new ExchangeRate(CurrencyPair::createFromString("EUR/USD"), 0.8, new \DateTimeImmutable(), "mock");
+
+            $serviceTwo->expects($this->exactly(2))
+                ->method("getExchangeRate")
+                ->willReturn($exchangeRate);
+
+            yield $serviceTwo;
+        };
+
+        $chain = new Chain($generator());
+
+        $query = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
+
+        $this->assertTrue($chain->supportQuery($query));
+        $exchangeRate = $chain->getExchangeRate($query);
+        $this->assertEquals(0.8, $exchangeRate->getValue());
+
+        $this->assertTrue($chain->supportQuery($query));
+        $exchangeRate = $chain->getExchangeRate($query);
+        $this->assertEquals(0.8, $exchangeRate->getValue());
     }
 }
