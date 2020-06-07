@@ -28,7 +28,7 @@ final class Chain implements ExchangeRateService
     /**
      * The services.
      *
-     * @var array
+     * @var array|ExchangeRateService[]
      */
     private $services;
 

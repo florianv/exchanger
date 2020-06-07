@@ -180,24 +180,23 @@ class ChainTest extends TestCase
      */
     public function it_can_convert_multiple_times()
     {
-        $generator = function(): \Generator
-        {
+        $generator = function (): \Generator {
             $serviceOne = $this->createMock(ExchangeRateService::class);
             $serviceOne
-                ->method("supportQuery")
+                ->method('supportQuery')
                 ->willReturn(false);
 
             yield $serviceOne;
 
             $serviceTwo = $this->createMock(ExchangeRateService::class);
             $serviceTwo
-                ->method("supportQuery")
+                ->method('supportQuery')
                 ->willReturn(true);
 
-            $exchangeRate = new ExchangeRate(CurrencyPair::createFromString("EUR/USD"), 0.8, new \DateTimeImmutable(), "mock");
+            $exchangeRate = new ExchangeRate(CurrencyPair::createFromString('EUR/USD'), 0.8, new \DateTimeImmutable(), 'mock');
 
             $serviceTwo->expects($this->exactly(2))
-                ->method("getExchangeRate")
+                ->method('getExchangeRate')
                 ->willReturn($exchangeRate);
 
             yield $serviceTwo;
