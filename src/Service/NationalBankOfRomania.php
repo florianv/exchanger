@@ -72,7 +72,7 @@ final class NationalBankOfRomania extends HttpService
 
     /**
      * {@inheritdoc}
-     * 
+     *
      * @throws UnsupportedCurrencyPairException
      */
     public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
