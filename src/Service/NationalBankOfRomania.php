@@ -172,7 +172,7 @@ final class NationalBankOfRomania extends HttpService
 
     /**
      * @param \SimpleXMLElement $element
-     * @param CurrencyPair $currencyPair
+     * @param CurrencyPair      $currencyPair
      *
      * @return float
      */
