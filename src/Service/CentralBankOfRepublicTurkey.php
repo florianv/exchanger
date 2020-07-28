@@ -32,7 +32,7 @@ final class CentralBankOfRepublicTurkey extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const BASE_URL = 'http://www.tcmb.gov.tr/kurlar/';
+    const BASE_URL = 'https://www.tcmb.gov.tr/kurlar/';
 
     const FILE_EXTENSION = '.xml';
 
