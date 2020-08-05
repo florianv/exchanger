@@ -91,13 +91,11 @@ final class XchangeApi extends HttpService
      * Array of codes supported according to.
      *
      * @url https://xchangeapi.com/currencies
-     *
-     * @return array
      */
     private function getSupportedCodes(): array
     {
         return require __DIR__.'/resources/xchangeapi-codes.php';
-    }       
+    }
 
     /**
      * Creates a rate.
