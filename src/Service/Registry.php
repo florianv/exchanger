@@ -47,6 +47,7 @@ final class Registry
             'xignite' => Xignite::class,
             'national_bank_of_ukraine' => NationalBankOfUkraine::class,
             'coin_layer' => CoinLayer::class,
+            'xchangeapi' => XchangeApi::class
         ];
     }
 }
