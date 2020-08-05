@@ -377,6 +377,7 @@ use Exchanger\Service\Xignite;
 use Exchanger\Service\RussianCentralBank;
 use Exchanger\Service\Cryptonator;
 use Exchanger\Service\CoinLayer;
+use Exchanger\Service\XchangeApi;
 
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
@@ -408,6 +409,7 @@ $service = new Chain([
             ],
         ]
     ),
+    new XchangeApi($client, null, ['api-key' => 'YOUR_KEY']),
 ]);
 ```
 

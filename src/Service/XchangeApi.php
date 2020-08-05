@@ -31,7 +31,7 @@ final class XchangeApi extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const ACCESS_KEY_OPTION = 'api-key';
+    const API_KEY_OPTION = 'api-key';
 
     const LATEST_URL = 'https://api.xchangeapi.com/latest?base=%s&api-key=%s';
 
@@ -42,8 +42,8 @@ final class XchangeApi extends HttpService
      */
     public function processOptions(array &$options): void
     {
-        if (!isset($options[self::ACCESS_KEY_OPTION])) {
-            throw new \InvalidArgumentException('The "api-key" option must be provided to use xChangeAPI.com');
+        if (!isset($options[self::API_KEY_OPTION])) {
+            throw new \InvalidArgumentException('The "api-key" option must be provided to use xChangeApi.com');
         }
     }
 
@@ -57,7 +57,7 @@ final class XchangeApi extends HttpService
         $url = sprintf(
             self::LATEST_URL,
             $currencyPair->getBaseCurrency(),
-            $this->options[self::ACCESS_KEY_OPTION]
+            $this->options[self::API_KEY_OPTION]
         );
 
         return $this->doCreateRate($url, $currencyPair);
@@ -72,7 +72,7 @@ final class XchangeApi extends HttpService
         $url = sprintf(
             self::HISTORICAL_URL,
             $exchangeQuery->getDate()->format('Y-m-d'),
-            $this->options[self::ACCESS_KEY_OPTION]
+            $this->options[self::API_KEY_OPTION]
         );
 
         return $this->doCreateRate($url, $currencyPair);
@@ -83,8 +83,21 @@ final class XchangeApi extends HttpService
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
-        return true;
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+        return in_array($currencyPair->getBaseCurrency(), $this->getSupportedCodes());
     }
+
+    /**
+     * Array of codes supported according to.
+     *
+     * @url https://xchangeapi.com/currencies
+     *
+     * @return array
+     */
+    private function getSupportedCodes(): array
+    {
+        return require __DIR__.'/resources/xchangeapi-codes.php';
+    }       
 
     /**
      * Creates a rate.

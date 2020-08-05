@@ -45,8 +45,8 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$url = 'http://www.tcmb.gov.tr/kurlar/today.xml';
-        self::$historicalUrl = 'http://www.tcmb.gov.tr/kurlar/201304/23042013.xml';
+        self::$url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
+        self::$historicalUrl = 'https://www.tcmb.gov.tr/kurlar/201304/23042013.xml';
         self::$content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
         self::$historicalContent = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_historical.xml');
     }
@@ -97,7 +97,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
-        $url = 'http://www.tcmb.gov.tr/kurlar/today.xml';
+        $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));
@@ -109,7 +109,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
-        $url = 'http://www.tcmb.gov.tr/kurlar/today.xml';
+        $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $pair = CurrencyPair::createFromString('EUR/TRY');
