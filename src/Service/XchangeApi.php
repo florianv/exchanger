@@ -84,6 +84,7 @@ final class XchangeApi extends HttpService
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
+
         return in_array($currencyPair->getBaseCurrency(), $this->getSupportedCodes());
     }
 
@@ -100,12 +101,7 @@ final class XchangeApi extends HttpService
     /**
      * Creates a rate.
      *
-     * @param string       $url
-     * @param CurrencyPair $currencyPair
-     *
-     * @return ExchangeRate
-     *
-     * @throws Exception
+     * @param string $url
      */
     private function doCreateRate($url, CurrencyPair $currencyPair): ExchangeRate
     {

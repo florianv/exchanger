@@ -27,5 +27,5 @@ return [
     'CHF',
     'CAD',
     'BRL',
-    'ZAR'
+    'ZAR',
 ];
