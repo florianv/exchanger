@@ -52,7 +52,7 @@ final class Forge extends HttpService
     public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
-        $currencySymbol = $currencyPair->getBaseCurrency() . '/' . $currencyPair->getQuoteCurrency();
+        $currencySymbol = $currencyPair->getBaseCurrency().'/'.$currencyPair->getQuoteCurrency();
         $url = sprintf(self::URL, $currencySymbol, $this->options['api_key']);
 
         $content = $this->request($url);
