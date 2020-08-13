@@ -26,7 +26,7 @@ class ForgeTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_rate_not_supported()
     {
-        $url = 'https://api.1forge.com/quotes?pairs=EURZZZ&api_key=secret';
+        $url = 'https://api.1forge.com/quotes?pairs=EUR/ZZZ&api_key=secret';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/error.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
@@ -38,7 +38,7 @@ class ForgeTest extends ServiceTestCase
      */
     public function it_fetches_a_rate()
     {
-        $url = 'https://api.1forge.com/quotes?pairs=EURUSD&api_key=secret';
+        $url = 'https://api.1forge.com/quotes?pairs=EUR/USD&api_key=secret';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/success.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
@@ -53,7 +53,7 @@ class ForgeTest extends ServiceTestCase
      */
     public function it_fetches_a_rate_when_response_symbol_matches()
     {
-        $url = 'https://api.1forge.com/quotes?pairs=EURHKD&api_key=secret';
+        $url = 'https://api.1forge.com/quotes?pairs=EUR/HKD&api_key=secret';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/multiple.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
@@ -68,7 +68,7 @@ class ForgeTest extends ServiceTestCase
      */
     public function it_throws_an_exception_when_response_symbol_does_not_match()
     {
-        $url = 'https://api.1forge.com/quotes?pairs=USDAED&api_key=secret';
+        $url = 'https://api.1forge.com/quotes?pairs=USD/AED&api_key=secret';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/multiple.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
