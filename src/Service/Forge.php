@@ -52,7 +52,7 @@ final class Forge extends HttpService
     public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
-        $currencySymbol = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
+        $currencySymbol = $currencyPair->getBaseCurrency().'/'.$currencyPair->getQuoteCurrency();
         $url = sprintf(self::URL, $currencySymbol, $this->options['api_key']);
 
         $content = $this->request($url);
@@ -61,12 +61,12 @@ final class Forge extends HttpService
         if ($result = reset($data)) {
             $date = new \DateTime();
 
-            if (null !== $result['timestamp']) {
-                $date->setTimestamp($result['timestamp']);
+            if (null !== $result['t']) {
+                $date->setTimestamp($result['t']);
             }
 
-            if ($result['symbol'] == $currencySymbol) {
-                return $this->createRate($currencyPair, (float) ($result['price']), $date);
+            if ($result['s'] == $currencySymbol) {
+                return $this->createRate($currencyPair, (float) ($result['p']), $date);
             }
         }
 
