@@ -30,17 +30,11 @@ trait SupportsHistoricalQueries
      */
     public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract
     {
-        $currencyPair = $exchangeQuery->getCurrencyPair();
-
         if ($exchangeQuery instanceof HistoricalExchangeRateQueryContract) {
-            if ($rate = $this->getHistoricalExchangeRate($exchangeQuery)) {
-                return $rate;
-            }
-        } elseif ($rate = $this->getLatestExchangeRate($exchangeQuery)) {
-            return $rate;
+            return $this->getHistoricalExchangeRate($exchangeQuery);
         }
 
-        throw new UnsupportedCurrencyPairException($currencyPair, $this);
+        return $this->getLatestExchangeRate($exchangeQuery);
     }
 
     /**
