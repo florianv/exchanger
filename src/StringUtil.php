@@ -23,11 +23,7 @@ final class StringUtil
     /**
      * Transforms an XML string to an element.
      *
-     * @param string $string
-     *
      * @throws \RuntimeException
-     *
-     * @return \SimpleXMLElement
      */
     public static function xmlToElement(string $string): \SimpleXMLElement
     {
@@ -50,11 +46,7 @@ final class StringUtil
     /**
      * Transforms a JSON string to an array.
      *
-     * @param string $string
-     *
      * @throws \RuntimeException
-     *
-     * @return array
      */
     public static function jsonToArray(string $string): array
     {
