@@ -16,6 +16,8 @@ namespace Exchanger\Tests;
 use Exchanger\ExchangeRate;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\CurrencyPair;
+use Exchanger\Exception\CacheException;
+use Exchanger\Exception\UnsupportedExchangeQueryException;
 use Exchanger\Exchanger;
 use PHPUnit\Framework\TestCase;
 
@@ -23,10 +25,10 @@ class ExchangerTest extends TestCase
 {
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedExchangeQueryException
      */
     public function it_throws_an_exception_when_service_does_not_support_query()
     {
+        $this->expectException(UnsupportedExchangeQueryException::class);
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $service
@@ -268,10 +270,10 @@ class ExchangerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\CacheException
      */
     public function it_throws_an_exception_if_cache_key_is_too_long()
     {
+        $this->expectException(CacheException::class);
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
 
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
@@ -289,10 +291,10 @@ class ExchangerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedExchangeQueryException
      */
     public function it_throws_an_exception_if_service_cant_support_pair()
     {
+        $this->expectException(UnsupportedExchangeQueryException::class);
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
 
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');

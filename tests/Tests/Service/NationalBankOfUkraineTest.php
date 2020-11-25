@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
@@ -39,11 +41,13 @@ class NationalBankOfUkraineTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "XXL/UAH" is not supported by the service "Exchanger\Service\NationalBankOfUkraine".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "XXL/UAH" is not supported by the service "Exchanger\Service\NationalBankOfUkraine".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfUkraine/success.xml');
 
@@ -109,11 +113,13 @@ class NationalBankOfUkraineTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedDateException
-     * @expectedExceptionMessage The date "1990-01-01" is not supported by the service "Exchanger\Service\NationalBankOfUkraine".
      */
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
+        $this->expectException(UnsupportedDateException::class);
+        $expectedExceptionMessage = 'The date "1990-01-01" is not supported by the service "Exchanger\Service\NationalBankOfUkraine".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date=19900101';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfUkraine/historical_error.xml');
 
@@ -123,11 +129,13 @@ class NationalBankOfUkraineTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "XXL/UAH" is not supported by the service "Exchanger\Service\NationalBankOfUkraine".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "XXL/UAH" is not supported by the service "Exchanger\Service\NationalBankOfUkraine".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date=20190101';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfUkraine/historical.xml');
 

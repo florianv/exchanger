@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Exchanger\Tests\Service;
 
 use Exchanger\CurrencyPair;
+use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\BulgarianNationalBank;
@@ -27,7 +29,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     protected static $historicalUrl;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$url = sprintf(BulgarianNationalBank::URL, date('d'), date('m'), date('Y'));
         self::$historicalUrl = sprintf(BulgarianNationalBank::URL, '01', '02', '2019');
@@ -115,10 +117,10 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedDateException
      */
     public function it_throws_an_exception_when_it_cannot_retrieve_an_xml_document_for_the_requested_date()
     {
+        $this->expectException(UnsupportedDateException::class);
         $expectedExceptionMessage = 'The date "%s" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
         $this->expectExceptionMessage(sprintf($expectedExceptionMessage, date('Y-m-d')));
 
@@ -131,11 +133,13 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedDateException
-     * @expectedExceptionMessage The date "2019-02-01" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
      */
     public function it_throws_an_exception_when_it_cannot_retrieve_an_xml_document_for_the_requested_date_historical()
     {
+        $this->expectException(UnsupportedDateException::class);
+        $expectedExceptionMessage = 'The date "2019-02-01" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $pair = CurrencyPair::createFromString('EUR/BGN');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/failure.html');
 
@@ -145,11 +149,13 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "ABC/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "ABC/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $pair = CurrencyPair::createFromString('ABC/BGN');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/success.xml');
 
@@ -159,11 +165,13 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "ABC/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "ABC/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $pair = CurrencyPair::createFromString('ABC/BGN');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/success.xml');
 
@@ -175,10 +183,10 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedDateException
      */
     public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected()
     {
+        $this->expectException(UnsupportedDateException::class);
         $expectedExceptionMessage = 'The date "%s" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
         $this->expectExceptionMessage(sprintf($expectedExceptionMessage, date('Y-m-d')));
 
@@ -191,11 +199,13 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedDateException
-     * @expectedExceptionMessage The date "2019-02-01" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
      */
     public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected_historical()
     {
+        $this->expectException(UnsupportedDateException::class);
+        $expectedExceptionMessage = 'The date "2019-02-01" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
+        $this->expectExceptionMessage(sprintf($expectedExceptionMessage, date('Y-m-d')));
+
         $pair = CurrencyPair::createFromString('AUD/BGN');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
@@ -207,11 +217,13 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "CAD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
      */
     public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "CAD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $pair = CurrencyPair::createFromString('CAD/BGN');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
@@ -221,11 +233,13 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "CAD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
      */
     public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected_historical()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "CAD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $pair = CurrencyPair::createFromString('CAD/BGN');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
@@ -237,11 +251,13 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "USD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
      */
     public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "USD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $pair = CurrencyPair::createFromString('USD/BGN');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
@@ -251,11 +267,13 @@ class BulgarianNationalBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "USD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".
      */
     public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected_historical()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "USD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $pair = CurrencyPair::createFromString('USD/BGN');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\Exception;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
@@ -25,11 +26,11 @@ class CurrencyLayerTest extends ServiceTestCase
 {
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "access_key" option must be provided.
      */
     public function it_throws_an_exception_if_access_key_option_missing()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "access_key" option must be provided.');
         new CurrencyLayer($this->createMock('Http\Client\HttpClient'));
     }
 
@@ -44,10 +45,10 @@ class CurrencyLayerTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
      */
     public function it_throws_an_exception_with_error_response()
     {
+        $this->expectException(Exception::class);
         $uri = 'http://www.apilayer.net/api/live?access_key=secret&currencies=EUR';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyLayer/error.json');
 

@@ -42,10 +42,10 @@ class CurrencyPairTest extends TestCase
     /**
      * @test
      * @dataProvider invalidStringProvider
-     * @expectedException \InvalidArgumentException
      */
     public function it_throws_an_exception_when_creating_from_an_invalid_string($string)
     {
+        $this->expectException(\InvalidArgumentException::class);
         CurrencyPair::createFromString($string);
     }
 

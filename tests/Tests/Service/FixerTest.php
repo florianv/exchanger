@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\Exception;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
@@ -52,11 +53,13 @@ class FixerTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
-     * @expectedExceptionMessage The current subscription plan does not support this API endpoint.
      */
     public function it_throws_an_exception_with_error_response()
     {
+        $this->expectException(Exception::class);
+        $expectedExceptionMessage = 'The current subscription plan does not support this API endpoint.';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $uri = 'http://data.fixer.io/api/latest?access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/error.json');
 

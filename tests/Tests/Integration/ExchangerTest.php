@@ -27,7 +27,7 @@ class ExchangerTest extends TestCase
 {
     private $fixerAccessKey;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fixerAccessKey = getenv('FIXER_ACCESS_KEY');
     }

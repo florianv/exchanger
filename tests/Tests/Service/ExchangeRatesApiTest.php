@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Exchanger\Tests\Service;
 
 use Exchanger\CurrencyPair;
+use Exchanger\Exception\Exception;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\ExchangeRatesApi;
@@ -53,11 +54,12 @@ class ExchangeRatesApiTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
-     * @expectedExceptionMessage Base 'FOO' is not supported.
      */
     public function it_throws_an_exception_with_error_response()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Base \'FOO\' is not supported.');
+
         $uri = 'https://api.exchangeratesapi.io/latest?base=FOO';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangeRatesApi/error.json');
 

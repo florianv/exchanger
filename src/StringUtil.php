@@ -31,17 +31,14 @@ final class StringUtil
      */
     public static function xmlToElement(string $string): \SimpleXMLElement
     {
-        $disableEntities = libxml_disable_entity_loader(true);
         $internalErrors = libxml_use_internal_errors(true);
 
         try {
             // Allow XML to be retrieved even if there is no response body
             $xml = new \SimpleXMLElement($string ?: '<root />', LIBXML_NONET);
 
-            libxml_disable_entity_loader($disableEntities);
             libxml_use_internal_errors($internalErrors);
         } catch (\Exception $e) {
-            libxml_disable_entity_loader($disableEntities);
             libxml_use_internal_errors($internalErrors);
 
             throw new \RuntimeException('Unable to parse XML data: '.$e->getMessage());

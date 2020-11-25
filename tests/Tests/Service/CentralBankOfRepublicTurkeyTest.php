@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
@@ -43,7 +44,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     /**
      * Set up variables before TestCase is being initialized.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
         self::$historicalUrl = 'https://www.tcmb.gov.tr/kurlar/201304/23042013.xml';
@@ -54,7 +55,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     /**
      * Clean variables after TestCase finish.
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$url = null;
         self::$content = null;
@@ -93,10 +94,10 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
         $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
 

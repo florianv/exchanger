@@ -23,11 +23,11 @@ class XigniteTest extends ServiceTestCase
 {
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "token" option must be provided.
      */
     public function it_throws_an_exception_if_token_option_missing()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "token" option must be provided.');
         new Xignite($this->createMock('Http\Client\HttpClient'));
     }
 

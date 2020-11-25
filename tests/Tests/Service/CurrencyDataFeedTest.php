@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\Exception;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
@@ -33,10 +34,10 @@ class CurrencyDataFeedTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
      */
     public function it_throws_an_exception_when_rate_not_supported()
     {
+        $this->expectException(Exception::class);
         $url = 'https://currencydatafeed.com/api/data.php?token=secret&currency=EUR/ZZZ';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyDataFeed/error.json');
         $service = new CurrencyDataFeed($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
