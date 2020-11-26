@@ -16,7 +16,6 @@ namespace Exchanger\Service;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\HistoricalExchangeRateQuery as HistoricalExchangeRateQueryContract;
-use Exchanger\Exception\UnsupportedCurrencyPairException;
 
 /**
  * Trait to implement to add historical service support.
@@ -39,19 +38,11 @@ trait SupportsHistoricalQueries
 
     /**
      * Gets the latest rate.
-     *
-     * @param ExchangeRateQueryContract $exchangeQuery
-     *
-     * @return ExchangeRateContract
      */
     abstract protected function getLatestExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract;
 
     /**
      * Gets an historical rate.
-     *
-     * @param HistoricalExchangeRateQueryContract $exchangeQuery
-     *
-     * @return ExchangeRateContract
      */
     abstract protected function getHistoricalExchangeRate(HistoricalExchangeRateQueryContract $exchangeQuery): ExchangeRateContract;
 }
