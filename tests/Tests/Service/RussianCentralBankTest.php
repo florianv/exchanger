@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
@@ -34,11 +36,13 @@ class RussianCentralBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "XXL/RUB" is not supported by the service "Exchanger\Service\RussianCentralBank".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "XXL/RUB" is not supported by the service "Exchanger\Service\RussianCentralBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/RussianCentralBank/success.xml');
 
@@ -104,11 +108,13 @@ class RussianCentralBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedDateException
-     * @expectedExceptionMessage The date "1986-08-23" is not supported by the service "Exchanger\Service\RussianCentralBank".
      */
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
+        $this->expectException(UnsupportedDateException::class);
+        $expectedExceptionMessage = 'The date "1986-08-23" is not supported by the service "Exchanger\Service\RussianCentralBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=23.08.1986';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/RussianCentralBank/historical_error.xml');
 
@@ -118,11 +124,13 @@ class RussianCentralBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "XXL/RUB" is not supported by the service "Exchanger\Service\RussianCentralBank".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "XXL/RUB" is not supported by the service "Exchanger\Service\RussianCentralBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=23.08.2016';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/RussianCentralBank/historical.xml');
 

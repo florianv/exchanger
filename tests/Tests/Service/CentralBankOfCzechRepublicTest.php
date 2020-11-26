@@ -46,7 +46,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     /**
      * Set up variables before TestCase is being initialized.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$url = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date='.date('d.m.Y');
         self::$historicalUrl = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=23.04.2000';
@@ -57,7 +57,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     /**
      * Clean variables after TestCase finish.
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$url = null;
         self::$content = null;

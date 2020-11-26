@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Exchanger\Tests\Service;
 
 use Exchanger\CurrencyPair;
+use Exchanger\Exception\Exception;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\CurrencyConverter;
@@ -26,20 +27,20 @@ class CurrencyConverterTest extends TestCase
 {
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "access_key" option must be provided.
      */
     public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "access_key" option must be provided.');
         new CurrencyConverter($this->createMock(HttpClient::class), null, ['enterprise' => true]);
     }
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
      */
     public function it_throws_an_exception_with_error_response()
     {
+        $this->expectException(Exception::class);
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=XXX_YYY&date=2000-01-01';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyConverter/error.json');
 

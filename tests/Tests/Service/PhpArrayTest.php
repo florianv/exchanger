@@ -59,11 +59,12 @@ class PhpArrayTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Rates passed to the PhpArray service must be scalars, "array" given.
      */
     public function it_throws_an_exception_when_fetching_latest_invalid_rate()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Rates passed to the PhpArray service must be scalars, "array" given.');
+
         $arrayProvider = new PhpArray([
             'EUR/USD' => [],
         ]);
@@ -120,11 +121,13 @@ class PhpArrayTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Rates passed to the PhpArray service must be scalars, "array" given.
      */
     public function it_throws_an_exception_when_fetching_historical_invalid_rate()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $expectedExceptionMessage = 'Rates passed to the PhpArray service must be scalars, "array" given.';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $now = new \DateTimeImmutable();
 
         $arrayProvider = new PhpArray([], [

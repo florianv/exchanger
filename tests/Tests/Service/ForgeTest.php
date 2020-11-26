@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\Exception;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
@@ -33,10 +34,10 @@ class ForgeTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
      */
     public function it_throws_an_exception_when_rate_not_supported()
     {
+        $this->expectException(Exception::class);
         $url = 'https://api.1forge.com/quotes?pairs=EUR/ZZZ&api_key=secret';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/error.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
@@ -81,10 +82,10 @@ class ForgeTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
      */
     public function it_throws_an_exception_when_response_symbol_does_not_match()
     {
+        $this->expectException(Exception::class);
         $url = 'https://api.1forge.com/quotes?pairs=USD/AED&api_key=secret';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/multiple.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);

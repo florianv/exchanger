@@ -31,10 +31,10 @@ class StringUtilTest extends TestCase
 
     /**
      * @test
-     * @expectedException \RuntimeException
      */
     public function it_throws_an_exception_when_converting_invalid_xml()
     {
+        $this->expectException(\RuntimeException::class);
         StringUtil::xmlToElement('/');
     }
 
@@ -49,10 +49,10 @@ class StringUtilTest extends TestCase
 
     /**
      * @test
-     * @expectedException \RuntimeException
      */
     public function it_throws_an_exception_when_converting_invalid_json()
     {
+        $this->expectException(\RuntimeException::class);
         StringUtil::jsonToArray('/');
     }
 }

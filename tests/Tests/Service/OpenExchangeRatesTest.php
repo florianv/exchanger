@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\Exception;
+use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
@@ -22,11 +24,11 @@ class OpenExchangeRatesTest extends ServiceTestCase
 {
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "app_id" option must be provided.
      */
     public function it_throws_an_exception_if_app_id_option_missing()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "app_id" option must be provided.');
         new OpenExchangeRates($this->createMock('Http\Client\HttpClient'));
     }
 
@@ -43,10 +45,10 @@ class OpenExchangeRatesTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
      */
     public function it_throws_an_exception_with_error_response()
     {
+        $this->expectException(Exception::class);
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&show_alternative=1';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/error.json');
 
@@ -142,11 +144,13 @@ class OpenExchangeRatesTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
-     * @expectedExceptionMessage Historical rates for the requested date are not available - please try a different date, or contact support@openexchangerates.org.
      */
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
+        $this->expectException(Exception::class);
+        $expectedExceptionMessage = 'Historical rates for the requested date are not available - please try a different date, or contact support@openexchangerates.org.';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'https://openexchangerates.org/api/historical/1900-08-23.json?app_id=secret&show_alternative=1';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_error.json');
 
@@ -159,11 +163,13 @@ class OpenExchangeRatesTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "USD/XXL" is not supported by the service "Exchanger\Service\OpenExchangeRates".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "USD/XXL" is not supported by the service "Exchanger\Service\OpenExchangeRates".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&show_alternative=1';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 

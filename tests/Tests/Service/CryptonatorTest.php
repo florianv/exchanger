@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\Exception;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
@@ -43,10 +44,10 @@ class CryptonatorTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\Exception
      */
     public function it_throws_an_exception_when_rate_not_supported()
     {
+        $this->expectException(Exception::class);
         $uri = 'https://api.cryptonator.com/api/ticker/btc-isk';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Cryptonator/error.json');
 

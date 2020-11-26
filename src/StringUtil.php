@@ -23,25 +23,18 @@ final class StringUtil
     /**
      * Transforms an XML string to an element.
      *
-     * @param string $string
-     *
      * @throws \RuntimeException
-     *
-     * @return \SimpleXMLElement
      */
     public static function xmlToElement(string $string): \SimpleXMLElement
     {
-        $disableEntities = libxml_disable_entity_loader(true);
         $internalErrors = libxml_use_internal_errors(true);
 
         try {
             // Allow XML to be retrieved even if there is no response body
             $xml = new \SimpleXMLElement($string ?: '<root />', LIBXML_NONET);
 
-            libxml_disable_entity_loader($disableEntities);
             libxml_use_internal_errors($internalErrors);
         } catch (\Exception $e) {
-            libxml_disable_entity_loader($disableEntities);
             libxml_use_internal_errors($internalErrors);
 
             throw new \RuntimeException('Unable to parse XML data: '.$e->getMessage());
@@ -53,11 +46,7 @@ final class StringUtil
     /**
      * Transforms a JSON string to an array.
      *
-     * @param string $string
-     *
      * @throws \RuntimeException
-     *
-     * @return array
      */
     public static function jsonToArray(string $string): array
     {

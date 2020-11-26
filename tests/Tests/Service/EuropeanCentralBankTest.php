@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
@@ -32,11 +34,13 @@ class EuropeanCentralBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "EUR/XXL" is not supported by the service "Exchanger\Service\EuropeanCentralBank".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "EUR/XXL" is not supported by the service "Exchanger\Service\EuropeanCentralBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/success.xml');
 
@@ -106,11 +110,13 @@ class EuropeanCentralBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedDateException
-     * @expectedExceptionMessage The date "2016-05-26" is not supported by the service "Exchanger\Service\EuropeanCentralBank".
      */
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
+        $this->expectException(UnsupportedDateException::class);
+        $expectedExceptionMessage = 'The date "2016-05-26" is not supported by the service "Exchanger\Service\EuropeanCentralBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
 
@@ -120,11 +126,13 @@ class EuropeanCentralBankTest extends ServiceTestCase
 
     /**
      * @test
-     * @expectedException \Exchanger\Exception\UnsupportedCurrencyPairException
-     * @expectedExceptionMessage The currency pair "EUR/XXL" is not supported by the service "Exchanger\Service\EuropeanCentralBank".
      */
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
+        $this->expectException(UnsupportedCurrencyPairException::class);
+        $expectedExceptionMessage = 'The currency pair "EUR/XXL" is not supported by the service "Exchanger\Service\EuropeanCentralBank".';
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
 
