@@ -36,7 +36,7 @@ class ChainExceptionTest extends TestCase
      */
     private $exception2;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->exception1 = new \Exception('Something bad happened.');
         $this->exception2 = new \Exception('General exception.');

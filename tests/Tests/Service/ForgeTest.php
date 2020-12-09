@@ -58,7 +58,7 @@ class ForgeTest extends ServiceTestCase
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(1.18711, $rate->getValue());
-        $this->assertTrue('2017-12-21' == $rate->getDate()->format('Y-m-d'));
+        $this->assertEquals('2017-12-21', $rate->getDate()->format('Y-m-d'));
         $this->assertEquals('forge', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
@@ -75,7 +75,7 @@ class ForgeTest extends ServiceTestCase
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
         $this->assertSame(9.12721, $rate->getValue());
-        $this->assertTrue('2018-05-30' == $rate->getDate()->format('Y-m-d'));
+        $this->assertEquals('2018-05-30', $rate->getDate()->format('Y-m-d'));
         $this->assertEquals('forge', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
