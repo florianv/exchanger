@@ -27,7 +27,7 @@ class ExchangerTest extends TestCase
 {
     private $fixerAccessKey;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixerAccessKey = getenv('FIXER_ACCESS_KEY');
     }
@@ -65,8 +65,8 @@ class ExchangerTest extends TestCase
         $thirdEnd = microtime(true) - $thirdStart;
 
         $this->assertEquals($firstRate, $secondRate, $thirdRate);
-        $this->assertTrue($secondEnd < (100 * $firstEnd));
-        $this->assertTrue($thirdEnd < (100 * $firstEnd));
+        $this->assertLessThan(100 * $firstEnd, $secondEnd);
+        $this->assertLessThan(100 * $firstEnd, $thirdEnd);
     }
 
     /**
