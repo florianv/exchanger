@@ -94,7 +94,7 @@ class Google extends Service
         $nodes = $xpath->query('//span[@id="knowledge-currency__tgt-amount"]');
 
         if (1 !== $nodes->length) {
-            $nodes = $xpath->query('//div[contains(@class, "vk_ans vk_bk") or contains(@class, "dDoNo vk_bk")]');
+            $nodes = $xpath->query('//div[contains(@class, "vk_ans vk_bk") or contains(@class, "dDoNo")]');
         }
 
         if (1 !== $nodes->length) {
