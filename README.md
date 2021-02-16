@@ -50,6 +50,7 @@ Here is the complete list of the currently implemented services:
 | [Xignite](https://www.xignite.com) | * | * | Yes |
 | [Currency Converter API](https://www.currencyconverterapi.com) | * | * | Yes (free but limited or paid) |
 | [xChangeApi.com](https://xchangeapi.com) | * | * | Yes |
+| [fastFOREX.io](https://www.fastforex.io) | USD (free), * (paid) | * | No |
 | Array | * | * | Yes |
 
 ## Credits

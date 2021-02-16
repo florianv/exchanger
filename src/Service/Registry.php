@@ -46,6 +46,7 @@ final class Registry
             'national_bank_of_ukraine' => NationalBankOfUkraine::class,
             'coin_layer' => CoinLayer::class,
             'xchangeapi' => XchangeApi::class,
+            'fastforex' => FastForex::class,
         ];
     }
 }
