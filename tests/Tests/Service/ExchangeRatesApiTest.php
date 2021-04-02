@@ -29,7 +29,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
      */
     public function it_does_support_all_queries()
     {
-        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'));
+        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null,  ['access_key' => 'x']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
@@ -39,7 +39,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
      */
     public function it_supports_eur_base()
     {
-        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'));
+        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CAD'))));
     }
 
@@ -48,7 +48,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
      */
     public function it_does_support_other_than_eur()
     {
-        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'));
+        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/CAD'))));
     }
 
@@ -60,10 +60,10 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Base \'FOO\' is not supported.');
 
-        $uri = 'https://api.exchangeratesapi.io/latest?base=FOO';
+        $uri = 'https://api.exchangeratesapi.io/latest?base=FOO&access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangeRatesApi/error.json');
 
-        $service = new ExchangeRatesApi($this->getHttpAdapterMock($uri, $content));
+        $service = new ExchangeRatesApi($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('FOO/EUR')));
     }
 
@@ -73,10 +73,10 @@ class ExchangeRatesApiTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
-        $uri = 'https://api.exchangeratesapi.io/latest?base=EUR';
+        $uri = 'https://api.exchangeratesapi.io/latest?base=EUR&access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangeRatesApi/latest.json');
 
-        $service = new ExchangeRatesApi($this->getHttpAdapterMock($uri, $content));
+        $service = new ExchangeRatesApi($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertEquals(1.0933, $rate->getValue());
@@ -91,11 +91,11 @@ class ExchangeRatesApiTest extends ServiceTestCase
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
-        $uri = 'https://api.exchangeratesapi.io/2000-01-03?base=EUR';
+        $uri = 'https://api.exchangeratesapi.io/2000-01-03?base=EUR&access_key=x';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangeRatesApi/historical.json');
         $date = new \DateTime('2000-01-03');
 
-        $service = new ExchangeRatesApi($this->getHttpAdapterMock($uri, $content));
+        $service = new ExchangeRatesApi($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertEquals(1.5209, $rate->getValue());
@@ -109,7 +109,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
      */
     public function it_has_a_name()
     {
-        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'));
+        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
 
         $this->assertSame('exchange_rates_api', $service->getName());
     }
