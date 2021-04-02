@@ -31,9 +31,26 @@ final class ExchangeRatesApi extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const LATEST_URL = 'https://api.exchangeratesapi.io/latest?base=%s';
+    const LATEST_URL = 'https://api.exchangeratesapi.io/latest?base=%s&access_key=%s';
 
-    const HISTORICAL_URL = 'https://api.exchangeratesapi.io/%s?base=%s';
+    const HISTORICAL_URL = 'https://api.exchangeratesapi.io/%s?base=%s&access_key=%s';
+
+    const ACCESS_KEY_OPTION = 'access_key';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function processOptions(array &$options): void
+    {
+        if (!isset($options[self::ACCESS_KEY_OPTION])) {
+            throw new \InvalidArgumentException('The "access_key" option must be provided to use exchangeratesapi.io');
+        }
+
+        if (!isset($options['enterprise'])) {
+            $options['enterprise'] = false;
+        }
+    }
+
 
     /**
      * {@inheritdoc}
@@ -44,7 +61,8 @@ final class ExchangeRatesApi extends HttpService
 
         $url = sprintf(
             self::LATEST_URL,
-            $currencyPair->getBaseCurrency()
+            $currencyPair->getBaseCurrency(),
+            $this->options[self::ACCESS_KEY_OPTION]
         );
 
         return $this->doCreateRate($url, $currencyPair);
@@ -60,7 +78,8 @@ final class ExchangeRatesApi extends HttpService
         $url = sprintf(
             self::HISTORICAL_URL,
             $exchangeQuery->getDate()->format('Y-m-d'),
-            $exchangeQuery->getCurrencyPair()->getBaseCurrency()
+            $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
+            $this->options[self::ACCESS_KEY_OPTION]
         );
 
         return $this->doCreateRate($url, $currencyPair);
