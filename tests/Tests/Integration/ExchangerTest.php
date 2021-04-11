@@ -53,15 +53,15 @@ class ExchangerTest extends TestCase
         }
 
         $firstStart = microtime(true);
-        $firstRate = $this->createCachedExchanger()->getExchangeRate(call_user_func($provideQuery));
+        $firstRate = $this->createCachedExchanger()->getExchangeRate(\call_user_func($provideQuery));
         $firstEnd = microtime(true) - $firstStart;
 
         $secondStart = microtime(true);
-        $secondRate = $this->createCachedExchanger()->getExchangeRate(call_user_func($provideQuery));
+        $secondRate = $this->createCachedExchanger()->getExchangeRate(\call_user_func($provideQuery));
         $secondEnd = microtime(true) - $secondStart;
 
         $thirdStart = microtime(true);
-        $thirdRate = $this->createCachedExchanger()->getExchangeRate(call_user_func($provideQuery));
+        $thirdRate = $this->createCachedExchanger()->getExchangeRate(\call_user_func($provideQuery));
         $thirdEnd = microtime(true) - $thirdStart;
 
         $this->assertEquals($firstRate, $secondRate, $thirdRate);

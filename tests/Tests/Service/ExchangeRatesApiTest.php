@@ -29,7 +29,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
      */
     public function it_does_support_all_queries()
     {
-        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null,  ['access_key' => 'x']);
+        $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }

@@ -34,7 +34,7 @@ class ExchangerTest extends TestCase
         $service
             ->expects($this->any())
             ->method('supportQuery')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
 
@@ -55,12 +55,12 @@ class ExchangerTest extends TestCase
         $service
             ->expects($this->any())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $service
             ->expects($this->once())
             ->method('getExchangeRate')
-            ->will($this->returnValue($rate));
+            ->willReturn($rate);
 
         $exchanger = new Exchanger($service);
 
@@ -117,14 +117,14 @@ class ExchangerTest extends TestCase
         $service
             ->expects($this->any())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
 
         $cache
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($rate));
+            ->willReturn($rate);
 
         $exchanger = new Exchanger($service, $cache);
         $this->assertSame($rate, $exchanger->getExchangeRate($exchangeRateQuery));
@@ -146,19 +146,19 @@ class ExchangerTest extends TestCase
         $service
             ->expects($this->any())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $service
             ->expects($this->once())
             ->method('getExchangeRate')
-            ->will($this->returnValue($rate));
+            ->willReturn($rate);
 
         $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
 
         $cache
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $cache
             ->expects($this->once())
@@ -184,7 +184,7 @@ class ExchangerTest extends TestCase
         $service
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $service
             ->expects($this->once())
@@ -220,19 +220,19 @@ class ExchangerTest extends TestCase
         $service
             ->expects($this->any())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $service
             ->expects($this->once())
             ->method('getExchangeRate')
-            ->will($this->returnValue($rate));
+            ->willReturn($rate);
 
         $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
 
         $cache
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $cache
             ->expects($this->once())
@@ -257,7 +257,7 @@ class ExchangerTest extends TestCase
         $service
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $cache
             ->expects($this->once())
@@ -283,7 +283,7 @@ class ExchangerTest extends TestCase
         $service
             ->expects($this->any())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $exchanger = new Exchanger($service, $cache, ['cache_key_prefix' => 'prefix_longer_then_24_symbols']);
         $exchanger->getExchangeRate($exchangeRateQuery);
@@ -302,7 +302,7 @@ class ExchangerTest extends TestCase
         $service
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $exchanger = new Exchanger($service);
         $exchanger->getExchangeRate($exchangeRateQuery);

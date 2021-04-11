@@ -140,7 +140,7 @@ class CurrencyConverterTest extends TestCase
         $adapter
             ->expects($this->once())
             ->method('sendRequest')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
 
         return $adapter;
     }
@@ -159,18 +159,18 @@ class CurrencyConverterTest extends TestCase
         $body
             ->expects($this->once())
             ->method('__toString')
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $response = $this->createMock(ResponseInterface::class);
         $response
             ->expects($this->once())
             ->method('getBody')
-            ->will($this->returnValue($body));
+            ->willReturn($body);
 
         $response
             ->expects($this->once())
             ->method('getStatusCode')
-            ->will($this->returnValue($statusCode));
+            ->willReturn($statusCode);
 
         return $response;
     }

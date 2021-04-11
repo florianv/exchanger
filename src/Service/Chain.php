@@ -39,7 +39,7 @@ final class Chain implements ExchangeRateService
      */
     public function __construct(iterable $services = [])
     {
-        if (!is_array($services)) {
+        if (!\is_array($services)) {
             /** @var \Iterator $services */
             $services = iterator_to_array($services);
         }

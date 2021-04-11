@@ -13,12 +13,8 @@ declare(strict_types=1);
 
 namespace Exchanger\Service;
 
-use Exchanger\Contract\CurrencyPair;
 use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\Contract\HistoricalExchangeRateQuery;
-use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
-use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
@@ -29,7 +25,6 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  */
 final class FastForex extends HttpService
 {
-
     const FETCH_ONE_URL = 'https://api.fastforex.io/fetch-one?from=%s&to=%s&api_key=%s';
 
     /**
@@ -71,7 +66,7 @@ final class FastForex extends HttpService
             }
             if (isset($result['base']) && $result['base'] == $baseCurrency) {
                 if (isset($result['result'][$quoteCurrency])) {
-                    return $this->createRate($currencyPair, (float)($result['result'][$quoteCurrency]), $date);
+                    return $this->createRate($currencyPair, (float) ($result['result'][$quoteCurrency]), $date);
                 }
             }
         }
@@ -86,5 +81,4 @@ final class FastForex extends HttpService
     {
         return 'fastforex';
     }
-
 }

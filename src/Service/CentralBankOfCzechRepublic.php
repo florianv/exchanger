@@ -84,7 +84,7 @@ final class CentralBankOfCzechRepublic extends HttpService
         }
 
         $date->setTime(0, 0, 0);
-        foreach (array_slice($lines, 2) as $line) {
+        foreach (\array_slice($lines, 2) as $line) {
             if (!preg_match(self::CURRENCY_LINE_PATTERN, $line)) {
                 continue;
             }

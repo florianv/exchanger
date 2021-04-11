@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Exchanger\Tests\Service;
 
 use Exchanger\Exception\Exception;
-use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\Cryptonator;

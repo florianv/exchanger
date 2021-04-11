@@ -30,13 +30,13 @@ abstract class ServiceTestCase extends TestCase
         $body
             ->expects($this->once())
             ->method('__toString')
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $response = $this->createMock('Psr\Http\Message\ResponseInterface');
         $response
             ->expects($this->once())
             ->method('getBody')
-            ->will($this->returnValue($body));
+            ->willReturn($body);
 
         return $response;
     }
@@ -61,7 +61,7 @@ abstract class ServiceTestCase extends TestCase
             ->with($this->callback(function ($arg) use ($url) {
                 return $arg->getUri()->__toString() === $url;
             }))
-            ->will($this->returnValue($response));
+            ->willReturn($response);
 
         return $adapter;
     }

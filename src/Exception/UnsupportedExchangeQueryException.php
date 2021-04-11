@@ -48,7 +48,7 @@ final class UnsupportedExchangeQueryException extends Exception
         parent::__construct(sprintf(
             'The exchange query "%s" is not supported by the service "%s".',
             $exchangeRateQuery->getCurrencyPair()->__toString(),
-            get_class($service)
+            \get_class($service)
         ));
 
         $this->exchangeRateQuery = $exchangeRateQuery;

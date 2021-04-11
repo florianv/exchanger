@@ -89,7 +89,7 @@ final class Exchanger implements ExchangeRateProviderContract
         $cacheKeyPrefix = preg_replace('#[\{\}\(\)/\\\@\:]#', '-', $cacheKeyPrefix);
 
         $cacheKey = $cacheKeyPrefix.sha1(serialize($exchangeQuery));
-        if (strlen($cacheKey) > 64) {
+        if (\strlen($cacheKey) > 64) {
             throw new CacheException("Cache key length exceeds 64 characters ('$cacheKey'). This violates PSR-6 standard");
         }
 

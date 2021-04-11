@@ -51,7 +51,6 @@ final class ExchangeRatesApi extends HttpService
         }
     }
 
-
     /**
      * {@inheritdoc}
      */

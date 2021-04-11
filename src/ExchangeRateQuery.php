@@ -62,7 +62,7 @@ class ExchangeRateQuery implements ExchangeRateQueryContract
      */
     public function getOption($name, $default = null)
     {
-        if (array_key_exists($name, $this->options)) {
+        if (\array_key_exists($name, $this->options)) {
             return $this->options[$name];
         }
 

@@ -148,8 +148,8 @@ final class NationalBankOfRomania extends HttpService
         $base = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
         $quote = $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
 
-        return ('RON' === $base && in_array($quote, self::SUPPORTED_CURRENCIES))
-            || ('RON' === $quote && in_array($base, self::SUPPORTED_CURRENCIES));
+        return ('RON' === $base && \in_array($quote, self::SUPPORTED_CURRENCIES))
+            || ('RON' === $quote && \in_array($base, self::SUPPORTED_CURRENCIES));
     }
 
     /**

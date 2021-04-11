@@ -85,7 +85,7 @@ final class XchangeApi extends HttpService
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-        return in_array($currencyPair->getBaseCurrency(), $this->getSupportedCodes());
+        return \in_array($currencyPair->getBaseCurrency(), $this->getSupportedCodes());
     }
 
     /**

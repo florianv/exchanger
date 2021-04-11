@@ -36,14 +36,14 @@ class ChainTest extends TestCase
         $serviceOne
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $serviceTwo = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $serviceTwo
             ->expects($this->never())
             ->method('supportQuery')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $chain = new Chain([$serviceOne, $serviceTwo]);
 
@@ -55,14 +55,14 @@ class ChainTest extends TestCase
         $serviceOne
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $serviceTwo = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $serviceTwo
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $chain = new Chain([$serviceOne, $serviceTwo]);
 
@@ -83,7 +83,7 @@ class ChainTest extends TestCase
         $serviceOne
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $serviceOne
             ->expects($this->once())
@@ -96,20 +96,20 @@ class ChainTest extends TestCase
         $serviceTwo
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $serviceTwo
             ->expects($this->once())
             ->method('getExchangeRate')
             ->with($query)
-            ->will($this->returnValue($rate));
+            ->willReturn($rate);
 
         $serviceThree = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
         $serviceThree
             ->expects($this->never())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $serviceThree
             ->expects($this->never())
@@ -137,7 +137,7 @@ class ChainTest extends TestCase
         $serviceOne
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $serviceTwo = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
@@ -149,7 +149,7 @@ class ChainTest extends TestCase
         $serviceTwo
             ->expects($this->once())
             ->method('supportQuery')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $chain = new Chain([$serviceOne, $serviceTwo]);
         $caught = false;
