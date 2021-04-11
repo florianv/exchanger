@@ -71,23 +71,7 @@ final class Cryptonator extends HttpService
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
-        $currencyPair = $exchangeQuery->getCurrencyPair();
-
-        return !$exchangeQuery instanceof HistoricalExchangeRateQuery
-            && in_array($currencyPair->getBaseCurrency(), $this->getSupportedCodes())
-            && in_array($currencyPair->getQuoteCurrency(), $this->getSupportedCodes());
-    }
-
-    /**
-     * Array of codes supported according to.
-     *
-     * @url https://www.cryptonator.com/api/currencies
-     *
-     * @return array
-     */
-    private function getSupportedCodes(): array
-    {
-        return require __DIR__.'/resources/cryptonator-codes.php';
+        return true;
     }
 
     /**
