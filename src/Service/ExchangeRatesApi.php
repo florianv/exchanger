@@ -18,6 +18,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\NonBreakingInvalidArgumentException;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
@@ -43,7 +44,7 @@ final class ExchangeRatesApi extends HttpService
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::ACCESS_KEY_OPTION])) {
-            throw new \InvalidArgumentException('The "access_key" option must be provided to use exchangeratesapi.io');
+            throw new NonBreakingInvalidArgumentException('The "access_key" option must be provided to use exchangeratesapi.io');
         }
 
         if (!isset($options['enterprise'])) {
