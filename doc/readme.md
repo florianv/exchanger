@@ -1,4 +1,6 @@
-# Sponsors
+# Documentation
+
+## Sponsors
 
 <table>
    <tr>
@@ -10,8 +12,6 @@
      <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
    </tr>
 </table>
-
-# Documentation
 
 ## Index
 
