@@ -15,6 +15,7 @@ namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
@@ -62,15 +63,11 @@ final class Cryptonator extends HttpService
     }
 
     /**
-     * Tells if the service supports the exchange rate query.
-     *
-     * @param ExchangeRateQuery $exchangeQuery
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
-        return true;
+        return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
 
     /**

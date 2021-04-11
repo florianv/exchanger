@@ -47,6 +47,7 @@ final class Registry
             'coin_layer' => CoinLayer::class,
             'xchangeapi' => XchangeApi::class,
             'fastforex' => FastForex::class,
+            'abstract_api' => AbstractApi::class,
         ];
     }
 }

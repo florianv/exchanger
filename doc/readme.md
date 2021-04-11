@@ -378,13 +378,15 @@ use Exchanger\Service\RussianCentralBank;
 use Exchanger\Service\Cryptonator;
 use Exchanger\Service\CoinLayer;
 use Exchanger\Service\XchangeApi;
+use Exchanger\Service\AbstractApi;
 
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
+    new ExchangeRatesApi(),
+    new AbstractApi($client, null, ['api_key' => 'api_key']),
     new CoinLayer($client, null, ['access_key' => 'access_key', 'paid' => false]),
     new EuropeanCentralBank(),
-    new ExchangeRatesApi(),
     new NationalBankOfRomania(),
     new CentralBankOfRepublicTurkey(),
     new CentralBankOfCzechRepublic(),
@@ -415,7 +417,7 @@ $service = new Chain([
 
 ### Sponsors
 
-We are proudly supported by the following echange rate providers offering *free plans up to 1,000 requests per day*:
+We are proudly supported by the following echange rate providers offering *free plans*:
 
 <img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" height="20px" width="20px"/> **[Fixer](https://fixer.io)**
 
