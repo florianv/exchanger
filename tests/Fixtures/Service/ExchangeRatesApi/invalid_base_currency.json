@@ -1,0 +1,6 @@
+{
+    "error":{
+        "code":"invalid_base_currency",
+        "message":"An unexpected error ocurred. [Technical Support: support@apilayer.com]"
+    }
+}

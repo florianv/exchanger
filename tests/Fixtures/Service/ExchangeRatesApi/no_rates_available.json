@@ -1,0 +1,6 @@
+{
+    "error":{
+        "code":"no_rates_available",
+        "message":"Your query did not return any results. Please try again."
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "error":{
+        "code":"invalid_date",
+        "message":"You have entered an invalid date. [Required format: date=YYYY-MM-DD]"
+    }
+}
