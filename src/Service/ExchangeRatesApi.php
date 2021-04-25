@@ -46,10 +46,6 @@ final class ExchangeRatesApi extends HttpService
         if (!isset($options[self::ACCESS_KEY_OPTION])) {
             throw new NonBreakingInvalidArgumentException('The "access_key" option must be provided to use exchangeratesapi.io');
         }
-
-        if (!isset($options['enterprise'])) {
-            $options['enterprise'] = false;
-        }
     }
 
     /**
