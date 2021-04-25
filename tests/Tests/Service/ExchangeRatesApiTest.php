@@ -25,7 +25,10 @@ use Exchanger\Service\ExchangeRatesApi;
  */
 class ExchangeRatesApiTest extends ServiceTestCase
 {
-    public function testItDoesNotSupportAllQueries()
+    /**
+     * @test
+     */
+    public function it_does_support_all_queries()
     {
         $service = new ExchangeRatesApi(
             $this->createMock('Http\Client\HttpClient'),
@@ -35,13 +38,19 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
-    public function testItSupportsEurBase()
+    /**
+     * @test
+     */
+    public function it_supports_eur_base()
     {
         $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CAD'))));
     }
 
-    public function testItDoesSupportAllQueriesEnterpriseMode()
+    /**
+     * @test
+     */
+    public function it_does_support_other_than_eur()
     {
         $service = new ExchangeRatesApi(
             $this->createMock('Http\Client\HttpClient'),
@@ -52,9 +61,10 @@ class ExchangeRatesApiTest extends ServiceTestCase
     }
 
     /**
+     * @test
      * @dataProvider unsupportedCurrencyPairResponsesProvider
      */
-    public function testItThrowsAnUnsupportedCurrencyPairException(
+    public function it_throws_An_unsupported_currency_pair_exception(
         string $contentPath,
         string $uri,
         string $accessKey,
@@ -115,7 +125,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
     /**
      * @dataProvider errorResponsesProvider
      */
-    public function testItThrowsAnExceptionWithErrorResponse(
+    public function it_throws_an_exception_with_error_response(
         string $contentPath,
         string $uri,
         string $accessKey,
@@ -186,7 +196,10 @@ class ExchangeRatesApiTest extends ServiceTestCase
         ];
     }
 
-    public function testItFetchesARate()
+    /**
+     * @test
+     */
+    public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'https://api.exchangeratesapi.io/latest?base=EUR&access_key=x&symbols=USD';
@@ -205,7 +218,10 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    public function testItFetchesAHistoricalRate()
+    /**
+     * @test
+     */
+    public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'https://api.exchangeratesapi.io/2021-04-15?base=EUR&access_key=x&symbols=USD';
@@ -225,7 +241,10 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    public function testItHasAName()
+    /**
+     * @test
+     */
+    public function it_has_a_name()
     {
         $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
 
