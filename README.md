@@ -6,7 +6,7 @@
 [![Version](http://img.shields.io/packagist/v/florianv/exchanger.svg?style=flat-square)](https://packagist.org/packages/florianv/exchanger)
 
 Exchanger is a PHP framework to work with currency exchange rates from various services such as 
-**[Fixer](https://fixer.io)** or **[currencylayer](https://currencylayer.com)**.
+**[Fixer](https://fixer.io)**, **[currencylayer](https://currencylayer.com)** or **[exchangeratesapi](https://exchangeratesapi.io)**.
 Looking for a simple library based on Exchanger ? Check out [Swap](https://github.com/florianv/swap) !
 
 ## Sponsors
@@ -19,6 +19,10 @@ Looking for a simple library based on Exchanger ? Check out [Swap](https://githu
    <tr>
      <td><img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" width="50px"/></td>
      <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
+   </tr>
+   <tr>
+     <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
+     <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
    </tr>
 </table>
 
@@ -34,7 +38,7 @@ Here is the complete list of the currently implemented services:
 |---------------------------------------------------------------------------|----------------------|----------------|----------------|
 | [Fixer](https://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
 | [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
-| [exchangeratesapi](https://exchangeratesapi.io) | USD (free), * (paid) | * | Yes |
+| [exchangeratesapi](https://exchangeratesapi.io) | EUR (free), * (paid) | * | Yes |
 | [Abstract](https://www.abstractapi.com) | * | * | No |
 | [coinlayer](https://coinlayer.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies) | Yes |
 | [European Central Bank](https://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |

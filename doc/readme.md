@@ -11,6 +11,10 @@
      <td><img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" width="50px"/></td>
      <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
    </tr>
+   <tr>
+     <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
+     <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
+   </tr>   
 </table>
 
 ## Index
@@ -56,6 +60,7 @@ The complete list of all supported services is available [here](https://github.c
 use Http\Client\Curl\Client as CurlClient;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
+use Exchanger\Service\ExchangeRatesApi;
 use Exchanger\Exchanger;
 
 // Create your http client (we choose curl here)
@@ -66,6 +71,9 @@ $service = new Fixer($client, null, ['access_key' => 'YOUR_KEY']);
 
 // Or use the currencylayer.com service
 $service = new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]);
+
+// Or use the exchangeratesapi.io service
+$service = new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]);
 
 // Create Exchanger with your service
 $exchanger = new Exchanger($service);
@@ -126,10 +134,12 @@ Simply create a `Chain` service to wrap the services you want to chain.
 use Exchanger\Service\Chain;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
+use Exchanger\Service\ExchangeRatesApi;
 
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
+    new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
 ]);
 ```
 
