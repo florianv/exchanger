@@ -6,7 +6,7 @@
 [![Version](http://img.shields.io/packagist/v/florianv/exchanger.svg?style=flat-square)](https://packagist.org/packages/florianv/exchanger)
 
 Exchanger is a PHP framework to work with currency exchange rates from various services such as 
-**[Fixer](https://fixer.io)** or **[currencylayer](https://currencylayer.com)**.
+**[Fixer](https://fixer.io)**, **[currencylayer](https://currencylayer.com)** or **[exchangeratesapi](https://exchangeratesapi.io)**.
 Looking for a simple library based on Exchanger ? Check out [Swap](https://github.com/florianv/swap) !
 
 ## Sponsors
@@ -21,9 +21,9 @@ Looking for a simple library based on Exchanger ? Check out [Swap](https://githu
      <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
    </tr>
    <tr>
-        <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
-        <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
-      </tr>
+     <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
+     <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
+   </tr>
 </table>
 
 ## Documentation
