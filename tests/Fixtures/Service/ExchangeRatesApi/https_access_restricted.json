@@ -1,0 +1,6 @@
+{
+    "error":{
+        "code":"https_access_restricted",
+        "message":"Access Restricted - Your current Subscription Plan does not support HTTPS Encryption."
+    }
+}

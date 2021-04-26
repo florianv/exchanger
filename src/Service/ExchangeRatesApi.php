@@ -26,15 +26,21 @@ use Exchanger\StringUtil;
 /**
  * ExchangeRatesApi Service.
  *
+ * @see https://exchangeratesapi.io/documentation/
+ *
  * @author Arjan Westdorp <arjanwestdorp@gmail.com>
  */
 final class ExchangeRatesApi extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const LATEST_URL = 'https://api.exchangeratesapi.io/latest?base=%s&access_key=%s';
+    const LATEST_URL = 'https://api.exchangeratesapi.io/latest?base=%s&access_key=%s&symbols=%s';
 
-    const HISTORICAL_URL = 'https://api.exchangeratesapi.io/%s?base=%s&access_key=%s';
+    const HISTORICAL_URL = 'https://api.exchangeratesapi.io/%s?base=%s&access_key=%s&symbols=%s';
+
+    const FREE_LATEST_URL = 'http://api.exchangeratesapi.io/latest?access_key=%s&symbols=%s';
+
+    const FREE_HISTORICAL_URL = 'http://api.exchangeratesapi.io/%s?access_key=%s&symbols=%s';
 
     const ACCESS_KEY_OPTION = 'access_key';
 
@@ -46,6 +52,10 @@ final class ExchangeRatesApi extends HttpService
         if (!isset($options[self::ACCESS_KEY_OPTION])) {
             throw new NonBreakingInvalidArgumentException('The "access_key" option must be provided to use exchangeratesapi.io');
         }
+
+        if (!isset($options['enterprise'])) {
+            $options['enterprise'] = false;
+        }
     }
 
     /**
@@ -54,12 +64,20 @@ final class ExchangeRatesApi extends HttpService
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
-
-        $url = sprintf(
-            self::LATEST_URL,
-            $currencyPair->getBaseCurrency(),
-            $this->options[self::ACCESS_KEY_OPTION]
-        );
+        if ($this->options['enterprise']) {
+            $url = sprintf(
+                self::LATEST_URL,
+                $currencyPair->getBaseCurrency(),
+                $this->options[self::ACCESS_KEY_OPTION],
+                $currencyPair->getQuoteCurrency()
+            );
+        } else {
+            $url = sprintf(
+                self::FREE_LATEST_URL,
+                $this->options[self::ACCESS_KEY_OPTION],
+                $currencyPair->getQuoteCurrency()
+            );
+        }
 
         return $this->doCreateRate($url, $currencyPair);
     }
@@ -70,13 +88,22 @@ final class ExchangeRatesApi extends HttpService
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
-
-        $url = sprintf(
-            self::HISTORICAL_URL,
-            $exchangeQuery->getDate()->format('Y-m-d'),
-            $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
-            $this->options[self::ACCESS_KEY_OPTION]
-        );
+        if ($this->options['enterprise']) {
+            $url = sprintf(
+                self::HISTORICAL_URL,
+                $exchangeQuery->getDate()->format('Y-m-d'),
+                $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
+                $this->options[self::ACCESS_KEY_OPTION],
+                $currencyPair->getQuoteCurrency()
+            );
+        } else {
+            $url = sprintf(
+                self::FREE_HISTORICAL_URL,
+                $exchangeQuery->getDate()->format('Y-m-d'),
+                $this->options[self::ACCESS_KEY_OPTION],
+                $exchangeQuery->getCurrencyPair()->getQuoteCurrency()
+            );
+        }
 
         return $this->doCreateRate($url, $currencyPair);
     }
@@ -86,16 +113,13 @@ final class ExchangeRatesApi extends HttpService
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
-        return true;
+        return $this->options['enterprise'] || 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
 
     /**
      * Creates a rate.
      *
-     * @param string       $url
-     * @param CurrencyPair $currencyPair
-     *
-     * @return ExchangeRate
+     * @param string $url
      *
      * @throws Exception
      */
@@ -105,7 +129,22 @@ final class ExchangeRatesApi extends HttpService
         $data = StringUtil::jsonToArray($content);
 
         if (isset($data['error'])) {
-            throw new Exception($data['error']);
+            if (isset($data['error']['code'])) {
+                if (\in_array($data['error']['code'], [
+                    'invalid_currency_codes',
+                    'invalid_base_currency',
+                    'no_rates_available',
+                ], true)) {
+                    throw new UnsupportedCurrencyPairException($currencyPair, $this);
+                }
+                if (isset($data['error']['message'])) {
+                    throw new Exception($data['error']['message']);
+                } else {
+                    throw new Exception('Service return error code: '.$data['error']['code']);
+                }
+            } else {
+                throw new Exception('Service return unhandled error');
+            }
         }
 
         if (isset($data['rates'][$currencyPair->getQuoteCurrency()])) {

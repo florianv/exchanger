@@ -73,7 +73,7 @@ $service = new Fixer($client, null, ['access_key' => 'YOUR_KEY']);
 $service = new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]);
 
 // Or use the exchangeratesapi.io service
-$service = new ExchangeRatesApi($client, null, ['access_key' => 'access_key']);
+$service = new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]);
 
 // Create Exchanger with your service
 $exchanger = new Exchanger($service);
@@ -139,7 +139,7 @@ use Exchanger\Service\ExchangeRatesApi;
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
-    new ExchangeRatesApi($client, null, ['access_key' => 'access_key']),
+    new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
 ]);
 ```
 
@@ -405,7 +405,7 @@ use Exchanger\Service\AbstractApi;
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
-    new ExchangeRatesApi($client, null, ['access_key' => 'access_key']),
+    new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new AbstractApi($client, null, ['api_key' => 'api_key']),
     new CoinLayer($client, null, ['access_key' => 'access_key', 'paid' => false]),
     new EuropeanCentralBank(),
