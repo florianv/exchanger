@@ -69,7 +69,10 @@ use Exchanger\Service\AbstractApi;
 use Exchanger\Exchanger;
 
 // Create your http client (we choose curl here)
-$client = new CurlClient();
+$options = [
+    CURLOPT_FOLLOWLOCATION => true,
+];
+$client = new CurlClient(null, null, $options);
 
 // Use the Fixer.io service
 $service = new Fixer($client, null, ['access_key' => 'YOUR_KEY']);
