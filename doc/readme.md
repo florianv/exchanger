@@ -15,6 +15,10 @@
      <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
      <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
    </tr>   
+   <tr>
+     <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba27ede983917dbff22f_favicon.png" width="50px"/></td>
+     <td><a href="https://www.abstractapi.com/">Abstract</a> provides simple exchange rates for developers and a dozen of APIs covering thousands of use cases.</td>
+   </tr>  
 </table>
 
 ## Index
@@ -61,6 +65,7 @@ use Http\Client\Curl\Client as CurlClient;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\ExchangeRatesApi;
+use Exchanger\Service\AbstractApi;
 use Exchanger\Exchanger;
 
 // Create your http client (we choose curl here)
@@ -74,6 +79,9 @@ $service = new CurrencyLayer($client, null, ['access_key' => 'access_key', 'ente
 
 // Or use the exchangeratesapi.io service
 $service = new ExchangeRatesApi($client, null, ['access_key' => 'access_key']);
+
+// Or use the abstractapi.com service
+$service = new AbstractApi($client, null, ['api_key' => 'api_key']);
 
 // Create Exchanger with your service
 $exchanger = new Exchanger($service);
@@ -135,11 +143,13 @@ use Exchanger\Service\Chain;
 use Exchanger\Service\Fixer;
 use Exchanger\Service\CurrencyLayer;
 use Exchanger\Service\ExchangeRatesApi;
+use Exchanger\Service\AbstractApi;
 
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new ExchangeRatesApi($client, null, ['access_key' => 'access_key']),
+    new AbstractApi($client, null, ['api_key' => 'api_key'])
 ]);
 ```
 
