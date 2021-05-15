@@ -1,0 +1,6 @@
+{
+    "error":{
+        "code":"invalid_access_key",
+        "message":"You have not supplied a valid API Access Key. [Technical Support: support@apilayer.com]"
+    }
+}
