@@ -13,9 +13,12 @@ declare(strict_types=1);
 
 namespace Exchanger\Service;
 
+use Exchanger\Contract\CurrencyPair;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
+use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
@@ -26,9 +29,13 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  */
 final class AbstractApi extends HttpService
 {
+    use SupportsHistoricalQueries;
+
     const API_KEY_OPTION = 'api_key';
 
-    const LATEST_URL = 'https://currency.abstractapi.com/v1/latest?api_key=%s&base=%s';
+    const LATEST_URL = 'https://exchange-rates.abstractapi.com/v1/live?api_key=%s&base=%s';
+
+    const HISTORICAL_URL = 'https://exchange-rates.abstractapi.com/v1/historical?api_key=%s&base=%s&date=%s';
 
     /**
      * {@inheritdoc}
@@ -43,9 +50,9 @@ final class AbstractApi extends HttpService
     /**
      * {@inheritdoc}
      */
-    public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract
+    protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        $currencyPair = $exchangeRateQuery->getCurrencyPair();
+        $currencyPair = $exchangeQuery->getCurrencyPair();
 
         $url = sprintf(
             self::LATEST_URL,
@@ -53,16 +60,48 @@ final class AbstractApi extends HttpService
             $currencyPair->getBaseCurrency()
         );
 
+        return $this->doCreateRate($url, $currencyPair);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
+    {
+        $currencyPair = $exchangeQuery->getCurrencyPair();
+
+        $url = sprintf(
+            self::HISTORICAL_URL,
+            $this->options[self::API_KEY_OPTION],
+            $currencyPair->getBaseCurrency(),
+            $exchangeQuery->getDate()->format('Y-m-d')
+        );
+
+        return $this->doCreateRate($url, $currencyPair);
+    }
+
+    /**
+     * Creates a rate.
+     *
+     * @param string       $url
+     * @param CurrencyPair $currencyPair
+     *
+     * @return ExchangeRate
+     *
+     * @throws Exception
+     */
+    private function doCreateRate($url, CurrencyPair $currencyPair): ExchangeRate
+    {
         $content = $this->request($url);
+
         $data = StringUtil::jsonToArray($content);
 
-        if (isset($data['exchange_rate'][$currencyPair->getQuoteCurrency()])) {
-            $date = new \DateTime(
-                $data['last_updated_utc'],
-                new \DateTimeZone('UTC')
-            );
+        if (isset($data['exchange_rates'][$currencyPair->getQuoteCurrency()])) {
+            $date = new \DateTime();
+            $date->setTimestamp($data['last_updated']);
+            $date->setTimezone(new \DateTimeZone('UTC'));
 
-            $rate = $data['exchange_rate'][$currencyPair->getQuoteCurrency()];
+            $rate = $data['exchange_rates'][$currencyPair->getQuoteCurrency()];
 
             return $this->createRate($currencyPair, (float) $rate, $date);
         }
@@ -75,7 +114,7 @@ final class AbstractApi extends HttpService
      */
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
-        return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
+        return true;
     }
 
     /**

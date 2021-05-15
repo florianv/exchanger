@@ -24,12 +24,12 @@ class AbstractApiTest extends ServiceTestCase
     /**
      * @test
      */
-    public function it_does_not_support_all_queries()
+    public function it_supports_all_queries()
     {
         $service = new AbstractApi($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
-        $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
+        $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     /**
@@ -38,7 +38,7 @@ class AbstractApiTest extends ServiceTestCase
     public function it_throws_an_exception_when_rate_not_supported()
     {
         $this->expectException(Exception::class);
-        $url = 'https://currency.abstractapi.com/v1/latest?api_key=secret&base=USD';
+        $url = 'https://exchange-rates.abstractapi.com/v1/live?api_key=secret&base=USD';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/success.json');
         $service = new AbstractApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
@@ -51,14 +51,33 @@ class AbstractApiTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('USD/GBP');
-        $url = 'https://currency.abstractapi.com/v1/latest?api_key=secret&base=USD';
+        $url = 'https://exchange-rates.abstractapi.com/v1/live?api_key=secret&base=USD';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/success.json');
         $service = new AbstractApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
-        $this->assertSame(0.807175, $rate->getValue());
-        $this->assertEquals('2020-07-01', $rate->getDate()->format('Y-m-d'));
+        $this->assertSame(0.71008, $rate->getValue());
+        $this->assertEquals('2021-05-14', $rate->getDate()->format('Y-m-d'));
+        $this->assertEquals('abstract_api', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_a_historical_rate()
+    {
+        $pair = CurrencyPair::createFromString('USD/GBP');
+        $url = 'https://exchange-rates.abstractapi.com/v1/historical?api_key=secret&base=USD&date=2000-01-03';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/success.json');
+        $date = new \DateTime('2000-01-03');
+
+        $service = new AbstractApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
+
+        $this->assertSame(0.71008, $rate->getValue());
+        $this->assertEquals('2021-05-14', $rate->getDate()->format('Y-m-d'));
         $this->assertEquals('abstract_api', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
