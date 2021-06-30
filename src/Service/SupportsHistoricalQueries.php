@@ -16,7 +16,6 @@ namespace Exchanger\Service;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\HistoricalExchangeRateQuery as HistoricalExchangeRateQueryContract;
-use Exchanger\Exception\UnsupportedCurrencyPairException;
 
 /**
  * Trait to implement to add historical service support.
@@ -30,17 +29,11 @@ trait SupportsHistoricalQueries
      */
     public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract
     {
-        $currencyPair = $exchangeQuery->getCurrencyPair();
-
         if ($exchangeQuery instanceof HistoricalExchangeRateQueryContract) {
-            if ($rate = $this->getHistoricalExchangeRate($exchangeQuery)) {
-                return $rate;
-            }
-        } elseif ($rate = $this->getLatestExchangeRate($exchangeQuery)) {
-            return $rate;
+            return $this->getHistoricalExchangeRate($exchangeQuery);
         }
 
-        throw new UnsupportedCurrencyPairException($currencyPair, $this);
+        return $this->getLatestExchangeRate($exchangeQuery);
     }
 
     /**
