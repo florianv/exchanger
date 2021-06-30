@@ -53,6 +53,7 @@ final class UnsupportedDateException extends Exception
         );
 
         $this->service = $service;
+        $this->date = $date;
     }
 
     /**
