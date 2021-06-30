@@ -97,15 +97,16 @@ final class AbstractApi extends HttpService
         $data = StringUtil::jsonToArray($content);
 
         if (isset($data['exchange_rates'][$currencyPair->getQuoteCurrency()])) {
-            $date = new \DateTime();
-            $date->setTimezone(new \DateTimeZone('UTC'));
-
-            if (isset($data['last_updated'])) {
-                $date->setTimestamp($data['last_updated']);
-            }
-
             if (isset($data['date'])) {
-                $date = \DateTime::createFromFormat('Y-m-d', $data['date'], new \DateTimeZone('UTC'));
+                $date = \DateTime::createFromFormat(
+                    'Y-m-d',
+                    $data['date'],
+                    new \DateTimeZone('UTC')
+                );
+            } else {
+                $date = new \DateTime();
+                $date->setTimezone(new \DateTimeZone('UTC'));
+                $date->setTimestamp($data['last_updated']);
             }
 
             $rate = $data['exchange_rates'][$currencyPair->getQuoteCurrency()];
