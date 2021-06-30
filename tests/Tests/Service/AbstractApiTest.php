@@ -70,7 +70,7 @@ class AbstractApiTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/GBP');
         $url = 'https://exchange-rates.abstractapi.com/v1/historical?api_key=secret&base=USD&date=2000-01-03';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/success.json');
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new AbstractApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
