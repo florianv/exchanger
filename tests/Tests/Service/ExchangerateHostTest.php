@@ -42,7 +42,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $expectedExceptionMessage = '';
         $this->expectExceptionMessage($expectedExceptionMessage);
 
-        $uri = 'https://api.exchangerate.host/latest?base=USD';
+        $uri = 'https://api.exchangerate.host/latest?base=USD&v=' . date('Y-m-d');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/error.json');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
@@ -55,7 +55,7 @@ class ExchangerateHostTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
-        $uri = 'https://api.exchangerate.host/latest?base=EUR';
+        $uri = 'https://api.exchangerate.host/latest?base=EUR&v=' . date('Y-m-d');
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/latest.json');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content));

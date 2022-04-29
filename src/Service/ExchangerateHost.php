@@ -31,7 +31,7 @@ final class ExchangerateHost extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const LATEST_URL = 'https://api.exchangerate.host/latest?base=%s';
+    const LATEST_URL = 'https://api.exchangerate.host/latest?base=%s&v=%s';
 
     const HISTORICAL_URL = 'https://api.exchangerate.host/%s?base=%s';
 
@@ -45,6 +45,7 @@ final class ExchangerateHost extends HttpService
 		$url = sprintf(
 			self::LATEST_URL,
 			$currencyPair->getBaseCurrency(),
+            date('Y-m-d')
 		);
 
         return $this->doCreateRate($url, $currencyPair);
@@ -60,7 +61,7 @@ final class ExchangerateHost extends HttpService
 		$url = sprintf(
 			self::HISTORICAL_URL,
 			$exchangeQuery->getDate()->format('Y-m-d'),
-			$exchangeQuery->getCurrencyPair()->getBaseCurrency(),
+			$exchangeQuery->getCurrencyPair()->getBaseCurrency()
 		);
 
         return $this->doCreateRate($url, $currencyPair);
