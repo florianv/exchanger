@@ -1,0 +1,40 @@
+{
+    "motd": {
+        "msg": "If you or your company use this project or like what we doing, please consider backing us so we can continue maintaining and evolving this project.",
+        "url": "https://exchangerate.host/#/donate"
+    },
+    "success": true,
+    "historical": true,
+    "base": "EUR",
+    "date": "2000-01-03",
+    "rates": {
+        "USD": 1.009,
+        "JPY": 102.75,
+        "CYP": 0.5767,
+        "CZK": 36.063,
+        "DKK": 7.4404,
+        "EEK": 15.6466,
+        "GBP": 0.6246,
+        "HUF": 254.53,
+        "LTL": 4.0454,
+        "LVL": 0.5916,
+        "MTL": 0.4151,
+        "PLN": 4.1835,
+        "ROL": 18273,
+        "SEK": 8.552,
+        "SIT": 198.8925,
+        "SKK": 42.317,
+        "CHF": 1.6043,
+        "ISK": 73.03,
+        "NOK": 8.062,
+        "TRL": 546131,
+        "AUD": 1.5346,
+        "CAD": 1.4577,
+        "HKD": 7.8624,
+        "KRW": 1140.02,
+        "NZD": 1.9331,
+        "SGD": 1.6769,
+        "ZAR": 6.2013,
+        "EUR": 1
+    }
+}

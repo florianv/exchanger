@@ -48,6 +48,7 @@ final class Registry
             'xchangeapi' => XchangeApi::class,
             'fastforex' => FastForex::class,
             'abstract_api' => AbstractApi::class,
+            'exchangeratehost' => ExchangerateHost::class,
         ];
     }
 }
