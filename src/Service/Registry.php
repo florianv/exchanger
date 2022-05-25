@@ -36,6 +36,7 @@ final class Registry
             'european_central_bank' => EuropeanCentralBank::class,
             'exchange_rates_api' => ExchangeRatesApi::class,
             'fixer' => Fixer::class,
+            'fixer_apilayer' => FixerApiLayer::class,
             'forge' => Forge::class,
             'national_bank_of_romania' => NationalBankOfRomania::class,
             'open_exchange_rates' => OpenExchangeRates::class,
