@@ -415,9 +415,11 @@ use Exchanger\Service\CoinLayer;
 use Exchanger\Service\XchangeApi;
 use Exchanger\Service\AbstractApi;
 use Exchanger\Service\ExchangerateHost;
+use Exchanger\Service\FixerApiLayer;
 
 $service = new Chain([
     new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
+    new FixerApiLayer($client, null, ['api_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new AbstractApi($client, null, ['api_key' => 'api_key']),
