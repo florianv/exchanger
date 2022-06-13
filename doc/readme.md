@@ -414,6 +414,7 @@ use Exchanger\Service\Cryptonator;
 use Exchanger\Service\CoinLayer;
 use Exchanger\Service\XchangeApi;
 use Exchanger\Service\AbstractApi;
+use Exchanger\Service\ExchangerateHost;
 use Exchanger\Service\FixerApiLayer;
 
 $service = new Chain([
@@ -434,6 +435,7 @@ $service = new Chain([
     new CurrencyDataFeed($client, null, ['api_key' => 'api_key']),
     new OpenExchangeRates($client, null, ['app_id' => 'app_id', 'enterprise' => false]),
     new Xignite($client, null, ['token' => 'token']),
+    new ExchangerateHost(),
     new PhpArray(
         [
             'EUR/USD' => 1.1,

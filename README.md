@@ -61,6 +61,7 @@ Here is the complete list of the currently implemented services:
 | [Currency Converter API](https://www.currencyconverterapi.com) | * | * | Yes (free but limited or paid) |
 | [xChangeApi.com](https://xchangeapi.com) | * | * | Yes |
 | [fastFOREX.io](https://www.fastforex.io) | USD (free), * (paid) | * | No |
+| [exchangerate.host](https://www.exchangerate.host) | * | * | Yes |
 | Array | * | * | Yes |
 
 ## Credits
