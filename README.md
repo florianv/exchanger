@@ -49,6 +49,7 @@ Here is the complete list of the currently implemented services:
 | [European Central Bank](https://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
 | [National Bank of Georgia](https://nbg.gov.ge) | * | GEL | Yes |
 | [National Bank of Romania](http://www.bnr.ro) | RON, AED, AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EGP, EUR, GBP, HRK, HUF, INR, JPY, KRW, MDL, MXN, NOK, NZD, PLN, RSD, RUB, SEK, TRY, UAH, USD, XAU, XDR, ZAR | RON, AED, AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EGP, EUR, GBP, HRK, HUF, INR, JPY, KRW, MDL, MXN, NOK, NZD, PLN, RSD, RUB, SEK, TRY, UAH, USD, XAU, XDR, ZAR | Yes |
+| [National Bank of Ukranie](https://bank.gov.ua) | * | UAH | Yes |
 | [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | Yes |
 | [Central Bank of the Republic of Uzbekistan](https://cbu.uz) | * | UZS | Yes |
 | [Central Bank of the Czech Republic](https://www.cnb.cz) | * | CZK | Yes |
