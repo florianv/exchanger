@@ -21,7 +21,7 @@ namespace Exchanger\Service;
 final class Registry
 {
     /**
-     * Returns a map of all supports services.
+     * Returns a map of all supported services.
      */
     public static function getServices(): array
     {
@@ -29,6 +29,7 @@ final class Registry
             'bulgarian_national_bank' => BulgarianNationalBank::class,
             'central_bank_of_czech_republic' => CentralBankOfCzechRepublic::class,
             'central_bank_of_republic_turkey' => CentralBankOfRepublicTurkey::class,
+            'central_bank_of_republic_uzbekistan' => CentralBankOfRepublicUzbekistan::class,
             'cryptonator' => Cryptonator::class,
             'currency_converter' => CurrencyConverter::class,
             'currency_data_feed' => CurrencyDataFeed::class,
