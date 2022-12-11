@@ -17,6 +17,7 @@ use Exchanger\Contract\CurrencyPair;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\NonBreakingInvalidArgumentException;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\Service\HttpService;
@@ -25,7 +26,9 @@ use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
- * ApiLayer Currency Data Service (https://apilayer.com/marketplace/currency_data-api).
+ * ApiLayer Currency Data Service.
+ *
+ * @see https://apilayer.com/marketplace/currency_data-api
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -45,7 +48,7 @@ final class CurrencyData extends HttpService
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::API_KEY_OPTION])) {
-            throw new \InvalidArgumentException('The "api_key" option must be provided to use CurrencyData (https://apilayer.com/marketplace/currency_data-api).');
+            throw new NonBreakingInvalidArgumentException('The "api_key" option must be provided to use CurrencyData (https://apilayer.com/marketplace/currency_data-api).');
         }
     }
 

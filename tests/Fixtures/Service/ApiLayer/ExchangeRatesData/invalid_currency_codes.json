@@ -1,0 +1,6 @@
+{
+    "error":{
+        "code":"invalid_currency_codes",
+        "message":"You have provided one or more invalid Currency Codes. [Required format: currencies=EUR,USD,GBP,...]"
+    }
+}

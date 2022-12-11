@@ -54,7 +54,8 @@ final class Registry
             'abstract_api' => AbstractApi::class,
             'exchangeratehost' => ExchangerateHost::class,
             'apilayer_fixer' => ApiLayer\Fixer::class,
-            'apilayer_currency_data' => ApiLayer\CurrencyData::class
+            'apilayer_currency_data' => ApiLayer\CurrencyData::class,
+            'apilayer_exchange_rates_data' => ApiLayer\ExchangeRatesData::class
         ];
     }
 }

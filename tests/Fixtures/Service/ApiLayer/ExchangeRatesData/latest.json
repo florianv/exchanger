@@ -1,0 +1,9 @@
+{
+    "success":true,
+    "timestamp":1619171643,
+    "base":"EUR",
+    "date":"2021-04-23",
+    "rates":{
+        "USD":1.20555
+    }
+}

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Exchanger\Tests\Service\ApiLayer;
 
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\NonBreakingInvalidArgumentException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
@@ -30,7 +31,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_throws_an_exception_if_api_key_option_missing()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(NonBreakingInvalidArgumentException::class);
         $this->expectExceptionMessage('The "api_key" option must be provided to use Fixer (https://apilayer.com/marketplace/fixer-api).');
         new Fixer($this->createMock('Http\Client\HttpClient'));
     }
