@@ -28,9 +28,19 @@ class FixerTest extends ServiceTestCase
     /**
      * @test
      */
+    public function it_throws_an_exception_if_api_key_option_missing()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "api_key" option must be provided to use Fixer (https://apilayer.com/marketplace/fixer-api).');
+        new Fixer($this->createMock('Http\Client\HttpClient'));
+    }
+
+    /**
+     * @test
+     */
     public function it_supports_all_queries()
     {
-        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
@@ -46,7 +56,7 @@ class FixerTest extends ServiceTestCase
         $uri = 'https://api.apilayer.com/fixer/latest?base=USD&apikey=x';
         $content = file_get_contents(__DIR__.'/../../../Fixtures/Service/ApiLayer/Fixer/error.json');
 
-        $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
+        $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['api_key' => 'x']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
     }
 
@@ -59,7 +69,7 @@ class FixerTest extends ServiceTestCase
         $uri = 'https://api.apilayer.com/fixer/latest?base=EUR&apikey=x';
         $content = file_get_contents(__DIR__.'/../../../Fixtures/Service/ApiLayer/Fixer/latest.json');
 
-        $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
+        $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['api_key' => 'x']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertEquals(1.0933, $rate->getValue());
@@ -78,7 +88,7 @@ class FixerTest extends ServiceTestCase
         $content = file_get_contents(__DIR__.'/../../../Fixtures/Service/ApiLayer/Fixer/historical.json');
         $date = new \DateTime('2000-01-03');
 
-        $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
+        $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['api_key' => 'x']);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertEquals(1.5209, $rate->getValue());
@@ -92,7 +102,7 @@ class FixerTest extends ServiceTestCase
      */
     public function it_has_a_name()
     {
-        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'x']);
 
         $this->assertSame('apilayer_fixer', $service->getName());
     }

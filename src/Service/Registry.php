@@ -53,7 +53,8 @@ final class Registry
             'fastforex' => FastForex::class,
             'abstract_api' => AbstractApi::class,
             'exchangeratehost' => ExchangerateHost::class,
-            'apilayer_fixer' => ApiLayer\Fixer::class
+            'apilayer_fixer' => ApiLayer\Fixer::class,
+            'apilayer_currency_data' => ApiLayer\CurrencyData::class
         ];
     }
 }

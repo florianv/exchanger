@@ -25,7 +25,7 @@ use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
- * Fixer Service (https://apilayer.com/marketplace/fixer-api).
+ * ApiLayer Fixer Service (https://apilayer.com/marketplace/fixer-api).
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -33,7 +33,7 @@ final class Fixer extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const ACCESS_KEY_OPTION = 'access_key';
+    const API_KEY_OPTION = 'api_key';
 
     const LATEST_URL = 'https://api.apilayer.com/fixer/latest?base=%s&apikey=%s';
 
@@ -44,8 +44,8 @@ final class Fixer extends HttpService
      */
     public function processOptions(array &$options): void
     {
-        if (!isset($options[self::ACCESS_KEY_OPTION])) {
-            throw new \InvalidArgumentException('The "access_key" option must be provided to use https://apilayer.com/marketplace/fixer-api');
+        if (!isset($options[self::API_KEY_OPTION])) {
+            throw new \InvalidArgumentException('The "api_key" option must be provided to use Fixer (https://apilayer.com/marketplace/fixer-api).');
         }
     }
 
@@ -59,7 +59,7 @@ final class Fixer extends HttpService
         $url = sprintf(
             self::LATEST_URL,
             $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
-            $this->options[self::ACCESS_KEY_OPTION]
+            $this->options[self::API_KEY_OPTION]
         );
 
         return $this->doCreateRate($url, $currencyPair);
@@ -76,7 +76,7 @@ final class Fixer extends HttpService
             self::HISTORICAL_URL,
             $exchangeQuery->getDate()->format('Y-m-d'),
             $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
-            $this->options[self::ACCESS_KEY_OPTION]
+            $this->options[self::API_KEY_OPTION]
         );
 
         return $this->doCreateRate($url, $currencyPair);
