@@ -4,19 +4,19 @@
 
 <table>
    <tr>
-      <td><img src="https://s3.amazonaws.com/swap.assets/fixer_icon.png?v=2" width="50px"/></td>
-      <td><a href="https://fixer.io">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
+      <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
+      <td><a href="https://apilayer.com/marketplace/fixer-api">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
    </tr>
    <tr>
-     <td><img src="https://s3.amazonaws.com/swap.assets/currencylayer_icon.png" width="50px"/></td>
-     <td><a href="https://currencylayer.com">currencylayer</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
+     <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
+     <td><a href="https://apilayer.com/marketplace/currency_data-api">Currency Data</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
    </tr>
    <tr>
-     <td><img src="https://exchangeratesapi.io/assets/images/api-logo.svg" width="50px"/></td>
-     <td><a href="https://exchangeratesapi.io">exchangeratesapi</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
+     <td><img src="https://assets.apilayer.com/apis/exchangerates_data.png" width="50px"/></td>
+     <td><a href="https://apilayer.com/marketplace/exchangerates_data-api">Exchange Rates Data</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
    </tr>   
    <tr>
-     <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba27ede983917dbff22f_favicon.png" width="50px"/></td>
+     <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba29feeeb05d69160e7b_webclip.png" width="50px"/></td>
      <td><a href="https://www.abstractapi.com/">Abstract</a> provides simple exchange rates for developers and a dozen of APIs covering thousands of use cases.</td>
    </tr>  
 </table>
@@ -62,9 +62,9 @@ The complete list of all supported services is available [here](https://github.c
 
 ```php
 use Http\Client\Curl\Client as CurlClient;
-use Exchanger\Service\Fixer;
-use Exchanger\Service\CurrencyLayer;
-use Exchanger\Service\ExchangeRatesApi;
+use Exchanger\Service\ApiLayer\CurrencyData;
+use Exchanger\Service\ApiLayer\ExchangeRatesData;
+use Exchanger\Service\ApiLayer\Fixer;
 use Exchanger\Service\AbstractApi;
 use Exchanger\Exchanger;
 
@@ -74,17 +74,17 @@ $options = [
 ];
 $client = new CurlClient(null, null, $options);
 
-// Use the Fixer.io service
-$service = new Fixer($client, null, ['access_key' => 'YOUR_KEY']);
+// Use the Fixer service
+$service = new Fixer($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api']);
 
-// Or use the currencylayer.com service
-$service = new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]);
+// Or use the CurrencyData service
+$service = new CurrencyData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api']);
 
-// Or use the exchangeratesapi.io service
-$service = new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]);
+// Or use the ExchangeRatesData service
+$service = new ExchangeRatesData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api']);
 
-// Or use the abstractapi.com service
-$service = new AbstractApi($client, null, ['api_key' => 'api_key']);
+// Or use the AbstractApi service
+$service = new AbstractApi($client, null, ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup']);
 
 // Create Exchanger with your service
 $exchanger = new Exchanger($service);
@@ -143,20 +143,20 @@ Simply create a `Chain` service to wrap the services you want to chain.
 
 ```php
 use Exchanger\Service\Chain;
-use Exchanger\Service\Fixer;
-use Exchanger\Service\CurrencyLayer;
-use Exchanger\Service\ExchangeRatesApi;
+use Exchanger\Service\ApiLayer\CurrencyData;
+use Exchanger\Service\ApiLayer\ExchangeRatesData;
+use Exchanger\Service\ApiLayer\Fixer;
 use Exchanger\Service\AbstractApi;
 
 $service = new Chain([
-    new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
-    new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
-    new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
-    new AbstractApi($client, null, ['api_key' => 'api_key'])
+    new Fixer($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api']),
+    new CurrencyData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api']),
+    new ExchangeRatesData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api']),
+    new AbstractApi($client, null, ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
 ]);
 ```
 
-The rates will be first fetched using the `Fixer` service, will fallback to `CurrencyLayer`.
+The rates will be first fetched using the `Fixer` service, will fallback to `CurrencyData`.
 
 > You can consult the list of the supported services and their options [here](#supported-services)
 
@@ -415,15 +415,19 @@ use Exchanger\Service\CoinLayer;
 use Exchanger\Service\XchangeApi;
 use Exchanger\Service\AbstractApi;
 use Exchanger\Service\ExchangerateHost;
-use Exchanger\Service\FixerApiLayer;
+use Exchanger\Service\ApiLayer\CurrencyData;
+use Exchanger\Service\ApiLayer\ExchangeRatesData;
+use Exchanger\Service\ApiLayer\Fixer;
 
 $service = new Chain([
-    new Fixer($client, null, ['access_key' => 'YOUR_KEY']),
-    new FixerApiLayer($client, null, ['api_key' => 'YOUR_KEY']),
+    new Fixer($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api']),
+    new CurrencyData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api']),
+    new ExchangeRatesData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api']),
+    new AbstractApi($client, null, ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup']),
+    new CoinLayer($client, null, ['access_key' => 'access_key', 'paid' => false]),
+    new Exchanger\Service\Fixer($client, null, ['access_key' => 'YOUR_KEY']),
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
-    new AbstractApi($client, null, ['api_key' => 'api_key']),
-    new CoinLayer($client, null, ['access_key' => 'access_key', 'paid' => false]),
     new EuropeanCentralBank(),
     new NationalBankOfRomania(),
     new CentralBankOfRepublicTurkey(),
