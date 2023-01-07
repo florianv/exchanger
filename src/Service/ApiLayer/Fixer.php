@@ -28,7 +28,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 /**
  * ApiLayer Fixer Service.
  *
- * @see https://apilayer.com/marketplace/fixer-api
+ * @see https://fixer.io
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
@@ -48,7 +48,7 @@ final class Fixer extends HttpService
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::API_KEY_OPTION])) {
-            throw new NonBreakingInvalidArgumentException('The "api_key" option must be provided to use Fixer (https://apilayer.com/marketplace/fixer-api).');
+            throw new NonBreakingInvalidArgumentException('The "api_key" option must be provided to use Fixer (https://fixer.io).');
         }
     }
 

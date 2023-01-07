@@ -5,7 +5,7 @@
 <table>
    <tr>
       <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
-      <td><a href="https://apilayer.com/marketplace/fixer-api">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
+      <td><a href="https://fixer.io">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
    </tr>
    <tr>
      <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
@@ -75,7 +75,7 @@ $options = [
 $client = new CurlClient(null, null, $options);
 
 // Use the Fixer service
-$service = new Fixer($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api']);
+$service = new Fixer($client, null, ['api_key' => 'Get your key here: https://fixer.io']);
 
 // Or use the CurrencyData service
 $service = new CurrencyData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api']);
@@ -149,7 +149,7 @@ use Exchanger\Service\ApiLayer\Fixer;
 use Exchanger\Service\AbstractApi;
 
 $service = new Chain([
-    new Fixer($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api']),
+    new Fixer($client, null, ['api_key' => 'Get your key here: https://fixer.io']),
     new CurrencyData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api']),
     new ExchangeRatesData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api']),
     new AbstractApi($client, null, ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
@@ -420,7 +420,7 @@ use Exchanger\Service\ApiLayer\ExchangeRatesData;
 use Exchanger\Service\ApiLayer\Fixer;
 
 $service = new Chain([
-    new Fixer($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/fixer-api']),
+    new Fixer($client, null, ['api_key' => 'Get your key here: https://fixer.io']),
     new CurrencyData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/currency_data-api']),
     new ExchangeRatesData($client, null, ['api_key' => 'Get your key here: https://apilayer.com/marketplace/exchangerates_data-api']),
     new AbstractApi($client, null, ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup']),

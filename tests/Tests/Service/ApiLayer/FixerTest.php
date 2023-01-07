@@ -32,7 +32,7 @@ class FixerTest extends ServiceTestCase
     public function it_throws_an_exception_if_api_key_option_missing()
     {
         $this->expectException(NonBreakingInvalidArgumentException::class);
-        $this->expectExceptionMessage('The "api_key" option must be provided to use Fixer (https://apilayer.com/marketplace/fixer-api).');
+        $this->expectExceptionMessage('The "api_key" option must be provided to use Fixer (https://fixer.io).');
         new Fixer($this->createMock('Http\Client\HttpClient'));
     }
 
