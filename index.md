@@ -1,5 +1,5 @@
 Exchanger is a PHP framework to work with currency exchange rates from various services such as
-**[Fixer](https://apilayer.com/marketplace/fixer-api)**, **[Currency Data](https://apilayer.com/marketplace/currency_data-api)**,
+**[Fixer](https://fixer.io)**, **[Currency Data](https://apilayer.com/marketplace/currency_data-api)**,
 **[Exchange Rates Data](https://apilayer.com/marketplace/exchangerates_data-api)** or **[Abstract](https://www.abstractapi.com)**.
 Looking for a simple library based on Exchanger ? Check out [Swap](https://github.com/florianv/swap) !
 
@@ -8,7 +8,7 @@ Looking for a simple library based on Exchanger ? Check out [Swap](https://githu
 <table>
    <tr>
       <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
-      <td><a href="https://apilayer.com/marketplace/fixer-api">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
+      <td><a href="https://fixer.io">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
    </tr>
    <tr>
      <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
@@ -34,7 +34,7 @@ Here is the complete list of the currently implemented services:
 
 | Service | Base Currency | Quote Currency | Historical |
 |---------------------------------------------------------------------------|----------------------|----------------|----------------|
-| [Fixer](https://apilayer.com/marketplace/fixer-api) | EUR (free, no SSL), * (paid) | * | Yes |
+| [Fixer](https://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
 | [Currency Data](https://apilayer.com/marketplace/currency_data-api) | USD (free), * (paid) | * | Yes |
 | [Exchange Rates Data](https://apilayer.com/marketplace/exchangerates_data-api) | USD (free), * (paid) | * | Yes |
 | [Abstract](https://www.abstractapi.com) | * | * | Yes |
