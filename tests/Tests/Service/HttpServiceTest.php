@@ -38,20 +38,10 @@ class HttpServiceTest extends TestCase
     /**
      * @test
      */
-    public function initialize_with_httplug_client()
-    {
-        $httpClient = $this->createMock('Http\Client\HttpClient');
-        $this->expectNotToPerformAssertions();
-        $this->createAnonymousClass($httpClient);
-    }
-
-    /**
-     * @test
-     */
     public function initialize_with_null_as_client()
     {
         $this->expectException(\Http\Discovery\Exception\NotFoundException::class);
-        $this->expectExceptionMessage('No HTTPlug clients found. Make sure to install a package providing "php-http/client-implementation"');
+        $this->expectExceptionMessage('No PSR-18 clients found. Make sure to install a package providing "psr/http-client-implementation". Example: "php-http/guzzle7-adapter"');
         $this->createAnonymousClass(null);
     }
 
@@ -62,7 +52,7 @@ class HttpServiceTest extends TestCase
     {
         $httpClient = new \stdClass();
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Client must be an instance of Http\Client\HttpClient or Psr\Http\Client\ClientInterface');
+        $this->expectExceptionMessage('Client must be an instance of Psr\Http\Client\ClientInterface');
         $this->createAnonymousClass($httpClient);
     }
 
