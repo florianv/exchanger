@@ -31,7 +31,7 @@ class CurrencyDataTest extends ServiceTestCase
     public function it_throws_an_exception_if_api_key_option_missing()
     {
         $this->expectException(NonBreakingInvalidArgumentException::class);
-        $this->expectExceptionMessage('The "api_key" option must be provided to use CurrencyData (https://apilayer.com/marketplace/currency_data-api).');
+        $this->expectExceptionMessage('The "api_key" option must be provided to use CurrencyData (https://currencylayer.com).');
         new CurrencyData($this->createMock('Http\Client\HttpClient'));
     }
 
