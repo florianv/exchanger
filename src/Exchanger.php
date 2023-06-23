@@ -88,7 +88,7 @@ final class Exchanger implements ExchangeRateProviderContract
         // Replace characters reserved in PSR-6
         $cacheKeyPrefix = preg_replace('#[\{\}\(\)/\\\@\:]#', '-', $cacheKeyPrefix);
 
-        $cacheKey = $cacheKeyPrefix.sha1(serialize($exchangeQuery));
+        $cacheKey = $this->generateCacheKey($cacheKeyPrefix, $exchangeQuery);
         if (\strlen($cacheKey) > 64) {
             throw new CacheException("Cache key length exceeds 64 characters ('$cacheKey'). This violates PSR-6 standard");
         }
@@ -105,5 +105,18 @@ final class Exchanger implements ExchangeRateProviderContract
         $this->cache->set($cacheKey, $rate, $ttl);
 
         return $rate;
+    }
+
+    private function generateCacheKey($cacheKeyPrefix, ExchangeRateQueryContract $exchangeQuery): string
+    {
+        $base = $exchangeQuery->getCurrencyPair()->getBaseCurrency().$exchangeQuery->getCurrencyPair()->getQuoteCurrency();
+
+        $date = '';
+
+        if ($exchangeQuery instanceof \Exchanger\Contract\HistoricalExchangeRateQuery) {
+            $date = $exchangeQuery->getDate()->format('Y-m-d');
+        }
+
+        return $cacheKeyPrefix.sha1($base.$date);
     }
 }
