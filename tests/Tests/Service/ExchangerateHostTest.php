@@ -89,6 +89,86 @@ class ExchangerateHostTest extends ServiceTestCase
     /**
      * @test
      */
+    public function it_fetches_uses_a_specific_source_option()
+    {
+        $pair = CurrencyPair::createFromString('EUR/AUD');
+        $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&source=ecb';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $date = new \DateTime('2000-01-03');
+
+        $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['source' => 'ecb']);
+
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
+
+        $this->assertEquals(1.5346, $rate->getValue());
+        $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals('exchangeratehost', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_uses_a_specific_source_option_overridden_by_exchange_query_method()
+    {
+        $pair = CurrencyPair::createFromString('EUR/AUD');
+        $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&source=testing';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $date = new \DateTime('2000-01-03');
+
+        $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['source' => 'ecb']);
+
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date, ['source' => 'testing']));
+
+        $this->assertEquals(1.5346, $rate->getValue());
+        $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals('exchangeratehost', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_uses_a_specific_places_option_overridden_by_exchange_query_method()
+    {
+        $pair = CurrencyPair::createFromString('EUR/AUD');
+        $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&places=10';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $date = new \DateTime('2000-01-03');
+
+        $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['places' => 6]);
+
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date, ['places' => 10]));
+
+        $this->assertEquals(1.5346, $rate->getValue());
+        $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals('exchangeratehost', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_uses_a_specific_places_option()
+    {
+        $pair = CurrencyPair::createFromString('EUR/AUD');
+        $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&places=6';
+        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $date = new \DateTime('2000-01-03');
+
+        $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['places' => 6]);
+
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
+
+        $this->assertEquals(1.5346, $rate->getValue());
+        $this->assertEquals($date, $rate->getDate());
+        $this->assertEquals('exchangeratehost', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    /**
+     * @test
+     */
     public function it_has_a_name()
     {
         $service = new ExchangerateHost($this->createMock('Http\Client\HttpClient'));

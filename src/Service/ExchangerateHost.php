@@ -34,6 +34,8 @@ final class ExchangerateHost extends HttpService
     const LATEST_URL = 'https://api.exchangerate.host/latest?base=%s&v=%s';
 
     const HISTORICAL_URL = 'https://api.exchangerate.host/%s?base=%s';
+    const OPTION_PLACES = 'places';
+    const OPTION_SOURCE = 'source';
 
     /**
      * {@inheritdoc}
@@ -48,7 +50,7 @@ final class ExchangerateHost extends HttpService
             date('Y-m-d')
 		);
 
-        return $this->doCreateRate($url, $currencyPair);
+        return $this->doCreateRate($this->additionalQueryParameters($url, $exchangeQuery), $currencyPair);
     }
 
     /**
@@ -64,7 +66,7 @@ final class ExchangerateHost extends HttpService
 			$exchangeQuery->getCurrencyPair()->getBaseCurrency()
 		);
 
-        return $this->doCreateRate($url, $currencyPair);
+        return $this->doCreateRate($this->additionalQueryParameters($url, $exchangeQuery), $currencyPair);
     }
 
     /**
@@ -110,5 +112,34 @@ final class ExchangerateHost extends HttpService
     public function getName(): string
     {
         return 'exchangeratehost';
+    }
+
+    private function additionalQueryParameters(string $url, $exchangeRateQuery): string
+    {
+        if (isset($this->options[self::OPTION_PLACES])) {
+            $places = $this->options[self::OPTION_PLACES];
+        }
+
+        if ($exchangeRateQuery->getOption(self::OPTION_PLACES)) {
+            $places = $exchangeRateQuery->getOption(self::OPTION_PLACES);
+        }
+
+        if (isset($this->options[self::OPTION_SOURCE])) {
+            $source = $this->options[self::OPTION_SOURCE];
+        }
+
+        if ($exchangeRateQuery->getOption(self::OPTION_SOURCE)) {
+            $source = $exchangeRateQuery->getOption(self::OPTION_SOURCE);
+        }
+
+        if (isset($places)) {
+            $url .= '&places=' . $places;
+        }
+
+        if (isset($source)) {
+            $url .= '&source='. $source;
+        }
+
+        return $url;
     }
 }
