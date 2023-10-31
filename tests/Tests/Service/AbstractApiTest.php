@@ -38,7 +38,7 @@ class AbstractApiTest extends ServiceTestCase
     public function it_throws_an_exception_when_rate_not_supported()
     {
         $this->expectException(Exception::class);
-        $url = 'https://exchange-rates.abstractapi.com/v1/live?api_key=secret&base=USD';
+        $url = 'https://exchange-rates.abstractapi.com/v1/live/?api_key=secret&base=USD';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/success.json');
         $service = new AbstractApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
@@ -51,7 +51,7 @@ class AbstractApiTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('USD/GBP');
-        $url = 'https://exchange-rates.abstractapi.com/v1/live?api_key=secret&base=USD';
+        $url = 'https://exchange-rates.abstractapi.com/v1/live/?api_key=secret&base=USD';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/success.json');
         $service = new AbstractApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
