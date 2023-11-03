@@ -84,7 +84,7 @@ class ExchangeRatesDataTest extends ServiceTestCase
 
     public function unsupportedCurrencyPairResponsesProvider(): array
     {
-        $dir = __DIR__.'/../../../Fixtures/Service/ExchangeRatesData/';
+        $dir = __DIR__.'/../../../Fixtures/Service/ApiLayer/ExchangeRatesData/';
 
         return [
             'invalid_base_currency' => [
@@ -186,7 +186,7 @@ class ExchangeRatesDataTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'https://api.apilayer.com/exchangerates_data/latest?base=EUR&api_key=x&symbols=USD';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ApiLayer/ExchangeRatesData/latest.json');
+        $content = file_get_contents(__DIR__.'/../../../Fixtures/Service/ApiLayer/ExchangeRatesData/latest.json');
 
         $service = new ExchangeRatesData(
             $this->getHttpAdapterMock($uri, $content),

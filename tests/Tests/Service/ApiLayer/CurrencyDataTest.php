@@ -51,7 +51,7 @@ class CurrencyDataTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $uri = 'https://api.apilayer.com/currency_data/live?apikey=secret&currencies=EUR';
-        $content = file_get_contents(__DIR__.'/../../../../Fixtures/Service/CurrencyData/error.json');
+        $content = file_get_contents(__DIR__.'/../../../Fixtures/Service/ApiLayer/CurrencyData/error.json');
 
         $service = new CurrencyData($this->getHttpAdapterMock($uri, $content), null, ['api_key' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -65,7 +65,7 @@ class CurrencyDataTest extends ServiceTestCase
         $uri = 'https://api.apilayer.com/currency_data/live?apikey=secret&currencies=EUR';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
-        $content = file_get_contents(__DIR__.'/../../../Fixtures/Service/CurrencyData/success.json');
+        $content = file_get_contents(__DIR__.'/../../../Fixtures/Service/ApiLayer/CurrencyData/success.json');
 
         $pair = CurrencyPair::createFromString('USD/EUR');
         $service = new CurrencyData($this->getHttpAdapterMock($uri, $content), null, ['api_key' => 'secret']);
@@ -84,7 +84,7 @@ class CurrencyDataTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/AED');
         $uri = 'http://apilayer.net/api/historical?apikey=secret&date=2015-05-06';
-        $content = file_get_contents(__DIR__.'/../../../Fixtures/Service/CurrencyData/historical_success.json');
+        $content = file_get_contents(__DIR__.'/../../../Fixtures/Service/ApiLayer/CurrencyData/historical_success.json');
         $date = new \DateTime('2015-05-06');
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1430870399);
