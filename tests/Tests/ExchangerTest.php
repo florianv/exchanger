@@ -19,6 +19,7 @@ use Exchanger\CurrencyPair;
 use Exchanger\Exception\CacheException;
 use Exchanger\Exception\UnsupportedExchangeQueryException;
 use Exchanger\Exchanger;
+use Exchanger\HistoricalExchangeRateQuery;
 use PHPUnit\Framework\TestCase;
 
 class ExchangerTest extends TestCase
@@ -139,7 +140,49 @@ class ExchangerTest extends TestCase
         $exchangeRateQuery = new ExchangeRateQuery($pair);
         $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
         $ttl = 3600;
-        $key = sha1(serialize($exchangeRateQuery));
+        $key = sha1("{$exchangeRateQuery->getCurrencyPair()->getBaseCurrency()}{$exchangeRateQuery->getCurrencyPair()->getQuoteCurrency()}");
+
+        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+
+        $service
+            ->expects($this->any())
+            ->method('supportQuery')
+            ->willReturn(true);
+
+        $service
+            ->expects($this->once())
+            ->method('getExchangeRate')
+            ->willReturn($rate);
+
+        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
+
+        $cache
+            ->expects($this->once())
+            ->method('get')
+            ->willReturn(null);
+
+        $cache
+            ->expects($this->once())
+            ->method('set')
+            ->with($key, $rate, $ttl);
+
+        $exchanger = new Exchanger($service, $cache, ['cache_ttl' => $ttl]);
+
+        $returnedRate = $exchanger->getExchangeRate($exchangeRateQuery);
+
+        $this->assertSame($rate, $returnedRate);
+    }
+
+    /**
+     * @test
+     */
+    public function it_caches_a_rate_historical_rate()
+    {
+        $pair = CurrencyPair::createFromString('EUR/USD');
+        $exchangeRateQuery = new HistoricalExchangeRateQuery($pair, new \DateTime('2020-12-01', new \DateTimeZone('UTC')));
+        $rate = new ExchangeRate($pair, 1, new \DateTime('2020-12-01', new \DateTimeZone('UTC')), __CLASS__);
+        $ttl = 3600;
+        $key = sha1("{$exchangeRateQuery->getCurrencyPair()->getBaseCurrency()}{$exchangeRateQuery->getCurrencyPair()->getQuoteCurrency()}2020-12-01");
 
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
@@ -213,7 +256,7 @@ class ExchangerTest extends TestCase
         $pair = CurrencyPair::createFromString('EUR/USD');
         $exchangeRateQuery = new ExchangeRateQuery($pair, ['cache_ttl' => $ttl]);
         $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
-        $key = sha1(serialize($exchangeRateQuery));
+        $key = sha1("{$exchangeRateQuery->getCurrencyPair()->getBaseCurrency()}{$exchangeRateQuery->getCurrencyPair()->getQuoteCurrency()}");
 
         $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
 
