@@ -33,7 +33,7 @@ final class AbstractApi extends HttpService
 
     const API_KEY_OPTION = 'api_key';
 
-    const LATEST_URL = 'https://exchange-rates.abstractapi.com/v1/live?api_key=%s&base=%s';
+    const LATEST_URL = 'https://exchange-rates.abstractapi.com/v1/live/?api_key=%s&base=%s';
 
     const HISTORICAL_URL = 'https://exchange-rates.abstractapi.com/v1/historical?api_key=%s&base=%s&date=%s';
 
