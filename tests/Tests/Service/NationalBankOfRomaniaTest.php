@@ -156,7 +156,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $this->assertSame('national_bank_of_romania', $service->getName());
     }
 
-    public function getSupportedCurrencies(): array
+    public static function getSupportedCurrencies(): array
     {
         return [
             ['AED'],

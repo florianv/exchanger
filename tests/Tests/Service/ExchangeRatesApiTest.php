@@ -91,7 +91,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $service->getExchangeRate($query);
     }
 
-    public function unsupportedCurrencyPairResponsesProvider(): array
+    public static function unsupportedCurrencyPairResponsesProvider(): array
     {
         $dir = __DIR__.'/../../Fixtures/Service/ExchangeRatesApi/';
 
