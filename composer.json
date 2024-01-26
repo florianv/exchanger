@@ -31,10 +31,11 @@
         "php-http/discovery": "^1.6",
         "psr/http-factory": "^1.0.2",
         "php-http/client-implementation": "^1.0",
-        "psr/simple-cache": "^1.0 || ^2.0 || ^3.0"
+        "psr/simple-cache": "^1.0 || ^2.0 || ^3.0",
+        "symfony/http-client": "^7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7 || ^8 || ^9.4",
+        "phpunit/phpunit": "^7 || ^8 || ^9.4 || ^10.5",
         "php-http/message": "^1.7",
         "php-http/mock-client": "^1.0",
         "nyholm/psr7": "^1.0"
@@ -50,5 +51,10 @@
     "suggest": {
         "php-http/message": "Required to use Guzzle for sending HTTP requests",
         "php-http/guzzle6-adapter": "Required to use Guzzle for sending HTTP requests"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }

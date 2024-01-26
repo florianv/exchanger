@@ -29,7 +29,7 @@ class CurrencyPairTest extends TestCase
         $this->assertEquals($quoteCurrency, $pair->getQuoteCurrency());
     }
 
-    public function validStringProvider()
+    public static function validStringProvider()
     {
         return [
             ['EUR/USD', 'EUR', 'USD'],
@@ -49,7 +49,7 @@ class CurrencyPairTest extends TestCase
         CurrencyPair::createFromString($string);
     }
 
-    public function invalidStringProvider()
+    public static function invalidStringProvider()
     {
         return [
             ['EUR'], ['EUR/'], ['EU/US'], ['EUR/US'], ['US/EUR'], ['00'], ['00/'], ['007/00'],
