@@ -14,11 +14,7 @@
    <tr>
      <td><img src="https://assets.apilayer.com/apis/exchangerates_data.png" width="50px"/></td>
      <td><a href="https://exchangeratesapi.io">Exchange Rates Data</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
-   </tr>   
-   <tr>
-     <td><img src="https://global-uploads.webflow.com/5ebbd0a566a3996636e55959/5ec2ba29feeeb05d69160e7b_webclip.png" width="50px"/></td>
-     <td><a href="https://www.abstractapi.com/">Abstract</a> provides simple exchange rates for developers and a dozen of APIs covering thousands of use cases.</td>
-   </tr>  
+   </tr>
 </table>
 
 ## Index
@@ -65,7 +61,6 @@ use Http\Client\Curl\Client as CurlClient;
 use Exchanger\Service\ApiLayer\CurrencyData;
 use Exchanger\Service\ApiLayer\ExchangeRatesData;
 use Exchanger\Service\ApiLayer\Fixer;
-use Exchanger\Service\AbstractApi;
 use Exchanger\Exchanger;
 
 // Create your http client (we choose curl here)
@@ -82,9 +77,6 @@ $service = new CurrencyData($client, null, ['api_key' => 'Get your key here: htt
 
 // Or use the ExchangeRatesData service
 $service = new ExchangeRatesData($client, null, ['api_key' => 'Get your key here: https://exchangeratesapi.io']);
-
-// Or use the AbstractApi service
-$service = new AbstractApi($client, null, ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup']);
 
 // Create Exchanger with your service
 $exchanger = new Exchanger($service);
@@ -146,13 +138,11 @@ use Exchanger\Service\Chain;
 use Exchanger\Service\ApiLayer\CurrencyData;
 use Exchanger\Service\ApiLayer\ExchangeRatesData;
 use Exchanger\Service\ApiLayer\Fixer;
-use Exchanger\Service\AbstractApi;
 
 $service = new Chain([
     new Fixer($client, null, ['api_key' => 'Get your key here: https://fixer.io']),
     new CurrencyData($client, null, ['api_key' => 'Get your key here: https://currencylayer.com']),
     new ExchangeRatesData($client, null, ['api_key' => 'Get your key here: https://exchangeratesapi.io']),
-    new AbstractApi($client, null, ['api_key' => 'Get your key here: https://app.abstractapi.com/users/signup'])
 ]);
 ```
 
