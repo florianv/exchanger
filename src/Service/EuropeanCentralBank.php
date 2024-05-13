@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Exchanger\Service;
 
+use DateInterval;
+use DateTime;
+use DateTimeInterface;
+use Exception;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
@@ -29,11 +33,11 @@ final class EuropeanCentralBank extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
+    private const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
 
-    const HISTORICAL_URL_LIMITED_TO_90_DAYS_BACK = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
+    private const HISTORICAL_URL_LIMITED_TO_90_DAYS_BACK = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
 
-    const HISTORICAL_URL_OLDER_THAN_90_DAYS = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
+    private const HISTORICAL_URL_OLDER_THAN_90_DAYS = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
 
     /**
      * {@inheritdoc}
@@ -48,7 +52,7 @@ final class EuropeanCentralBank extends HttpService
 
         $quoteCurrency = $currencyPair->getQuoteCurrency();
         $elements = $element->xpath('//xmlns:Cube[@currency="'.$quoteCurrency.'"]/@rate');
-        $date = new \DateTime((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
+        $date = new DateTime((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
 
         if (empty($elements) || !$date) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -72,13 +76,20 @@ final class EuropeanCentralBank extends HttpService
         $formattedDate = $exchangeQuery->getDate()->format('Y-m-d');
         $quoteCurrency = $currencyPair->getQuoteCurrency();
 
+        $prevDays = 0;
+        while (empty($element->xpath('//xmlns:Cube[@time="'.$formattedDate.'"]'))) {
+            $prevDays ++;
+            if ($prevDays > 7) {
+                throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
+            }
+            $formattedDate = $exchangeQuery
+                ->getDate()
+                ->sub(new DateInterval('P'.$prevDays.'D'))
+                ->format('Y-m-d');
+        }
         $elements = $element->xpath('//xmlns:Cube[@time="'.$formattedDate.'"]/xmlns:Cube[@currency="'.$quoteCurrency.'"]/@rate');
 
         if (empty($elements)) {
-            if (empty($element->xpath('//xmlns:Cube[@time="'.$formattedDate.'"]'))) {
-                throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
-            }
-
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
@@ -102,15 +113,15 @@ final class EuropeanCentralBank extends HttpService
     }
 
     /**
-     * @param \DateTimeInterface $date
+     * @param DateTimeInterface $date
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    private function getHistoricalUrl(\DateTimeInterface $date): string
+    private function getHistoricalUrl(DateTimeInterface $date): string
     {
-        $dateDiffInDays = $date->diff(new \DateTime('now'))->days;
+        $dateDiffInDays = $date->diff(new DateTime('now'))->days;
         if ($dateDiffInDays > 90) {
             return self::HISTORICAL_URL_OLDER_THAN_90_DAYS;
         }
