@@ -32,9 +32,9 @@ final class NationalBankOfRomania extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    protected const URL = 'https://www.bnr.ro/nbrfxrates.xml';
+    protected const URL = 'https://curs.bnr.ro/nbrfxrates.xml';
 
-    protected const HISTORICAL_URL_TEMPLATE = 'https://www.bnr.ro/files/xml/years/nbrfxrates{year}.xml';
+    protected const HISTORICAL_URL_TEMPLATE = 'https://curs.bnr.ro/files/xml/years/nbrfxrates{year}.xml';
 
     private const SUPPORTED_CURRENCIES = [
         'AED',
