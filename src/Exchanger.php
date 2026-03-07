@@ -56,7 +56,7 @@ final class Exchanger implements ExchangeRateProviderContract
      * @param CacheInterface|null         $cache
      * @param array                       $options
      */
-    public function __construct(ExchangeRateServiceContract $service, CacheInterface $cache = null, array $options = [])
+    public function __construct(ExchangeRateServiceContract $service, ?CacheInterface $cache = null, array $options = [])
     {
         $this->service = $service;
         $this->cache = $cache;

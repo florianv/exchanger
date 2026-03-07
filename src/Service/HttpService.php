@@ -47,7 +47,7 @@ abstract class HttpService extends Service
      * @param RequestFactoryInterface|null    $requestFactory
      * @param array                           $options
      */
-    public function __construct($httpClient = null, RequestFactoryInterface $requestFactory = null, array $options = [])
+    public function __construct($httpClient = null, ?RequestFactoryInterface $requestFactory = null, array $options = [])
     {
         if (null === $httpClient) {
             $httpClient = HttpClientDiscovery::find();

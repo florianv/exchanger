@@ -77,7 +77,7 @@ final class CentralBankOfRepublicUzbekistan extends HttpService
      * @throws UnsupportedCurrencyPairException
      * @throws Exception
      */
-    private function doCreateRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
+    private function doCreateRate(ExchangeRateQuery $exchangeQuery, ?DateTimeInterface $requestedDate = null): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
@@ -106,7 +106,7 @@ final class CentralBankOfRepublicUzbekistan extends HttpService
      *
      * @return string
      */
-    private function buildUrl(DateTimeInterface $requestedDate = null): string
+    private function buildUrl(?DateTimeInterface $requestedDate = null): string
     {
         $date = '';
         if (!is_null($requestedDate)) {
