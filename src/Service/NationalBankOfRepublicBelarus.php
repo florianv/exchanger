@@ -81,7 +81,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      *
      * @return int|false
      */
-    private static function detectPeriodicity(string $baseCurrency, \DateTimeInterface $date = null)
+    private static function detectPeriodicity(string $baseCurrency, ?\DateTimeInterface $date = null)
     {
         return array_reduce(
 
@@ -115,7 +115,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      *
      * @return bool
      */
-    private static function supportQuoteCurrency(string $quoteCurrency, \DateTimeInterface $date = null): bool
+    private static function supportQuoteCurrency(string $quoteCurrency, ?\DateTimeInterface $date = null): bool
     {
         if ($date) {
             $date = $date->format('Y-m-d');
@@ -167,7 +167,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      * @throws UnsupportedDateException
      * @throws UnsupportedExchangeQueryException
      */
-    private function doCreateRate(ExchangeRateQuery $exchangeQuery, \DateTimeInterface $requestedDate = null): ExchangeRate
+    private function doCreateRate(ExchangeRateQuery $exchangeQuery, ?\DateTimeInterface $requestedDate = null): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $baseCurrency = $currencyPair->getBaseCurrency();
@@ -224,7 +224,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      *
      * @return string
      */
-    private function buildUrl(string $baseCurrency, \DateTimeInterface $requestedDate = null): string
+    private function buildUrl(string $baseCurrency, ?\DateTimeInterface $requestedDate = null): string
     {
         $data = isset($requestedDate) ? ['ondate' => $requestedDate->format('Y-m-d')] : [];
         $data += ['periodicity' => (int) self::detectPeriodicity($baseCurrency, $requestedDate)];

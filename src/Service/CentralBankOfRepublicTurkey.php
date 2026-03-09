@@ -70,7 +70,7 @@ final class CentralBankOfRepublicTurkey extends HttpService
      *
      * @throws UnsupportedCurrencyPairException
      */
-    private function doCreateRate(ExchangeRateQuery $exchangeQuery, DateTimeInterface $requestedDate = null): ExchangeRate
+    private function doCreateRate(ExchangeRateQuery $exchangeQuery, ?DateTimeInterface $requestedDate = null): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $content = $this->request($this->buildUrl($requestedDate));
@@ -97,7 +97,7 @@ final class CentralBankOfRepublicTurkey extends HttpService
      *
      * @return string
      */
-    private function buildUrl(DateTimeInterface $requestedDate = null): string
+    private function buildUrl(?DateTimeInterface $requestedDate = null): string
     {
         if (null === $requestedDate) {
             $fileName = 'today';
