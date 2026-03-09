@@ -93,7 +93,7 @@ final class CentralBankOfCzechRepublic extends HttpService
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
 
-                return $this->createRate($currencyPair, (float) ($rate / (int) $count), $date);
+                return $this->createRate($currencyPair, round($rate / (int) $count, 10), $date);
             }
         }
 
