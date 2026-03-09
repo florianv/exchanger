@@ -22,12 +22,11 @@ use Exchanger\CurrencyPair;
 use Exchanger\Service\Chain;
 use Exchanger\Service\PhpArray;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ChainTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         // Supported
@@ -69,9 +68,7 @@ class ChainTest extends TestCase
         $this->assertFalse($chain->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_use_next_provider_in_the_chain()
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
@@ -121,9 +118,7 @@ class ChainTest extends TestCase
         $this->assertSame($rate, $fetchedRate);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_all_providers_fail()
     {
         $exception = new Exception('Unsupported currency pair.');
@@ -165,9 +160,7 @@ class ChainTest extends TestCase
         $this->assertTrue($caught);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new Chain();
@@ -175,9 +168,7 @@ class ChainTest extends TestCase
         $this->assertSame('chain', $service->getName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_convert_multiple_times()
     {
         $generator = function (): \Generator {

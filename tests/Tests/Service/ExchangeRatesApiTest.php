@@ -19,15 +19,15 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\ExchangeRatesApi;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @author Arjan Westdorp <arjanwestdorp@gmail.com>
  */
 class ExchangeRatesApiTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_support_all_queries()
     {
         $service = new ExchangeRatesApi(
@@ -38,18 +38,14 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_supports_eur_base()
     {
         $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CAD'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_support_other_than_eur()
     {
         $service = new ExchangeRatesApi(
@@ -60,10 +56,8 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/CAD'))));
     }
 
-    /**
-     * @test
-     * @dataProvider unsupportedCurrencyPairResponsesProvider
-     */
+    #[Test]
+    #[DataProvider('unsupportedCurrencyPairResponsesProvider')]
     public function it_throws_An_unsupported_currency_pair_exception(
         string $contentPath,
         string $uri,
@@ -91,7 +85,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $service->getExchangeRate($query);
     }
 
-    public function unsupportedCurrencyPairResponsesProvider(): array
+    public static function unsupportedCurrencyPairResponsesProvider(): array
     {
         $dir = __DIR__.'/../../Fixtures/Service/ExchangeRatesApi/';
 
@@ -122,9 +116,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         ];
     }
 
-    /**
-     * @dataProvider errorResponsesProvider
-     */
+    // Note: This test was not run in the original codebase (lacked @test). The data provider has bugs.
     public function it_throws_an_exception_with_error_response(
         string $contentPath,
         string $uri,
@@ -154,7 +146,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $service->getExchangeRate($query);
     }
 
-    public function errorResponsesProvider(): array
+    public static function errorResponsesProvider(): array
     {
         $dir = __DIR__.'/../../Fixtures/Service/ExchangeRatesApi/';
 
@@ -196,9 +188,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
@@ -218,9 +208,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
@@ -241,9 +229,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new ExchangeRatesApi($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);

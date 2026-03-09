@@ -18,12 +18,11 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\Forge;
+use PHPUnit\Framework\Attributes\Test;
 
 class ForgeTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new Forge($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
@@ -32,9 +31,7 @@ class ForgeTest extends ServiceTestCase
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_rate_not_supported()
     {
         $this->expectException(Exception::class);
@@ -45,9 +42,7 @@ class ForgeTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/ZZZ')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
@@ -63,9 +58,7 @@ class ForgeTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_when_response_symbol_matches()
     {
         $pair = CurrencyPair::createFromString('EUR/HKD');
@@ -80,9 +73,7 @@ class ForgeTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_response_symbol_does_not_match()
     {
         $this->expectException(Exception::class);
@@ -93,9 +84,7 @@ class ForgeTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/AED')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new Forge($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);

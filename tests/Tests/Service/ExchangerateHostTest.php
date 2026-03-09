@@ -18,24 +18,21 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\ExchangerateHost;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @author Pascal Hofmann <mail@pascalhofmann.de>
  */
 class ExchangerateHostTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_supports_all_queries()
     {
         $service = new ExchangerateHost($this->createMock('Http\Client\HttpClient'));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_with_error_response()
     {
         $this->expectException(Exception::class);
@@ -49,9 +46,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
@@ -67,9 +62,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
@@ -86,9 +79,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_uses_a_specific_source_option()
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
@@ -106,9 +97,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_uses_a_specific_source_option_overridden_by_exchange_query_method()
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
@@ -126,9 +115,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_uses_a_specific_places_option_overridden_by_exchange_query_method()
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
@@ -146,9 +133,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_uses_a_specific_places_option()
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
@@ -166,9 +151,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new ExchangerateHost($this->createMock('Http\Client\HttpClient'));

@@ -17,15 +17,14 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\XchangeApi;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @author xChangeApi.com <hello@xchangeapi.com>
  */
 class XchangeApiTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new XchangeApi($this->createMock('Http\Client\HttpClient'), null, ['api-key' => 'secret']);
@@ -33,9 +32,7 @@ class XchangeApiTest extends ServiceTestCase
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('ABC/DEF'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/GBP');
@@ -51,9 +48,7 @@ class XchangeApiTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rates()
     {
         $pair = CurrencyPair::createFromString('USD/JPY');
@@ -70,9 +65,7 @@ class XchangeApiTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new XchangeApi($this->createMock('Http\Client\HttpClient'), null, ['api-key' => 'secret']);

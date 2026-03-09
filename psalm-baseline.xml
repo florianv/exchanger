@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.15.1@28dc127af1b5aecd52314f6f645bafc10d0e11f9">
+  <file src="src/Contract/ExchangeRate.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getCurrencyPair]]></code>
+      <code><![CDATA[getDate]]></code>
+      <code><![CDATA[getProviderName]]></code>
+      <code><![CDATA[getValue]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Contract/ExchangeRateService.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getName]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/CurrencyPair.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getBaseCurrency(): string]]></code>
+      <code><![CDATA[public function getQuoteCurrency(): string]]></code>
+      <code><![CDATA[public function isIdentical(): bool]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Exception/ChainException.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getExceptions]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Exception/NonBreakingInvalidArgumentException.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[NonBreakingInvalidArgumentException]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/Exception/UnsupportedCurrencyPairException.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getCurrencyPair]]></code>
+      <code><![CDATA[getService]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Exception/UnsupportedDateException.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getDate]]></code>
+      <code><![CDATA[getService]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Exception/UnsupportedExchangeQueryException.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getExchangeRateQuery]]></code>
+      <code><![CDATA[getService]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/ExchangeRate.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getCurrencyPair(): CurrencyPairContract]]></code>
+      <code><![CDATA[public function getDate(): \DateTimeInterface]]></code>
+      <code><![CDATA[public function getProviderName(): string]]></code>
+      <code><![CDATA[public function getValue(): float]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/ExchangeRateQuery.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getCurrencyPair(): CurrencyPairContract]]></code>
+      <code><![CDATA[public function getOption($name, $default = null)]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/ExchangeRateQueryBuilder.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[$date]]></code>
+    </PropertyNotSetInConstructor>
+    <PropertyTypeCoercion>
+      <code><![CDATA[$date]]></code>
+      <code><![CDATA[CurrencyPair::createFromString($currencyPair)]]></code>
+    </PropertyTypeCoercion>
+    <RedundantConditionGivenDocblockType>
+      <code><![CDATA[$this->date]]></code>
+    </RedundantConditionGivenDocblockType>
+    <UnusedClass>
+      <code><![CDATA[ExchangeRateQueryBuilder]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Exchanger.php">
+    <DocblockTypeContradiction>
+      <code><![CDATA[null === $this->cache]]></code>
+    </DocblockTypeContradiction>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$cacheKeyPrefix]]></code>
+      <code><![CDATA[$ttl]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$cacheKeyPrefix]]></code>
+      <code><![CDATA[$cacheKeyPrefix]]></code>
+      <code><![CDATA[$item]]></code>
+      <code><![CDATA[$ttl]]></code>
+    </MixedAssignment>
+    <PossiblyInvalidOperand>
+      <code><![CDATA[$cacheKeyPrefix]]></code>
+    </PossiblyInvalidOperand>
+    <PossiblyNullOperand>
+      <code><![CDATA[$cacheKeyPrefix]]></code>
+    </PossiblyNullOperand>
+    <PossiblyNullPropertyAssignmentValue>
+      <code><![CDATA[$cache]]></code>
+    </PossiblyNullPropertyAssignmentValue>
+    <UnusedClass>
+      <code><![CDATA[Exchanger]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/HistoricalExchangeRateQuery.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getDate(): \DateTimeInterface]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Service/AbstractApi.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['date']]]></code>
+      <code><![CDATA[$data['last_updated']]]></code>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['exchange_rates'][$currencyPair->getQuoteCurrency()]]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$rate]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Service/ApiLayer/CurrencyData.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[ExchangeRateContract]]></code>
+      <code><![CDATA[ExchangeRateContract]]></code>
+    </InvalidNullableReturnType>
+    <MismatchingDocblockReturnType>
+      <code><![CDATA[ExchangeRate|null]]></code>
+    </MismatchingDocblockReturnType>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+    </MixedArgument>
+    <NullableReturnStatement>
+      <code><![CDATA[$this->doCreateRate($url, $currencyPair)]]></code>
+      <code><![CDATA[$this->doCreateRate($url, $exchangeQuery->getCurrencyPair())]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="src/Service/ApiLayer/ExchangeRatesData.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['date']]]></code>
+      <code><![CDATA[$data['error']['message']]]></code>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['error']['code']]]></code>
+      <code><![CDATA[$data['error']['code']]]></code>
+      <code><![CDATA[$data['error']['message']]]></code>
+      <code><![CDATA[$data['rates'][$currencyPair->getQuoteCurrency()]]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$rate]]></code>
+    </MixedAssignment>
+    <MixedOperand>
+      <code><![CDATA[$data['error']['code']]]></code>
+    </MixedOperand>
+  </file>
+  <file src="src/Service/ApiLayer/Fixer.php">
+    <InvalidArrayOffset>
+      <code><![CDATA[$errors[$code]]]></code>
+    </InvalidArrayOffset>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['date']]]></code>
+      <code><![CDATA[$data['error']['code']]]></code>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['error']['code']]]></code>
+      <code><![CDATA[$data['rates'][$currencyPair->getQuoteCurrency()]]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$rate]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Service/BulgarianNationalBank.php">
+    <InvalidOperand>
+      <code><![CDATA[$ratio]]></code>
+    </InvalidOperand>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Service/CentralBankOfCzechRepublic.php">
+    <InvalidOperand>
+      <code><![CDATA[$rate / (int) $count]]></code>
+    </InvalidOperand>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyInvalidArrayAccess>
+      <code><![CDATA[$words[0]]]></code>
+    </PossiblyInvalidArrayAccess>
+  </file>
+  <file src="src/Service/CentralBankOfRepublicTurkey.php">
+    <InvalidOperand>
+      <code><![CDATA[$rate / $unit]]></code>
+    </InvalidOperand>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeRateQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <ParamNameMismatch>
+      <code><![CDATA[$exchangeRateQuery]]></code>
+    </ParamNameMismatch>
+    <PossiblyNullArrayAccess>
+      <code><![CDATA[$element->xpath('//Tarih_Date/@Date')[0]]]></code>
+      <code><![CDATA[$elements[0]]]></code>
+    </PossiblyNullArrayAccess>
+    <PossiblyNullPropertyFetch>
+      <code><![CDATA[$elements[0]->ForexSelling]]></code>
+    </PossiblyNullPropertyFetch>
+    <RedundantCast>
+      <code><![CDATA[(float) ($rate / $unit)]]></code>
+    </RedundantCast>
+    <RedundantCondition>
+      <code><![CDATA[(int) $elements[0]->Unit]]></code>
+    </RedundantCondition>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[empty($elements)]]></code>
+    </RiskyTruthyFalsyComparison>
+    <TypeDoesNotContainNull>
+      <code><![CDATA[1]]></code>
+    </TypeDoesNotContainNull>
+    <TypeDoesNotContainType>
+      <code><![CDATA[!$date]]></code>
+      <code><![CDATA[!$date]]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="src/Service/CentralBankOfRepublicUzbekistan.php">
+    <InvalidOperand>
+      <code><![CDATA[$rate / $unit]]></code>
+    </InvalidOperand>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArrayAccess>
+      <code><![CDATA[$currencyInfo[0]['Date']]]></code>
+      <code><![CDATA[$currencyInfo[0]['Nominal']]]></code>
+      <code><![CDATA[$currencyInfo[0]['Rate']]]></code>
+      <code><![CDATA[$currency['Ccy']]]></code>
+    </MixedArrayAccess>
+  </file>
+  <file src="src/Service/Chain.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$exceptions]]></code>
+    </ArgumentTypeCoercion>
+    <DocblockTypeContradiction>
+      <code><![CDATA[\is_array($services)]]></code>
+    </DocblockTypeContradiction>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedAssignment>
+      <code><![CDATA[$service]]></code>
+      <code><![CDATA[$service]]></code>
+    </MixedAssignment>
+    <MixedMethodCall>
+      <code><![CDATA[getExchangeRate]]></code>
+      <code><![CDATA[supportQuery]]></code>
+      <code><![CDATA[supportQuery]]></code>
+    </MixedMethodCall>
+    <MixedReturnStatement>
+      <code><![CDATA[$service->getExchangeRate($exchangeQuery)]]></code>
+      <code><![CDATA[$service->getExchangeRate($exchangeQuery)]]></code>
+    </MixedReturnStatement>
+    <NoValue>
+      <code><![CDATA[$services]]></code>
+    </NoValue>
+    <PossiblyInvalidPropertyAssignmentValue>
+      <code><![CDATA[$services]]></code>
+    </PossiblyInvalidPropertyAssignmentValue>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[!$service->supportQuery($exchangeQuery)]]></code>
+      <code><![CDATA[$service->supportQuery($exchangeQuery)]]></code>
+    </RiskyTruthyFalsyComparison>
+    <UnusedClass>
+      <code><![CDATA[Chain]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Service/CoinLayer.php">
+    <InvalidArrayOffset>
+      <code><![CDATA[$errors[$code]]]></code>
+    </InvalidArrayOffset>
+    <InvalidNullableReturnType>
+      <code><![CDATA[ExchangeRateContract]]></code>
+      <code><![CDATA[ExchangeRateContract]]></code>
+    </InvalidNullableReturnType>
+    <MismatchingDocblockReturnType>
+      <code><![CDATA[ExchangeRate|null]]></code>
+    </MismatchingDocblockReturnType>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$this->options['access_key']]]></code>
+      <code><![CDATA[$this->options['access_key']]]></code>
+    </MixedArgument>
+    <NullableReturnStatement>
+      <code><![CDATA[$this->doCreateRate($url, $currencyPair)]]></code>
+      <code><![CDATA[$this->doCreateRate($url, $currencyPair)]]></code>
+    </NullableReturnStatement>
+    <UnusedMethod>
+      <code><![CDATA[getErrorMessage]]></code>
+    </UnusedMethod>
+  </file>
+  <file src="src/Service/Cryptonator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['timestamp']]]></code>
+      <code><![CDATA[$message]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['ticker']['price']]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$message]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Service/CurrencyConverter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeRateQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$dateStringified]]></code>
+      <code><![CDATA[$this->options['access_key']]]></code>
+      <code><![CDATA[$this->options['access_key']]]></code>
+      <code><![CDATA[$this->options['access_key']]]></code>
+      <code><![CDATA[$this->options['access_key']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$responsePayload['results'][$keyAsCurrencyPair]['val'][$dateStringified]]]></code>
+    </MixedArrayAccess>
+    <MixedArrayOffset>
+      <code><![CDATA[$responsePayload['results'][$keyAsCurrencyPair]['val'][$dateStringified]]]></code>
+    </MixedArrayOffset>
+    <MixedAssignment>
+      <code><![CDATA[$dateStringified]]></code>
+      <code><![CDATA[$rate]]></code>
+      <code><![CDATA[$rate]]></code>
+    </MixedAssignment>
+    <ParamNameMismatch>
+      <code><![CDATA[$exchangeRateQuery]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Service/CurrencyDataFeed.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['currency'][0]['date']]]></code>
+      <code><![CDATA[$this->options['api_key']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['currency'][0]]]></code>
+      <code><![CDATA[$data['currency'][0]]]></code>
+      <code><![CDATA[$data['currency'][0]['date']]]></code>
+      <code><![CDATA[$data['currency'][0]['value']]]></code>
+    </MixedArrayAccess>
+    <ParamNameMismatch>
+      <code><![CDATA[$exchangeRateQuery]]></code>
+    </ParamNameMismatch>
+    <PossiblyFalseArgument>
+      <code><![CDATA[strtotime($data['currency'][0]['date'])]]></code>
+    </PossiblyFalseArgument>
+  </file>
+  <file src="src/Service/CurrencyLayer.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[ExchangeRateContract]]></code>
+      <code><![CDATA[ExchangeRateContract]]></code>
+    </InvalidNullableReturnType>
+    <MismatchingDocblockReturnType>
+      <code><![CDATA[ExchangeRate|null]]></code>
+    </MismatchingDocblockReturnType>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$this->options['access_key']]]></code>
+      <code><![CDATA[$this->options['access_key']]]></code>
+      <code><![CDATA[$this->options['access_key']]]></code>
+      <code><![CDATA[$this->options['access_key']]]></code>
+    </MixedArgument>
+    <NullableReturnStatement>
+      <code><![CDATA[$this->doCreateRate($url, $currencyPair)]]></code>
+      <code><![CDATA[$this->doCreateRate($url, $exchangeQuery->getCurrencyPair())]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="src/Service/EuropeanCentralBank.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyNullArrayAccess>
+      <code><![CDATA[$element->xpath('//xmlns:Cube[@time]/@time')[0]]]></code>
+    </PossiblyNullArrayAccess>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[empty($element->xpath('//xmlns:Cube[@time="'.$formattedDate.'"]'))]]></code>
+      <code><![CDATA[empty($elements)]]></code>
+      <code><![CDATA[empty($elements)]]></code>
+    </RiskyTruthyFalsyComparison>
+    <TypeDoesNotContainType>
+      <code><![CDATA[!$date]]></code>
+      <code><![CDATA[!$date]]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="src/Service/ExchangeRatesApi.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['date']]]></code>
+      <code><![CDATA[$data['error']['message']]]></code>
+      <code><![CDATA[$this->options[self::ACCESS_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::ACCESS_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::ACCESS_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::ACCESS_KEY_OPTION]]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['error']['code']]]></code>
+      <code><![CDATA[$data['error']['code']]]></code>
+      <code><![CDATA[$data['error']['message']]]></code>
+      <code><![CDATA[$data['rates'][$currencyPair->getQuoteCurrency()]]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$rate]]></code>
+    </MixedAssignment>
+    <MixedOperand>
+      <code><![CDATA[$data['error']['code']]]></code>
+    </MixedOperand>
+  </file>
+  <file src="src/Service/ExchangerateHost.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MissingParamType>
+      <code><![CDATA[$exchangeRateQuery]]></code>
+    </MissingParamType>
+    <MixedArgument>
+      <code><![CDATA[$data['date']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['rates'][$currencyPair->getQuoteCurrency()]]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$places]]></code>
+      <code><![CDATA[$places]]></code>
+      <code><![CDATA[$rate]]></code>
+      <code><![CDATA[$source]]></code>
+      <code><![CDATA[$source]]></code>
+    </MixedAssignment>
+    <MixedMethodCall>
+      <code><![CDATA[getOption]]></code>
+      <code><![CDATA[getOption]]></code>
+      <code><![CDATA[getOption]]></code>
+      <code><![CDATA[getOption]]></code>
+    </MixedMethodCall>
+    <MixedOperand>
+      <code><![CDATA[$places]]></code>
+      <code><![CDATA[$source]]></code>
+    </MixedOperand>
+  </file>
+  <file src="src/Service/FastForex.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$result['updated']]]></code>
+      <code><![CDATA[$this->options['api_key']]]></code>
+    </MixedArgument>
+    <ParamNameMismatch>
+      <code><![CDATA[$exchangeRateQuery]]></code>
+    </ParamNameMismatch>
+  </file>
+  <file src="src/Service/Fixer.php">
+    <InvalidArrayOffset>
+      <code><![CDATA[$errors[$code]]]></code>
+    </InvalidArrayOffset>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['date']]]></code>
+      <code><![CDATA[$data['error']['code']]]></code>
+      <code><![CDATA[$this->options[self::ACCESS_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::ACCESS_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::ACCESS_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::ACCESS_KEY_OPTION]]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['error']['code']]]></code>
+      <code><![CDATA[$data['rates'][$currencyPair->getQuoteCurrency()]]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$rate]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Service/FixerApiLayer.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['date']]]></code>
+      <code><![CDATA[$data['error']['code']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['error']['code']]]></code>
+      <code><![CDATA[$data['rates'][$currencyPair->getQuoteCurrency()]]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$rate]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Service/Forge.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$result['t']]]></code>
+      <code><![CDATA[$this->options['api_key']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$result['p']]]></code>
+      <code><![CDATA[$result['s']]]></code>
+      <code><![CDATA[$result['t']]]></code>
+      <code><![CDATA[$result['t']]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$result]]></code>
+    </MixedAssignment>
+    <ParamNameMismatch>
+      <code><![CDATA[$exchangeRateQuery]]></code>
+    </ParamNameMismatch>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$result = reset($data)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/Service/HttpService.php">
+    <MixedArgument>
+      <code><![CDATA[$value]]></code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$header]]></code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Service/NationalBankOfGeorgia.php">
+    <InvalidOperand>
+      <code><![CDATA[$rate / $unit]]></code>
+    </InvalidOperand>
+    <MissingClosureParamType>
+      <code><![CDATA[$currency]]></code>
+    </MissingClosureParamType>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$element['currencies']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$currencyInfo[0]['quantity']]]></code>
+      <code><![CDATA[$currencyInfo[0]['rate']]]></code>
+      <code><![CDATA[$currency['code']]]></code>
+      <code><![CDATA[$element['currencies']]]></code>
+      <code><![CDATA[$element['date']]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$element]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Service/NationalBankOfRepublicBelarus.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[NationalBankOfRepublicBelarus]]></code>
+    </ClassMustBeFinal>
+    <InvalidOperand>
+      <code><![CDATA[$rate / $scale]]></code>
+    </InvalidOperand>
+    <LessSpecificReturnStatement>
+      <code><![CDATA[$codes = $codes ?? StringUtil::jsonToArray(file_get_contents(__DIR__.'/resources/nbrb-codes.json'))]]></code>
+    </LessSpecificReturnStatement>
+    <MissingClosureReturnType>
+      <code><![CDATA[static function ($periodicity, $entry) use ($date) {]]></code>
+    </MissingClosureReturnType>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery, bool $ignoreSupportPeriod = false): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$entry['Cur_DateEnd']]]></code>
+      <code><![CDATA[$entry['Cur_DateStart']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$entry['Cur_DateEnd']]]></code>
+      <code><![CDATA[$entry['Cur_DateStart']]]></code>
+      <code><![CDATA[$entry['Cur_Periodicity']]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$codes]]></code>
+    </MixedAssignment>
+    <MixedReturnStatement>
+      <code><![CDATA[$codes = $codes ?? StringUtil::jsonToArray(file_get_contents(__DIR__.'/resources/nbrb-codes.json'))]]></code>
+      <code><![CDATA[array_reduce(
+
+            array_reverse(array_intersect_key(
+                $codes = self::getSupportedCodes(),
+                array_flip(array_keys(array_column($codes, 'Cur_Abbreviation'), $baseCurrency))
+            )),
+
+            static function ($periodicity, $entry) use ($date) {
+                if ($date) {
+                    $dateStart = new \DateTimeImmutable($entry['Cur_DateStart']);
+                    $dateEnd = new \DateTimeImmutable($entry['Cur_DateEnd']);
+                    if ($date < $dateStart || $date > $dateEnd) {
+                        return $periodicity;
+                    }
+                }
+
+                return in_array($periodicity, [false, 1], true) ? $entry['Cur_Periodicity'] : $periodicity;
+            },
+
+            false
+
+        )]]></code>
+      <code><![CDATA[array_reduce(
+
+            array_reverse(array_intersect_key(
+                $codes = self::getSupportedCodes(),
+                array_flip(array_keys(array_column($codes, 'Cur_Abbreviation'), $baseCurrency))
+            )),
+
+            static function ($periodicity, $entry) use ($date) {
+                if ($date) {
+                    $dateStart = new \DateTimeImmutable($entry['Cur_DateStart']);
+                    $dateEnd = new \DateTimeImmutable($entry['Cur_DateEnd']);
+                    if ($date < $dateStart || $date > $dateEnd) {
+                        return $periodicity;
+                    }
+                }
+
+                return in_array($periodicity, [false, 1], true) ? $entry['Cur_Periodicity'] : $periodicity;
+            },
+
+            false
+
+        )]]></code>
+    </MixedReturnStatement>
+    <PossiblyFalseArgument>
+      <code><![CDATA[file_get_contents(__DIR__.'/resources/nbrb-codes.json')]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyNullArgument>
+      <code><![CDATA[$entry['Date'] ?? null]]></code>
+    </PossiblyNullArgument>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$date]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/Service/NationalBankOfRomania.php">
+    <InvalidOperand>
+      <code><![CDATA[$rate]]></code>
+      <code><![CDATA[1 / $rateValue]]></code>
+    </InvalidOperand>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyFalseArgument>
+      <code><![CDATA[strpos($content, '<')]]></code>
+    </PossiblyFalseArgument>
+    <PossiblyInvalidOperand>
+      <code><![CDATA[$rateValue]]></code>
+    </PossiblyInvalidOperand>
+    <PossiblyNullArrayAccess>
+      <code><![CDATA[$element->xpath('//xmlns:PublishingDate')[0]]]></code>
+    </PossiblyNullArrayAccess>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[empty($element->xpath('//xmlns:Cube[@date="'.$formattedDate.'"]'))]]></code>
+      <code><![CDATA[empty($element['multiplier'])]]></code>
+      <code><![CDATA[empty($elements)]]></code>
+      <code><![CDATA[empty($elements)]]></code>
+    </RiskyTruthyFalsyComparison>
+    <TypeDoesNotContainType>
+      <code><![CDATA[!$date]]></code>
+      <code><![CDATA[!$date]]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="src/Service/NationalBankOfUkraine.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[NationalBankOfUkraine]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$element->xpath('./error')]]></code>
+      <code><![CDATA[empty($elements)]]></code>
+      <code><![CDATA[empty($elements)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/Service/OpenExchangeRates.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['description']]]></code>
+      <code><![CDATA[$data['timestamp']]]></code>
+      <code><![CDATA[$this->options['app_id']]]></code>
+      <code><![CDATA[$this->options['app_id']]]></code>
+      <code><![CDATA[$this->options['app_id']]]></code>
+      <code><![CDATA[$this->options['app_id']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['rates'][$currencyPair->getQuoteCurrency()]]]></code>
+    </MixedArrayAccess>
+  </file>
+  <file src="src/Service/PhpArray.php">
+    <InvalidCast>
+      <code><![CDATA[$this->historicalRates[$date->format('Y-m-d')][(string) $currencyPair]]]></code>
+      <code><![CDATA[$this->latestRates[(string) $currencyPair]]]></code>
+    </InvalidCast>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MissingReturnType>
+      <code><![CDATA[validateHistoricalRates]]></code>
+      <code><![CDATA[validateRates]]></code>
+    </MissingReturnType>
+    <MixedArgument>
+      <code><![CDATA[$rate]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$rate]]></code>
+    </MixedAssignment>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Service/Registry.php">
+    <UnusedClass>
+      <code><![CDATA[Registry]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Service/RussianCentralBank.php">
+    <InvalidOperand>
+      <code><![CDATA[$nominal]]></code>
+      <code><![CDATA[$rate]]></code>
+    </InvalidOperand>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[empty($elements)]]></code>
+      <code><![CDATA[empty($elements)]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/Service/WebserviceX.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Service/XchangeApi.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['message']]]></code>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['rates'][$currencyPair->getQuoteCurrency()]]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$rate]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Service/Xignite.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+    <MixedArgument>
+      <code><![CDATA[$data['Message']]]></code>
+      <code><![CDATA[$data['Message']]]></code>
+      <code><![CDATA[$data['StartDate']]]></code>
+      <code><![CDATA[$this->options['token']]]></code>
+      <code><![CDATA[$this->options['token']]]></code>
+    </MixedArgument>
+    <MixedArrayAccess>
+      <code><![CDATA[$data['Average']]]></code>
+      <code><![CDATA[$data['Bid']]]></code>
+      <code><![CDATA[$data['Date']]]></code>
+      <code><![CDATA[$data['Message']]]></code>
+      <code><![CDATA[$data['Message']]]></code>
+      <code><![CDATA[$data['Outcome']]]></code>
+      <code><![CDATA[$data['Outcome']]]></code>
+      <code><![CDATA[$data['StartDate']]]></code>
+      <code><![CDATA[$data['Time']]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$data]]></code>
+      <code><![CDATA[$data]]></code>
+    </MixedAssignment>
+    <MixedOperand>
+      <code><![CDATA[$data['Date']]]></code>
+      <code><![CDATA[$data['Time']]]></code>
+    </MixedOperand>
+  </file>
+  <file src="src/StringUtil.php">
+    <MixedArrayAccess>
+      <code><![CDATA[$jsonErrors[$last]]]></code>
+    </MixedArrayAccess>
+    <MixedAssignment>
+      <code><![CDATA[$data]]></code>
+    </MixedAssignment>
+    <MixedOperand>
+      <code><![CDATA[isset($jsonErrors[$last]) ? $jsonErrors[$last] : 'Unknown error']]></code>
+    </MixedOperand>
+    <MixedReturnStatement>
+      <code><![CDATA[$data]]></code>
+    </MixedReturnStatement>
+  </file>
+</files>

@@ -18,12 +18,11 @@ use Exchanger\CurrencyPair;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\PhpArray;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PhpArrayTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_supports_latest_queries()
     {
         $service = new PhpArray([]);
@@ -35,9 +34,7 @@ class PhpArrayTest extends TestCase
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/GBP'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_supports_historical_queries()
     {
         $now = new \DateTimeImmutable();
@@ -57,9 +54,7 @@ class PhpArrayTest extends TestCase
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/GBP'), $now)));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_fetching_latest_invalid_rate()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -70,9 +65,7 @@ class PhpArrayTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_latest_rate_from_rates()
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
@@ -87,9 +80,7 @@ class PhpArrayTest extends TestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_latest_rate_from_scalars()
     {
         $arrayProvider = new PhpArray([
@@ -119,9 +110,7 @@ class PhpArrayTest extends TestCase
         $this->assertSame($jpyGbpPair, $jpyGbp->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_fetching_historical_invalid_rate()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -139,9 +128,7 @@ class PhpArrayTest extends TestCase
         $arrayProvider->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), $now));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate_from_exchange_rates()
     {
         $now = new \DateTimeImmutable();
@@ -157,9 +144,7 @@ class PhpArrayTest extends TestCase
         $this->assertSame(1.50, $rate->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate_from_scalars()
     {
         $now = new \DateTimeImmutable();
@@ -185,9 +170,7 @@ class PhpArrayTest extends TestCase
         $this->assertEquals('array', $jpyGbp->getProviderName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new PhpArray([], []);

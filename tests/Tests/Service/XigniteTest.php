@@ -18,12 +18,11 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\Xignite;
+use PHPUnit\Framework\Attributes\Test;
 
 class XigniteTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_if_token_option_missing()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -31,9 +30,7 @@ class XigniteTest extends ServiceTestCase
         new Xignite($this->createMock('Http\Client\HttpClient'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_support_all_queries()
     {
         $service = new Xignite($this->createMock('Http\Client\HttpClient'), null, ['token' => 'token']);
@@ -42,9 +39,7 @@ class XigniteTest extends ServiceTestCase
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_on_response_error()
     {
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
@@ -63,9 +58,7 @@ class XigniteTest extends ServiceTestCase
         $this->assertTrue($caught);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('GBP/AWG');
@@ -81,9 +74,7 @@ class XigniteTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
@@ -100,9 +91,7 @@ class XigniteTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new Xignite($this->createMock('Http\Client\HttpClient'), null, ['token' => 'token']);

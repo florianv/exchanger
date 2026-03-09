@@ -18,12 +18,11 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\AbstractApi;
+use PHPUnit\Framework\Attributes\Test;
 
 class AbstractApiTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_supports_all_queries()
     {
         $service = new AbstractApi($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
@@ -32,9 +31,7 @@ class AbstractApiTest extends ServiceTestCase
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_rate_not_supported()
     {
         $this->expectException(Exception::class);
@@ -45,9 +42,7 @@ class AbstractApiTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/ZZZ')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('USD/GBP');
@@ -63,9 +58,7 @@ class AbstractApiTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('USD/GBP');
@@ -82,9 +75,7 @@ class AbstractApiTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new AbstractApi($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);

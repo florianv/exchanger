@@ -16,12 +16,11 @@ namespace Exchanger\Tests;
 use Exchanger\CurrencyPair;
 use Exchanger\HistoricalExchangeRateQuery;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class HistoricalExchangeRateQueryTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_serializes()
     {
         $firstQuery = new HistoricalExchangeRateQuery(

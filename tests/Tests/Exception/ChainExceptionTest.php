@@ -15,10 +15,10 @@ namespace Exchanger\Tests\Exception;
 
 use Exchanger\Exception\ChainException;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 
-/**
- * @covers \Exchanger\Exception\ChainException
- */
+#[CoversClass(\Exchanger\Exception\ChainException::class)]
 class ChainExceptionTest extends TestCase
 {
     /**
@@ -47,9 +47,7 @@ class ChainExceptionTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_should_have_a_descriptive_error_message()
     {
         $this->assertSame("The chain resulted in 2 exception(s):\r\nException: Something bad happened.\r\nException: General exception.", $this->chainException->getMessage());

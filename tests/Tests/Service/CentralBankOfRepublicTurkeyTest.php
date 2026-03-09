@@ -18,6 +18,7 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
+use PHPUnit\Framework\Attributes\Test;
 
 class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
 {
@@ -81,9 +82,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         return new CentralBankOfRepublicTurkey($this->getHttpAdapterMock(self::$historicalUrl, self::$historicalContent));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new CentralBankOfRepublicTurkey($this->createMock('Http\Client\HttpClient'));
@@ -92,9 +91,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -105,9 +102,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
@@ -123,9 +118,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/TRY');
@@ -139,9 +132,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new CentralBankOfRepublicTurkey($this->createMock('Http\Client\HttpClient'));

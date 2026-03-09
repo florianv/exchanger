@@ -15,12 +15,11 @@ namespace Exchanger\Tests;
 
 use Exchanger\StringUtil;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class StringUtilTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_converts_an_xml_string_to_element()
     {
         $element = StringUtil::xmlToElement('<root>hello</root>');
@@ -29,27 +28,21 @@ class StringUtilTest extends TestCase
         $this->assertEquals('hello', (string) $element);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_converting_invalid_xml()
     {
         $this->expectException(\RuntimeException::class);
         StringUtil::xmlToElement('/');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_converts_a_json_string_to_array()
     {
         $json = StringUtil::jsonToArray('{"license": "MIT"}');
         $this->assertEquals('MIT', $json['license']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_converting_invalid_json()
     {
         $this->expectException(\RuntimeException::class);
