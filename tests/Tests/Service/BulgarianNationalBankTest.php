@@ -19,6 +19,7 @@ use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\BulgarianNationalBank;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @author Marin Bezhanov
@@ -35,9 +36,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         self::$historicalUrl = sprintf(BulgarianNationalBank::URL, '01', '02', '2019');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new BulgarianNationalBank($this->createMock('Http\Client\HttpClient'));
@@ -47,9 +46,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/BGN'), new \DateTime())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('USD/BGN');
@@ -64,9 +61,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_historical()
     {
         $pair = CurrencyPair::createFromString('USD/BGN');
@@ -81,9 +76,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_with_ratio()
     {
         $pair = CurrencyPair::createFromString('IDR/BGN');
@@ -98,9 +91,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_with_ratio_historical()
     {
         $pair = CurrencyPair::createFromString('IDR/BGN');
@@ -115,9 +106,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_it_cannot_retrieve_an_xml_document_for_the_requested_date()
     {
         $this->expectException(UnsupportedDateException::class);
@@ -131,9 +120,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery($pair));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_it_cannot_retrieve_an_xml_document_for_the_requested_date_historical()
     {
         $this->expectException(UnsupportedDateException::class);
@@ -147,9 +134,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -163,9 +148,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery($pair));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -181,9 +164,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected()
     {
         $this->expectException(UnsupportedDateException::class);
@@ -197,9 +178,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery($pair));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected_historical()
     {
         $this->expectException(UnsupportedDateException::class);
@@ -215,9 +194,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -231,9 +208,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery($pair));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected_historical()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -249,9 +224,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -265,9 +238,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery($pair));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected_historical()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -283,9 +254,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new BulgarianNationalBank($this->createMock('Http\Client\HttpClient'));

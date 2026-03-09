@@ -18,15 +18,14 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\CoinLayer;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 class CoinLayerTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_if_access_key_option_missing()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -34,18 +33,14 @@ class CoinLayerTest extends ServiceTestCase
         new CoinLayer($this->createMock('Http\Client\HttpClient'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_supports_all_queries()
     {
         $service = new CoinLayer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_with_error_response()
     {
         $this->expectException(Exception::class);
@@ -56,9 +51,7 @@ class CoinLayerTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_normal_mode()
     {
         $uri = 'http://api.coinlayer.com/api/live?access_key=secret&symbols=BTC&target=USD';
@@ -76,9 +69,7 @@ class CoinLayerTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_paid_mode()
     {
         $uri = 'https://api.coinlayer.com/api/live?access_key=secret&symbols=BTC&target=USD';
@@ -96,9 +87,7 @@ class CoinLayerTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate_normal_mode()
     {
         $pair = CurrencyPair::createFromString('ETH/USD');
@@ -117,9 +106,7 @@ class CoinLayerTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate_paid_mode()
     {
         $pair = CurrencyPair::createFromString('ETH/USD');
@@ -138,9 +125,7 @@ class CoinLayerTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new CoinLayer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret', 'enterprise' => true]);

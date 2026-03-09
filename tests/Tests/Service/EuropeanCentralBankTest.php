@@ -19,12 +19,11 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\EuropeanCentralBank;
+use PHPUnit\Framework\Attributes\Test;
 
 class EuropeanCentralBankTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new EuropeanCentralBank($this->createMock('Http\Client\HttpClient'));
@@ -32,9 +31,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -48,9 +45,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/XXL')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
@@ -87,9 +82,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate_older_than_90_days()
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
@@ -108,9 +101,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
         $this->expectException(UnsupportedDateException::class);
@@ -124,9 +115,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/JPY'), new \DateTime('2016-05-26')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -140,9 +129,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/XXL'), new \DateTime('2016-08-23')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new EuropeanCentralBank($this->createMock('Http\Client\HttpClient'));

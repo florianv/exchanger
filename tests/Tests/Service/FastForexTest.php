@@ -18,12 +18,11 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\FastForex;
+use PHPUnit\Framework\Attributes\Test;
 
 class FastForexTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new FastForex($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
@@ -32,9 +31,7 @@ class FastForexTest extends ServiceTestCase
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_rate_not_supported()
     {
         $this->expectException(Exception::class);
@@ -45,9 +42,7 @@ class FastForexTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/ZZZ')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_when_response_symbol_matches()
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
@@ -62,9 +57,7 @@ class FastForexTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_response_symbol_does_not_match()
     {
         $this->expectException(Exception::class);
@@ -75,9 +68,7 @@ class FastForexTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/AED')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new FastForex($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);

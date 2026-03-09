@@ -18,42 +18,35 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\Fixer;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @author Pascal Hofmann <mail@pascalhofmann.de>
  */
 class FixerTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_supports_eur_base_normal_mode()
     {
         $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CAD'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_other_than_eur_base_in_normal_mode()
     {
         $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/CAD'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_with_error_response()
     {
         $this->expectException(Exception::class);
@@ -67,9 +60,7 @@ class FixerTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_normal_mode()
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
@@ -85,9 +76,7 @@ class FixerTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_enterprise_mode()
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
@@ -103,9 +92,7 @@ class FixerTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate_normal_mode()
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
@@ -122,9 +109,7 @@ class FixerTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate_enterprise_mode()
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
@@ -141,9 +126,7 @@ class FixerTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x', 'enterprise' => true]);

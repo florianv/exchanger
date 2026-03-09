@@ -18,6 +18,7 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\CentralBankOfRepublicUzbekistan;
+use PHPUnit\Framework\Attributes\Test;
 
 class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
 {
@@ -71,9 +72,7 @@ class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
         return new CentralBankOfRepublicUzbekistan($this->getHttpAdapterMock(self::$historicalUrl, self::$historicalContent));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new CentralBankOfRepublicUzbekistan($this->createMock('Http\Client\HttpClient'));
@@ -82,9 +81,7 @@ class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -93,9 +90,7 @@ class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/UZS')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/UZS');
@@ -108,9 +103,7 @@ class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/UZS');
@@ -124,9 +117,7 @@ class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_normalizes_a_rate()
     {
         $pair = CurrencyPair::createFromString('IRR/UZS');
@@ -139,9 +130,7 @@ class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new CentralBankOfRepublicUzbekistan($this->createMock('Http\Client\HttpClient'));

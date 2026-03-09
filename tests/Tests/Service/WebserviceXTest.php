@@ -17,12 +17,11 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\WebserviceX;
+use PHPUnit\Framework\Attributes\Test;
 
 class WebserviceXTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new WebserviceX($this->createMock('Http\Client\HttpClient'));
@@ -31,9 +30,7 @@ class WebserviceXTest extends ServiceTestCase
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
@@ -49,9 +46,7 @@ class WebserviceXTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new WebserviceX($this->createMock('Http\Client\HttpClient'));

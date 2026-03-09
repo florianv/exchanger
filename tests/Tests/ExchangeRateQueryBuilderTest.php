@@ -17,21 +17,18 @@ use Exchanger\ExchangeRateQueryBuilder;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ExchangeRateQueryBuilderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_builds_a_rate()
     {
         $builder = new ExchangeRateQueryBuilder('EUR/USD');
         $this->assertInstanceOf(ExchangeRateQuery:: class, $builder->build());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_builds_an_historical_rate()
     {
         $builder = (new ExchangeRateQueryBuilder('EUR/USD'))

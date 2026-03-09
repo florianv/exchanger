@@ -15,13 +15,13 @@ namespace Exchanger\Tests;
 
 use Exchanger\CurrencyPair;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CurrencyPairTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider validStringProvider
-     */
+    #[Test]
+    #[DataProvider('validStringProvider')]
     public function it_creates_a_pair_from_a_valid_string($string, $baseCurrency, $quoteCurrency)
     {
         $pair = CurrencyPair::createFromString($string);
@@ -29,7 +29,7 @@ class CurrencyPairTest extends TestCase
         $this->assertEquals($quoteCurrency, $pair->getQuoteCurrency());
     }
 
-    public function validStringProvider()
+    public static function validStringProvider()
     {
         return [
             ['EUR/USD', 'EUR', 'USD'],
@@ -39,26 +39,22 @@ class CurrencyPairTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider invalidStringProvider
-     */
+    #[Test]
+    #[DataProvider('invalidStringProvider')]
     public function it_throws_an_exception_when_creating_from_an_invalid_string($string)
     {
         $this->expectException(\InvalidArgumentException::class);
         CurrencyPair::createFromString($string);
     }
 
-    public function invalidStringProvider()
+    public static function invalidStringProvider()
     {
         return [
             ['EUR'], ['EUR/'], ['EU/US'], ['EUR/US'], ['US/EUR'], ['00'], ['00/'], ['007/00'],
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_be_converted_to_a_string()
     {
         $pair = new CurrencyPair('EUR', 'USD');
@@ -66,9 +62,7 @@ class CurrencyPairTest extends TestCase
         $this->assertEquals('EUR/USD', $pair->__toString());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_check_if_identical()
     {
         $pair = new CurrencyPair('EUR', 'USD');

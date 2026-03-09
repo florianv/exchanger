@@ -19,12 +19,11 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\OpenExchangeRates;
+use PHPUnit\Framework\Attributes\Test;
 
 class OpenExchangeRatesTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_if_app_id_option_missing()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -32,9 +31,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         new OpenExchangeRates($this->createMock('Http\Client\HttpClient'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new OpenExchangeRates($this->createMock('Http\Client\HttpClient'), null, ['app_id' => 'secret']);
@@ -43,9 +40,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), new \DateTime())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_with_error_response()
     {
         $this->expectException(Exception::class);
@@ -56,9 +51,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_normal_mode()
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
@@ -76,9 +69,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate_enterprise_mode()
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
@@ -96,9 +87,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('USD/AED');
@@ -119,9 +108,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate_enterprise()
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
@@ -142,9 +129,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
         $this->expectException(Exception::class);
@@ -161,9 +146,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -180,9 +163,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new OpenExchangeRates($this->createMock('Http\Client\HttpClient'), null, ['app_id' => 'secret']);

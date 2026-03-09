@@ -19,15 +19,14 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\ApiLayer\CurrencyData;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 class CurrencyDataTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_if_api_key_option_missing()
     {
         $this->expectException(NonBreakingInvalidArgumentException::class);
@@ -35,18 +34,14 @@ class CurrencyDataTest extends ServiceTestCase
         new CurrencyData($this->createMock('Http\Client\HttpClient'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_supports_all_queries()
     {
         $service = new CurrencyData($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_with_error_response()
     {
         $this->expectException(Exception::class);
@@ -57,9 +52,7 @@ class CurrencyDataTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $uri = 'https://api.apilayer.com/currency_data/live?apikey=secret&currencies=EUR';
@@ -77,9 +70,7 @@ class CurrencyDataTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('USD/AED');
@@ -98,9 +89,7 @@ class CurrencyDataTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new CurrencyData($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);

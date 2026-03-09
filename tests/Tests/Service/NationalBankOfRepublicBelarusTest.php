@@ -19,12 +19,11 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\NationalBankOfRepublicBelarus;
+use PHPUnit\Framework\Attributes\Test;
 
 class NationalBankOfRepublicBelarusTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new NationalBankOfRepublicBelarus($this->createMock('Http\Client\HttpClient'));
@@ -33,9 +32,7 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -44,9 +41,7 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/BYN')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $url = 'https://www.nbrb.by/api/exrates/rates?periodicity=0';
@@ -64,9 +59,7 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
         $this->assertSame($currencyPair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $url = 'https://www.nbrb.by/api/exrates/rates?ondate=2020-03-07&periodicity=0';
@@ -83,9 +76,7 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
         $this->assertSame($currencyPair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
         $this->expectException(UnsupportedDateException::class);
@@ -98,9 +89,7 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
         $service->getExchangeRate(new HistoricalExchangeRateQuery($currencyPair, $requestedDate));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new NationalBankOfRepublicBelarus($this->createMock('Http\Client\HttpClient'));

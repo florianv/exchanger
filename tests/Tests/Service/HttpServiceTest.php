@@ -18,12 +18,11 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Service\HttpService;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
+use PHPUnit\Framework\Attributes\Test;
 
 class HttpServiceTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function initialize_with_http_client()
     {
         if (false == interface_exists(ClientInterface::class)) {
@@ -35,9 +34,7 @@ class HttpServiceTest extends TestCase
         $this->createAnonymousClass($httpClient);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function initialize_with_httplug_client()
     {
         $httpClient = $this->createMock('Http\Client\HttpClient');
@@ -45,9 +42,7 @@ class HttpServiceTest extends TestCase
         $this->createAnonymousClass($httpClient);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function initialize_with_null_as_client()
     {
         // When null is passed, HttpClientDiscovery auto-discovers a client.
@@ -57,9 +52,7 @@ class HttpServiceTest extends TestCase
         $this->createAnonymousClass(null);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function initialize_with_invalid_client()
     {
         $httpClient = new \stdClass();

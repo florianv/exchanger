@@ -15,12 +15,11 @@ namespace Exchanger\Tests\Service;
 
 use Exchanger\Service\Registry;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class RegistryTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_provides_all_services()
     {
         $excludedServices = [

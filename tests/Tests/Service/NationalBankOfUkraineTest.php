@@ -19,6 +19,7 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\NationalBankOfUkraine;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Tests for National Bank of Ukraine.
@@ -27,9 +28,7 @@ use Exchanger\Service\NationalBankOfUkraine;
  */
 class NationalBankOfUkraineTest extends ServiceTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_support_all_queries()
     {
         $service = new NationalBankOfUkraine($this->createMock('Http\Client\HttpClient'));
@@ -39,9 +38,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/UAH'), new \DateTime())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -55,9 +52,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXL/UAH')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('EUR/UAH');
@@ -73,9 +68,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_nominational_rate()
     {
         $pair = CurrencyPair::createFromString('AMD/UAH');
@@ -91,9 +84,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fetches_a_historical_rate()
     {
         $pair = CurrencyPair::createFromString('USD/UAH');
@@ -111,9 +102,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_historical_date_is_not_supported()
     {
         $this->expectException(UnsupportedDateException::class);
@@ -127,9 +116,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/UAH'), new \DateTime('1990-01-01')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
@@ -143,9 +130,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('XXL/UAH'), new \DateTime('2019-01-01')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new NationalBankOfUkraine($this->createMock('Http\Client\HttpClient'));

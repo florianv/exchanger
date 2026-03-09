@@ -22,12 +22,11 @@ use Http\Client\HttpClient;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
+use PHPUnit\Framework\Attributes\Test;
 
 class CurrencyConverterTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -35,9 +34,7 @@ class CurrencyConverterTest extends TestCase
         new CurrencyConverter($this->createMock(HttpClient::class), null, ['enterprise' => true]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_exception_with_error_response()
     {
         $this->expectException(Exception::class);
@@ -48,7 +45,7 @@ class CurrencyConverterTest extends TestCase
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/YYY')));
     }
 
-    /** @test */
+    #[Test]
     public function it_fetches_a_rate_normal_mode()
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
@@ -63,7 +60,7 @@ class CurrencyConverterTest extends TestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /** @test */
+    #[Test]
     public function it_fetches_a_rate_enterprise_mode()
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
@@ -78,7 +75,7 @@ class CurrencyConverterTest extends TestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /** @test */
+    #[Test]
     public function it_fetches_a_historical_rate_normal_mode()
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
@@ -95,7 +92,7 @@ class CurrencyConverterTest extends TestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /** @test */
+    #[Test]
     public function it_fetches_a_historical_rate_enterprise_mode()
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
@@ -112,9 +109,7 @@ class CurrencyConverterTest extends TestCase
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_name()
     {
         $service = new CurrencyConverter($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);

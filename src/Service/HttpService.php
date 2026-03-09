@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Exchanger\Service;
 
 use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -50,7 +50,7 @@ abstract class HttpService extends Service
     public function __construct($httpClient = null, ?RequestFactoryInterface $requestFactory = null, array $options = [])
     {
         if (null === $httpClient) {
-            $httpClient = HttpClientDiscovery::find();
+            $httpClient = Psr18ClientDiscovery::find();
         } else {
             if (!$httpClient instanceof ClientInterface && !$httpClient instanceof HttpClient) {
                 throw new \LogicException('Client must be an instance of Http\\Client\\HttpClient or Psr\\Http\\Client\\ClientInterface');

@@ -16,12 +16,11 @@ namespace Exchanger\Tests;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ExchangeRateQueryTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_serializes()
     {
         $firstQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
