@@ -10,23 +10,6 @@ Exchanger is a PHP framework to work with currency exchange rates from various s
 or **[Exchange Rates Data](https://exchangeratesapi.io)**.
 Looking for a simple library based on Exchanger ? Check out [Swap](https://github.com/florianv/swap) !
 
-## Sponsors
-
-<table>
-   <tr>
-      <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
-      <td><a href="https://fixer.io">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
-   </tr>
-   <tr>
-     <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
-     <td><a href="https://currencylayer.com">Currency Data</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
-   </tr>
-   <tr>
-     <td><img src="https://assets.apilayer.com/apis/exchangerates_data.png" width="50px"/></td>
-     <td><a href="https://exchangeratesapi.io">Exchange Rates Data</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
-   </tr>
-</table>
-
 ## Documentation
 
 The documentation for the current branch can be found [here](https://github.com/florianv/exchanger/blob/master/doc/readme.md).
