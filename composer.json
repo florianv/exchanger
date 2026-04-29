@@ -1,13 +1,16 @@
 {
     "name": "florianv/exchanger",
     "type": "library",
-    "description": "Currency exchange rates framework for PHP",
+    "description": "PHP exchange rate provider layer for currency conversion: 30 services, chain fallback, and caching.",
     "keywords": [
-        "currency",
-        "money",
-        "rate",
-        "conversion",
-        "exchange rates"
+        "php",
+        "currency-conversion",
+        "exchange-rates",
+        "exchange-rate-api",
+        "forex",
+        "fallback",
+        "swap",
+        "money"
     ],
     "homepage": "https://github.com/florianv/exchanger",
     "license": "MIT",
