@@ -132,7 +132,7 @@ use Exchanger\ExchangeRateQueryBuilder;
 $query = (new ExchangeRateQueryBuilder('EUR/USD'))->build();
 ```
 
-> Currencies are expressed as their [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) code.
+> Currencies are expressed as their [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code.
 
 ### Latest and historical rates
 
