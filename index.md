@@ -1,69 +1,105 @@
-Exchanger is a PHP framework to work with currency exchange rates from various services such as
-**[Fixer](https://fixer.io)**, **[Currency Data](https://currencylayer.com)** or **[Exchange Rates Data](https://exchangeratesapi.io)**.
-Looking for a simple library based on Exchanger ? Check out [Swap](https://github.com/florianv/swap) !
+---
+title: "Exchanger: PHP exchange rate provider layer"
+description: PHP exchange rate provider layer for currency conversion. 30 services, chain fallback, and caching. Maintained since 2016.
+---
 
-## Sponsors
+**Exchange rate provider layer for PHP, with chain fallback, caching, and direct access to 30 implementations.**
 
-<table>
-   <tr>
-      <td><img src="https://assets.apilayer.com/apis/fixer.png" width="50px"/></td>
-      <td><a href="https://fixer.io">Fixer</a> is a simple and lightweight API for foreign exchange rates that supports up to 170 world currencies.</td>
-   </tr>
-   <tr>
-     <td><img src="https://assets.apilayer.com/apis/currency_data.png" width="50px"/></td>
-     <td><a href="https://currencylayer.com">Currency Data</a> provides reliable exchange rates and currency conversions for your business up to 168 world currencies.</td>
-   </tr>
-   <tr>
-     <td><img src="https://assets.apilayer.com/apis/exchangerates_data.png" width="50px"/></td>
-     <td><a href="https://exchangeratesapi.io">Exchange Rates Data</a> provides reliable exchange rates and currency conversions for your business with over 15 data sources.</td>
-   </tr>
-</table>
+Most exchange rate APIs are a single point of failure. Exchanger gives you a single interface over 30 providers, with chainable fallback and PSR-16 caching.
+
+> Used in production PHP applications since 2016.
+
+Exchanger is the PHP **exchange rate provider layer**. It exposes 30 services (the European Central Bank, several national banks, exchangerate.host, and commercial **exchange rate APIs** that require an API key) behind a single `ExchangeRateService` interface, with chainable fallback, PSR-16 caching, and historical rates.
+
+For most use cases, the higher-level [Swap](https://github.com/florianv/swap) library is what you want. Reach for Exchanger directly when you need finer control.
+
+## What is Exchanger?
+
+- Exchanger is a PHP library for currency conversion and exchange rate retrieval at the provider layer.
+- It contains 30 service implementations behind a common `ExchangeRateService` interface.
+- It caches results via PSR-16 SimpleCache.
+- It supports historical rates.
+- It supports a chain service for fallback. When a service errors, the next one in the chain is tried.
+
+## When should you use Exchanger?
+
+- Use Exchanger when you need finer control than [Swap](https://github.com/florianv/swap) exposes: custom chain composition, custom caching strategy, custom HTTP middleware, or building your own facade or framework integration.
+- For most PHP applications, use [Swap](https://github.com/florianv/swap) instead. It is built on Exchanger and provides sensible defaults and a builder-style API.
+
+## Why Exchanger over Swap?
+
+Swap is the easy-to-use, high-level API. Exchanger is the layer Swap is built on.
+
+Reach for Exchanger directly when:
+
+- **Custom facade:** you want to build your own currency conversion API on top of the provider layer.
+- **Framework binding:** you are integrating into a framework that does not yet have a Swap binding.
+- **Fine-grained chain composition:** you need to wrap services with custom logic before chaining them.
+- **Direct cache control:** you want to manage the PSR-16 cache strategy yourself.
+- **Custom HTTP layer:** you need an HTTP middleware stack the Swap builder does not expose.
+
+If none of these apply, use Swap.
+
+## Quickstart
+
+Exchanger requires PHP 8.2 or newer.
+
+Install via Composer:
+
+```bash
+composer require florianv/exchanger symfony/http-client nyholm/psr7
+```
+
+Use it:
+
+```php
+use Exchanger\Exchanger;
+use Exchanger\ExchangeRateQueryBuilder;
+use Exchanger\Service\EuropeanCentralBank;
+
+// The European Central Bank is free, no API key required.
+$service   = new EuropeanCentralBank();
+$exchanger = new Exchanger($service);
+
+// EUR → USD exchange rate
+$query = (new ExchangeRateQueryBuilder('EUR/USD'))->build();
+$rate  = $exchanger->getExchangeRate($query);
+
+$rate->getValue();                 // e.g. 1.0823 (a float)
+$rate->getDate()->format('Y-m-d'); // e.g. 2026-04-29
+$rate->getProviderName();          // 'european_central_bank'
+
+// Convert an amount using the returned rate
+$amountInEUR = 100.00;
+$amountInUSD = $amountInEUR * $rate->getValue();
+
+// Historical rate
+$query = (new ExchangeRateQueryBuilder('EUR/USD'))
+    ->setDate((new \DateTime())->modify('-15 days'))
+    ->build();
+
+$rate = $exchanger->getExchangeRate($query);
+```
+
+Exchanger retrieves the rate; your application multiplies the amount by `$rate->getValue()` to perform the conversion.
+
+## View on GitHub
+
+Source code, full documentation, providers list, and issue tracker:
+
+**[→ View on GitHub](https://github.com/florianv/exchanger)**
+
+## Related packages
+
+- [Swap](https://github.com/florianv/swap): easy-to-use PHP currency conversion library.
+- [Exchanger](https://github.com/florianv/exchanger): exchange rate provider layer (this package).
+- [Laravel Swap](https://github.com/florianv/laravel-swap): Laravel application of Swap.
+- [Symfony Swap](https://github.com/florianv/symfony-swap): Symfony integration of Swap.
 
 ## Documentation
 
-The documentation for the current branch can be found [here](https://github.com/florianv/exchanger/blob/master/doc/readme.md).
+The full documentation, with the per-service configuration reference, caching options, and how to write your own service, is in [doc/readme.md](https://github.com/florianv/exchanger/blob/master/doc/readme.md) on the GitHub repository.
 
-## Services
+---
 
-Here is the complete list of the currently implemented services:
-
-| Service | Base Currency | Quote Currency | Historical |
-|---------------------------------------------------------------------------|----------------------|----------------|----------------|
-| [Fixer](https://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
-| [Currency Data](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
-| [Exchange Rates Data](https://exchangeratesapi.io) | USD (free), * (paid) | * | Yes |
-| [Abstract](https://www.abstractapi.com) | * | * | Yes |
-| [coinlayer](https://coinlayer.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies) | Yes |
-| [Fixer](https://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
-| [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
-| [exchangeratesapi](https://exchangeratesapi.io) | USD (free), * (paid) | * | Yes |
-| [European Central Bank](https://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
-| [National Bank of Georgia](https://nbg.gov.ge) | * | GEL | Yes |
-| [National Bank of the Republic of Belarus](https://www.nbrb.by) | * | BYN (from 01-07-2016),<br>BYR (01-01-2000 - 30-06-2016),<br>BYB (25-05-1992 - 31-12-1999) | Yes |
-| [National Bank of Romania](http://www.bnr.ro) | RON, AED, AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EGP, EUR, GBP, HRK, HUF, INR, JPY, KRW, MDL, MXN, NOK, NZD, PLN, RSD, RUB, SEK, TRY, UAH, USD, XAU, XDR, ZAR | RON, AED, AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EGP, EUR, GBP, HRK, HUF, INR, JPY, KRW, MDL, MXN, NOK, NZD, PLN, RSD, RUB, SEK, TRY, UAH, USD, XAU, XDR, ZAR | Yes |
-| [National Bank of Ukranie](https://bank.gov.ua) | * | UAH | Yes |
-| [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | Yes |
-| [Central Bank of the Republic of Uzbekistan](https://cbu.uz) | * | UZS | Yes |
-| [Central Bank of the Czech Republic](https://www.cnb.cz) | * | CZK | Yes |
-| [Central Bank of Russia](https://cbr.ru) | * | RUB | Yes |
-| [Bulgarian National Bank](http://bnb.bg) | * | BGN | Yes |
-| [WebserviceX](http://www.webservicex.net) | * | * | No |
-| [1Forge](https://1forge.com) | * (free but limited or paid) | * (free but limited or paid) | No |
-| [Cryptonator](https://www.cryptonator.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies)  | No |
-| [CurrencyDataFeed](https://currencydatafeed.com) | * (free but limited or paid) | * (free but limited or paid) | No |
-| [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
-| [Xignite](https://www.xignite.com) | * | * | Yes |
-| [Currency Converter API](https://www.currencyconverterapi.com) | * | * | Yes (free but limited or paid) |
-| [xChangeApi.com](https://xchangeapi.com) | * | * | Yes |
-| [fastFOREX.io](https://www.fastforex.io) | USD (free), * (paid) | * | No |
-| [exchangerate.host](https://www.exchangerate.host) | * | * | Yes |
-| Array | * | * | Yes |
-
-## Credits
-
-- [Florian Voutzinos](https://github.com/florianv)
-- [All Contributors](https://github.com/florianv/exchanger/contributors)
-
-## License
-
-The MIT License (MIT). Please see [LICENSE](https://github.com/florianv/exchanger/blob/master/LICENSE) for more information.
+_Exchanger is open to selected partnerships with exchange rate providers._
