@@ -154,7 +154,7 @@ Exchanger ships 30 exchange rate provider implementations. Each is registered in
 | currencylayer (direct)           | `currency_layer`                 | USD (free), * (paid)  | *     | Yes        |
 | Exchange Rates Data (APILayer)   | `apilayer_exchange_rates_data`   | USD (free), * (paid)  | *     | Yes        |
 | exchangeratesapi (direct)        | `exchange_rates_api`             | USD (free), * (paid)  | *     | Yes        |
-| fastFOREX.io                     | `fastforex`                      | USD (free), * (paid)  | *     | No         |
+| fastFOREX.io                     | `fastforex`                      | *                     | *     | Yes        |
 | Fixer (APILayer)                 | `apilayer_fixer`                 | EUR (free), * (paid)  | *     | Yes        |
 | Fixer (direct)                   | `fixer`                          | EUR (free), * (paid)  | *     | Yes        |
 | 1Forge                           | `forge`                          | *                     | *     | No         |
