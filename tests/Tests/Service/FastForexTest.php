@@ -23,19 +23,19 @@ use PHPUnit\Framework\Attributes\Test;
 class FastForexTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_supports_all_queries()
     {
         $service = new FastForex($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
-        $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
+        $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     #[Test]
     public function it_throws_an_exception_when_rate_not_supported()
     {
         $this->expectException(Exception::class);
-        $url = 'https://api.fastforex.io/fetch-one?from=EUR&to=ZZZ&api_key=secret';
+        $url = 'https://api.fastforex.io/fetch-one?from=EUR&to=ZZZ';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/FastForex/error-unsupported.json');
         $service = new FastForex($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
@@ -46,7 +46,7 @@ class FastForexTest extends ServiceTestCase
     public function it_fetches_a_rate_when_response_symbol_matches()
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
-        $url = 'https://api.fastforex.io/fetch-one?from=USD&to=EUR&api_key=secret';
+        $url = 'https://api.fastforex.io/fetch-one?from=USD&to=EUR';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/FastForex/one-usd-eur.json');
         $service = new FastForex($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
@@ -61,9 +61,19 @@ class FastForexTest extends ServiceTestCase
     public function it_throws_an_exception_when_response_symbol_does_not_match()
     {
         $this->expectException(Exception::class);
-        $url = 'https://api.fastforex.io/fetch-one?from=USD&to=AED&api_key=secret';
+        $url = 'https://api.fastforex.io/fetch-one?from=USD&to=AED';
         $content = file_get_contents(__DIR__.'/../../Fixtures/Service/FastForex/one-usd-eur.json');
         $service = new FastForex($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
+
+        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/AED')));
+    }
+
+    #[Test]
+    public function it_throws_an_exception_when_response_status_error()
+    {
+        $this->expectException(Exception::class);
+        $url = 'https://api.fastforex.io/fetch-one?from=USD&to=AED';
+        $service = new FastForex($this->getHttpAdapterMock($url, '', 401), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/AED')));
     }

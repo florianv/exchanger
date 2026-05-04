@@ -21,10 +21,11 @@ abstract class ServiceTestCase extends TestCase
      * Create a mocked Response.
      *
      * @param string $content The body content
+     * @param int $statusCode The status code
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    private function getResponse($content)
+    private function getResponse($content, $statusCode = 200)
     {
         $body = $this->createMock('Psr\Http\Message\StreamInterface');
         $body
@@ -38,6 +39,10 @@ abstract class ServiceTestCase extends TestCase
             ->method('getBody')
             ->willReturn($body);
 
+        $response
+            ->method('getStatusCode')
+            ->willReturn($statusCode);
+
         return $response;
     }
 
@@ -46,12 +51,13 @@ abstract class ServiceTestCase extends TestCase
      *
      * @param string $url     The url
      * @param string $content The body content
+     * @param int $statusCode The status code
      *
      * @return \Http\Client\HttpClient
      */
-    protected function getHttpAdapterMock($url, $content)
+    protected function getHttpAdapterMock($url, $content, $statusCode = 200)
     {
-        $response = $this->getResponse($content);
+        $response = $this->getResponse($content, $statusCode);
 
         $adapter = $this->createMock('Http\Client\HttpClient');
 
