@@ -1,33 +1,20 @@
 # Documentation
 
-## 💡 What is Exchanger?
+<table>
+   <tr>
+      <td width="220" align="center">
+         <a href="https://www.fastforex.io" target="_blank" rel="noopener">
+            <img src="https://console.fastforex.io/img/fastforex/logo-bk-1k.svg" width="180px" alt="fastFOREX"/>
+         </a>
+      </td>
+      <td>
+         <strong>Sponsored by <a href="https://www.fastforex.io" target="_blank" rel="noopener">fastFOREX</a>.</strong> Real-time JSON API, 160+ currencies, 55+ years of history, 500+ cryptocurrencies. <strong>Free tier</strong>; paid plans from $18/month.
+         <a href="https://www.fastforex.io" target="_blank" rel="noopener"><strong>→ Get a free fastFOREX API key</strong></a>
+      </td>
+   </tr>
+</table>
 
-- Exchanger is a PHP library for currency conversion and exchange rate retrieval at the provider layer.
-- It contains 30 service implementations behind a common `ExchangeRateService` interface.
-- It caches results via PSR-16 SimpleCache.
-- It supports historical rates.
-- It supports a chain service for fallback. When a service errors, the next one in the chain is tried.
-
-For the wider ecosystem (Swap, Laravel Swap, Symfony Swap), see the [README](../README.md).
-
-## 🎯 When should you use Exchanger?
-
-- Use Exchanger when you need finer control than [Swap](https://github.com/florianv/swap) exposes: custom chain composition, custom caching strategy, custom HTTP middleware, or building your own facade or framework integration.
-- For most PHP applications, use [Swap](https://github.com/florianv/swap) instead. It is built on Exchanger and provides sensible defaults and a builder-style API.
-
-## 🧠 Why Exchanger over Swap?
-
-Swap is the easy-to-use, high-level API. Exchanger is the layer Swap is built on.
-
-Reach for Exchanger directly when:
-
-- **Custom facade:** you want to build your own currency conversion API on top of the provider layer.
-- **Framework binding:** you are integrating into a framework that does not yet have a Swap binding.
-- **Fine-grained chain composition:** you need to wrap services with custom logic before chaining.
-- **Direct cache control:** you want to manage the PSR-16 cache strategy yourself.
-- **Custom HTTP layer:** you need an HTTP middleware stack the Swap builder does not expose.
-
-If none of these apply, use Swap.
+This is the technical reference for Exchanger. For the project overview and ecosystem (Swap, Laravel Swap, Symfony Swap), see the [README](../README.md).
 
 ## Index
 
@@ -45,6 +32,9 @@ If none of these apply, use Swap.
   * [Per-query options](#per-query-options)
   * [HTTP request caching](#http-request-caching)
 * [Provider configuration](#-provider-configuration)
+  * [Commercial services](#commercial-services)
+  * [Public services](#public-services)
+  * [Example](#example)
 * [Creating a custom service](#-creating-a-custom-service)
   * [Standard service](#standard-service)
   * [Historical service](#historical-service)
@@ -72,25 +62,26 @@ You can also pass a client explicitly to each service constructor if you do not 
 
 ### Building Exchanger
 
-`Exchanger` is constructed with a single service:
+`Exchanger` is constructed with a single service. A typical setup uses [fastFOREX](https://www.fastforex.io) (the project's sponsor) as the primary service:
 
 ```php
 use Exchanger\Exchanger;
+use Exchanger\Service\FastForex;
+
+$service   = new FastForex(null, null, ['api_key' => getenv('FASTFOREX_API_KEY')]);
+$exchanger = new Exchanger($service);
+```
+
+Service constructors take an HTTP client (any PSR-18 client) as the first argument and a PSR-17 request factory as the second; both can be left `null` to auto-discover. The third argument is the per-service options array. Per-service option keys are documented in the [Provider configuration](#-provider-configuration) section.
+
+For a no-key starting point, the European Central Bank publishes EUR-base rates for free:
+
+```php
 use Exchanger\Service\EuropeanCentralBank;
 
 $service   = new EuropeanCentralBank();
 $exchanger = new Exchanger($service);
 ```
-
-Service constructors take an HTTP client (any PSR-18 client) as the first argument and a PSR-17 request factory as the second; both can be left `null` to auto-discover. The third argument is the per-service options array. For example:
-
-```php
-use Exchanger\Service\OpenExchangeRates;
-
-$service = new OpenExchangeRates(null, null, ['app_id' => 'YOUR_APP_ID']);
-```
-
-Per-service option keys are documented in the [Provider configuration](#-provider-configuration) section.
 
 ### Chaining services
 
@@ -100,10 +91,10 @@ Wrap multiple services in a `Chain` to fall back when one of them errors:
 use Exchanger\Exchanger;
 use Exchanger\Service\Chain;
 use Exchanger\Service\EuropeanCentralBank;
+use Exchanger\Service\FastForex;
 
 $service = new Chain([
-    new YourPrimaryService(null, null, ['api_key' => 'YOUR_KEY']),
-    new YourFallbackService(null, null, ['api_key' => 'YOUR_KEY']),
+    new FastForex(null, null, ['api_key' => getenv('FASTFOREX_API_KEY')]),
     new EuropeanCentralBank(), // free fallback for EUR-base pairs
 ]);
 
@@ -177,14 +168,14 @@ composer require symfony/cache
 
 ```php
 use Exchanger\Exchanger;
-use Exchanger\Service\EuropeanCentralBank;
+use Exchanger\Service\FastForex;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Psr16Cache;
 
 $cache = new Psr16Cache(new FilesystemAdapter());
 
 $exchanger = new Exchanger(
-    new EuropeanCentralBank(),
+    new FastForex(null, null, ['api_key' => getenv('FASTFOREX_API_KEY')]),
     $cache,
     ['cache_ttl' => 3600, 'cache_key_prefix' => 'myapp-']
 );
@@ -226,7 +217,7 @@ composer require php-http/cache-plugin cache/array-adapter
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Exchanger\Exchanger;
 use Exchanger\ExchangeRateQueryBuilder;
-use Exchanger\Service\EuropeanCentralBank;
+use Exchanger\Service\FastForex;
 use Http\Adapter\Guzzle7\Client as GuzzleClient;
 use Http\Client\Common\Plugin\CachePlugin;
 use Http\Client\Common\PluginClient;
@@ -237,7 +228,7 @@ $streamFactory = new GuzzleStreamFactory();
 $cachePlugin   = new CachePlugin($pool, $streamFactory);
 $httpClient    = new PluginClient(new GuzzleClient(), [$cachePlugin]);
 
-$service   = new EuropeanCentralBank($httpClient);
+$service   = new FastForex($httpClient, null, ['api_key' => getenv('FASTFOREX_API_KEY')]);
 $exchanger = new Exchanger($service);
 
 $exchanger->getExchangeRate(
@@ -251,6 +242,34 @@ $exchanger->getExchangeRate(
 
 ## 🔑 Provider configuration
 
+### Commercial services
+
+Commercial services take an HTTP client, a request factory (both can be `null`), and an options array. The option key varies by service. The project's sponsor [fastFOREX](https://www.fastforex.io) (`fastforex`) is the recommended starting point.
+
+| Service class                                  | Required option | Optional flags        |
+| ---------------------------------------------- | --------------- | --------------------- |
+| ⭐ **`Exchanger\Service\FastForex`**           | **`api_key`**   |                       |
+|                                                |                 |                       |
+| `Exchanger\Service\AbstractApi`                | `api_key`       |                       |
+| `Exchanger\Service\ApiLayer\CurrencyData`      | `api_key`       |                       |
+| `Exchanger\Service\ApiLayer\ExchangeRatesData` | `api_key`       |                       |
+| `Exchanger\Service\ApiLayer\Fixer`             | `api_key`       |                       |
+| `Exchanger\Service\CoinLayer`                  | `access_key`    | `paid` (bool)         |
+| `Exchanger\Service\CurrencyConverter`          | `access_key`    | `enterprise` (bool)   |
+| `Exchanger\Service\CurrencyDataFeed`           | `api_key`       |                       |
+| `Exchanger\Service\CurrencyLayer`              | `access_key`    | `enterprise` (bool)   |
+| `Exchanger\Service\ExchangeRatesApi`           | `access_key`    |                       |
+| `Exchanger\Service\Fixer`                      | `access_key`    |                       |
+| `Exchanger\Service\FixerApiLayer`              | `api_key`       |                       |
+| `Exchanger\Service\Forge`                      | `api_key`       |                       |
+| `Exchanger\Service\OpenExchangeRates`          | `app_id`        | `enterprise` (bool)   |
+| `Exchanger\Service\XchangeApi`                 | `api-key`       | (note the hyphen)     |
+| `Exchanger\Service\Xignite`                    | `token`         |                       |
+
+> Note: `Exchanger\Service\Cryptonator`, `Exchanger\Service\ExchangerateHost` and `Exchanger\Service\WebserviceX` are commercial upstream services but the current wrapper does not enforce any option for them. They can be instantiated without arguments until the wrappers are updated to require a key.
+
+### Public services
+
 Public services need no configuration; instantiate them directly:
 
 ```php
@@ -261,37 +280,36 @@ $service = new EuropeanCentralBank();
 $service = new NationalBankOfRomania();
 ```
 
-Commercial services take an HTTP client, a request factory (both can be `null`), and an options array. The option key varies by service:
+| Identifier                            | Service class                                       | Base           | Quote          | Historical |
+| ------------------------------------- | --------------------------------------------------- | -------------- | -------------- | ---------- |
+| `bulgarian_national_bank`             | `Exchanger\Service\BulgarianNationalBank`           | *              | BGN            | Yes        |
+| `central_bank_of_czech_republic`      | `Exchanger\Service\CentralBankOfCzechRepublic`      | *              | CZK            | Yes        |
+| `central_bank_of_republic_turkey`     | `Exchanger\Service\CentralBankOfRepublicTurkey`     | *              | TRY            | Yes        |
+| `central_bank_of_republic_uzbekistan` | `Exchanger\Service\CentralBankOfRepublicUzbekistan` | *              | UZS            | Yes        |
+| `european_central_bank`               | `Exchanger\Service\EuropeanCentralBank`             | EUR            | *              | Yes        |
+| `national_bank_of_georgia`            | `Exchanger\Service\NationalBankOfGeorgia`           | *              | GEL            | Yes        |
+| `national_bank_of_romania`            | `Exchanger\Service\NationalBankOfRomania`           | (limited list) | (limited list) | Yes        |
+| `national_bank_of_republic_belarus`   | `Exchanger\Service\NationalBankOfRepublicBelarus`   | *              | BYN            | Yes        |
+| `national_bank_of_ukraine`            | `Exchanger\Service\NationalBankOfUkraine`           | *              | UAH            | Yes        |
+| `russian_central_bank`                | `Exchanger\Service\RussianCentralBank`              | *              | RUB            | Yes        |
 
-| Service class                                  | Required option | Optional flags        |
-| ---------------------------------------------- | --------------- | --------------------- |
-| `Exchanger\Service\AbstractApi`                | `api_key`       |                       |
-| `Exchanger\Service\ApiLayer\CurrencyData`      | `api_key`       |                       |
-| `Exchanger\Service\ApiLayer\ExchangeRatesData` | `api_key`       |                       |
-| `Exchanger\Service\ApiLayer\Fixer`             | `api_key`       |                       |
-| `Exchanger\Service\CoinLayer`                  | `access_key`    | `paid` (bool)         |
-| `Exchanger\Service\CurrencyConverter`          | `access_key`    | `enterprise` (bool)   |
-| `Exchanger\Service\CurrencyDataFeed`           | `api_key`       |                       |
-| `Exchanger\Service\CurrencyLayer`              | `access_key`    | `enterprise` (bool)   |
-| `Exchanger\Service\ExchangeRatesApi`           | `access_key`    |                       |
-| `Exchanger\Service\FastForex`                  | `api_key`       |                       |
-| `Exchanger\Service\Fixer`                      | `access_key`    |                       |
-| `Exchanger\Service\FixerApiLayer`              | `api_key`       |                       |
-| `Exchanger\Service\Forge`                      | `api_key`       |                       |
-| `Exchanger\Service\OpenExchangeRates`          | `app_id`        | `enterprise` (bool)   |
-| `Exchanger\Service\XchangeApi`                 | `api-key`       | (note the hyphen)     |
-| `Exchanger\Service\Xignite`                    | `token`         |                       |
+### Example
 
-Example:
+Chaining fastFOREX as the primary service with a couple of fallbacks:
 
 ```php
+use Exchanger\Service\Chain;
+use Exchanger\Service\EuropeanCentralBank;
+use Exchanger\Service\FastForex;
 use Exchanger\Service\ApiLayer\Fixer;
 use Exchanger\Service\OpenExchangeRates;
-use Exchanger\Service\Xignite;
 
-$fixer   = new Fixer(null, null, ['api_key' => 'YOUR_KEY']);
-$oer     = new OpenExchangeRates(null, null, ['app_id' => 'YOUR_APP_ID', 'enterprise' => false]);
-$xignite = new Xignite(null, null, ['token' => 'YOUR_TOKEN']);
+$service = new Chain([
+    new FastForex(null, null, ['api_key' => getenv('FASTFOREX_API_KEY')]),
+    new Fixer(null, null, ['api_key' => 'YOUR_KEY']),
+    new OpenExchangeRates(null, null, ['app_id' => 'YOUR_APP_ID', 'enterprise' => false]),
+    new EuropeanCentralBank(), // free fallback for EUR-base pairs
+]);
 ```
 
 The `Exchanger\Service\PhpArray` service (registry identifier `array`) is a special case used in tests and fixtures. It accepts a structure of latest and historical rates:
@@ -304,8 +322,6 @@ $service = new PhpArray(
     ['2017-01-01' => ['EUR/USD' => 1.5]]           // historical rates
 );
 ```
-
-The full provider list with capabilities (base currency, quote currency, historical support) is in the [README's Providers table](../README.md#-providers).
 
 ## 🧩 Creating a custom service
 
@@ -393,7 +409,7 @@ The `Chain` throws an `Exchanger\Exception\ChainException`. Calling `$exception-
 
 #### Can I use Exchanger without an API key?
 
-Yes. The European Central Bank, the national banks, `Cryptonator`, `ExchangerateHost`, and `WebserviceX` do not require an API key. See the [Providers table](../README.md#-providers) for the full list.
+Yes. The European Central Bank and the national banks listed under [Public services](#public-services) require no key. A few commercial services (`Cryptonator`, `ExchangerateHost`, `WebserviceX`) can also currently be used without one, since the wrapper does not yet enforce an option for them.
 
 #### How does Exchanger relate to Swap?
 
@@ -413,4 +429,4 @@ Implement `Exchanger\Contract\ExchangeRateService` (or extend `HttpService` / `S
 
 #### Where is the full provider list with capabilities?
 
-In the [README's Providers table](../README.md#-providers). It lists every supported service with its base currency, quote currency, and historical support.
+In the [Provider configuration](#-provider-configuration) section above, split into Commercial and Public tables with identifier, base currency, quote currency and historical support.
