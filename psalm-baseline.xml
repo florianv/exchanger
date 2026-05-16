@@ -545,10 +545,6 @@
       <code><![CDATA[public function processOptions(array &$options): void]]></code>
       <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
     </MissingOverrideAttribute>
-    <MixedArgument>
-      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
-      <code><![CDATA[$this->options[self::API_KEY_OPTION]]]></code>
-    </MixedArgument>
   </file>
   <file src="src/Service/Fixer.php">
     <InvalidArrayOffset>

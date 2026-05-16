@@ -118,9 +118,14 @@ final class FastForex extends HttpService
             throw new \Exchanger\Exception\Exception($message);
         }
 
-        $dateString = $result['updated'] ?? $result['date'] ?? 'now';
         try {
-            $date = new \DateTime(is_string($dateString) ? $dateString : 'now');
+            if (isset($result['updated']) && is_string($result['updated'])) {
+                $date = new \DateTime($result['updated']);
+            } elseif (isset($result['date']) && is_string($result['date'])) {
+                $date = new \DateTime($result['date']);
+            } else {
+                $date = new \DateTime();
+            }
         } catch (\Throwable $thrown) {
             $date = new \DateTime();
         }
