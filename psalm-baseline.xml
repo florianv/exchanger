@@ -539,18 +539,12 @@
   </file>
   <file src="src/Service/FastForex.php">
     <MissingOverrideAttribute>
-      <code><![CDATA[public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
       <code><![CDATA[public function getName(): string]]></code>
       <code><![CDATA[public function processOptions(array &$options): void]]></code>
       <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
     </MissingOverrideAttribute>
-    <MixedArgument>
-      <code><![CDATA[$result['updated']]]></code>
-      <code><![CDATA[$this->options['api_key']]]></code>
-    </MixedArgument>
-    <ParamNameMismatch>
-      <code><![CDATA[$exchangeRateQuery]]></code>
-    </ParamNameMismatch>
   </file>
   <file src="src/Service/Fixer.php">
     <InvalidArrayOffset>

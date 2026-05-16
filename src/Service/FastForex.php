@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Exchanger\Service;
 
+use Exchanger\Contract\CurrencyPair;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
-use Exchanger\CurrencyPair;
-use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
@@ -112,15 +111,21 @@ final class FastForex extends HttpService
         }
 
         if ($response->getStatusCode() !== 200 || isset($result['error'])) {
-            throw new \Exchanger\Exception\Exception(
-                empty($result['error'])
-                    ? sprintf('Failed with HTTP response code %d', $response->getStatusCode())
-                    : $result['error']
-            );
+            $message = empty($result['error']) || !is_string($result['error'])
+                ? sprintf('Failed with HTTP response code %d', $response->getStatusCode())
+                : $result['error'];
+
+            throw new \Exchanger\Exception\Exception($message);
         }
 
         try {
-            $date = new \DateTime($result['updated'] ?? ($result['date'] ?? 'now'));
+            if (isset($result['updated']) && is_string($result['updated'])) {
+                $date = new \DateTime($result['updated']);
+            } elseif (isset($result['date']) && is_string($result['date'])) {
+                $date = new \DateTime($result['date']);
+            } else {
+                $date = new \DateTime();
+            }
         } catch (\Throwable $thrown) {
             $date = new \DateTime();
         }
