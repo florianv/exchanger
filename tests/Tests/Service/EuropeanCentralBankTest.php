@@ -39,7 +39,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/success.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/EuropeanCentralBank/success.xml');
 
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/XXL')));
@@ -49,7 +49,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/success.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/EuropeanCentralBank/success.xml');
 
         $pair = CurrencyPair::createFromString('EUR/BGN');
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
@@ -67,14 +67,14 @@ class EuropeanCentralBankTest extends ServiceTestCase
     public function it_fetches_a_historical_rate_within_90_days_back()
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/historical-90d.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/EuropeanCentralBank/historical-90d.xml');
 
         $pair = CurrencyPair::createFromString('EUR/JPY');
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
         $date = (new \DateTime())->modify('2019-11-29');
 
         $rate = $service->getExchangeRate(
-            new HistoricalExchangeRateQuery($pair, $date)
+            new HistoricalExchangeRateQuery($pair, $date),
         );
 
         $this->assertEquals($date, $rate->getDate());
@@ -86,13 +86,13 @@ class EuropeanCentralBankTest extends ServiceTestCase
     public function it_fetches_a_historical_rate_older_than_90_days()
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
 
         $pair = CurrencyPair::createFromString('EUR/JPY');
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
 
         $rate = $service->getExchangeRate(
-            new HistoricalExchangeRateQuery($pair, new \DateTime('2016-08-23'))
+            new HistoricalExchangeRateQuery($pair, new \DateTime('2016-08-23')),
         );
 
         $this->assertSame(113.48, $rate->getValue());
@@ -109,7 +109,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
 
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/JPY'), new \DateTime('2016-05-26')));
@@ -123,7 +123,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
 
         $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/XXL'), new \DateTime('2016-08-23')));

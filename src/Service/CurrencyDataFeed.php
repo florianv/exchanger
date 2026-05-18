@@ -26,13 +26,12 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  */
 final class CurrencyDataFeed extends HttpService
 {
-    const URL = 'https://currencydatafeed.com/api/data.php?token=%s&currency=%s';
+    public const URL = 'https://currencydatafeed.com/api/data.php?token=%s&currency=%s';
 
-    const HISTORICAL_URL = 'https://currencydatafeed.com/api/historical.php?token=%s&date=%s&currency=%s';
+    public const HISTORICAL_URL = 'https://currencydatafeed.com/api/historical.php?token=%s&date=%s&currency=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options['api_key'])) {
@@ -40,21 +39,19 @@ final class CurrencyDataFeed extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
-        $url = sprintf(self::URL, $this->options['api_key'], $currencyPair->getBaseCurrency().'/'.$currencyPair->getQuoteCurrency());
+        $url = sprintf(self::URL, $this->options['api_key'], $currencyPair->getBaseCurrency() . '/' . $currencyPair->getQuoteCurrency());
 
         $content = $this->request($url);
 
@@ -69,9 +66,8 @@ final class CurrencyDataFeed extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'currency_data_feed';

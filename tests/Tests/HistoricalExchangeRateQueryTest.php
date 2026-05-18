@@ -26,19 +26,19 @@ class HistoricalExchangeRateQueryTest extends TestCase
         $firstQuery = new HistoricalExchangeRateQuery(
             CurrencyPair::createFromString('EUR/USD'),
             new \DateTime('yesterday'),
-            ['cache_ttl' => 3600]
+            ['cache_ttl' => 3600],
         );
 
         $secondQuery = new HistoricalExchangeRateQuery(
             CurrencyPair::createFromString('EUR/USD'),
             new \DateTime('yesterday'),
-            ['cache_ttl' => 3600]
+            ['cache_ttl' => 3600],
         );
 
         $thirdQuery = new HistoricalExchangeRateQuery(
             CurrencyPair::createFromString('EUR/USD'),
             new \DateTime(),
-            ['cache_ttl' => 3600]
+            ['cache_ttl' => 3600],
         );
 
         $this->assertEquals(serialize($firstQuery), serialize($secondQuery));

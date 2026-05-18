@@ -46,7 +46,7 @@ class UniRateApiTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $url = 'https://api.unirateapi.com/api/rates?api_key=secret&from=USD&to=EUR';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/UniRateApi/rate-usd-eur.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/UniRateApi/rate-usd-eur.json');
         $service = new UniRateApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -62,7 +62,7 @@ class UniRateApiTest extends ServiceTestCase
         $pair = CurrencyPair::createFromString('USD/EUR');
         $date = new \DateTime('2024-01-15');
         $url = 'https://api.unirateapi.com/api/historical/rates?api_key=secret&date=2024-01-15&from=USD&to=EUR';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/UniRateApi/historical-usd-eur.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/UniRateApi/historical-usd-eur.json');
         $service = new UniRateApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
@@ -80,7 +80,7 @@ class UniRateApiTest extends ServiceTestCase
         $this->expectExceptionMessage('Currency not found or no data available');
 
         $url = 'https://api.unirateapi.com/api/rates?api_key=secret&from=USD&to=ZZZ';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/UniRateApi/error-invalid-currency.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/UniRateApi/error-invalid-currency.json');
         $service = new UniRateApi($this->getHttpAdapterMock($url, $content, 404), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/ZZZ')));

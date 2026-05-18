@@ -26,11 +26,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  */
 final class Forge extends HttpService
 {
-    const URL = 'https://api.1forge.com/quotes?pairs=%s&api_key=%s';
+    public const URL = 'https://api.1forge.com/quotes?pairs=%s&api_key=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options['api_key'])) {
@@ -38,21 +37,19 @@ final class Forge extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
-        $currencySymbol = $currencyPair->getBaseCurrency().'/'.$currencyPair->getQuoteCurrency();
+        $currencySymbol = $currencyPair->getBaseCurrency() . '/' . $currencyPair->getQuoteCurrency();
         $url = sprintf(self::URL, $currencySymbol, $this->options['api_key']);
 
         $content = $this->request($url);
@@ -73,9 +70,8 @@ final class Forge extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'forge';

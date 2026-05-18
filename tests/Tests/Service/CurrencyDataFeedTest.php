@@ -36,7 +36,7 @@ class CurrencyDataFeedTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $url = 'https://currencydatafeed.com/api/data.php?token=secret&currency=EUR/ZZZ';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyDataFeed/error.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyDataFeed/error.json');
         $service = new CurrencyDataFeed($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/ZZZ')));
@@ -47,7 +47,7 @@ class CurrencyDataFeedTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $url = 'https://currencydatafeed.com/api/data.php?token=secret&currency=EUR/USD';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyDataFeed/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyDataFeed/success.json');
         $service = new CurrencyDataFeed($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));

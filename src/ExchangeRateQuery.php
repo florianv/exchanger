@@ -49,17 +49,15 @@ class ExchangeRateQuery implements ExchangeRateQueryContract
         $this->options = $options;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getCurrencyPair(): CurrencyPairContract
     {
         return $this->currencyPair;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getOption($name, $default = null)
     {
         if (\array_key_exists($name, $this->options)) {

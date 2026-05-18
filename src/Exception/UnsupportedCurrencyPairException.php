@@ -49,8 +49,8 @@ final class UnsupportedCurrencyPairException extends Exception
             sprintf(
                 'The currency pair "%s" is not supported by the service "%s".',
                 $currencyPair->__toString(),
-                \get_class($service)
-            )
+                \get_class($service),
+            ),
         );
 
         $this->currencyPair = $currencyPair;

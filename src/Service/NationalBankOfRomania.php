@@ -75,6 +75,7 @@ final class NationalBankOfRomania extends HttpService
      *
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $content = $this->request(self::URL);
@@ -86,7 +87,7 @@ final class NationalBankOfRomania extends HttpService
         $date = new \DateTime((string) $element->xpath('//xmlns:PublishingDate')[0]);
         $xmlCurrency = $this->getXmlCurrency($currencyPair);
 
-        $elements = $element->xpath('//xmlns:Rate[@currency="'.$xmlCurrency.'"]');
+        $elements = $element->xpath('//xmlns:Rate[@currency="' . $xmlCurrency . '"]');
 
         if (empty($elements) || !$date) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -103,6 +104,7 @@ final class NationalBankOfRomania extends HttpService
      * @throws UnsupportedDateException
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -125,10 +127,10 @@ final class NationalBankOfRomania extends HttpService
         $formattedDate = $date->format('Y-m-d');
         $xmlCurrency = $this->getXmlCurrency($currencyPair);
 
-        $elements = $element->xpath('//xmlns:Cube[@date="'.$formattedDate.'"]/xmlns:Rate[@currency="'.$xmlCurrency.'"]');
+        $elements = $element->xpath('//xmlns:Cube[@date="' . $formattedDate . '"]/xmlns:Rate[@currency="' . $xmlCurrency . '"]');
 
         if (empty($elements)) {
-            if (empty($element->xpath('//xmlns:Cube[@date="'.$formattedDate.'"]'))) {
+            if (empty($element->xpath('//xmlns:Cube[@date="' . $formattedDate . '"]'))) {
                 throw new UnsupportedDateException($date, $this);
             }
 
@@ -140,9 +142,8 @@ final class NationalBankOfRomania extends HttpService
         return $this->createRate($currencyPair, $rateValue, $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         $base = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
@@ -152,9 +153,8 @@ final class NationalBankOfRomania extends HttpService
             || ('RON' === $quote && \in_array($base, self::SUPPORTED_CURRENCIES));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'national_bank_of_romania';

@@ -54,7 +54,7 @@ class FixerTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $uri = 'http://data.fixer.io/api/latest?access_key=x';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/error.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/error.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -65,7 +65,7 @@ class FixerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'http://data.fixer.io/api/latest?access_key=x';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/latest.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/latest.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -81,7 +81,7 @@ class FixerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'https://data.fixer.io/api/latest?base=EUR&access_key=x';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/latest.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/latest.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -97,7 +97,7 @@ class FixerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'http://data.fixer.io/api/2000-01-03?access_key=x';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
@@ -114,7 +114,7 @@ class FixerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://data.fixer.io/api/2000-01-03?base=EUR&access_key=x';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Fixer/historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true]);

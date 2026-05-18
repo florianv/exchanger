@@ -24,6 +24,8 @@ use Psr\SimpleCache\CacheInterface;
 /**
  * Default implementation of the exchange rate provider with PSR-6 caching support.
  *
+ * @api
+ *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class Exchanger implements ExchangeRateProviderContract
@@ -63,9 +65,8 @@ final class Exchanger implements ExchangeRateProviderContract
         $this->options = $options;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -82,13 +83,13 @@ final class Exchanger implements ExchangeRateProviderContract
             return $this->service->getExchangeRate($exchangeQuery);
         }
 
-        $cacheKeyPrefix = isset($this->options['cache_key_prefix']) ? $this->options['cache_key_prefix'] : '';
+        $cacheKeyPrefix = $this->options['cache_key_prefix'] ?? '';
         $cacheKeyPrefix = $exchangeQuery->getOption('cache_key_prefix', $cacheKeyPrefix);
 
         // Replace characters reserved in PSR-6
         $cacheKeyPrefix = preg_replace('#[\{\}\(\)/\\\@\:]#', '-', $cacheKeyPrefix);
 
-        $cacheKey = $cacheKeyPrefix.sha1(serialize($exchangeQuery));
+        $cacheKey = $cacheKeyPrefix . sha1(serialize($exchangeQuery));
         if (\strlen($cacheKey) > 64) {
             throw new CacheException("Cache key length exceeds 64 characters ('$cacheKey'). This violates PSR-6 standard");
         }
@@ -100,7 +101,7 @@ final class Exchanger implements ExchangeRateProviderContract
         }
 
         $rate = $this->service->getExchangeRate($exchangeQuery);
-        $ttl = $exchangeQuery->getOption('cache_ttl', isset($this->options['cache_ttl']) ? $this->options['cache_ttl'] : null);
+        $ttl = $exchangeQuery->getOption('cache_ttl', $this->options['cache_ttl'] ?? null);
 
         $this->cache->set($cacheKey, $rate, $ttl);
 

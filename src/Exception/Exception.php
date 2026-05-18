@@ -18,6 +18,4 @@ namespace Exchanger\Exception;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class Exception extends \Exception
-{
-}
+class Exception extends \Exception {}

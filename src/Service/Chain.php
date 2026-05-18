@@ -21,6 +21,8 @@ use Exchanger\Exception\ChainException;
 /**
  * A service using other services in a chain.
  *
+ * @api
+ *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class Chain implements ExchangeRateService
@@ -47,9 +49,8 @@ final class Chain implements ExchangeRateService
         $this->services = $services;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $exceptions = [];
@@ -69,9 +70,8 @@ final class Chain implements ExchangeRateService
         throw new ChainException($exceptions);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         foreach ($this->services as $service) {
@@ -83,9 +83,8 @@ final class Chain implements ExchangeRateService
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'chain';

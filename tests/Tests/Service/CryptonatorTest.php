@@ -26,7 +26,7 @@ class CryptonatorTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $uri = 'https://api.cryptonator.com/api/ticker/btc-isk';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Cryptonator/error.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Cryptonator/error.json');
 
         $service = new Cryptonator($this->getHttpAdapterMock($uri, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/ISK')));
@@ -37,7 +37,7 @@ class CryptonatorTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('BTC/USD');
         $url = 'https://api.cryptonator.com/api/ticker/btc-usd';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Cryptonator/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Cryptonator/success.json');
 
         $service = new Cryptonator($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));

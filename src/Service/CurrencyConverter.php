@@ -33,17 +33,16 @@ final class CurrencyConverter extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const FREE_LATEST_URL = 'https://free.currconv.com/api/v7/convert?q=%s&apiKey=%s';
+    public const FREE_LATEST_URL = 'https://free.currconv.com/api/v7/convert?q=%s&apiKey=%s';
 
-    const ENTERPRISE_LATEST_URL = 'https://api.currconv.com/api/v7/convert?q=%s&apiKey=%s';
+    public const ENTERPRISE_LATEST_URL = 'https://api.currconv.com/api/v7/convert?q=%s&apiKey=%s';
 
-    const FREE_HISTORICAL_URL = 'https://free.currconv.com/api/v7/convert?q=%s&date=%s&apiKey=%s';
+    public const FREE_HISTORICAL_URL = 'https://free.currconv.com/api/v7/convert?q=%s&date=%s&apiKey=%s';
 
-    const ENTERPRISE_HISTORICAL_URL = 'https://api.currconv.com/api/v7/convert?q=%s&date=%s&apiKey=%s';
+    public const ENTERPRISE_HISTORICAL_URL = 'https://api.currconv.com/api/v7/convert?q=%s&date=%s&apiKey=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options['enterprise'])) {
@@ -55,9 +54,8 @@ final class CurrencyConverter extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeRateQuery): bool
     {
         if ($this->isEnterprise()) {
@@ -84,19 +82,20 @@ final class CurrencyConverter extends HttpService
      *
      * @throws Exception
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         if ($this->isEnterprise()) {
             $url = sprintf(
                 self::ENTERPRISE_LATEST_URL,
                 $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
-                $this->options['access_key']
+                $this->options['access_key'],
             );
         } else {
             $url = sprintf(
                 self::FREE_LATEST_URL,
                 $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
-                $this->options['access_key']
+                $this->options['access_key'],
             );
         }
 
@@ -112,6 +111,7 @@ final class CurrencyConverter extends HttpService
      *
      * @throws Exception
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $historicalDateTime = $this->getAdoptedDateTime($exchangeQuery->getDate());
@@ -121,14 +121,14 @@ final class CurrencyConverter extends HttpService
                 self::ENTERPRISE_HISTORICAL_URL,
                 $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
                 $historicalDateTime->format('Y-m-d'),
-                $this->options['access_key']
+                $this->options['access_key'],
             );
         } else {
             $url = sprintf(
                 self::FREE_HISTORICAL_URL,
                 $this->stringifyCurrencyPair($exchangeQuery->getCurrencyPair()),
                 $historicalDateTime->format('Y-m-d'),
-                $this->options['access_key']
+                $this->options['access_key'],
             );
         }
 
@@ -235,9 +235,8 @@ final class CurrencyConverter extends HttpService
             ->setTimezone(new DateTimeZone('Asia/Manila'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'currency_converter';

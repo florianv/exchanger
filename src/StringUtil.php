@@ -37,7 +37,7 @@ final class StringUtil
         } catch (\Exception $e) {
             libxml_use_internal_errors($internalErrors);
 
-            throw new \RuntimeException('Unable to parse XML data: '.$e->getMessage());
+            throw new \RuntimeException('Unable to parse XML data: ' . $e->getMessage());
         }
 
         return $xml;
@@ -63,7 +63,7 @@ final class StringUtil
         if (JSON_ERROR_NONE !== json_last_error()) {
             $last = json_last_error();
 
-            throw new \RuntimeException('Unable to parse JSON data: '.(isset($jsonErrors[$last]) ? $jsonErrors[$last] : 'Unknown error'));
+            throw new \RuntimeException('Unable to parse JSON data: ' . ($jsonErrors[$last] ?? 'Unknown error'));
         }
 
         return $data;

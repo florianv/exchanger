@@ -31,16 +31,15 @@ final class FastForex extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const API_KEY_OPTION = 'api_key';
-    const API_KEY_HEADER = 'X-Api-Key';
+    public const API_KEY_OPTION = 'api_key';
+    public const API_KEY_HEADER = 'X-Api-Key';
 
-    const FETCH_ONE_URL = 'https://api.fastforex.io/fetch-one?from=%s&to=%s';
+    public const FETCH_ONE_URL = 'https://api.fastforex.io/fetch-one?from=%s&to=%s';
 
-    const HISTORICAL_URL = 'https://api.fastforex.io/historical?date=%s&from=%s&to=%s';
+    public const HISTORICAL_URL = 'https://api.fastforex.io/historical?date=%s&from=%s&to=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::API_KEY_OPTION])) {
@@ -48,17 +47,15 @@ final class FastForex extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -66,19 +63,18 @@ final class FastForex extends HttpService
             sprintf(
                 self::FETCH_ONE_URL,
                 $currencyPair->getBaseCurrency(),
-                $currencyPair->getQuoteCurrency()
+                $currencyPair->getQuoteCurrency(),
             ),
             [
                 self::API_KEY_HEADER => $this->options[self::API_KEY_OPTION],
-            ]
+            ],
         );
 
         return $this->processResponse($response, $currencyPair, 'result');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -87,11 +83,11 @@ final class FastForex extends HttpService
                 self::HISTORICAL_URL,
                 $exchangeQuery->getDate()->format('Y-m-d'),
                 $currencyPair->getBaseCurrency(),
-                $currencyPair->getQuoteCurrency()
+                $currencyPair->getQuoteCurrency(),
             ),
             [
                 self::API_KEY_HEADER => $this->options[self::API_KEY_OPTION],
-            ]
+            ],
         );
 
         return $this->processResponse($response, $currencyPair, 'results');
@@ -100,11 +96,11 @@ final class FastForex extends HttpService
     protected function processResponse(
         \Psr\Http\Message\ResponseInterface $response,
         CurrencyPair $currencyPair,
-        string $resultKey
+        string $resultKey,
     ): ExchangeRate {
         try {
             $result = StringUtil::jsonToArray(
-                $response->getBody()->__toString()
+                $response->getBody()->__toString(),
             );
         } catch (\Throwable $thrown) {
             $result = ['error' => 'Failed to parse response'];
@@ -140,9 +136,8 @@ final class FastForex extends HttpService
         throw new \Exchanger\Exception\Exception('Unknown error');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'fastforex';

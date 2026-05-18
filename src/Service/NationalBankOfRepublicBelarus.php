@@ -39,6 +39,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      * @throws UnsupportedDateException
      * @throws UnsupportedExchangeQueryException
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->doCreateRate($exchangeQuery);
@@ -51,6 +52,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      * @throws UnsupportedDateException
      * @throws UnsupportedExchangeQueryException
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());
@@ -61,6 +63,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      *
      * @param bool $ignoreSupportPeriod
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery, bool $ignoreSupportPeriod = false): bool
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -84,12 +87,10 @@ class NationalBankOfRepublicBelarus extends HttpService
     private static function detectPeriodicity(string $baseCurrency, ?\DateTimeInterface $date = null)
     {
         return array_reduce(
-
             array_reverse(array_intersect_key(
                 $codes = self::getSupportedCodes(),
-                array_flip(array_keys(array_column($codes, 'Cur_Abbreviation'), $baseCurrency))
+                array_flip(array_keys(array_column($codes, 'Cur_Abbreviation'), $baseCurrency)),
             )),
-
             static function ($periodicity, $entry) use ($date) {
                 if ($date) {
                     $dateStart = new \DateTimeImmutable($entry['Cur_DateStart']);
@@ -101,9 +102,7 @@ class NationalBankOfRepublicBelarus extends HttpService
 
                 return in_array($periodicity, [false, 1], true) ? $entry['Cur_Periodicity'] : $periodicity;
             },
-
-            false
-
+            false,
         );
     }
 
@@ -144,12 +143,13 @@ class NationalBankOfRepublicBelarus extends HttpService
     {
         static $codes;
 
-        return $codes = $codes ?? StringUtil::jsonToArray(file_get_contents(__DIR__.'/resources/nbrb-codes.json'));
+        return $codes ??= StringUtil::jsonToArray(file_get_contents(__DIR__ . '/resources/nbrb-codes.json'));
     }
 
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getName(): string
     {
         return 'national_bank_of_republic_belarus';
@@ -205,7 +205,7 @@ class NationalBankOfRepublicBelarus extends HttpService
         }
 
         $date = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s', $entry['Date'] ?? null);
-        $requestedDate = $requestedDate ?? new \DateTimeImmutable;
+        $requestedDate ??= new \DateTimeImmutable();
         if (!$date || $date->format('Y-m-d') !== $requestedDate->format('Y-m-d')) {
             throw new UnsupportedDateException($requestedDate, $this);
         }
@@ -229,6 +229,6 @@ class NationalBankOfRepublicBelarus extends HttpService
         $data = isset($requestedDate) ? ['ondate' => $requestedDate->format('Y-m-d')] : [];
         $data += ['periodicity' => (int) self::detectPeriodicity($baseCurrency, $requestedDate)];
 
-        return self::URL.'?'.http_build_query($data);
+        return self::URL . '?' . http_build_query($data);
     }
 }

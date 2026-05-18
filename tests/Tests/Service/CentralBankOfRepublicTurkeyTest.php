@@ -49,8 +49,8 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     {
         self::$url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
         self::$historicalUrl = 'https://www.tcmb.gov.tr/kurlar/201304/23042013.xml';
-        self::$content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
-        self::$historicalContent = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_historical.xml');
+        self::$content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
+        self::$historicalContent = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_historical.xml');
     }
 
     /**
@@ -96,7 +96,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY')));
@@ -106,7 +106,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $pair = CurrencyPair::createFromString('EUR/TRY');
         $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));

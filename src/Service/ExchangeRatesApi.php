@@ -34,19 +34,18 @@ final class ExchangeRatesApi extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const LATEST_URL = 'https://api.exchangeratesapi.io/latest?base=%s&access_key=%s&symbols=%s';
+    public const LATEST_URL = 'https://api.exchangeratesapi.io/latest?base=%s&access_key=%s&symbols=%s';
 
-    const HISTORICAL_URL = 'https://api.exchangeratesapi.io/%s?base=%s&access_key=%s&symbols=%s';
+    public const HISTORICAL_URL = 'https://api.exchangeratesapi.io/%s?base=%s&access_key=%s&symbols=%s';
 
-    const FREE_LATEST_URL = 'http://api.exchangeratesapi.io/latest?access_key=%s&symbols=%s';
+    public const FREE_LATEST_URL = 'http://api.exchangeratesapi.io/latest?access_key=%s&symbols=%s';
 
-    const FREE_HISTORICAL_URL = 'http://api.exchangeratesapi.io/%s?access_key=%s&symbols=%s';
+    public const FREE_HISTORICAL_URL = 'http://api.exchangeratesapi.io/%s?access_key=%s&symbols=%s';
 
-    const ACCESS_KEY_OPTION = 'access_key';
+    public const ACCESS_KEY_OPTION = 'access_key';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::ACCESS_KEY_OPTION])) {
@@ -58,9 +57,8 @@ final class ExchangeRatesApi extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -69,22 +67,21 @@ final class ExchangeRatesApi extends HttpService
                 self::LATEST_URL,
                 $currencyPair->getBaseCurrency(),
                 $this->options[self::ACCESS_KEY_OPTION],
-                $currencyPair->getQuoteCurrency()
+                $currencyPair->getQuoteCurrency(),
             );
         } else {
             $url = sprintf(
                 self::FREE_LATEST_URL,
                 $this->options[self::ACCESS_KEY_OPTION],
-                $currencyPair->getQuoteCurrency()
+                $currencyPair->getQuoteCurrency(),
             );
         }
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -94,23 +91,22 @@ final class ExchangeRatesApi extends HttpService
                 $exchangeQuery->getDate()->format('Y-m-d'),
                 $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
                 $this->options[self::ACCESS_KEY_OPTION],
-                $currencyPair->getQuoteCurrency()
+                $currencyPair->getQuoteCurrency(),
             );
         } else {
             $url = sprintf(
                 self::FREE_HISTORICAL_URL,
                 $exchangeQuery->getDate()->format('Y-m-d'),
                 $this->options[self::ACCESS_KEY_OPTION],
-                $exchangeQuery->getCurrencyPair()->getQuoteCurrency()
+                $exchangeQuery->getCurrencyPair()->getQuoteCurrency(),
             );
         }
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
@@ -140,7 +136,7 @@ final class ExchangeRatesApi extends HttpService
                 if (isset($data['error']['message'])) {
                     throw new Exception($data['error']['message']);
                 } else {
-                    throw new Exception('Service return error code: '.$data['error']['code']);
+                    throw new Exception('Service return error code: ' . $data['error']['code']);
                 }
             } else {
                 throw new Exception('Service return unhandled error');
@@ -157,9 +153,8 @@ final class ExchangeRatesApi extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'exchange_rates_api';

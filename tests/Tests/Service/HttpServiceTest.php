@@ -63,14 +63,14 @@ class HttpServiceTest extends TestCase
 
     private function createAnonymousClass($httpClient)
     {
-        return new class($httpClient) extends HttpService {
+        return new class ($httpClient) extends HttpService {
             public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
             {
                 return new \Exchanger\ExchangeRate(
                     $exchangeQuery->getCurrencyPair(),
                     1,
                     new \DateTimeImmutable(),
-                    $this->getName()
+                    $this->getName(),
                 );
             }
 

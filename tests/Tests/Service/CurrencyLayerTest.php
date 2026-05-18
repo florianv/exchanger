@@ -45,7 +45,7 @@ class CurrencyLayerTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $uri = 'http://www.apilayer.net/api/live?access_key=secret&currencies=EUR';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyLayer/error.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyLayer/error.json');
 
         $service = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -57,7 +57,7 @@ class CurrencyLayerTest extends ServiceTestCase
         $uri = 'http://www.apilayer.net/api/live?access_key=secret&currencies=EUR';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyLayer/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyLayer/success.json');
 
         $pair = CurrencyPair::createFromString('USD/EUR');
         $service = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
@@ -75,7 +75,7 @@ class CurrencyLayerTest extends ServiceTestCase
         $uri = 'https://www.apilayer.net/api/live?access_key=secret&source=USD&currencies=EUR';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyLayer/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyLayer/success.json');
 
         $pair = CurrencyPair::createFromString('USD/EUR');
         $service = new CurrencyLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'enterprise' => true]);
@@ -92,7 +92,7 @@ class CurrencyLayerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/AED');
         $uri = 'http://apilayer.net/api/historical?access_key=secret&date=2015-05-06';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyLayer/historical_success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyLayer/historical_success.json');
         $date = new \DateTime('2015-05-06');
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1430870399);
@@ -110,7 +110,7 @@ class CurrencyLayerTest extends ServiceTestCase
     public function it_fetches_a_historical_rate_enterprise_mode()
     {
         $uri = 'https://apilayer.net/api/historical?access_key=secret&date=2015-05-06&source=USD';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CurrencyLayer/historical_success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyLayer/historical_success.json');
         $date = new \DateTime('2015-05-06');
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1430870399);

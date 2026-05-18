@@ -36,15 +36,14 @@ final class Fixer extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const API_KEY_OPTION = 'api_key';
+    public const API_KEY_OPTION = 'api_key';
 
-    const LATEST_URL = 'https://api.apilayer.com/fixer/latest?base=%s&apikey=%s';
+    public const LATEST_URL = 'https://api.apilayer.com/fixer/latest?base=%s&apikey=%s';
 
-    const HISTORICAL_URL = 'https://api.apilayer.com/fixer/%s?base=%s&apikey=%s';
+    public const HISTORICAL_URL = 'https://api.apilayer.com/fixer/%s?base=%s&apikey=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::API_KEY_OPTION])) {
@@ -52,9 +51,8 @@ final class Fixer extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -62,15 +60,14 @@ final class Fixer extends HttpService
         $url = sprintf(
             self::LATEST_URL,
             $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
-            $this->options[self::API_KEY_OPTION]
+            $this->options[self::API_KEY_OPTION],
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -79,15 +76,14 @@ final class Fixer extends HttpService
             self::HISTORICAL_URL,
             $exchangeQuery->getDate()->format('Y-m-d'),
             $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
-            $this->options[self::API_KEY_OPTION]
+            $this->options[self::API_KEY_OPTION],
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
@@ -151,12 +147,11 @@ final class Fixer extends HttpService
             505 => 'The specified timeframe is too long, exceeding 365 days.',
         ];
 
-        return isset($errors[$code]) ? $errors[$code] : '';
+        return $errors[$code] ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'apilayer_fixer';

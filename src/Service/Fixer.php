@@ -31,19 +31,18 @@ final class Fixer extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const ACCESS_KEY_OPTION = 'access_key';
+    public const ACCESS_KEY_OPTION = 'access_key';
 
-    const ENTERPRISE_LATEST_URL = 'https://data.fixer.io/api/latest?base=%s&access_key=%s';
+    public const ENTERPRISE_LATEST_URL = 'https://data.fixer.io/api/latest?base=%s&access_key=%s';
 
-    const ENTERPRISE_HISTORICAL_URL = 'https://data.fixer.io/api/%s?base=%s&access_key=%s';
+    public const ENTERPRISE_HISTORICAL_URL = 'https://data.fixer.io/api/%s?base=%s&access_key=%s';
 
-    const FREE_LATEST_URL = 'http://data.fixer.io/api/latest?access_key=%s';
+    public const FREE_LATEST_URL = 'http://data.fixer.io/api/latest?access_key=%s';
 
-    const FREE_HISTORICAL_URL = 'http://data.fixer.io/api/%s?access_key=%s';
+    public const FREE_HISTORICAL_URL = 'http://data.fixer.io/api/%s?access_key=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::ACCESS_KEY_OPTION])) {
@@ -55,9 +54,8 @@ final class Fixer extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -66,21 +64,20 @@ final class Fixer extends HttpService
             $url = sprintf(
                 self::ENTERPRISE_LATEST_URL,
                 $currencyPair->getBaseCurrency(),
-                $this->options[self::ACCESS_KEY_OPTION]
+                $this->options[self::ACCESS_KEY_OPTION],
             );
         } else {
             $url = sprintf(
                 self::FREE_LATEST_URL,
-                $this->options[self::ACCESS_KEY_OPTION]
+                $this->options[self::ACCESS_KEY_OPTION],
             );
         }
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -90,22 +87,21 @@ final class Fixer extends HttpService
                 self::ENTERPRISE_HISTORICAL_URL,
                 $exchangeQuery->getDate()->format('Y-m-d'),
                 $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
-                $this->options[self::ACCESS_KEY_OPTION]
+                $this->options[self::ACCESS_KEY_OPTION],
             );
         } else {
             $url = sprintf(
                 self::FREE_HISTORICAL_URL,
                 $exchangeQuery->getDate()->format('Y-m-d'),
-                $this->options[self::ACCESS_KEY_OPTION]
+                $this->options[self::ACCESS_KEY_OPTION],
             );
         }
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
@@ -169,12 +165,11 @@ final class Fixer extends HttpService
             505 => 'The specified timeframe is too long, exceeding 365 days.',
         ];
 
-        return isset($errors[$code]) ? $errors[$code] : '';
+        return $errors[$code] ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'fixer';

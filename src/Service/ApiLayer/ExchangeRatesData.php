@@ -36,15 +36,14 @@ final class ExchangeRatesData extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const API_KEY_OPTION = 'api_key';
+    public const API_KEY_OPTION = 'api_key';
 
-    const LATEST_URL = 'https://api.apilayer.com/exchangerates_data/latest?base=%s&apikey=%s&symbols=%s';
+    public const LATEST_URL = 'https://api.apilayer.com/exchangerates_data/latest?base=%s&apikey=%s&symbols=%s';
 
-    const HISTORICAL_URL = 'https://api.apilayer.com/exchangerates_data/%s?base=%s&apikey=%s&symbols=%s';
+    public const HISTORICAL_URL = 'https://api.apilayer.com/exchangerates_data/%s?base=%s&apikey=%s&symbols=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::API_KEY_OPTION])) {
@@ -52,9 +51,8 @@ final class ExchangeRatesData extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -63,15 +61,14 @@ final class ExchangeRatesData extends HttpService
             self::LATEST_URL,
             $currencyPair->getBaseCurrency(),
             $this->options[self::API_KEY_OPTION],
-            $currencyPair->getQuoteCurrency()
+            $currencyPair->getQuoteCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -81,15 +78,14 @@ final class ExchangeRatesData extends HttpService
             $exchangeQuery->getDate()->format('Y-m-d'),
             $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
             $this->options[self::API_KEY_OPTION],
-            $currencyPair->getQuoteCurrency()
+            $currencyPair->getQuoteCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
@@ -119,7 +115,7 @@ final class ExchangeRatesData extends HttpService
                 if (isset($data['error']['message'])) {
                     throw new Exception($data['error']['message']);
                 } else {
-                    throw new Exception('Service return error code: '.$data['error']['code']);
+                    throw new Exception('Service return error code: ' . $data['error']['code']);
                 }
             } else {
                 throw new Exception('Service return unhandled error');
@@ -136,9 +132,8 @@ final class ExchangeRatesData extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'apilayer_exchange_rates_data';

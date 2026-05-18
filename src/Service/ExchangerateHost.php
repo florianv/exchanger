@@ -31,47 +31,44 @@ final class ExchangerateHost extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const LATEST_URL = 'https://api.exchangerate.host/latest?base=%s&v=%s';
+    public const LATEST_URL = 'https://api.exchangerate.host/latest?base=%s&v=%s';
 
-    const HISTORICAL_URL = 'https://api.exchangerate.host/%s?base=%s';
-    const OPTION_PLACES = 'places';
-    const OPTION_SOURCE = 'source';
+    public const HISTORICAL_URL = 'https://api.exchangerate.host/%s?base=%s';
+    public const OPTION_PLACES = 'places';
+    public const OPTION_SOURCE = 'source';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-		$url = sprintf(
-			self::LATEST_URL,
-			$currencyPair->getBaseCurrency(),
-            date('Y-m-d')
-		);
+        $url = sprintf(
+            self::LATEST_URL,
+            $currencyPair->getBaseCurrency(),
+            date('Y-m-d'),
+        );
 
         return $this->doCreateRate($this->additionalQueryParameters($url, $exchangeQuery), $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
-		$url = sprintf(
-			self::HISTORICAL_URL,
-			$exchangeQuery->getDate()->format('Y-m-d'),
-			$exchangeQuery->getCurrencyPair()->getBaseCurrency()
-		);
+        $url = sprintf(
+            self::HISTORICAL_URL,
+            $exchangeQuery->getDate()->format('Y-m-d'),
+            $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
+        );
 
         return $this->doCreateRate($this->additionalQueryParameters($url, $exchangeQuery), $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
@@ -106,9 +103,8 @@ final class ExchangerateHost extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'exchangeratehost';
@@ -137,7 +133,7 @@ final class ExchangerateHost extends HttpService
         }
 
         if (isset($source)) {
-            $url .= '&source='. $source;
+            $url .= '&source=' . $source;
         }
 
         return $url;

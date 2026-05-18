@@ -31,15 +31,14 @@ final class AbstractApi extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const API_KEY_OPTION = 'api_key';
+    public const API_KEY_OPTION = 'api_key';
 
-    const LATEST_URL = 'https://exchange-rates.abstractapi.com/v1/live/?api_key=%s&base=%s';
+    public const LATEST_URL = 'https://exchange-rates.abstractapi.com/v1/live/?api_key=%s&base=%s';
 
-    const HISTORICAL_URL = 'https://exchange-rates.abstractapi.com/v1/historical?api_key=%s&base=%s&date=%s';
+    public const HISTORICAL_URL = 'https://exchange-rates.abstractapi.com/v1/historical?api_key=%s&base=%s&date=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::API_KEY_OPTION])) {
@@ -47,9 +46,8 @@ final class AbstractApi extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -57,15 +55,14 @@ final class AbstractApi extends HttpService
         $url = sprintf(
             self::LATEST_URL,
             $this->options[self::API_KEY_OPTION],
-            $currencyPair->getBaseCurrency()
+            $currencyPair->getBaseCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -74,7 +71,7 @@ final class AbstractApi extends HttpService
             self::HISTORICAL_URL,
             $this->options[self::API_KEY_OPTION],
             $currencyPair->getBaseCurrency(),
-            $exchangeQuery->getDate()->format('Y-m-d')
+            $exchangeQuery->getDate()->format('Y-m-d'),
         );
 
         return $this->doCreateRate($url, $currencyPair);
@@ -101,7 +98,7 @@ final class AbstractApi extends HttpService
                 $date = \DateTime::createFromFormat(
                     'Y-m-d',
                     $data['date'],
-                    new \DateTimeZone('UTC')
+                    new \DateTimeZone('UTC'),
                 );
             } else {
                 $date = new \DateTime();
@@ -117,17 +114,15 @@ final class AbstractApi extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'abstract_api';

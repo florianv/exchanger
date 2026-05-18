@@ -29,15 +29,14 @@ final class EuropeanCentralBank extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
+    public const DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
 
-    const HISTORICAL_URL_LIMITED_TO_90_DAYS_BACK = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
+    public const HISTORICAL_URL_LIMITED_TO_90_DAYS_BACK = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
 
-    const HISTORICAL_URL_OLDER_THAN_90_DAYS = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
+    public const HISTORICAL_URL_OLDER_THAN_90_DAYS = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -47,7 +46,7 @@ final class EuropeanCentralBank extends HttpService
         $element->registerXPathNamespace('xmlns', 'http://www.ecb.int/vocabulary/2002-08-01/eurofxref');
 
         $quoteCurrency = $currencyPair->getQuoteCurrency();
-        $elements = $element->xpath('//xmlns:Cube[@currency="'.$quoteCurrency.'"]/@rate');
+        $elements = $element->xpath('//xmlns:Cube[@currency="' . $quoteCurrency . '"]/@rate');
         $date = new \DateTime((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
 
         if (empty($elements) || !$date) {
@@ -57,9 +56,8 @@ final class EuropeanCentralBank extends HttpService
         return $this->createRate($currencyPair, (float) ($elements[0]['rate']), $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -72,10 +70,10 @@ final class EuropeanCentralBank extends HttpService
         $formattedDate = $exchangeQuery->getDate()->format('Y-m-d');
         $quoteCurrency = $currencyPair->getQuoteCurrency();
 
-        $elements = $element->xpath('//xmlns:Cube[@time="'.$formattedDate.'"]/xmlns:Cube[@currency="'.$quoteCurrency.'"]/@rate');
+        $elements = $element->xpath('//xmlns:Cube[@time="' . $formattedDate . '"]/xmlns:Cube[@currency="' . $quoteCurrency . '"]/@rate');
 
         if (empty($elements)) {
-            if (empty($element->xpath('//xmlns:Cube[@time="'.$formattedDate.'"]'))) {
+            if (empty($element->xpath('//xmlns:Cube[@time="' . $formattedDate . '"]'))) {
                 throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
             }
 
@@ -85,17 +83,15 @@ final class EuropeanCentralBank extends HttpService
         return $this->createRate($currencyPair, (float) ($elements[0]['rate']), $exchangeQuery->getDate());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'EUR' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'european_central_bank';

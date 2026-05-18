@@ -30,13 +30,12 @@ final class Xignite extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const LATEST_URL = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=%s&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=%s';
+    public const LATEST_URL = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=%s&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=%s';
 
-    const HISTORICAL_URL = 'http://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetHistoricalRates?Symbols=%s&AsOfDate=%s&_Token=%s&FixingTime=&PriceType=Mid';
+    public const HISTORICAL_URL = 'http://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetHistoricalRates?Symbols=%s&AsOfDate=%s&_Token=%s&FixingTime=&PriceType=Mid';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options['token'])) {
@@ -44,17 +43,16 @@ final class Xignite extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
 
         $url = sprintf(
             self::LATEST_URL,
-            $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency(),
-            $this->options['token']
+            $currencyPair->getBaseCurrency() . $currencyPair->getQuoteCurrency(),
+            $this->options['token'],
         );
 
         $content = $this->request($url);
@@ -66,7 +64,7 @@ final class Xignite extends HttpService
             throw new Exception($data['Message']);
         }
 
-        $dateString = $data['Date'].' '.$data['Time'];
+        $dateString = $data['Date'] . ' ' . $data['Time'];
 
         if (!$date = \DateTime::createFromFormat('m/d/Y H:i:s A', $dateString, new \DateTimeZone('UTC'))) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -75,20 +73,19 @@ final class Xignite extends HttpService
         return $this->createRate($currencyPair, (float) ($data['Bid']), $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $queryDate = $exchangeQuery->getDate();
-        $symbol = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
+        $symbol = $currencyPair->getBaseCurrency() . $currencyPair->getQuoteCurrency();
 
         $url = sprintf(
             self::HISTORICAL_URL,
             $symbol,
             $queryDate->format('m/d/Y'),
-            $this->options['token']
+            $this->options['token'],
         );
 
         $content = $this->request($url);
@@ -107,17 +104,15 @@ final class Xignite extends HttpService
         return $this->createRate($currencyPair, (float) ($data['Average']), $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'xignite';

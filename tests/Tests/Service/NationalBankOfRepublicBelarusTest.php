@@ -45,7 +45,7 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $url = 'https://www.nbrb.by/api/exrates/rates?periodicity=0';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRepublicBelarus/nbrb_today.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRepublicBelarus/nbrb_today.json');
         $today = new \DateTimeImmutable('today');
         $content = sprintf($content, $today->format('Y-m-d\TH:i:s'));
 
@@ -63,7 +63,7 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
     public function it_fetches_a_historical_rate()
     {
         $url = 'https://www.nbrb.by/api/exrates/rates?ondate=2020-03-07&periodicity=0';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRepublicBelarus/nbrb_historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRepublicBelarus/nbrb_historical.json');
         $currencyPair = CurrencyPair::createFromString('EUR/BYN');
         $requestedDate = new \DateTimeImmutable('2020-03-07');
 

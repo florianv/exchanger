@@ -36,7 +36,7 @@ class ForgeTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $url = 'https://api.1forge.com/quotes?pairs=EUR/ZZZ&api_key=secret';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/error.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Forge/error.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/ZZZ')));
@@ -47,7 +47,7 @@ class ForgeTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $url = 'https://api.1forge.com/quotes?pairs=EUR/USD&api_key=secret';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Forge/success.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -63,7 +63,7 @@ class ForgeTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/HKD');
         $url = 'https://api.1forge.com/quotes?pairs=EUR/HKD&api_key=secret';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/multiple.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Forge/multiple.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -78,7 +78,7 @@ class ForgeTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $url = 'https://api.1forge.com/quotes?pairs=USD/AED&api_key=secret';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/Forge/multiple.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Forge/multiple.json');
         $service = new Forge($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/AED')));

@@ -16,6 +16,8 @@ namespace Exchanger\Service;
 /**
  * Holds services.
  *
+ * @api
+ *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class Registry
@@ -56,7 +58,7 @@ final class Registry
             'apilayer_fixer' => ApiLayer\Fixer::class,
             'apilayer_currency_data' => ApiLayer\CurrencyData::class,
             'apilayer_exchange_rates_data' => ApiLayer\ExchangeRatesData::class,
-            'unirate_api' => UniRateApi::class
+            'unirate_api' => UniRateApi::class,
         ];
     }
 }

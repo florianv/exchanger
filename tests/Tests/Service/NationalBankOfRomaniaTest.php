@@ -31,14 +31,14 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     {
         $service = new NationalBankOfRomania($this->createMock(HttpClient::class));
 
-        $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString($currency.'/RON'))));
-        $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('RON/'.$currency))));
-        $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString($currency.'/RON'), new \DateTime())));
-        $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('RON/'.$currency), new \DateTime())));
-        $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/'.$currency))));
-        $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString($currency.'/EUR'))));
-        $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/'.$currency), new \DateTime())));
-        $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString($currency.'/EUR'), new \DateTime())));
+        $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString($currency . '/RON'))));
+        $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('RON/' . $currency))));
+        $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString($currency . '/RON'), new \DateTime())));
+        $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('RON/' . $currency), new \DateTime())));
+        $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/' . $currency))));
+        $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString($currency . '/EUR'))));
+        $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/' . $currency), new \DateTime())));
+        $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString($currency . '/EUR'), new \DateTime())));
     }
 
     #[Test]
@@ -47,7 +47,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $this->expectException(UnsupportedCurrencyPairException::class);
 
         $url = 'https://curs.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/RON')));
@@ -58,7 +58,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/RON');
         $url = 'https://curs.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -74,7 +74,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('HUF/RON');
         $url = 'https://curs.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -90,11 +90,11 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/RON');
         $url = 'https://curs.bnr.ro/files/xml/years/nbrfxrates2018.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(
-            new HistoricalExchangeRateQuery($pair, new \DateTime('2018-02-02'))
+            new HistoricalExchangeRateQuery($pair, new \DateTime('2018-02-02')),
         );
 
         $this->assertSame(4.6526, $rate->getValue());
@@ -110,11 +110,11 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $this->expectExceptionMessage("The date \"2018-02-25\" is not supported by the service \"Exchanger\Service\NationalBankOfRomania\".");
 
         $url = 'https://curs.bnr.ro/files/xml/years/nbrfxrates2018.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(
-            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/RON'), new \DateTime('2018-02-25'))
+            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/RON'), new \DateTime('2018-02-25')),
         );
     }
 
@@ -124,11 +124,11 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $this->expectExceptionMessage("The currency pair \"RON/XXL\" is not supported by the service \"Exchanger\Service\NationalBankOfRomania\".");
         $this->expectException(UnsupportedCurrencyPairException::class);
         $url = 'https://curs.bnr.ro/files/xml/years/nbrfxrates2018.xml';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(
-            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('RON/XXL'), new \DateTime('2018-02-02'))
+            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('RON/XXL'), new \DateTime('2018-02-02')),
         );
     }
 

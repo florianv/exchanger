@@ -30,17 +30,16 @@ final class OpenExchangeRates extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const FREE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&show_alternative=1';
+    public const FREE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&show_alternative=1';
 
-    const ENTERPRISE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&base=%s&symbols=%s&show_alternative=1';
+    public const ENTERPRISE_LATEST_URL = 'https://openexchangerates.org/api/latest.json?app_id=%s&base=%s&symbols=%s&show_alternative=1';
 
-    const FREE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s&show_alternative=1';
+    public const FREE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s&show_alternative=1';
 
-    const ENTERPRISE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s&base=%s&symbols=%s&show_alternative=1';
+    public const ENTERPRISE_HISTORICAL_URL = 'https://openexchangerates.org/api/historical/%s.json?app_id=%s&base=%s&symbols=%s&show_alternative=1';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options['app_id'])) {
@@ -52,9 +51,8 @@ final class OpenExchangeRates extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -64,7 +62,7 @@ final class OpenExchangeRates extends HttpService
                 self::ENTERPRISE_LATEST_URL,
                 $this->options['app_id'],
                 $currencyPair->getBaseCurrency(),
-                $currencyPair->getQuoteCurrency()
+                $currencyPair->getQuoteCurrency(),
             );
         } else {
             $url = sprintf(self::FREE_LATEST_URL, $this->options['app_id']);
@@ -73,9 +71,8 @@ final class OpenExchangeRates extends HttpService
         return $this->doCreateRate($url, $exchangeQuery);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -86,22 +83,21 @@ final class OpenExchangeRates extends HttpService
                 $exchangeQuery->getDate()->format('Y-m-d'),
                 $this->options['app_id'],
                 $currencyPair->getBaseCurrency(),
-                $currencyPair->getQuoteCurrency()
+                $currencyPair->getQuoteCurrency(),
             );
         } else {
             $url = sprintf(
                 self::FREE_HISTORICAL_URL,
                 $exchangeQuery->getDate()->format('Y-m-d'),
-                $this->options['app_id']
+                $this->options['app_id'],
             );
         }
 
         return $this->doCreateRate($url, $exchangeQuery);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
@@ -139,9 +135,8 @@ final class OpenExchangeRates extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
+    #[\Override]
     public function getName(): string
     {
         return 'open_exchange_rates';

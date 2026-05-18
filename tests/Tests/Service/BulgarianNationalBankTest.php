@@ -50,7 +50,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $pair = CurrencyPair::createFromString('USD/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/success.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -65,7 +65,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     public function it_fetches_a_rate_historical()
     {
         $pair = CurrencyPair::createFromString('USD/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/success.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01')));
@@ -80,7 +80,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     public function it_fetches_a_rate_with_ratio()
     {
         $pair = CurrencyPair::createFromString('IDR/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/success.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -95,7 +95,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     public function it_fetches_a_rate_with_ratio_historical()
     {
         $pair = CurrencyPair::createFromString('IDR/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/success.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01')));
@@ -114,7 +114,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage(sprintf($expectedExceptionMessage, date('Y-m-d')));
 
         $pair = CurrencyPair::createFromString('EUR/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/failure.html');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/failure.html');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
         $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -128,7 +128,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $pair = CurrencyPair::createFromString('EUR/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/failure.html');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/failure.html');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
         $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01')));
@@ -142,7 +142,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $pair = CurrencyPair::createFromString('ABC/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/success.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
         $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -156,11 +156,11 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $pair = CurrencyPair::createFromString('ABC/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/success.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
         $service->getExchangeRate(
-            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01'))
+            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01')),
         );
     }
 
@@ -172,7 +172,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage(sprintf($expectedExceptionMessage, date('Y-m-d')));
 
         $pair = CurrencyPair::createFromString('AUD/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
         $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -186,11 +186,11 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage(sprintf($expectedExceptionMessage, date('Y-m-d')));
 
         $pair = CurrencyPair::createFromString('AUD/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
         $service->getExchangeRate(
-            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01'))
+            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01')),
         );
     }
 
@@ -202,7 +202,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $pair = CurrencyPair::createFromString('CAD/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
         $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -216,11 +216,11 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $pair = CurrencyPair::createFromString('CAD/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
         $service->getExchangeRate(
-            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01'))
+            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01')),
         );
     }
 
@@ -232,7 +232,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $pair = CurrencyPair::createFromString('USD/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$url, $content));
         $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -246,11 +246,11 @@ class BulgarianNationalBankTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $pair = CurrencyPair::createFromString('USD/BGN');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/missingfields.xml');
 
         $service = new BulgarianNationalBank($this->getHttpAdapterMock(self::$historicalUrl, $content));
         $service->getExchangeRate(
-            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01'))
+            new HistoricalExchangeRateQuery($pair, new \DateTimeImmutable('2019-02-01')),
         );
     }
 
