@@ -34,6 +34,7 @@ final class RussianCentralBank extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -58,6 +59,7 @@ final class RussianCentralBank extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -87,6 +89,7 @@ final class RussianCentralBank extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'RUB' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
@@ -95,6 +98,7 @@ final class RussianCentralBank extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'russian_central_bank';

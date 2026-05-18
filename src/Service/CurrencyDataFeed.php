@@ -33,6 +33,7 @@ final class CurrencyDataFeed extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options['api_key'])) {
@@ -43,6 +44,7 @@ final class CurrencyDataFeed extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
@@ -51,6 +53,7 @@ final class CurrencyDataFeed extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeRateQuery->getCurrencyPair();
@@ -72,6 +75,7 @@ final class CurrencyDataFeed extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'currency_data_feed';

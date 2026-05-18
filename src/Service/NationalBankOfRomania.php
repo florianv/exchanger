@@ -75,6 +75,7 @@ final class NationalBankOfRomania extends HttpService
      *
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $content = $this->request(self::URL);
@@ -103,6 +104,7 @@ final class NationalBankOfRomania extends HttpService
      * @throws UnsupportedDateException
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -143,6 +145,7 @@ final class NationalBankOfRomania extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         $base = $exchangeQuery->getCurrencyPair()->getBaseCurrency();
@@ -155,6 +158,7 @@ final class NationalBankOfRomania extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'national_bank_of_romania';

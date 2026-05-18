@@ -37,6 +37,7 @@ final class BulgarianNationalBank extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery, new DateTimeImmutable());
@@ -45,6 +46,7 @@ final class BulgarianNationalBank extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());
@@ -106,6 +108,7 @@ final class BulgarianNationalBank extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'BGN' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
@@ -114,6 +117,7 @@ final class BulgarianNationalBank extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'bulgarian_national_bank';

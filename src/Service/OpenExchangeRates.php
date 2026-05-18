@@ -41,6 +41,7 @@ final class OpenExchangeRates extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options['app_id'])) {
@@ -55,6 +56,7 @@ final class OpenExchangeRates extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -76,6 +78,7 @@ final class OpenExchangeRates extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -102,6 +105,7 @@ final class OpenExchangeRates extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
@@ -142,6 +146,7 @@ final class OpenExchangeRates extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'open_exchange_rates';

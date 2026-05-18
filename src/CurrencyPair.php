@@ -72,6 +72,7 @@ final class CurrencyPair implements CurrencyPairContract
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getBaseCurrency(): string
     {
         return $this->baseCurrency;
@@ -80,6 +81,7 @@ final class CurrencyPair implements CurrencyPairContract
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getQuoteCurrency(): string
     {
         return $this->quoteCurrency;
@@ -88,6 +90,7 @@ final class CurrencyPair implements CurrencyPairContract
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function isIdentical(): bool
     {
         return $this->baseCurrency === $this->quoteCurrency;

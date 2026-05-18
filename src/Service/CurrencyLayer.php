@@ -43,6 +43,7 @@ final class CurrencyLayer extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options['access_key'])) {
@@ -57,6 +58,7 @@ final class CurrencyLayer extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -82,6 +84,7 @@ final class CurrencyLayer extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         if ($this->options['enterprise']) {
@@ -105,6 +108,7 @@ final class CurrencyLayer extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return $this->options['enterprise'] || 'USD' === $exchangeQuery->getCurrencyPair()->getBaseCurrency();
@@ -147,6 +151,7 @@ final class CurrencyLayer extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'currency_layer';

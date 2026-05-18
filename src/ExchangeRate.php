@@ -70,6 +70,7 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getValue(): float
     {
         return $this->value;
@@ -78,6 +79,7 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getDate(): \DateTimeInterface
     {
         return $this->date;
@@ -86,6 +88,7 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getProviderName(): string
     {
         return $this->provider;
@@ -94,6 +97,7 @@ final class ExchangeRate implements ExchangeRateContract
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getCurrencyPair(): CurrencyPairContract
     {
         return $this->currencyPair;

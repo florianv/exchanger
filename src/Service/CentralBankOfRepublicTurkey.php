@@ -39,6 +39,7 @@ final class CentralBankOfRepublicTurkey extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery);
@@ -47,6 +48,7 @@ final class CentralBankOfRepublicTurkey extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());
@@ -55,6 +57,7 @@ final class CentralBankOfRepublicTurkey extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeRateQuery): bool
     {
         return 'TRY' === $exchangeRateQuery->getCurrencyPair()->getQuoteCurrency();
@@ -113,6 +116,7 @@ final class CentralBankOfRepublicTurkey extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'central_bank_of_republic_turkey';

@@ -39,6 +39,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      * @throws UnsupportedDateException
      * @throws UnsupportedExchangeQueryException
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->doCreateRate($exchangeQuery);
@@ -51,6 +52,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      * @throws UnsupportedDateException
      * @throws UnsupportedExchangeQueryException
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());
@@ -61,6 +63,7 @@ class NationalBankOfRepublicBelarus extends HttpService
      *
      * @param bool $ignoreSupportPeriod
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery, bool $ignoreSupportPeriod = false): bool
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -150,6 +153,7 @@ class NationalBankOfRepublicBelarus extends HttpService
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getName(): string
     {
         return 'national_bank_of_republic_belarus';

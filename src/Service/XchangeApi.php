@@ -40,6 +40,7 @@ final class XchangeApi extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options[self::API_KEY_OPTION])) {
@@ -50,6 +51,7 @@ final class XchangeApi extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -66,6 +68,7 @@ final class XchangeApi extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -81,6 +84,7 @@ final class XchangeApi extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -125,6 +129,7 @@ final class XchangeApi extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'xchangeapi';

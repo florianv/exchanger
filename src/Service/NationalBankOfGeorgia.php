@@ -36,6 +36,7 @@ final class NationalBankOfGeorgia extends HttpService
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getName(): string
     {
         return 'national_bank_of_georgia';
@@ -44,6 +45,7 @@ final class NationalBankOfGeorgia extends HttpService
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'GEL' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
@@ -53,6 +55,7 @@ final class NationalBankOfGeorgia extends HttpService
      * @inheritDoc
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->doCreateRate($exchangeQuery);
@@ -62,6 +65,7 @@ final class NationalBankOfGeorgia extends HttpService
      * @inheritDoc
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());

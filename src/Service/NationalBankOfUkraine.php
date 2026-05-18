@@ -36,6 +36,7 @@ class NationalBankOfUkraine extends HttpService
      *
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -68,6 +69,7 @@ class NationalBankOfUkraine extends HttpService
      * @throws UnsupportedDateException
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -98,6 +100,7 @@ class NationalBankOfUkraine extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'UAH' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
@@ -108,6 +111,7 @@ class NationalBankOfUkraine extends HttpService
      *
      * @return string
      */
+    #[\Override]
     public function getName(): string
     {
         return 'national_bank_of_ukraine';

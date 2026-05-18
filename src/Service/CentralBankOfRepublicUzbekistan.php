@@ -36,6 +36,7 @@ final class CentralBankOfRepublicUzbekistan extends HttpService
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function getName(): string
     {
         return 'central_bank_of_republic_uzbekistan';
@@ -44,6 +45,7 @@ final class CentralBankOfRepublicUzbekistan extends HttpService
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'UZS' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
@@ -53,6 +55,7 @@ final class CentralBankOfRepublicUzbekistan extends HttpService
      * @inheritDoc
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->doCreateRate($exchangeQuery);
@@ -62,6 +65,7 @@ final class CentralBankOfRepublicUzbekistan extends HttpService
      * @inheritDoc
      * @throws UnsupportedCurrencyPairException
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());

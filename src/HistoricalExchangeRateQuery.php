@@ -47,6 +47,7 @@ final class HistoricalExchangeRateQuery extends ExchangeRateQuery implements His
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getDate(): \DateTimeInterface
     {
         return $this->date;

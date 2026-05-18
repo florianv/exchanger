@@ -44,6 +44,7 @@ final class CurrencyConverter extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function processOptions(array &$options): void
     {
         if (!isset($options['enterprise'])) {
@@ -58,6 +59,7 @@ final class CurrencyConverter extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeRateQuery): bool
     {
         if ($this->isEnterprise()) {
@@ -84,6 +86,7 @@ final class CurrencyConverter extends HttpService
      *
      * @throws Exception
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         if ($this->isEnterprise()) {
@@ -112,6 +115,7 @@ final class CurrencyConverter extends HttpService
      *
      * @throws Exception
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $historicalDateTime = $this->getAdoptedDateTime($exchangeQuery->getDate());
@@ -238,6 +242,7 @@ final class CurrencyConverter extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'currency_converter';

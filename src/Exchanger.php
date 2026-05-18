@@ -66,6 +66,7 @@ final class Exchanger implements ExchangeRateProviderContract
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();

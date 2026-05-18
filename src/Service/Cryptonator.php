@@ -37,6 +37,7 @@ final class Cryptonator extends HttpService
      *
      * @throws Exception
      */
+    #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -65,6 +66,7 @@ final class Cryptonator extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
@@ -73,6 +75,7 @@ final class Cryptonator extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'cryptonator';

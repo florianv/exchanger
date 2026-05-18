@@ -50,6 +50,7 @@ final class Chain implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $exceptions = [];
@@ -72,6 +73,7 @@ final class Chain implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         foreach ($this->services as $service) {
@@ -86,6 +88,7 @@ final class Chain implements ExchangeRateService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'chain';

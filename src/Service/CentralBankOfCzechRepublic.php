@@ -41,6 +41,7 @@ final class CentralBankOfCzechRepublic extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery, new DateTimeImmutable());
@@ -49,6 +50,7 @@ final class CentralBankOfCzechRepublic extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());
@@ -57,6 +59,7 @@ final class CentralBankOfCzechRepublic extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'CZK' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
@@ -127,6 +130,7 @@ final class CentralBankOfCzechRepublic extends HttpService
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'central_bank_of_czech_republic';

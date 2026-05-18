@@ -58,6 +58,7 @@ final class PhpArray extends Service
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -107,6 +108,7 @@ final class PhpArray extends Service
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -153,6 +155,7 @@ final class PhpArray extends Service
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return 'array';
