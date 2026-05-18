@@ -861,6 +861,15 @@
       <code><![CDATA[empty($elements)]]></code>
     </RiskyTruthyFalsyComparison>
   </file>
+  <file src="src/Service/UniRateApi.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
+      <code><![CDATA[public function getName(): string]]></code>
+      <code><![CDATA[public function processOptions(array &$options): void]]></code>
+      <code><![CDATA[public function supportQuery(ExchangeRateQuery $exchangeQuery): bool]]></code>
+    </MissingOverrideAttribute>
+  </file>
   <file src="src/Service/WebserviceX.php">
     <MissingOverrideAttribute>
       <code><![CDATA[public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract]]></code>
