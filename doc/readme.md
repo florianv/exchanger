@@ -263,6 +263,7 @@ Commercial services take an HTTP client, a request factory (both can be `null`),
 | `Exchanger\Service\FixerApiLayer`              | `api_key`       |                       |
 | `Exchanger\Service\Forge`                      | `api_key`       |                       |
 | `Exchanger\Service\OpenExchangeRates`          | `app_id`        | `enterprise` (bool)   |
+| `Exchanger\Service\UniRateApi`                 | `api_key`       |                       |
 | `Exchanger\Service\XchangeApi`                 | `api-key`       | (note the hyphen)     |
 | `Exchanger\Service\Xignite`                    | `token`         |                       |
 
