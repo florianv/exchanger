@@ -83,7 +83,7 @@ final class Exchanger implements ExchangeRateProviderContract
             return $this->service->getExchangeRate($exchangeQuery);
         }
 
-        $cacheKeyPrefix = isset($this->options['cache_key_prefix']) ? $this->options['cache_key_prefix'] : '';
+        $cacheKeyPrefix = $this->options['cache_key_prefix'] ?? '';
         $cacheKeyPrefix = $exchangeQuery->getOption('cache_key_prefix', $cacheKeyPrefix);
 
         // Replace characters reserved in PSR-6
@@ -101,7 +101,7 @@ final class Exchanger implements ExchangeRateProviderContract
         }
 
         $rate = $this->service->getExchangeRate($exchangeQuery);
-        $ttl = $exchangeQuery->getOption('cache_ttl', isset($this->options['cache_ttl']) ? $this->options['cache_ttl'] : null);
+        $ttl = $exchangeQuery->getOption('cache_ttl', $this->options['cache_ttl'] ?? null);
 
         $this->cache->set($cacheKey, $rate, $ttl);
 

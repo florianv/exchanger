@@ -143,7 +143,7 @@ class NationalBankOfRepublicBelarus extends HttpService
     {
         static $codes;
 
-        return $codes = $codes ?? StringUtil::jsonToArray(file_get_contents(__DIR__ . '/resources/nbrb-codes.json'));
+        return $codes ??= StringUtil::jsonToArray(file_get_contents(__DIR__ . '/resources/nbrb-codes.json'));
     }
 
     /**
@@ -205,7 +205,7 @@ class NationalBankOfRepublicBelarus extends HttpService
         }
 
         $date = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s', $entry['Date'] ?? null);
-        $requestedDate = $requestedDate ?? new \DateTimeImmutable();
+        $requestedDate ??= new \DateTimeImmutable();
         if (!$date || $date->format('Y-m-d') !== $requestedDate->format('Y-m-d')) {
             throw new UnsupportedDateException($requestedDate, $this);
         }

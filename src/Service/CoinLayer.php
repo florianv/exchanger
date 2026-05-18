@@ -159,6 +159,6 @@ final class CoinLayer extends HttpService
             505 => 'The specified timeframe is too long, exceeding 365 days.',
         ];
 
-        return isset($errors[$code]) ? $errors[$code] : '';
+        return $errors[$code] ?? '';
     }
 }

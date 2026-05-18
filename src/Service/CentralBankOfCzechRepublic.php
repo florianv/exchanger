@@ -85,7 +85,7 @@ final class CentralBankOfCzechRepublic extends HttpService
             if (!preg_match(self::CURRENCY_LINE_PATTERN, $line)) {
                 continue;
             }
-            list(, , $count, $code, $rate) = explode('|', $line);
+            [, , $count, $code, $rate] = explode('|', $line);
 
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
