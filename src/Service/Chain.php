@@ -21,6 +21,8 @@ use Exchanger\Exception\ChainException;
 /**
  * A service using other services in a chain.
  *
+ * @api
+ *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class Chain implements ExchangeRateService

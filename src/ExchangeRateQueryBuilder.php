@@ -16,6 +16,8 @@ namespace Exchanger;
 /**
  * Helps building exchange queries.
  *
+ * @api
+ *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class ExchangeRateQueryBuilder

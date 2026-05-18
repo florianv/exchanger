@@ -204,10 +204,10 @@
       <code><![CDATA[$rate / $scale]]></code>
     </InvalidOperand>
     <LessSpecificReturnStatement>
-      <code><![CDATA[$codes = $codes ?? StringUtil::jsonToArray(file_get_contents(__DIR__.'/resources/nbrb-codes.json'))]]></code>
+      <code><![CDATA[$codes = $codes ?? StringUtil::jsonToArray(file_get_contents(__DIR__ . '/resources/nbrb-codes.json'))]]></code>
     </LessSpecificReturnStatement>
     <PossiblyFalseArgument>
-      <code><![CDATA[file_get_contents(__DIR__.'/resources/nbrb-codes.json')]]></code>
+      <code><![CDATA[file_get_contents(__DIR__ . '/resources/nbrb-codes.json')]]></code>
     </PossiblyFalseArgument>
     <PossiblyNullArgument>
       <code><![CDATA[$entry['Date'] ?? null]]></code>

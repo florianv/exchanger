@@ -24,6 +24,8 @@ use Psr\SimpleCache\CacheInterface;
 /**
  * Default implementation of the exchange rate provider with PSR-6 caching support.
  *
+ * @api
+ *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class Exchanger implements ExchangeRateProviderContract

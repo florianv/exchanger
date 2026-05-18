@@ -16,6 +16,8 @@ namespace Exchanger\Service;
 /**
  * Holds services.
  *
+ * @api
+ *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
 final class Registry
