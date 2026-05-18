@@ -1,7 +1,8 @@
 {
     "name": "florianv/exchanger",
-    "type": "library",
     "description": "PHP exchange rate provider layer for currency conversion: 30 services, chain fallback, and caching.",
+    "license": "MIT",
+    "type": "library",
     "keywords": [
         "php",
         "currency-conversion",
@@ -12,8 +13,6 @@
         "swap",
         "money"
     ],
-    "homepage": "https://github.com/florianv/exchanger",
-    "license": "MIT",
     "authors": [
         {
             "name": "Florian Voutzinos",
@@ -21,6 +20,28 @@
             "homepage": "https://voutzinos.com"
         }
     ],
+    "homepage": "https://github.com/florianv/exchanger",
+    "require": {
+        "php": "^8.2",
+        "ext-json": "*",
+        "ext-libxml": "*",
+        "ext-simplexml": "*",
+        "php-http/client-implementation": "^1.0",
+        "php-http/discovery": "^1.19",
+        "php-http/httplug": "^1.0 || ^2.0",
+        "psr/http-factory": "^1.0.2",
+        "psr/simple-cache": "^1.0 || ^2.0 || ^3.0",
+        "symfony/http-client": "^8.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "nyholm/psr7": "^1.0",
+        "php-http/message": "^1.7",
+        "php-http/mock-client": "^1.0",
+        "phpunit/phpunit": "^11.0 || ^12.0",
+        "roave/backward-compatibility-check": "^8.9",
+        "vimeo/psalm": "^6.0"
+    },
     "autoload": {
         "psr-4": {
             "Exchanger\\": "src/"
@@ -31,41 +52,20 @@
             "Exchanger\\": "tests/"
         }
     },
-    "require": {
-        "ext-json": "*",
-        "ext-libxml": "*",
-        "ext-simplexml": "*",
-        "php": "^8.2",
-        "php-http/httplug": "^1.0 || ^2.0",
-        "php-http/discovery": "^1.19",
-        "psr/http-factory": "^1.0.2",
-        "php-http/client-implementation": "^1.0",
-        "psr/simple-cache": "^1.0 || ^2.0 || ^3.0",
-        "symfony/http-client": "^8.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^11.0 || ^12.0",
-        "php-http/message": "^1.7",
-        "php-http/mock-client": "^1.0",
-        "nyholm/psr7": "^1.0",
-        "vimeo/psalm": "^6.0",
-        "roave/backward-compatibility-check": "^8.9",
-        "friendsofphp/php-cs-fixer": "^3.95"
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit",
-        "psalm": "vendor/bin/psalm --no-progress",
-        "cs:fix": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --quiet",
-        "cs:check": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --verbose --dry-run"
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
         }
     },
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true
-        }
+    "scripts": {
+        "cs:check": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --verbose --dry-run",
+        "cs:fix": "vendor/bin/php-cs-fixer fix --no-interaction --ansi --quiet",
+        "psalm": "vendor/bin/psalm --no-progress",
+        "test": "vendor/bin/phpunit"
     }
 }
