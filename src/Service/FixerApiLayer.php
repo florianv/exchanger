@@ -22,9 +22,7 @@ final class FixerApiLayer extends HttpService
 
     private const HISTORICAL_URL = 'https://api.apilayer.com/fixer/%s?base=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function processOptions(array &$options): void
     {
@@ -33,9 +31,7 @@ final class FixerApiLayer extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
@@ -43,15 +39,13 @@ final class FixerApiLayer extends HttpService
 
         $url = \sprintf(
             self::LATEST_URL,
-            $currencyPair->getBaseCurrency()
+            $currencyPair->getBaseCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRate
     {
@@ -60,15 +54,13 @@ final class FixerApiLayer extends HttpService
         $url = \sprintf(
             self::HISTORICAL_URL,
             $exchangeQuery->getDate()->format('Y-m-d'),
-            $currencyPair->getBaseCurrency()
+            $currencyPair->getBaseCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
@@ -88,7 +80,7 @@ final class FixerApiLayer extends HttpService
     private function doCreateRate(string $url, CurrencyPair $currencyPair): ExchangeRate
     {
         $content = $this->request($url, [
-            'apikey' => $this->options[self::API_KEY_OPTION]
+            'apikey' => $this->options[self::API_KEY_OPTION],
         ]);
         $data = StringUtil::jsonToArray($content);
 
@@ -138,9 +130,7 @@ final class FixerApiLayer extends HttpService
         return $errors[$code] ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

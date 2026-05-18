@@ -63,9 +63,7 @@ final class Exchanger implements ExchangeRateProviderContract
         $this->options = $options;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract
     {
@@ -89,7 +87,7 @@ final class Exchanger implements ExchangeRateProviderContract
         // Replace characters reserved in PSR-6
         $cacheKeyPrefix = preg_replace('#[\{\}\(\)/\\\@\:]#', '-', $cacheKeyPrefix);
 
-        $cacheKey = $cacheKeyPrefix.sha1(serialize($exchangeQuery));
+        $cacheKey = $cacheKeyPrefix . sha1(serialize($exchangeQuery));
         if (\strlen($cacheKey) > 64) {
             throw new CacheException("Cache key length exceeds 64 characters ('$cacheKey'). This violates PSR-6 standard");
         }

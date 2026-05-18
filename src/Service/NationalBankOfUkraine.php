@@ -45,7 +45,7 @@ class NationalBankOfUkraine extends HttpService
         $content = $this->request(self::URL);
         $element = StringUtil::xmlToElement($content);
 
-        $elements = $element->xpath('./currency[cc="'.$baseCurrency.'"]');
+        $elements = $element->xpath('./currency[cc="' . $baseCurrency . '"]');
 
         if (empty($elements)) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -77,10 +77,10 @@ class NationalBankOfUkraine extends HttpService
         $date = $exchangeQuery->getDate();
         $formattedDate = $date->format('Ymd');
 
-        $content = $this->request(self::URL.'?'.http_build_query(['date' => $formattedDate]));
+        $content = $this->request(self::URL . '?' . http_build_query(['date' => $formattedDate]));
         $element = StringUtil::xmlToElement($content);
 
-        $elements = $element->xpath('./currency[cc="'.$baseCurrency.'"]');
+        $elements = $element->xpath('./currency[cc="' . $baseCurrency . '"]');
 
         if (empty($elements)) {
             if ($element->xpath('./error')) {
@@ -97,9 +97,7 @@ class NationalBankOfUkraine extends HttpService
         return $this->createRate($currencyPair, $rate, $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {

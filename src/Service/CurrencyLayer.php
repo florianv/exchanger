@@ -32,17 +32,15 @@ final class CurrencyLayer extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const FREE_LATEST_URL = 'http://www.apilayer.net/api/live?access_key=%s&currencies=%s';
+    public const FREE_LATEST_URL = 'http://www.apilayer.net/api/live?access_key=%s&currencies=%s';
 
-    const ENTERPRISE_LATEST_URL = 'https://www.apilayer.net/api/live?access_key=%s&source=%s&currencies=%s';
+    public const ENTERPRISE_LATEST_URL = 'https://www.apilayer.net/api/live?access_key=%s&source=%s&currencies=%s';
 
-    const FREE_HISTORICAL_URL = 'http://apilayer.net/api/historical?access_key=%s&date=%s';
+    public const FREE_HISTORICAL_URL = 'http://apilayer.net/api/historical?access_key=%s&date=%s';
 
-    const ENTERPRISE_HISTORICAL_URL = 'https://apilayer.net/api/historical?access_key=%s&date=%s&source=%s';
+    public const ENTERPRISE_HISTORICAL_URL = 'https://apilayer.net/api/historical?access_key=%s&date=%s&source=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function processOptions(array &$options): void
     {
@@ -55,9 +53,7 @@ final class CurrencyLayer extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -68,22 +64,20 @@ final class CurrencyLayer extends HttpService
                 self::ENTERPRISE_LATEST_URL,
                 $this->options['access_key'],
                 $currencyPair->getBaseCurrency(),
-                $currencyPair->getQuoteCurrency()
+                $currencyPair->getQuoteCurrency(),
             );
         } else {
             $url = sprintf(
                 self::FREE_LATEST_URL,
                 $this->options['access_key'],
-                $currencyPair->getQuoteCurrency()
+                $currencyPair->getQuoteCurrency(),
             );
         }
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -92,22 +86,20 @@ final class CurrencyLayer extends HttpService
                 self::ENTERPRISE_HISTORICAL_URL,
                 $this->options['access_key'],
                 $exchangeQuery->getDate()->format('Y-m-d'),
-                $exchangeQuery->getCurrencyPair()->getBaseCurrency()
+                $exchangeQuery->getCurrencyPair()->getBaseCurrency(),
             );
         } else {
             $url = sprintf(
                 self::FREE_HISTORICAL_URL,
                 $this->options['access_key'],
-                $exchangeQuery->getDate()->format('Y-m-d')
+                $exchangeQuery->getDate()->format('Y-m-d'),
             );
         }
 
         return $this->doCreateRate($url, $exchangeQuery->getCurrencyPair());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
@@ -138,8 +130,8 @@ final class CurrencyLayer extends HttpService
         } else {
             $date = new \DateTime($data['date']);
         }
-        
-        $hash = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
+
+        $hash = $currencyPair->getBaseCurrency() . $currencyPair->getQuoteCurrency();
 
         if ($data['source'] === $currencyPair->getBaseCurrency() && isset($data['quotes'][$hash])) {
             return $this->createRate($currencyPair, (float) ($data['quotes'][$hash]), $date);
@@ -148,9 +140,7 @@ final class CurrencyLayer extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

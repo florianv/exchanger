@@ -36,7 +36,7 @@ class AbstractApiTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $url = 'https://exchange-rates.abstractapi.com/v1/live/?api_key=secret&base=USD';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/AbstractApi/success.json');
         $service = new AbstractApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/ZZZ')));
@@ -47,7 +47,7 @@ class AbstractApiTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/GBP');
         $url = 'https://exchange-rates.abstractapi.com/v1/live/?api_key=secret&base=USD';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/AbstractApi/success.json');
         $service = new AbstractApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -63,7 +63,7 @@ class AbstractApiTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/GBP');
         $url = 'https://exchange-rates.abstractapi.com/v1/historical?api_key=secret&base=USD&date=2000-01-03';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/AbstractApi/historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/AbstractApi/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new AbstractApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);

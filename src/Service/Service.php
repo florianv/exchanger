@@ -47,9 +47,7 @@ abstract class Service implements ExchangeRateService
      *
      * @param array &$options
      */
-    public function processOptions(array &$options): void
-    {
-    }
+    public function processOptions(array &$options): void {}
 
     /**
      * Creates an instant rate.

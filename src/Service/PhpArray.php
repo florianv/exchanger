@@ -55,9 +55,7 @@ final class PhpArray extends Service
         $this->historicalRates = $historicalRates;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -105,9 +103,7 @@ final class PhpArray extends Service
         return $this->createRate($currencyPair, $rate, $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
@@ -152,9 +148,7 @@ final class PhpArray extends Service
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

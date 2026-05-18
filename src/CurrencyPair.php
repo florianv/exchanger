@@ -69,36 +69,28 @@ final class CurrencyPair implements CurrencyPairContract
         return new self($parts[0], $parts[1]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getBaseCurrency(): string
     {
         return $this->baseCurrency;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getQuoteCurrency(): string
     {
         return $this->quoteCurrency;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function isIdentical(): bool
     {
         return $this->baseCurrency === $this->quoteCurrency;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function __toString(): string
     {
         return sprintf('%s/%s', $this->baseCurrency, $this->quoteCurrency);

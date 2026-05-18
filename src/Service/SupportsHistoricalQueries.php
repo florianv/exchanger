@@ -24,9 +24,7 @@ use Exchanger\Contract\HistoricalExchangeRateQuery as HistoricalExchangeRateQuer
  */
 trait SupportsHistoricalQueries
 {
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function getExchangeRate(ExchangeRateQueryContract $exchangeQuery): ExchangeRateContract
     {
         if ($exchangeQuery instanceof HistoricalExchangeRateQueryContract) {

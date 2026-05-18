@@ -26,7 +26,7 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  */
 final class Cryptonator extends HttpService
 {
-    const LATEST_URL = 'https://api.cryptonator.com/api/ticker/%s-%s';
+    public const LATEST_URL = 'https://api.cryptonator.com/api/ticker/%s-%s';
 
     /**
      * Gets the exchange rate.
@@ -46,8 +46,8 @@ final class Cryptonator extends HttpService
             sprintf(
                 self::LATEST_URL,
                 strtolower($currencyPair->getBaseCurrency()),
-                strtolower($currencyPair->getQuoteCurrency())
-            )
+                strtolower($currencyPair->getQuoteCurrency()),
+            ),
         );
 
         $data = StringUtil::jsonToArray($response);
@@ -63,18 +63,14 @@ final class Cryptonator extends HttpService
         return $this->createRate($currencyPair, (float) ($data['ticker']['price']), $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

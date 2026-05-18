@@ -31,13 +31,11 @@ final class CoinLayer extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const LATEST_URL = '%s://api.coinlayer.com/api/live?access_key=%s&symbols=%s&target=%s';
+    public const LATEST_URL = '%s://api.coinlayer.com/api/live?access_key=%s&symbols=%s&target=%s';
 
-    const HISTORICAL_URL = '%s://api.coinlayer.com/api/%s?access_key=%s&symbols=%s&target=%s';
+    public const HISTORICAL_URL = '%s://api.coinlayer.com/api/%s?access_key=%s&symbols=%s&target=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function processOptions(array &$options): void
     {
@@ -50,9 +48,7 @@ final class CoinLayer extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -65,15 +61,13 @@ final class CoinLayer extends HttpService
             $protocol,
             $this->options['access_key'],
             $currencyPair->getBaseCurrency(),
-            $currencyPair->getQuoteCurrency()
+            $currencyPair->getQuoteCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -87,15 +81,13 @@ final class CoinLayer extends HttpService
             $exchangeQuery->getDate()->format('Y-m-d'),
             $this->options['access_key'],
             $currencyPair->getBaseCurrency(),
-            $currencyPair->getQuoteCurrency()
+            $currencyPair->getQuoteCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
@@ -131,9 +123,7 @@ final class CoinLayer extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

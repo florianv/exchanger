@@ -30,35 +30,29 @@ final class CentralBankOfCzechRepublic extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const URL = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt';
+    public const URL = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt';
 
-    const DATE_FORMAT = 'd.m.Y';
+    public const DATE_FORMAT = 'd.m.Y';
 
-    const DATE_QUERY_PARAMETER_NAME = 'date';
+    public const DATE_QUERY_PARAMETER_NAME = 'date';
 
-    const CURRENCY_LINE_PATTERN = '#^.*\|.*\|\d+\|\w{3}\|\d+(?:,\d+)?$#';
+    public const CURRENCY_LINE_PATTERN = '#^.*\|.*\|\d+\|\w{3}\|\d+(?:,\d+)?$#';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery, new DateTimeImmutable());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
@@ -124,12 +118,10 @@ final class CentralBankOfCzechRepublic extends HttpService
      */
     private function buildUrl(DateTimeInterface $requestedDate): string
     {
-        return self::URL.'?'.http_build_query([self::DATE_QUERY_PARAMETER_NAME => $requestedDate->format(self::DATE_FORMAT)]);
+        return self::URL . '?' . http_build_query([self::DATE_QUERY_PARAMETER_NAME => $requestedDate->format(self::DATE_FORMAT)]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

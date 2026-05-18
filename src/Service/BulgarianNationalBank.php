@@ -32,20 +32,16 @@ final class BulgarianNationalBank extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const URL = 'http://bnb.bg/Statistics/StExternalSector/StExchangeRates/StERForeignCurrencies/index.htm?downloadOper=true&group1=first&firstDays=%s&firstMonths=%s&firstYear=%s&search=true&type=XML';
+    public const URL = 'http://bnb.bg/Statistics/StExternalSector/StExchangeRates/StERForeignCurrencies/index.htm?downloadOper=true&group1=first&firstDays=%s&firstMonths=%s&firstYear=%s&search=true&type=XML';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery, new DateTimeImmutable());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -75,7 +71,7 @@ final class BulgarianNationalBank extends HttpService
             // BNB returns an HTTP document when there is no currency information for the specified date.
             throw new UnsupportedDateException($requestedDate, $this);
         }
-        $elements = $element->xpath('./ROW[CODE="'.$baseCurrency.'"]');
+        $elements = $element->xpath('./ROW[CODE="' . $baseCurrency . '"]');
 
         if (!isset($elements['0'])) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
@@ -105,18 +101,14 @@ final class BulgarianNationalBank extends HttpService
         return sprintf(self::URL, $requestedDate->format('d'), $requestedDate->format('m'), $requestedDate->format('Y'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'BGN' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

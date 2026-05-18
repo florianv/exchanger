@@ -38,7 +38,7 @@ final class ChainException extends Exception
             return sprintf(
                 '%s: %s',
                 \get_class($exception),
-                $exception->getMessage()
+                $exception->getMessage(),
             );
         }, $exceptions);
 
@@ -46,8 +46,8 @@ final class ChainException extends Exception
             sprintf(
                 "The chain resulted in %d exception(s):\r\n%s",
                 \count($exceptions),
-                implode("\r\n", $messages)
-            )
+                implode("\r\n", $messages),
+            ),
         );
 
         $this->exceptions = $exceptions;

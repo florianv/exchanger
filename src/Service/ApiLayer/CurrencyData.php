@@ -36,15 +36,13 @@ final class CurrencyData extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const API_KEY_OPTION = 'api_key';
+    public const API_KEY_OPTION = 'api_key';
 
-    const LATEST_URL = 'https://api.apilayer.com/currency_data/live?apikey=%s&currencies=%s';
+    public const LATEST_URL = 'https://api.apilayer.com/currency_data/live?apikey=%s&currencies=%s';
 
-    const HISTORICAL_URL = 'https://api.apilayer.com/currency_data/historical?apikey=%s&date=%s';
+    public const HISTORICAL_URL = 'https://api.apilayer.com/currency_data/historical?apikey=%s&date=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function processOptions(array &$options): void
     {
@@ -53,9 +51,7 @@ final class CurrencyData extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -64,30 +60,26 @@ final class CurrencyData extends HttpService
         $url = sprintf(
             self::LATEST_URL,
             $this->options[self::API_KEY_OPTION],
-            $currencyPair->getQuoteCurrency()
+            $currencyPair->getQuoteCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         $url = sprintf(
             self::HISTORICAL_URL,
             $this->options[self::API_KEY_OPTION],
-            $exchangeQuery->getDate()->format('Y-m-d')
+            $exchangeQuery->getDate()->format('Y-m-d'),
         );
 
         return $this->doCreateRate($url, $exchangeQuery->getCurrencyPair());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
@@ -114,7 +106,7 @@ final class CurrencyData extends HttpService
         }
 
         $date = (new \DateTime())->setTimestamp($data['timestamp']);
-        $hash = $currencyPair->getBaseCurrency().$currencyPair->getQuoteCurrency();
+        $hash = $currencyPair->getBaseCurrency() . $currencyPair->getQuoteCurrency();
 
         if ($data['source'] === $currencyPair->getBaseCurrency() && isset($data['quotes'][$hash])) {
             return $this->createRate($currencyPair, (float) ($data['quotes'][$hash]), $date);
@@ -123,9 +115,7 @@ final class CurrencyData extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

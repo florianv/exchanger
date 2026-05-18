@@ -29,11 +29,9 @@ final class RussianCentralBank extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const URL = 'http://www.cbr.ru/scripts/XML_daily.asp';
+    public const URL = 'http://www.cbr.ru/scripts/XML_daily.asp';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -43,7 +41,7 @@ final class RussianCentralBank extends HttpService
         $content = $this->request(self::URL);
         $element = StringUtil::xmlToElement($content);
 
-        $elements = $element->xpath('./Valute[CharCode="'.$baseCurrency.'"]');
+        $elements = $element->xpath('./Valute[CharCode="' . $baseCurrency . '"]');
         $date = \DateTime::createFromFormat('!d.m.Y', (string) $element['Date']);
 
         if (empty($elements) || !$date) {
@@ -56,9 +54,7 @@ final class RussianCentralBank extends HttpService
         return $this->createRate($currencyPair, (float) $rate / $nominal, $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -67,10 +63,10 @@ final class RussianCentralBank extends HttpService
         $date = $exchangeQuery->getDate();
         $formattedDate = $date->format('d.m.Y');
 
-        $content = $this->request(self::URL.'?'.http_build_query(['date_req' => $formattedDate]));
+        $content = $this->request(self::URL . '?' . http_build_query(['date_req' => $formattedDate]));
         $element = StringUtil::xmlToElement($content);
 
-        $elements = $element->xpath('./Valute[CharCode="'.$baseCurrency.'"]');
+        $elements = $element->xpath('./Valute[CharCode="' . $baseCurrency . '"]');
 
         if (empty($elements)) {
             if ((string) $element['Date'] !== $date->format('d.m.Y')) {
@@ -86,18 +82,14 @@ final class RussianCentralBank extends HttpService
         return $this->createRate($currencyPair, (float) ($rate / $nominal), $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return 'RUB' === $exchangeQuery->getCurrencyPair()->getQuoteCurrency();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

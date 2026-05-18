@@ -37,7 +37,7 @@ class XchangeApiTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/GBP');
         $uri = 'https://api.xchangeapi.com/latest?base=EUR&api-key=secret';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/XchangeApi/latest.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/XchangeApi/latest.json');
 
         $service = new XchangeApi($this->getHttpAdapterMock($uri, $content), null, ['api-key' => 'secret']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -53,7 +53,7 @@ class XchangeApiTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/JPY');
         $uri = 'https://api.xchangeapi.com/historical/2020-01-20?api-key=secret';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/XchangeApi/historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/XchangeApi/historical.json');
         $date = new \DateTime('2020-01-20');
 
         $service = new XchangeApi($this->getHttpAdapterMock($uri, $content), null, ['api-key' => 'secret']);

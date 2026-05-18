@@ -45,7 +45,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&show_alternative=1';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/error.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/error.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -58,7 +58,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&show_alternative=1';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -76,7 +76,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&base=USD&symbols=EUR&show_alternative=1';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -92,11 +92,11 @@ class OpenExchangeRatesTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/AED');
         $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&show_alternative=1';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
         $rate = $service->getExchangeRate(
-            new HistoricalExchangeRateQuery($pair, new \DateTime('2016-08-23'))
+            new HistoricalExchangeRateQuery($pair, new \DateTime('2016-08-23')),
         );
 
         $expectedDate = new \DateTime();
@@ -113,11 +113,11 @@ class OpenExchangeRatesTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&base=USD&symbols=EUR&show_alternative=1';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(
-            new HistoricalExchangeRateQuery($pair, new \DateTime('2016-08-23'))
+            new HistoricalExchangeRateQuery($pair, new \DateTime('2016-08-23')),
         );
 
         $expectedDate = new \DateTime();
@@ -137,12 +137,12 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://openexchangerates.org/api/historical/1900-08-23.json?app_id=secret&show_alternative=1';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_error.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_error.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
 
         $service->getExchangeRate(
-            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), new \DateTime('1900-08-23'))
+            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/AED'), new \DateTime('1900-08-23')),
         );
     }
 
@@ -154,12 +154,12 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&show_alternative=1';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
 
         $service->getExchangeRate(
-            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/XXL'), new \DateTime('2016-08-23'))
+            new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/XXL'), new \DateTime('2016-08-23')),
         );
     }
 

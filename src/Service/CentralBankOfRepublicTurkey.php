@@ -32,31 +32,25 @@ final class CentralBankOfRepublicTurkey extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const BASE_URL = 'https://www.tcmb.gov.tr/kurlar/';
+    public const BASE_URL = 'https://www.tcmb.gov.tr/kurlar/';
 
-    const FILE_EXTENSION = '.xml';
+    public const FILE_EXTENSION = '.xml';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
         return $this->doCreateRate($exchangeQuery, $exchangeQuery->getDate());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeRateQuery): bool
     {
@@ -81,7 +75,7 @@ final class CentralBankOfRepublicTurkey extends HttpService
         $element = StringUtil::xmlToElement($content);
 
         $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
-        $elements = $element->xpath('//Currency[@CurrencyCode="'.$currencyPair->getBaseCurrency().'"]');
+        $elements = $element->xpath('//Currency[@CurrencyCode="' . $currencyPair->getBaseCurrency() . '"]');
 
         if (!empty($elements) || !$date) {
             $rate = (float) $elements[0]->ForexSelling;
@@ -110,12 +104,10 @@ final class CentralBankOfRepublicTurkey extends HttpService
             $fileName = "$yearMonth/$dayMonthYear";
         }
 
-        return self::BASE_URL.$fileName.self::FILE_EXTENSION;
+        return self::BASE_URL . $fileName . self::FILE_EXTENSION;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

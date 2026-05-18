@@ -18,6 +18,4 @@ namespace Exchanger\Exception;
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
  */
-class NonBreakingInvalidArgumentException extends \Exception
-{
-}
+class NonBreakingInvalidArgumentException extends \Exception {}

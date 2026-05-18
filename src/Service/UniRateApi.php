@@ -31,15 +31,13 @@ final class UniRateApi extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const API_KEY_OPTION = 'api_key';
+    public const API_KEY_OPTION = 'api_key';
 
-    const LATEST_URL = 'https://api.unirateapi.com/api/rates?api_key=%s&from=%s&to=%s';
+    public const LATEST_URL = 'https://api.unirateapi.com/api/rates?api_key=%s&from=%s&to=%s';
 
-    const HISTORICAL_URL = 'https://api.unirateapi.com/api/historical/rates?api_key=%s&date=%s&from=%s&to=%s';
+    public const HISTORICAL_URL = 'https://api.unirateapi.com/api/historical/rates?api_key=%s&date=%s&from=%s&to=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function processOptions(array &$options): void
     {
@@ -48,18 +46,14 @@ final class UniRateApi extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -68,15 +62,13 @@ final class UniRateApi extends HttpService
             self::LATEST_URL,
             urlencode((string) $this->options[self::API_KEY_OPTION]),
             $currencyPair->getBaseCurrency(),
-            $currencyPair->getQuoteCurrency()
+            $currencyPair->getQuoteCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair, new \DateTime());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -86,7 +78,7 @@ final class UniRateApi extends HttpService
             urlencode((string) $this->options[self::API_KEY_OPTION]),
             $exchangeQuery->getDate()->format('Y-m-d'),
             $currencyPair->getBaseCurrency(),
-            $currencyPair->getQuoteCurrency()
+            $currencyPair->getQuoteCurrency(),
         );
 
         return $this->doCreateRate($url, $currencyPair, $exchangeQuery->getDate());
@@ -120,9 +112,7 @@ final class UniRateApi extends HttpService
         return $this->createRate($currencyPair, (float) $data['rate'], $date);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

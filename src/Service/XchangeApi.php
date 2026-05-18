@@ -31,15 +31,13 @@ final class XchangeApi extends HttpService
 {
     use SupportsHistoricalQueries;
 
-    const API_KEY_OPTION = 'api-key';
+    public const API_KEY_OPTION = 'api-key';
 
-    const LATEST_URL = 'https://api.xchangeapi.com/latest?base=%s&api-key=%s';
+    public const LATEST_URL = 'https://api.xchangeapi.com/latest?base=%s&api-key=%s';
 
-    const HISTORICAL_URL = 'https://api.xchangeapi.com/historical/%s?api-key=%s';
+    public const HISTORICAL_URL = 'https://api.xchangeapi.com/historical/%s?api-key=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function processOptions(array &$options): void
     {
@@ -48,9 +46,7 @@ final class XchangeApi extends HttpService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -59,15 +55,13 @@ final class XchangeApi extends HttpService
         $url = sprintf(
             self::LATEST_URL,
             $currencyPair->getBaseCurrency(),
-            $this->options[self::API_KEY_OPTION]
+            $this->options[self::API_KEY_OPTION],
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -75,15 +69,13 @@ final class XchangeApi extends HttpService
         $url = sprintf(
             self::HISTORICAL_URL,
             $exchangeQuery->getDate()->format('Y-m-d'),
-            $this->options[self::API_KEY_OPTION]
+            $this->options[self::API_KEY_OPTION],
         );
 
         return $this->doCreateRate($url, $currencyPair);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
@@ -99,7 +91,7 @@ final class XchangeApi extends HttpService
      */
     private function getSupportedCodes(): array
     {
-        return require __DIR__.'/resources/xchangeapi-codes.php';
+        return require __DIR__ . '/resources/xchangeapi-codes.php';
     }
 
     /**
@@ -126,9 +118,7 @@ final class XchangeApi extends HttpService
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

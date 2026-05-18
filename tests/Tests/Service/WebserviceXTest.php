@@ -35,7 +35,7 @@ class WebserviceXTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'http://www.webservicex.net/currencyconvertor.asmx/ConversionRate?FromCurrency=EUR&ToCurrency=USD';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/WebserviceX/success.xml');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/WebserviceX/success.xml');
 
         $service = new WebserviceX($this->getHttpAdapterMock($uri, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));

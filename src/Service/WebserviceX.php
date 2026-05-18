@@ -25,11 +25,9 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  */
 final class WebserviceX extends HttpService
 {
-    const URL = 'http://www.webservicex.net/currencyconvertor.asmx/ConversionRate?FromCurrency=%s&ToCurrency=%s';
+    public const URL = 'http://www.webservicex.net/currencyconvertor.asmx/ConversionRate?FromCurrency=%s&ToCurrency=%s';
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
@@ -41,18 +39,14 @@ final class WebserviceX extends HttpService
         return $this->createInstantRate($currencyPair, (float) (StringUtil::xmlToElement($content)));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {

@@ -25,7 +25,7 @@ class ExchangeRateQueryBuilderTest extends TestCase
     public function it_builds_a_rate()
     {
         $builder = new ExchangeRateQueryBuilder('EUR/USD');
-        $this->assertInstanceOf(ExchangeRateQuery:: class, $builder->build());
+        $this->assertInstanceOf(ExchangeRateQuery::class, $builder->build());
     }
 
     #[Test]
@@ -34,6 +34,6 @@ class ExchangeRateQueryBuilderTest extends TestCase
         $builder = (new ExchangeRateQueryBuilder('EUR/USD'))
             ->setDate(new \DateTime());
 
-        $this->assertInstanceOf(HistoricalExchangeRateQuery:: class, $builder->build());
+        $this->assertInstanceOf(HistoricalExchangeRateQuery::class, $builder->build());
     }
 }

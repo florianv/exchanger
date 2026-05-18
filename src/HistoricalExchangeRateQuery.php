@@ -44,9 +44,7 @@ final class HistoricalExchangeRateQuery extends ExchangeRateQuery implements His
         $this->date = $date instanceof \DateTime ? clone $date : $date;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     #[\Override]
     public function getDate(): \DateTimeInterface
     {

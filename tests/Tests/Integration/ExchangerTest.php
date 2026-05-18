@@ -76,7 +76,7 @@ class ExchangerTest extends TestCase
      */
     private function createFileCacheItemPool()
     {
-        $filesystemAdapter = new Local(sys_get_temp_dir().'/exchanger-tests');
+        $filesystemAdapter = new Local(sys_get_temp_dir() . '/exchanger-tests');
         $filesystem = new Filesystem($filesystemAdapter);
 
         restore_error_handler();
@@ -96,7 +96,7 @@ class ExchangerTest extends TestCase
         return new Exchanger(
             new Fixer(null, null, ['access_key' => $this->fixerAccessKey]),
             $this->createFileCacheItemPool(),
-            ['cache_ttl' => $ttl]
+            ['cache_ttl' => $ttl],
         );
     }
 
@@ -112,7 +112,7 @@ class ExchangerTest extends TestCase
         return new HistoricalExchangeRateQuery(
             CurrencyPair::createFromString('EUR/USD'),
             new \DateTime($date),
-            ['cache_ttl' => 60]
+            ['cache_ttl' => 60],
         );
     }
 

@@ -34,10 +34,10 @@ class RegistryTest extends TestCase
         foreach ($classes as $class) {
             $reflect = new \ReflectionClass($class);
 
-            if (!\in_array($class, $excludedServices) &&
-                false === strpos($class, 'Mock') &&
-                false === $reflect->isAnonymous() &&
-                $reflect->implementsInterface('Exchanger\Contract\ExchangeRateService')
+            if (!\in_array($class, $excludedServices)
+                && false === strpos($class, 'Mock')
+                && false === $reflect->isAnonymous()
+                && $reflect->implementsInterface('Exchanger\Contract\ExchangeRateService')
             ) {
                 $services[] = $class;
             }

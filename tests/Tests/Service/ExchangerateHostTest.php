@@ -40,7 +40,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $uri = 'https://api.exchangerate.host/latest?base=USD&v=' . date('Y-m-d');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/error.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/error.json');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -51,7 +51,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'https://api.exchangerate.host/latest?base=EUR&v=' . date('Y-m-d');
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/latest.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/latest.json');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -67,7 +67,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content));
@@ -84,7 +84,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&source=ecb';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['source' => 'ecb']);
@@ -102,7 +102,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&source=testing';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['source' => 'ecb']);
@@ -120,7 +120,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&places=10';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['places' => 6]);
@@ -138,7 +138,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&places=6';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['places' => 6]);

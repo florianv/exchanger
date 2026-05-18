@@ -59,5 +59,5 @@ return [
     'XLM',
     'XMR',
     'XRP',
-    'ZEC'
+    'ZEC',
 ];

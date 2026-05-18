@@ -45,7 +45,7 @@ class CoinLayerTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $uri = 'http://api.coinlayer.com/api/live?access_key=secret&symbols=BTC&target=USD';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CoinLayer/error.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/error.json');
 
         $service = new CoinLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD')));
@@ -57,7 +57,7 @@ class CoinLayerTest extends ServiceTestCase
         $uri = 'http://api.coinlayer.com/api/live?access_key=secret&symbols=BTC&target=USD';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1583227144);
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CoinLayer/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/success.json');
 
         $pair = CurrencyPair::createFromString('BTC/USD');
         $service = new CoinLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
@@ -75,7 +75,7 @@ class CoinLayerTest extends ServiceTestCase
         $uri = 'https://api.coinlayer.com/api/live?access_key=secret&symbols=BTC&target=USD';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1583227144);
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CoinLayer/success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/success.json');
 
         $pair = CurrencyPair::createFromString('BTC/USD');
         $service = new CoinLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'paid' => true]);
@@ -92,7 +92,7 @@ class CoinLayerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('ETH/USD');
         $uri = 'http://api.coinlayer.com/api/2015-05-06?access_key=secret&symbols=ETH&target=USD';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CoinLayer/historical_success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/historical_success.json');
         $date = new \DateTime('2015-05-06');
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1577923149);
@@ -111,7 +111,7 @@ class CoinLayerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('ETH/USD');
         $uri = 'https://api.coinlayer.com/api/2015-05-06?access_key=secret&symbols=ETH&target=USD';
-        $content = file_get_contents(__DIR__.'/../../Fixtures/Service/CoinLayer/historical_success.json');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/historical_success.json');
         $date = new \DateTime('2015-05-06');
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1577923149);
