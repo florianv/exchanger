@@ -1,6 +1,6 @@
 {
     "name": "florianv/exchanger",
-    "description": "PHP exchange rate provider layer for currency conversion: 30 services, chain fallback, and caching.",
+    "description": "PHP exchange rate provider layer for currency conversion: 30+ services, chain fallback, and caching.",
     "license": "MIT",
     "type": "library",
     "keywords": [
