@@ -5,7 +5,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/florianv/exchanger.svg?style=flat-square)](https://packagist.org/packages/florianv/exchanger)
 [![Version](http://img.shields.io/packagist/v/florianv/exchanger.svg?style=flat-square)](https://packagist.org/packages/florianv/exchanger)
 
-> _Exchange rate provider layer for PHP. Direct access to 31 provider implementations through a single `ExchangeRateService` interface, with chain fallback and PSR-16 caching. Maintained since 2016._
+> _Exchange rate provider layer for PHP. Direct access to 30+ provider implementations through a single `ExchangeRateService` interface, with chain fallback and PSR-16 caching. Maintained since 2016._
 
 <table>
    <tr>
@@ -21,12 +21,12 @@
    </tr>
 </table>
 
-Exchanger is the **exchange rate provider layer** for PHP — 31 services (commercial APIs like its sponsor **[fastFOREX](https://www.fastforex.io)**, the European Central Bank, several national banks, exchangerate.host) behind a single `ExchangeRateService` interface, with chainable fallback, PSR-16 caching and historical rates. For most use cases the higher-level [Swap](https://github.com/florianv/swap) library is what you want; reach for Exchanger when you need finer control.
+Exchanger is the **exchange rate provider layer** for PHP — 30+ services (commercial APIs like its sponsor **[fastFOREX](https://www.fastforex.io)**, the European Central Bank, several national banks, exchangerate.host) behind a single `ExchangeRateService` interface, with chainable fallback, PSR-16 caching and historical rates. For most use cases the higher-level [Swap](https://github.com/florianv/swap) library is what you want; reach for Exchanger when you need finer control.
 
 ## 💡 What is Exchanger?
 
 - A PHP library for currency conversion and exchange rate retrieval at the provider layer.
-- 31 service implementations behind a common `ExchangeRateService` interface.
+- 30+ service implementations behind a common `ExchangeRateService` interface.
 - PSR-16 SimpleCache support.
 - Historical rates.
 - A chain service for fallback. When a service errors, the next one in the chain is tried.
@@ -119,7 +119,7 @@ Services are tried in order. If a service does not support the requested currenc
 
 ## 📊 Providers
 
-Exchanger ships 31 exchange rate provider implementations. Each is registered in `Exchanger\Service\Registry` under the **identifier** shown below.
+Exchanger ships 30+ exchange rate provider implementations. Each is registered in `Exchanger\Service\Registry` under the **identifier** shown below.
 
 ### Commercial providers (require an API key)
 
