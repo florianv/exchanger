@@ -149,11 +149,12 @@ Exchanger ships 30+ exchange rate provider implementations. Each is registered i
 ### Public providers (no API key required)
 
 | Service                                    | Identifier                            | Base           | Quote          | Historical |
-| ------------------------------------------ | ------------------------------------- | -------------- | -------------- | ---------- |
+|--------------------------------------------|---------------------------------------|----------------|----------------|------------|
 | Bulgarian National Bank                    | `bulgarian_national_bank`             | *              | BGN            | Yes        |
 | Central Bank of the Czech Republic         | `central_bank_of_czech_republic`      | *              | CZK            | Yes        |
 | Central Bank of the Republic of Turkey     | `central_bank_of_republic_turkey`     | *              | TRY            | Yes        |
 | Central Bank of the Republic of Uzbekistan | `central_bank_of_republic_uzbekistan` | *              | UZS            | Yes        |
+| National Bank of Danmark                   | `danish_central_bank`                 | (limited list) | (limited list) | Yes        |
 | European Central Bank                      | `european_central_bank`               | EUR            | *              | Yes        |
 | National Bank of Georgia                   | `national_bank_of_georgia`            | *              | GEL            | Yes        |
 | National Bank of Romania                   | `national_bank_of_romania`            | (limited list) | (limited list) | Yes        |

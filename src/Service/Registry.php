@@ -36,6 +36,7 @@ final class Registry
             'currency_converter' => CurrencyConverter::class,
             'currency_data_feed' => CurrencyDataFeed::class,
             'currency_layer' => CurrencyLayer::class,
+            'danish_central_bank' => DanishCentralBank::class,
             'european_central_bank' => EuropeanCentralBank::class,
             'exchange_rates_api' => ExchangeRatesApi::class,
             'fixer' => Fixer::class,

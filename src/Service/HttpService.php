@@ -64,19 +64,25 @@ abstract class HttpService extends Service
     }
 
     /**
-     * @param string $url
-     * @param array  $headers
+     * @param string      $url
+     * @param array       $headers
+     * @param string      $method
+     * @param string|null $body
      *
      * @return \Psr\Http\Message\RequestInterface
      */
-    private function buildRequest($url, array $headers = []): RequestInterface
+    private function buildRequest($url, array $headers = [], string $method = 'GET', ?string $body = null): RequestInterface
     {
-        $request = $this->requestFactory->createRequest('GET', $url);
+        $request = $this->requestFactory->createRequest($method, $url);
         foreach ($headers as $header => $value) {
             $request = $request->withHeader($header, $value);
         }
 
         $request = $request->withHeader('User-Agent', 'Swap');
+
+        if (null !== $body) {
+            $request = $request->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($body));
+        }
 
         return $request;
     }
@@ -105,5 +111,19 @@ abstract class HttpService extends Service
     protected function getResponse($url, array $headers = []): ResponseInterface
     {
         return $this->httpClient->sendRequest($this->buildRequest($url, $headers));
+    }
+
+    /**
+     * Posts the given body to the given url and returns the response content.
+     *
+     * @param string $url
+     * @param string $body
+     * @param array  $headers
+     *
+     * @return string
+     */
+    protected function postRequest(string $url, string $body, array $headers = []): string
+    {
+        return $this->httpClient->sendRequest($this->buildRequest($url, $headers, 'POST', $body))->getBody()->__toString();
     }
 }
