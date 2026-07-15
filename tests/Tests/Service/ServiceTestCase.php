@@ -52,10 +52,12 @@ abstract class ServiceTestCase extends TestCase
      * @param string $url     The url
      * @param string $content The body content
      * @param int $statusCode The status code
+     * @param callable|null $requestCallback Optional extra check receiving the \Psr\Http\Message\RequestInterface,
+     *                                       rejecting the request unless it returns a truthy value
      *
      * @return \Http\Client\HttpClient
      */
-    protected function getHttpAdapterMock($url, $content, $statusCode = 200)
+    protected function getHttpAdapterMock($url, $content, $statusCode = 200, ?callable $requestCallback = null)
     {
         $response = $this->getResponse($content, $statusCode);
 
@@ -64,8 +66,12 @@ abstract class ServiceTestCase extends TestCase
         $adapter
             ->expects($this->once())
             ->method('sendRequest')
-            ->with($this->callback(function ($arg) use ($url) {
-                return $arg->getUri()->__toString() === $url;
+            ->with($this->callback(function ($arg) use ($url, $requestCallback) {
+                if ($arg->getUri()->__toString() !== $url) {
+                    return false;
+                }
+
+                return null === $requestCallback || (bool) $requestCallback($arg);
             }))
             ->willReturn($response);
 
