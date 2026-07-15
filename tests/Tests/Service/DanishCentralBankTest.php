@@ -20,8 +20,11 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\DanishCentralBank;
 use Http\Client\HttpClient;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class DanishCentralBankTest extends ServiceTestCase
 {
@@ -128,7 +131,7 @@ class DanishCentralBankTest extends ServiceTestCase
         $pair = CurrencyPair::createFromString('EUR/DKK');
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/DanishCentralBank/statbank-eur.json');
 
-        $service = new DanishCentralBank($this->getHttpAdapterMock(DanishCentralBank::STATBANK_URL, $content));
+        $service = new DanishCentralBank($this->getStatbankAdapterMock($content, 'EUR', '2024M03D14'));
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, new \DateTime('2024-03-14')));
 
         $this->assertEqualsWithDelta(7.4568, $rate->getValue(), 1e-9);
@@ -143,7 +146,7 @@ class DanishCentralBankTest extends ServiceTestCase
         $pair = CurrencyPair::createFromString('DKK/EUR');
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/DanishCentralBank/statbank-eur.json');
 
-        $service = new DanishCentralBank($this->getHttpAdapterMock(DanishCentralBank::STATBANK_URL, $content));
+        $service = new DanishCentralBank($this->getStatbankAdapterMock($content, 'EUR', '2024M03D14'));
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, new \DateTime('2024-03-14')));
 
         $this->assertSame(0.134106, $rate->getValue());
@@ -160,8 +163,33 @@ class DanishCentralBankTest extends ServiceTestCase
 
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/DanishCentralBank/statbank-notfound-date.json');
 
-        $service = new DanishCentralBank($this->getHttpAdapterMock(DanishCentralBank::STATBANK_URL, $content));
+        $service = new DanishCentralBank($this->getStatbankAdapterMock($content, 'EUR', '2024M03D16'));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/DKK'), new \DateTime('2024-03-16')));
+    }
+
+    #[Test]
+    public function it_posts_to_statbank_using_the_injected_stream_factory(): void
+    {
+        $pair = CurrencyPair::createFromString('EUR/DKK');
+        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/DanishCentralBank/statbank-eur.json');
+        $expectedBody = $this->buildStatbankRequestBody('EUR', '2024M03D14');
+
+        $streamFactory = $this->createMock(StreamFactoryInterface::class);
+        $streamFactory
+            ->expects($this->once())
+            ->method('createStream')
+            ->with($expectedBody)
+            ->willReturn((new Psr17Factory())->createStream($expectedBody));
+
+        $service = new DanishCentralBank(
+            $this->getStatbankAdapterMock($content, 'EUR', '2024M03D14'),
+            new Psr17Factory(),
+            [],
+            $streamFactory
+        );
+        $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, new \DateTime('2024-03-14')));
+
+        $this->assertEqualsWithDelta(7.4568, $rate->getValue(), 1e-9);
     }
 
     #[Test]
@@ -174,38 +202,48 @@ class DanishCentralBankTest extends ServiceTestCase
 
     public static function getSupportedCurrencies(): array
     {
-        return [
-            ['AUD'],
-            ['BRL'],
-            ['CAD'],
-            ['CHF'],
-            ['CNY'],
-            ['CZK'],
-            ['EUR'],
-            ['GBP'],
-            ['HKD'],
-            ['HUF'],
-            ['IDR'],
-            ['ILS'],
-            ['INR'],
-            ['ISK'],
-            ['JPY'],
-            ['KRW'],
-            ['MXN'],
-            ['MYR'],
-            ['NOK'],
-            ['NZD'],
-            ['PHP'],
-            ['PLN'],
-            ['RON'],
-            ['SEK'],
-            ['SGD'],
-            ['THB'],
-            ['TRY'],
-            ['USD'],
-            ['XDR'],
-            ['ZAR'],
-        ];
+        $currencies = (new \ReflectionClassConstant(DanishCentralBank::class, 'SUPPORTED_CURRENCIES'))->getValue();
+
+        return array_map(static fn(string $currency): array => [$currency], $currencies);
+    }
+
+    /**
+     * Creates an adapter mock for the StatBank endpoint, checking that the request
+     * is a POST with a JSON content type and the expected DNVALD query body.
+     *
+     * @return \Http\Client\HttpClient
+     */
+    private function getStatbankAdapterMock(string $content, string $currency, string $tid)
+    {
+        $expectedBody = $this->buildStatbankRequestBody($currency, $tid);
+
+        return $this->getHttpAdapterMock(
+            DanishCentralBank::STATBANK_URL,
+            $content,
+            200,
+            function (RequestInterface $request) use ($expectedBody): bool {
+                return 'POST' === $request->getMethod()
+                    && 'application/json' === $request->getHeaderLine('Content-Type')
+                    && $expectedBody === (string) $request->getBody();
+            }
+        );
+    }
+
+    /**
+     * Builds the JSON body the service is expected to post to StatBank.
+     */
+    private function buildStatbankRequestBody(string $currency, string $tid): string
+    {
+        return (string) json_encode([
+            'table' => 'DNVALD',
+            'format' => 'JSONSTAT',
+            'lang' => 'en',
+            'variables' => [
+                ['code' => 'VALUTA', 'values' => [$currency]],
+                ['code' => 'KURTYP', 'values' => ['KBH']],
+                ['code' => 'Tid', 'values' => [$tid]],
+            ],
+        ]);
     }
 
     /**
