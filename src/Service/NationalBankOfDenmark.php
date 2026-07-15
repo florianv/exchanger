@@ -23,11 +23,11 @@ use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
- * Danish Central Bank (Danmarks Nationalbank) Service.
+ * National Bank of Denmark (Danmarks Nationalbank) Service.
  *
  * All rates are published as DKK per 100 units of foreign currency.
  */
-final class DanishCentralBank extends HttpService
+final class NationalBankOfDenmark extends HttpService
 {
     use SupportsHistoricalQueries;
 
@@ -133,7 +133,7 @@ final class DanishCentralBank extends HttpService
     #[\Override]
     public function getName(): string
     {
-        return 'danish_central_bank';
+        return 'national_bank_of_denmark';
     }
 
     /**

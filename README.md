@@ -154,8 +154,8 @@ Exchanger ships 30+ exchange rate provider implementations. Each is registered i
 | Central Bank of the Czech Republic         | `central_bank_of_czech_republic`      | *              | CZK            | Yes        |
 | Central Bank of the Republic of Turkey     | `central_bank_of_republic_turkey`     | *              | TRY            | Yes        |
 | Central Bank of the Republic of Uzbekistan | `central_bank_of_republic_uzbekistan` | *              | UZS            | Yes        |
-| National Bank of Danmark                   | `danish_central_bank`                 | (limited list) | (limited list) | Yes        |
 | European Central Bank                      | `european_central_bank`               | EUR            | *              | Yes        |
+| National Bank of Denmark                   | `national_bank_of_denmark`            | (limited list) | (limited list) | Yes        |
 | National Bank of Georgia                   | `national_bank_of_georgia`            | *              | GEL            | Yes        |
 | National Bank of Romania                   | `national_bank_of_romania`            | (limited list) | (limited list) | Yes        |
 | National Bank of the Republic of Belarus   | `national_bank_of_republic_belarus`   | *              | BYN            | Yes        |

@@ -287,8 +287,8 @@ $service = new NationalBankOfRomania();
 | `central_bank_of_czech_republic`      | `Exchanger\Service\CentralBankOfCzechRepublic`      | *              | CZK            | Yes        |
 | `central_bank_of_republic_turkey`     | `Exchanger\Service\CentralBankOfRepublicTurkey`     | *              | TRY            | Yes        |
 | `central_bank_of_republic_uzbekistan` | `Exchanger\Service\CentralBankOfRepublicUzbekistan` | *              | UZS            | Yes        |
-| `danish_central_bank`                 | `Exchanger\Service\DanishCentralBank`               | (limited list) | (limited list) | Yes        |
 | `european_central_bank`               | `Exchanger\Service\EuropeanCentralBank`             | EUR            | *              | Yes        |
+| `national_bank_of_denmark`            | `Exchanger\Service\NationalBankOfDenmark`           | (limited list) | (limited list) | Yes        |
 | `national_bank_of_georgia`            | `Exchanger\Service\NationalBankOfGeorgia`           | *              | GEL            | Yes        |
 | `national_bank_of_romania`            | `Exchanger\Service\NationalBankOfRomania`           | (limited list) | (limited list) | Yes        |
 | `national_bank_of_republic_belarus`   | `Exchanger\Service\NationalBankOfRepublicBelarus`   | *              | BYN            | Yes        |
