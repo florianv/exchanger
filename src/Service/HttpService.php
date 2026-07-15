@@ -20,6 +20,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * Base class for http based services.
@@ -43,11 +44,19 @@ abstract class HttpService extends Service
     private $requestFactory;
 
     /**
+     * The stream factory.
+     *
+     * @var StreamFactoryInterface
+     */
+    private $streamFactory;
+
+    /**
      * @param HttpClient|ClientInterface|null $httpClient
      * @param RequestFactoryInterface|null    $requestFactory
      * @param array                           $options
+     * @param StreamFactoryInterface|null     $streamFactory
      */
-    public function __construct($httpClient = null, ?RequestFactoryInterface $requestFactory = null, array $options = [])
+    public function __construct($httpClient = null, ?RequestFactoryInterface $requestFactory = null, array $options = [], ?StreamFactoryInterface $streamFactory = null)
     {
         if (null === $httpClient) {
             $httpClient = Psr18ClientDiscovery::find();
@@ -59,6 +68,7 @@ abstract class HttpService extends Service
 
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory ?: Psr17FactoryDiscovery::findRequestFactory();
+        $this->streamFactory = $streamFactory ?: Psr17FactoryDiscovery::findStreamFactory();
 
         parent::__construct($options);
     }
@@ -81,7 +91,7 @@ abstract class HttpService extends Service
         $request = $request->withHeader('User-Agent', 'Swap');
 
         if (null !== $body) {
-            $request = $request->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($body));
+            $request = $request->withBody($this->streamFactory->createStream($body));
         }
 
         return $request;
