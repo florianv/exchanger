@@ -218,19 +218,9 @@
       <code><![CDATA[$rate]]></code>
       <code><![CDATA[1 / $rateValue]]></code>
     </InvalidOperand>
-    <PossiblyFalseArgument>
-      <code><![CDATA[strpos($content, '<')]]></code>
-    </PossiblyFalseArgument>
     <PossiblyInvalidOperand>
       <code><![CDATA[$rateValue]]></code>
     </PossiblyInvalidOperand>
-    <PossiblyNullArrayAccess>
-      <code><![CDATA[$element->xpath('//xmlns:PublishingDate')[0]]]></code>
-    </PossiblyNullArrayAccess>
-    <TypeDoesNotContainType>
-      <code><![CDATA[!$date]]></code>
-      <code><![CDATA[!$date]]></code>
-    </TypeDoesNotContainType>
   </file>
   <file src="src/Service/PhpArray.php">
     <InvalidCast>
