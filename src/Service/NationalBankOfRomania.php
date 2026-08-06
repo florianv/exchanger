@@ -78,21 +78,19 @@ final class NationalBankOfRomania extends HttpService
     #[\Override]
     public function getLatestExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
-        $content = $this->request(self::URL);
-
-        $element = StringUtil::xmlToElement($content);
-        $element->registerXPathNamespace('xmlns', 'http://www.bnr.ro/xsd');
+        $element = $this->parseXml($this->request(self::URL));
 
         $currencyPair = $exchangeQuery->getCurrencyPair();
-        $date = new \DateTime((string) $element->xpath('//xmlns:PublishingDate')[0]);
+        $publishingDates = $element->xpath('//xmlns:PublishingDate');
         $xmlCurrency = $this->getXmlCurrency($currencyPair);
 
         $elements = $element->xpath('//xmlns:Rate[@currency="' . $xmlCurrency . '"]');
 
-        if (empty($elements) || !$date) {
+        if (empty($elements) || empty($publishingDates)) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
+        $date = new \DateTime((string) $publishingDates[0]);
         $rateValue = $this->getRateValue($elements[0], $currencyPair);
 
         return $this->createRate($currencyPair, $rateValue, $date);
@@ -116,13 +114,7 @@ final class NationalBankOfRomania extends HttpService
         }
 
         $url = str_replace('{year}', $year, self::HISTORICAL_URL_TEMPLATE);
-        $content = $this->request($url);
-
-        // remove BOM from beginning of content
-        $content = substr($content, strpos($content, '<'));
-
-        $element = StringUtil::xmlToElement($content);
-        $element->registerXPathNamespace('xmlns', 'http://www.bnr.ro/xsd');
+        $element = $this->parseXml($this->request($url));
 
         $formattedDate = $date->format('Y-m-d');
         $xmlCurrency = $this->getXmlCurrency($currencyPair);
@@ -158,6 +150,28 @@ final class NationalBankOfRomania extends HttpService
     public function getName(): string
     {
         return 'national_bank_of_romania';
+    }
+
+    /**
+     * Parses the XML content, registering the "xmlns" XPath prefix with the namespace
+     * declared by the document: BNR changed it from "http://www.bnr.ro/xsd" to
+     * "https://www.bnr.ro/xsd", and hardcoding either would break the other.
+     *
+     * @param string $content
+     *
+     * @return \SimpleXMLElement
+     */
+    private function parseXml(string $content): \SimpleXMLElement
+    {
+        // skip any BOM or other leading noise before the XML declaration
+        $content = substr($content, (int) strpos($content, '<'));
+
+        $element = StringUtil::xmlToElement($content);
+
+        $namespaces = $element->getDocNamespaces() ?: [];
+        $element->registerXPathNamespace('xmlns', $namespaces[''] ?? 'https://www.bnr.ro/xsd');
+
+        return $element;
     }
 
     /**
