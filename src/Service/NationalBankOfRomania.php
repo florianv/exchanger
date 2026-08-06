@@ -163,14 +163,13 @@ final class NationalBankOfRomania extends HttpService
      */
     private function parseXml(string $content): \SimpleXMLElement
     {
-        // remove BOM from beginning of content
+        // skip any BOM or other leading noise before the XML declaration
         $content = substr($content, (int) strpos($content, '<'));
 
         $element = StringUtil::xmlToElement($content);
 
-        $namespaces = $element->getDocNamespaces();
-        $namespace = \is_array($namespaces) ? ($namespaces[''] ?? null) : null;
-        $element->registerXPathNamespace('xmlns', $namespace ?? 'https://www.bnr.ro/xsd');
+        $namespaces = $element->getDocNamespaces() ?: [];
+        $element->registerXPathNamespace('xmlns', $namespaces[''] ?? 'https://www.bnr.ro/xsd');
 
         return $element;
     }

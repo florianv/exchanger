@@ -90,7 +90,15 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/RON');
         $url = 'https://curs.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates_https_namespace.xml');
+        // Same fixture as it_fetches_a_rate(), with only the root namespace swapped
+        // to the URI BNR serves since 2026 — the one variable under test.
+        $content = str_replace(
+            'xmlns="http://www.bnr.ro/xsd"',
+            'xmlns="https://www.bnr.ro/xsd"',
+            file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml'),
+            $count,
+        );
+        $this->assertSame(1, $count);
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -124,7 +132,14 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/RON');
         $url = 'https://curs.bnr.ro/files/xml/years/nbrfxrates2018.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018_https_namespace.xml');
+        // Derived like in it_fetches_a_rate_when_the_document_uses_the_https_namespace().
+        $content = str_replace(
+            'xmlns="http://www.bnr.ro/xsd"',
+            'xmlns="https://www.bnr.ro/xsd"',
+            file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml'),
+            $count,
+        );
+        $this->assertSame(1, $count);
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(
