@@ -15,20 +15,11 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
  */
 final class Frankfurter extends HttpService
 {
-
-    private const BASE_URL = "https://api.frankfurter.dev/v1/";
-    private const SUPPORTED_CURRENCIES = [
-        'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EUR',
-        'GBP', 'HKD', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY',
-        'KRW', 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PLN', 'RON',
-        'SEK', 'SGD', 'THB', 'TRY', 'USD', 'ZAR'
-    ];
+    private const BASE_URL = "https://api.frankfurter.dev/v2/rates";
 
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
-        $currencyPair = $exchangeQuery->getCurrencyPair();
-        return in_array($currencyPair->getBaseCurrency(), self::SUPPORTED_CURRENCIES) &&
-               in_array($currencyPair->getQuoteCurrency(), self::SUPPORTED_CURRENCIES);
+        return true;
     }
 
     public function getName(): string
@@ -42,22 +33,21 @@ final class Frankfurter extends HttpService
         $base = $currencyPair->getBaseCurrency();
         $quote = $currencyPair->getQuoteCurrency();
 
+        $url = self::BASE_URL . "?base={$base}&quotes={$quote}";
+
         if ($exchangeQuery instanceof HistoricalExchangeRateQueryContract) {
-            $date = $exchangeQuery->getDate()->format('Y-m-d');
-            $url = self::BASE_URL . "{$date}?base={$base}&symbols={$quote}";
-        } else {
-            $url = self::BASE_URL . "latest?base={$base}&symbols={$quote}";
+            $url .= '&date=' . $exchangeQuery->getDate()->format('Y-m-d');
         }
 
         $content = $this->request($url);
         $data = json_decode($content, true);
 
-        if (!isset($data['rates'][$quote])) {
+        if (!isset($data[0]['rate'])) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
-        $rate = (float)$data['rates'][$quote];
-        $date = new \DateTime($data['date']);
+        $rate = (float)$data[0]['rate'];
+        $date = new \DateTime($data[0]['date']);
 
         return $this->createRate($currencyPair, $rate, $date);
     }
