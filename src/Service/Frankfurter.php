@@ -17,16 +17,19 @@ final class Frankfurter extends HttpService
 {
     private const BASE_URL = "https://api.frankfurter.dev/v2/rates";
 
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return true;
     }
 
+    #[\Override]
     public function getName(): string
     {
         return 'frankfurter';
     }
 
+    #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
