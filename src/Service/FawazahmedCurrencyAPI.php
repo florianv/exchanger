@@ -18,6 +18,7 @@ final class FawazahmedCurrencyAPI extends HttpService
 {
     public const URL_TEMPLATE = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@%s/v1/currencies/%s.min.json";
 
+    #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
     {
         $currencyPair = $exchangeQuery->getCurrencyPair();
@@ -44,11 +45,13 @@ final class FawazahmedCurrencyAPI extends HttpService
         return $this->createRate($currencyPair, $rate, $date);
     }
 
+    #[\Override]
     public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
     {
         return !($exchangeQuery instanceof HistoricalExchangeRateQuery && $exchangeQuery->getDate() < new \DateTime('2025-01-01'));
     }
 
+    #[\Override]
     public function getName(): string
     {
         return "fawazahmed_currency_api";
