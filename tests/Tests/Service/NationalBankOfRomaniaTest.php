@@ -86,11 +86,60 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     }
 
     #[Test]
+    public function it_fetches_a_rate_when_the_document_uses_the_https_namespace(): void
+    {
+        $pair = CurrencyPair::createFromString('EUR/RON');
+        $url = 'https://curs.bnr.ro/nbrfxrates.xml';
+        // Same fixture as it_fetches_a_rate(), with only the root namespace swapped
+        // to the URI BNR serves since 2026 — the one variable under test.
+        $content = str_replace(
+            'xmlns="http://www.bnr.ro/xsd"',
+            'xmlns="https://www.bnr.ro/xsd"',
+            file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml'),
+            $count,
+        );
+        $this->assertSame(1, $count);
+
+        $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
+        $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
+
+        $this->assertSame(4.5125, $rate->getValue());
+        $this->assertEquals(new \DateTime('2016-12-02'), $rate->getDate());
+        $this->assertEquals('national_bank_of_romania', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    #[Test]
     public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/RON');
         $url = 'https://curs.bnr.ro/files/xml/years/nbrfxrates2018.xml';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
+
+        $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
+        $rate = $service->getExchangeRate(
+            new HistoricalExchangeRateQuery($pair, new \DateTime('2018-02-02')),
+        );
+
+        $this->assertSame(4.6526, $rate->getValue());
+        $this->assertEquals(new \DateTime('2018-02-02'), $rate->getDate());
+        $this->assertEquals('national_bank_of_romania', $rate->getProviderName());
+        $this->assertSame($pair, $rate->getCurrencyPair());
+    }
+
+    #[Test]
+    public function it_fetches_a_historical_rate_when_the_document_uses_the_https_namespace(): void
+    {
+        $pair = CurrencyPair::createFromString('EUR/RON');
+        $url = 'https://curs.bnr.ro/files/xml/years/nbrfxrates2018.xml';
+        // Derived like in it_fetches_a_rate_when_the_document_uses_the_https_namespace().
+        $content = str_replace(
+            'xmlns="http://www.bnr.ro/xsd"',
+            'xmlns="https://www.bnr.ro/xsd"',
+            file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml'),
+            $count,
+        );
+        $this->assertSame(1, $count);
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(
