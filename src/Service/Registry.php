@@ -40,6 +40,7 @@ final class Registry
             'fixer_apilayer' => FixerApiLayer::class,
             'forge' => Forge::class,
             'national_bank_of_georgia' => NationalBankOfGeorgia::class,
+            'narodowy_bank_polski' => NationalBankOfPoland::class,
             'national_bank_of_republic_belarus' => NationalBankOfRepublicBelarus::class,
             'national_bank_of_romania' => NationalBankOfRomania::class,
             'national_bank_of_ukraine' => NationalBankOfUkraine::class,

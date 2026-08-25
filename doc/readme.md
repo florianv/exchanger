@@ -393,6 +393,7 @@ use Exchanger\Service\CentralBankOfRepublicTurkey;
 use Exchanger\Service\CurrencyDataFeed;
 use Exchanger\Service\EuropeanCentralBank;
 use Exchanger\Service\ExchangeRatesApi;
+use Exchanger\Service\NationalBankOfPoland;
 use Exchanger\Service\NationalBankOfRomania;
 use Exchanger\Service\OpenExchangeRates;
 use Exchanger\Service\PhpArray;
@@ -419,6 +420,7 @@ $service = new Chain([
     new CurrencyLayer($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new ExchangeRatesApi($client, null, ['access_key' => 'access_key', 'enterprise' => false]),
     new EuropeanCentralBank(),
+    new NationalBankOfPoland($client, null, ['table' => 'a']),
     new NationalBankOfRomania(),
     new CentralBankOfRepublicTurkey(),
     new CentralBankOfCzechRepublic(),
