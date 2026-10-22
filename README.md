@@ -129,6 +129,7 @@ Exchanger ships 30+ exchange rate provider implementations. Each is registered i
 | ⭐ **[fastFOREX](https://www.fastforex.io)** | **`fastforex`** | **\***                   | **\*** | **Yes**    |
 |                                          |                 |                          |        |            |
 | AbstractAPI                              | `abstract_api`                 | *                    | *     | Yes        |
+| AllRatesToday                            | `allratestoday`                | *                    | *     | No         |
 | coinlayer                                | `coin_layer`                   | * (crypto)           | *     | Yes        |
 | Cryptonator                              | `cryptonator`                  | * (crypto)           | * (crypto) | No    |
 | Currency Converter API                   | `currency_converter`           | *                    | *     | Yes        |
