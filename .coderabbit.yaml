@@ -1,0 +1,71 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# Repository review rules live in .github/skills/code-review/SKILL.md,
+# which CodeRabbit auto-discovers; keep them there, not here.
+language: en-US
+
+reviews:
+  # Inline comments only for important findings; minor ones are grouped in the review summary.
+  profile: quiet
+  # Keep the PR description untouched and the walkthrough comment minimal.
+  high_level_summary: false
+  review_status: false
+  changed_files_summary: false
+  sequence_diagrams: false
+  estimate_code_review_effort: false
+  assess_linked_issues: false
+  related_issues: false
+  related_prs: false
+  suggested_labels: false
+  suggested_reviewers: false
+  in_progress_fortune: false
+  auto_review:
+    enabled: true
+    drafts: false
+    # Review once per PR; re-run with `@coderabbitai review` after follow-up pushes.
+    auto_incremental_review: false
+  path_filters:
+    - "!psalm-baseline.xml"
+    - "!composer.lock"
+  path_instructions:
+    - path: "src/Service/**/*.php"
+      instructions: |
+        - Transport failures (non-200 status, empty, HTML or plain-text bodies, malformed JSON) must not surface as UnsupportedCurrencyPairException; that exception means the provider answered and does not support the pair.
+        - Out-of-range or unavailable dates must throw UnsupportedDateException, not UnsupportedCurrencyPairException.
+        - Historical support goes through the SupportsHistoricalQueries trait and Exchanger\Contract\HistoricalExchangeRateQuery, never an instanceof check on the concrete Exchanger\HistoricalExchangeRateQuery.
+        - Required options (api_key, ...) must be validated in processOptions().
+    - path: "src/Service/Registry.php"
+      instructions: |
+        - New identifiers are snake_case of the class name (unirate_api, national_bank_of_denmark). Identifiers are public API; renaming after a release breaks user configs.
+    - path: "tests/Tests/Service/**/*.php"
+      instructions: |
+        - Tests use the #[Test] attribute; a `/** @test */` docblock runs zero tests on PHPUnit 12.
+        - Every error branch of the service needs a test that can only pass through that branch (assert the message or the exact exception class, not just Exception).
+  pre_merge_checks:
+    docstrings:
+      mode: "off"
+    title:
+      mode: "off"
+    description:
+      mode: "off"
+    issue_assessment:
+      mode: "off"
+  finishing_touches:
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: false
+    autofix:
+      enabled: false
+  tools:
+    # Types are enforced by Psalm in CI; style by php-cs-fixer (`composer cs:check`).
+    phpstan:
+      enabled: false
+    phpcs:
+      enabled: false
+    phpmd:
+      enabled: false
+    languagetool:
+      enabled: false
+
+chat:
+  art: false
