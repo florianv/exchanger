@@ -405,15 +405,6 @@ class ConstantService extends HttpService
 
 ## ❓ FAQ
 
-#### Which exceptions can `getExchangeRate()` throw?
-
-- `Exchanger\Exception\Exception` when no rate can be provided. Catch a subclass to learn why: `UnsupportedCurrencyPairException`, `UnsupportedDateException`, `UnsupportedExchangeQueryException` (the service does not support the query), `ChainException` (every service in a `Chain` failed) or `CacheException`.
-- `Psr\Http\Client\ClientExceptionInterface` when the HTTP request to a provider fails.
-- `RuntimeException` when a provider's response cannot be parsed.
-- `Psr\SimpleCache\InvalidArgumentException` when your PSR-16 cache rejects the cache key.
-
-A `Chain` catches all of these from its services and reports them together in a `ChainException`.
-
 #### What happens when every service in the chain fails?
 
 The `Chain` throws an `Exchanger\Exception\ChainException`. Calling `$exception->getExceptions()` on it returns the list of exceptions collected from each service in the chain.
