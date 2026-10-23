@@ -25,14 +25,14 @@ final class ExchangeRateQueryBuilder
     /**
      * The currency pair.
      *
-     * @var CurrencyPair
+     * @var \Exchanger\Contract\CurrencyPair
      */
     private $currencyPair;
 
     /**
      * The date.
      *
-     * @var \DateTime
+     * @var \DateTimeInterface|null
      */
     private $date;
 

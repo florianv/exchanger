@@ -15,6 +15,7 @@ namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
+use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\StringUtil;
@@ -47,11 +48,17 @@ final class EuropeanCentralBank extends HttpService
 
         $quoteCurrency = $currencyPair->getQuoteCurrency();
         $elements = $element->xpath('//xmlns:Cube[@currency="' . $quoteCurrency . '"]/@rate');
-        $date = new \DateTime((string) $element->xpath('//xmlns:Cube[@time]/@time')[0]);
+        $dates = $element->xpath('//xmlns:Cube[@time]/@time');
 
-        if (empty($elements) || !$date) {
+        if (empty($dates)) {
+            throw new Exception('The response of the European Central Bank has no rate date.');
+        }
+
+        if (empty($elements)) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
+
+        $date = new \DateTime((string) $dates[0]);
 
         return $this->createRate($currencyPair, (float) ($elements[0]['rate']), $date);
     }

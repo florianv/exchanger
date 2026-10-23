@@ -215,7 +215,7 @@ class NationalBankOfRepublicBelarus extends HttpService
             throw new \RuntimeException('Service has returned malformed response');
         }
 
-        $date = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s', $entry['Date'] ?? null);
+        $date = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s', $entry['Date'] ?? '');
         $requestedDate ??= new \DateTimeImmutable();
         if (!$date || $date->format('Y-m-d') !== $requestedDate->format('Y-m-d')) {
             throw new UnsupportedDateException($requestedDate, $this);

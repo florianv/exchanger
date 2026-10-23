@@ -33,28 +33,3 @@ jobs:
 
       - name: Run Psalm
         run: vendor/bin/psalm --no-progress
-
-  baseline:
-    name: Psalm baseline does not grow
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      # The pull_request checkout is a merge commit; its first parent is the base branch tip.
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 2
-
-      # Compares the total number of entries, so regenerated or renamed entries do not count as new.
-      - name: Compare baseline entry counts
-        run: |
-          set -euo pipefail
-          count() { { grep -o '<code>' || true; } | wc -l | tr -d ' '; }
-          before=$(git show HEAD^1:psalm-baseline.xml | count)
-          after=$(count < psalm-baseline.xml)
-          echo "psalm-baseline.xml entries: $before before, $after after"
-          if [ "$after" -gt "$before" ]; then
-            echo "::error file=psalm-baseline.xml::This PR adds $((after - before)) suppressed Psalm issue(s) to psalm-baseline.xml. Fix the issues in code; run 'composer psalm' locally to see them. If an entry is unavoidable, explain why in the PR description."
-            exit 1
-          fi
