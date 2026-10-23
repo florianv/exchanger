@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\ExchangeRateService;
 use Exchanger\CurrencyPair;
@@ -22,38 +23,21 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\AllRatesToday;
 use Exchanger\Tests\FileContents;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 
 final class AllRatesTodayTest extends HttpServiceContractTestCase
 {
-    #[Test]
-    public function it_throws_an_exception_when_api_key_option_missing(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('api_key');
-
-        new AllRatesToday($this->createStub(ClientInterface::class));
-    }
-
-    #[Test]
-    public function it_does_not_support_historical_queries(): void
-    {
-        $service = new AllRatesToday($this->createStub(ClientInterface::class), null, ['api_key' => 'secret']);
-
-        $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
-        $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), new \DateTime())));
-    }
+    private const URL = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
 
     #[Test]
     public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
-        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/AllRatesToday/rate-usd-eur.json');
         $service = new AllRatesToday(
-            $this->getHttpAdapterMock($url, $content, 200, function (RequestInterface $request): bool {
+            $this->getHttpAdapterMock(self::URL, $this->fixture('rate-usd-eur'), 200, function (RequestInterface $request): bool {
                 return $request->getHeaderLine('Authorization') === 'Bearer secret';
             }),
             null,
@@ -62,27 +46,47 @@ final class AllRatesTodayTest extends HttpServiceContractTestCase
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
-        $this->assertSame(0.85, $rate->getValue());
-        $this->assertSame('2026-10-22', $rate->getDate()->format('Y-m-d'));
-        $this->assertSame('allratestoday', $rate->getProviderName());
+        $this->assertSame(0.9215, $rate->getValue());
+        $this->assertSame('2026-04-03T12:00:00+00:00', $rate->getDate()->format(\DATE_ATOM));
+        $this->assertSame('all_rates_today', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
 
     #[Test]
-    public function it_throws_an_exception_when_response_has_error_field(): void
+    public function it_picks_the_row_of_the_requested_pair(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Invalid API key');
+        $body = '[{"rate":0.79,"source":"USD","target":"GBP","time":"2026-04-03T12:00:00Z"},'
+            . '{"rate":0.9215,"source":"USD","target":"EUR","time":"2026-04-03T12:00:00Z"}]';
 
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
-        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/AllRatesToday/error-invalid-key.json');
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, $content, 401), null, ['api_key' => 'secret']);
-
-        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $this->assertSame(0.9215, $this->fetch($body)->getValue());
     }
 
     #[Test]
-    public function it_throws_an_exception_when_api_key_option_is_blank(): void
+    public function it_sends_uppercase_currency_codes(): void
+    {
+        $service = new AllRatesToday($this->getHttpAdapterMock(self::URL, $this->fixture('rate-usd-eur')), null, ['api_key' => 'secret']);
+
+        $rate = $service->getExchangeRate(new ExchangeRateQuery(new CurrencyPair('usd', 'eur')));
+
+        $this->assertSame(0.9215, $rate->getValue());
+    }
+
+    #[Test]
+    public function it_trims_the_api_key(): void
+    {
+        $service = new AllRatesToday(
+            $this->getHttpAdapterMock(self::URL, $this->fixture('rate-usd-eur'), 200, function (RequestInterface $request): bool {
+                return $request->getHeaderLine('Authorization') === 'Bearer secret';
+            }),
+            null,
+            ['api_key' => "secret\n"],
+        );
+
+        $this->assertSame(0.9215, $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')))->getValue());
+    }
+
+    #[Test]
+    public function it_rejects_a_blank_api_key(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('api_key');
@@ -91,43 +95,30 @@ final class AllRatesTodayTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_trims_the_api_key(): void
-    {
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
-        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/AllRatesToday/rate-usd-eur.json');
-        $service = new AllRatesToday(
-            $this->getHttpAdapterMock($url, $content, 200, function (RequestInterface $request): bool {
-                return $request->getHeaderLine('Authorization') === 'Bearer secret';
-            }),
-            null,
-            ['api_key' => "secret\n"],
-        );
-
-        $this->assertSame(0.85, $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')))->getValue());
-    }
-
-    #[Test]
-    public function it_matches_the_quote_currency_case_insensitively(): void
-    {
-        $url = 'https://allratestoday.com/api/v1/rates?source=usd&target=eur';
-        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/AllRatesToday/rate-usd-eur.json');
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
-
-        $rate = $service->getExchangeRate(new ExchangeRateQuery(new CurrencyPair('usd', 'eur')));
-
-        $this->assertSame(0.85, $rate->getValue());
-    }
-
-    #[Test]
-    public function it_throws_an_exception_when_response_status_error(): void
+    public function it_reports_the_api_error_message_with_the_status_code(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Failed with HTTP response code 503');
+        $this->expectExceptionMessage('Authentication required. Provide an API key via Authorization header or log in. (HTTP response code 401)');
 
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, '{"message":"x"}', 503), null, ['api_key' => 'secret']);
+        $this->fetch($this->fixture('error-authentication-required'), 401);
+    }
 
-        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+    #[Test]
+    public function it_reports_the_request_limit_as_a_service_error(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Request limit exceeded (HTTP response code 429)');
+
+        $this->fetch($this->fixture('error-request-limit-exceeded'), 429);
+    }
+
+    #[Test]
+    public function it_reports_an_error_field_in_a_200_response(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Quota exceeded');
+
+        $this->fetch('{"error":"Quota exceeded"}');
     }
 
     #[Test]
@@ -136,86 +127,59 @@ final class AllRatesTodayTest extends HttpServiceContractTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Failed to parse response (HTTP response code 502)');
 
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, '<html>Bad Gateway</html>', 502), null, ['api_key' => 'secret']);
-
-        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+        $this->fetch('<html>Bad Gateway</html>', 502);
     }
 
     #[Test]
-    public function it_throws_an_exception_when_a_200_response_has_an_error_field(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Quota exceeded');
-
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, '{"error":"Quota exceeded"}'), null, ['api_key' => 'secret']);
-
-        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
-    }
-
-    #[Test]
-    public function it_throws_an_exception_when_a_200_response_is_empty(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Failed to parse response (HTTP response code 200)');
-
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, ''), null, ['api_key' => 'secret']);
-
-        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
-    }
-
-    #[Test]
-    public function it_throws_an_unsupported_currency_pair_exception_on_http_400(): void
+    public function it_reports_http_400_as_an_unsupported_pair(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
         $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=XYZ';
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, '{"error":"Upstream API error: 400"}', 400), null, ['api_key' => 'secret']);
+        $service = new AllRatesToday($this->getHttpAdapterMock($url, '{"error":"Bad Request"}', 400), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/XYZ')));
     }
 
     #[Test]
-    public function it_throws_an_exception_when_quote_currency_missing(): void
+    public function it_reports_an_empty_list_as_an_unsupported_pair(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=ZZZ';
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, '[]'), null, ['api_key' => 'secret']);
-
-        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/ZZZ')));
+        $this->fetch('[]');
     }
 
     #[Test]
-    public function it_throws_an_unsupported_currency_pair_exception_when_rate_is_not_numeric(): void
+    public function it_does_not_return_a_rate_for_another_base_currency(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, '[{"source":"USD","target":"EUR","rate":"n/a"}]'), null, ['api_key' => 'secret']);
+        $this->fetch('[{"rate":1.08,"source":"GBP","target":"EUR","time":"2026-04-03T12:00:00Z"}]');
+    }
 
-        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function provideMalformedRows(): iterable
+    {
+        yield 'object instead of a list' => ['{"message":"maintenance"}'];
+        yield 'rows wrapped in an object' => ['{"data":[{"rate":0.9215,"source":"USD","target":"EUR","time":"2026-04-03T12:00:00Z"}]}'];
+        yield 'row without currency codes' => ['[{"rate":0.9215,"time":"2026-04-03T12:00:00Z"}]'];
+        yield 'non-numeric rate' => ['[{"rate":"n/a","source":"USD","target":"EUR","time":"2026-04-03T12:00:00Z"}]'];
+        yield 'null rate' => ['[{"rate":null,"source":"USD","target":"EUR","time":"2026-04-03T12:00:00Z"}]'];
+        yield 'zero rate' => ['[{"rate":0,"source":"USD","target":"EUR","time":"2026-04-03T12:00:00Z"}]'];
+        yield 'missing time' => ['[{"rate":0.9215,"source":"USD","target":"EUR"}]'];
+        yield 'invalid time' => ['[{"rate":0.9215,"source":"USD","target":"EUR","time":"not a date"}]'];
     }
 
     #[Test]
-    public function it_throws_an_unsupported_currency_pair_exception_when_rate_is_zero(): void
+    #[DataProvider('provideMalformedRows')]
+    public function it_reports_malformed_rows_as_service_errors(string $body): void
     {
-        $this->expectException(UnsupportedCurrencyPairException::class);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unexpected response');
 
-        $url = 'https://allratestoday.com/api/v1/rates?source=USD&target=EUR';
-        $service = new AllRatesToday($this->getHttpAdapterMock($url, '[{"source":"USD","target":"EUR","rate":0}]'), null, ['api_key' => 'secret']);
-
-        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
-    }
-
-    #[Test]
-    public function it_has_a_name(): void
-    {
-        $service = new AllRatesToday($this->createStub(ClientInterface::class), null, ['api_key' => 'secret']);
-
-        $this->assertSame('allratestoday', $service->getName());
+        $this->fetch($body);
     }
 
     #[\Override]
@@ -251,6 +215,18 @@ final class AllRatesTodayTest extends HttpServiceContractTestCase
     #[\Override]
     protected function successfulResponseBody(): string
     {
-        return FileContents::read(__DIR__ . '/../../Fixtures/Service/AllRatesToday/rate-usd-eur.json');
+        return $this->fixture('rate-usd-eur');
+    }
+
+    private function fetch(string $body, int $statusCode = 200): ExchangeRateContract
+    {
+        $service = new AllRatesToday($this->getHttpAdapterMock(self::URL, $body, $statusCode), null, ['api_key' => 'secret']);
+
+        return $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+    }
+
+    private function fixture(string $name): string
+    {
+        return FileContents::read(__DIR__ . '/../../Fixtures/Service/AllRatesToday/' . $name . '.json');
     }
 }
