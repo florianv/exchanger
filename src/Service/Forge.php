@@ -44,7 +44,13 @@ final class Forge extends HttpService
         return !$exchangeQuery instanceof HistoricalExchangeRateQuery;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     *
+     * Renaming $exchangeRateQuery to match the interface would break callers using named arguments; do it in 3.0.
+     *
+     * @psalm-suppress ParamNameMismatch
+     */
     #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeRateQuery): ExchangeRateContract
     {
