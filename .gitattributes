@@ -9,3 +9,4 @@
 .php_cs.dist export-ignore
 psalm.xml export-ignore
 phpunit.xml.dist export-ignore
+CONTRIBUTING.md export-ignore
