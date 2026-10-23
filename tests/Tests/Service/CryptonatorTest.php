@@ -18,13 +18,13 @@ use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\Cryptonator;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class CryptonatorTest extends ServiceTestCase
+final class CryptonatorTest extends ServiceTestCase
 {
     #[Test]
-    public function it_throws_an_exception_when_rate_not_supported()
+    public function it_throws_an_exception_when_rate_not_supported(): void
     {
         $this->expectException(Exception::class);
         $uri = 'https://api.cryptonator.com/api/ticker/btc-isk';
@@ -35,7 +35,7 @@ class CryptonatorTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('BTC/USD');
         $url = 'https://api.cryptonator.com/api/ticker/btc-usd';
@@ -51,9 +51,9 @@ class CryptonatorTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new Cryptonator($this->createMock(HttpClient::class));
+        $service = new Cryptonator($this->createMock(ClientInterface::class));
 
         $this->assertSame('cryptonator', $service->getName());
     }

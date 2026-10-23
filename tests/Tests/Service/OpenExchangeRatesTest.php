@@ -20,30 +20,30 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\OpenExchangeRates;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class OpenExchangeRatesTest extends ServiceTestCase
+final class OpenExchangeRatesTest extends ServiceTestCase
 {
     #[Test]
-    public function it_throws_an_exception_if_app_id_option_missing()
+    public function it_throws_an_exception_if_app_id_option_missing(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "app_id" option must be provided.');
-        new OpenExchangeRates($this->createMock(HttpClient::class));
+        new OpenExchangeRates($this->createMock(ClientInterface::class));
     }
 
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new OpenExchangeRates($this->createMock(HttpClient::class), null, ['app_id' => 'secret']);
+        $service = new OpenExchangeRates($this->createMock(ClientInterface::class), null, ['app_id' => 'secret']);
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), new \DateTime())));
     }
 
     #[Test]
-    public function it_throws_an_exception_with_error_response()
+    public function it_throws_an_exception_with_error_response(): void
     {
         $this->expectException(Exception::class);
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&show_alternative=1';
@@ -54,7 +54,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_normal_mode()
+    public function it_fetches_a_rate_normal_mode(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&show_alternative=1';
@@ -72,7 +72,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_enterprise_mode()
+    public function it_fetches_a_rate_enterprise_mode(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&base=USD&symbols=EUR&show_alternative=1';
@@ -90,7 +90,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('USD/AED');
         $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&show_alternative=1';
@@ -111,7 +111,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_enterprise()
+    public function it_fetches_a_historical_rate_enterprise(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&base=USD&symbols=EUR&show_alternative=1';
@@ -132,7 +132,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_historical_date_is_not_supported()
+    public function it_throws_an_exception_when_historical_date_is_not_supported(): void
     {
         $this->expectException(Exception::class);
         $expectedExceptionMessage = 'Historical rates for the requested date are not available - please try a different date, or contact support@openexchangerates.org.';
@@ -149,7 +149,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
+    public function it_throws_an_exception_when_the_pair_is_not_supported_historical(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "USD/XXL" is not supported by the service "Exchanger\Service\OpenExchangeRates".';
@@ -166,9 +166,9 @@ class OpenExchangeRatesTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new OpenExchangeRates($this->createMock(HttpClient::class), null, ['app_id' => 'secret']);
+        $service = new OpenExchangeRates($this->createMock(ClientInterface::class), null, ['app_id' => 'secret']);
 
         $this->assertSame('open_exchange_rates', $service->getName());
     }

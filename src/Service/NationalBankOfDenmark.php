@@ -87,10 +87,10 @@ final class NationalBankOfDenmark extends HttpService
         $element = StringUtil::xmlToElement($content);
 
         $foreignCurrency = $this->getForeignCurrency($currencyPair);
-        $elements = $element->xpath('//currency[@code="' . $foreignCurrency . '"]/@rate');
-        $dates = $element->xpath('//dailyrates/@id');
+        $elements = StringUtil::xpath($element, '//currency[@code="' . $foreignCurrency . '"]/@rate');
+        $dates = StringUtil::xpath($element, '//dailyrates/@id');
 
-        if (empty($elements) || empty($dates)) {
+        if ([] === $elements || [] === $dates) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
@@ -156,10 +156,10 @@ final class NationalBankOfDenmark extends HttpService
         $formattedDate = $exchangeQuery->getDate()->format('Y-m-d');
         $foreignCurrency = $this->getForeignCurrency($currencyPair);
 
-        $elements = $element->xpath('//xmlns:Cube[@time="' . $formattedDate . '"]/xmlns:Cube[@currency="' . $foreignCurrency . '"]/@rate');
+        $elements = StringUtil::xpath($element, '//xmlns:Cube[@time="' . $formattedDate . '"]/xmlns:Cube[@currency="' . $foreignCurrency . '"]/@rate');
 
-        if (empty($elements)) {
-            if (empty($element->xpath('//xmlns:Cube[@time="' . $formattedDate . '"]'))) {
+        if ([] === $elements) {
+            if ([] === StringUtil::xpath($element, '//xmlns:Cube[@time="' . $formattedDate . '"]')) {
                 throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
             }
 

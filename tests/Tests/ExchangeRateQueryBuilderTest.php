@@ -19,17 +19,17 @@ use Exchanger\HistoricalExchangeRateQuery;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-class ExchangeRateQueryBuilderTest extends TestCase
+final class ExchangeRateQueryBuilderTest extends TestCase
 {
     #[Test]
-    public function it_builds_a_rate()
+    public function it_builds_a_rate(): void
     {
         $builder = new ExchangeRateQueryBuilder('EUR/USD');
         $this->assertInstanceOf(ExchangeRateQuery::class, $builder->build());
     }
 
     #[Test]
-    public function it_builds_an_historical_rate()
+    public function it_builds_an_historical_rate(): void
     {
         $builder = (new ExchangeRateQueryBuilder('EUR/USD'))
             ->setDate(new \DateTime());

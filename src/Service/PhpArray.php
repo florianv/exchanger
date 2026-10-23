@@ -125,7 +125,7 @@ final class PhpArray extends Service
      *
      * @throws \InvalidArgumentException
      */
-    private function validateRates(array $rates)
+    private function validateRates(array $rates): void
     {
         foreach ($rates as $rate) {
             if (!is_scalar($rate)) {
@@ -141,7 +141,7 @@ final class PhpArray extends Service
      *
      * @throws \InvalidArgumentException
      */
-    private function validateHistoricalRates(array $rates)
+    private function validateHistoricalRates(array $rates): void
     {
         foreach ($rates as $rate) {
             $this->validateRates($rate);

@@ -81,14 +81,14 @@ final class CentralBankOfRepublicTurkey extends HttpService
 
         $element = StringUtil::xmlToElement($content);
 
-        $dates = $element->xpath('//Tarih_Date/@Date');
+        $dates = StringUtil::xpath($element, '//Tarih_Date/@Date');
 
-        if (empty($dates)) {
+        if ([] === $dates) {
             throw new Exception('The response of the Central Bank of the Republic of Turkey has no rate date.');
         }
 
         $date = new \DateTime((string) $dates[0]);
-        $elements = $element->xpath('//Currency[@CurrencyCode="' . $currencyPair->getBaseCurrency() . '"]');
+        $elements = StringUtil::xpath($element, '//Currency[@CurrencyCode="' . $currencyPair->getBaseCurrency() . '"]');
 
         $currency = $elements[0] ?? null;
 

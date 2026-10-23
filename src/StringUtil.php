@@ -44,6 +44,18 @@ final class StringUtil
     }
 
     /**
+     * Runs an XPath query, returning an empty list instead of false or null when nothing matches.
+     *
+     * @return list<\SimpleXMLElement>
+     */
+    public static function xpath(\SimpleXMLElement $element, string $expression): array
+    {
+        $result = $element->xpath($expression);
+
+        return \is_array($result) ? array_values($result) : [];
+    }
+
+    /**
      * Transforms a JSON string to an array.
      *
      * @throws \RuntimeException

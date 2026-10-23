@@ -19,22 +19,22 @@ use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\Forge;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class ForgeTest extends ServiceTestCase
+final class ForgeTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new Forge($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
+        $service = new Forge($this->createMock(ClientInterface::class), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     #[Test]
-    public function it_throws_an_exception_when_rate_not_supported()
+    public function it_throws_an_exception_when_rate_not_supported(): void
     {
         $this->expectException(Exception::class);
         $url = 'https://api.1forge.com/quotes?pairs=EUR/ZZZ&api_key=secret';
@@ -45,7 +45,7 @@ class ForgeTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $url = 'https://api.1forge.com/quotes?pairs=EUR/USD&api_key=secret';
@@ -61,7 +61,7 @@ class ForgeTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_when_response_symbol_matches()
+    public function it_fetches_a_rate_when_response_symbol_matches(): void
     {
         $pair = CurrencyPair::createFromString('EUR/HKD');
         $url = 'https://api.1forge.com/quotes?pairs=EUR/HKD&api_key=secret';
@@ -76,7 +76,7 @@ class ForgeTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_response_symbol_does_not_match()
+    public function it_throws_an_exception_when_response_symbol_does_not_match(): void
     {
         $this->expectException(Exception::class);
         $url = 'https://api.1forge.com/quotes?pairs=USD/AED&api_key=secret';
@@ -87,9 +87,9 @@ class ForgeTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new Forge($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
+        $service = new Forge($this->createMock(ClientInterface::class), null, ['api_key' => 'secret']);
 
         $this->assertSame('forge', $service->getName());
     }

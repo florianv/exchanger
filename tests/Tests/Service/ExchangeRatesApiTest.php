@@ -21,19 +21,19 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\ExchangeRatesApi;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
 /**
  * @author Arjan Westdorp <arjanwestdorp@gmail.com>
  */
-class ExchangeRatesApiTest extends ServiceTestCase
+final class ExchangeRatesApiTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_support_all_queries()
+    public function it_does_support_all_queries(): void
     {
         $service = new ExchangeRatesApi(
-            $this->createMock(HttpClient::class),
+            $this->createMock(ClientInterface::class),
             null,
             ['access_key' => 'x', 'enterprise' => false],
         );
@@ -41,17 +41,17 @@ class ExchangeRatesApiTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_supports_eur_base()
+    public function it_supports_eur_base(): void
     {
-        $service = new ExchangeRatesApi($this->createMock(HttpClient::class), null, ['access_key' => 'x']);
+        $service = new ExchangeRatesApi($this->createMock(ClientInterface::class), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CAD'))));
     }
 
     #[Test]
-    public function it_does_support_other_than_eur()
+    public function it_does_support_other_than_eur(): void
     {
         $service = new ExchangeRatesApi(
-            $this->createMock(HttpClient::class),
+            $this->createMock(ClientInterface::class),
             null,
             ['access_key' => 'x', 'enterprise' => true],
         );
@@ -68,7 +68,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         string $currencyPair,
         bool $historical = false,
         string $dateStr = '2020-04-15',
-    ) {
+    ): void {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
         $content = FileContents::read($contentPath);
@@ -129,7 +129,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
         string $message,
         bool $historical = false,
         string $dateStr = '2020-04-15',
-    ) {
+    ): void {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 
@@ -192,7 +192,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'https://api.exchangeratesapi.io/latest?base=EUR&access_key=x&symbols=USD';
@@ -212,7 +212,7 @@ class ExchangeRatesApiTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'https://api.exchangeratesapi.io/2021-04-15?base=EUR&access_key=x&symbols=USD';
@@ -233,9 +233,9 @@ class ExchangeRatesApiTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new ExchangeRatesApi($this->createMock(HttpClient::class), null, ['access_key' => 'x']);
+        $service = new ExchangeRatesApi($this->createMock(ClientInterface::class), null, ['access_key' => 'x']);
 
         $this->assertSame('exchange_rates_api', $service->getName());
     }

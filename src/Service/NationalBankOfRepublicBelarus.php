@@ -25,6 +25,10 @@ use Exchanger\StringUtil;
  * National Bank of the Republic of Belarus (NBRB) Service.
  *
  * @author Sergey Danilchenko <s.danilchenko@ttbooking.ru>
+ *
+ * Not final for backward compatibility; make it final in 3.0.
+ *
+ * @psalm-suppress ClassMustBeFinal
  */
 class NationalBankOfRepublicBelarus extends HttpService
 {
@@ -91,8 +95,8 @@ class NationalBankOfRepublicBelarus extends HttpService
                 $codes = self::getSupportedCodes(),
                 array_flip(array_keys(array_column($codes, 'Cur_Abbreviation'), $baseCurrency)),
             )),
-            static function ($periodicity, $entry) use ($date) {
-                if ($date) {
+            static function (int|false $periodicity, array $entry) use ($date): int|false {
+                if (null !== $date) {
                     $dateStart = new \DateTimeImmutable($entry['Cur_DateStart']);
                     $dateEnd = new \DateTimeImmutable($entry['Cur_DateEnd']);
                     if ($date < $dateStart || $date > $dateEnd) {
@@ -116,11 +120,11 @@ class NationalBankOfRepublicBelarus extends HttpService
      */
     private static function supportQuoteCurrency(string $quoteCurrency, ?\DateTimeInterface $date = null): bool
     {
-        if ($date) {
+        if (null !== $date) {
             $date = $date->format('Y-m-d');
         }
 
-        return $date
+        return null !== $date
             ? $quoteCurrency === 'BYN' && $date >= '2016-07-01'
                 || $quoteCurrency === 'BYR' && $date >= '2000-01-01' && $date < '2016-07-01'
                 || $quoteCurrency === 'BYB' && $date >= '1992-05-25' && $date < '2000-01-01'
@@ -221,7 +225,7 @@ class NationalBankOfRepublicBelarus extends HttpService
             throw new UnsupportedDateException($requestedDate, $this);
         }
 
-        $rate = (float) $entry['Cur_OfficialRate'];
+        $rate = $entry['Cur_OfficialRate'];
         $scale = (float) ($entry['Cur_Scale'] ?? 1);
 
         return $this->createRate($currencyPair, $rate / $scale, $date);

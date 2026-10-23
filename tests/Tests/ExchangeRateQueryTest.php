@@ -18,10 +18,10 @@ use Exchanger\CurrencyPair;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-class ExchangeRateQueryTest extends TestCase
+final class ExchangeRateQueryTest extends TestCase
 {
     #[Test]
-    public function it_serializes()
+    public function it_serializes(): void
     {
         $firstQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
         $secondQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));

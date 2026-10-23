@@ -20,31 +20,31 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\NationalBankOfRepublicBelarus;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class NationalBankOfRepublicBelarusTest extends ServiceTestCase
+final class NationalBankOfRepublicBelarusTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new NationalBankOfRepublicBelarus($this->createMock(HttpClient::class));
+        $service = new NationalBankOfRepublicBelarus($this->createMock(ClientInterface::class));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('BYN/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported()
+    public function it_throws_an_exception_when_the_pair_is_not_supported(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
-        $service = new NationalBankOfRepublicBelarus($this->createMock(HttpClient::class));
+        $service = new NationalBankOfRepublicBelarus($this->createMock(ClientInterface::class));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/BYN')));
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $url = 'https://www.nbrb.by/api/exrates/rates?periodicity=0';
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRepublicBelarus/nbrb_today.json');
@@ -62,7 +62,7 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $url = 'https://www.nbrb.by/api/exrates/rates?ondate=2020-03-07&periodicity=0';
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRepublicBelarus/nbrb_historical.json');
@@ -79,7 +79,7 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_historical_date_is_not_supported()
+    public function it_throws_an_exception_when_historical_date_is_not_supported(): void
     {
         $this->expectException(UnsupportedDateException::class);
         $this->expectExceptionMessage("The date \"1995-01-01\" is not supported by the service \"Exchanger\Service\NationalBankOfRepublicBelarus\".");
@@ -87,14 +87,14 @@ class NationalBankOfRepublicBelarusTest extends ServiceTestCase
         $currencyPair = CurrencyPair::createFromString('EUR/BYN');
         $requestedDate = new \DateTimeImmutable('1995-01-01');
 
-        $service = new NationalBankOfRepublicBelarus($this->createMock(HttpClient::class));
+        $service = new NationalBankOfRepublicBelarus($this->createMock(ClientInterface::class));
         $service->getExchangeRate(new HistoricalExchangeRateQuery($currencyPair, $requestedDate));
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new NationalBankOfRepublicBelarus($this->createMock(HttpClient::class));
+        $service = new NationalBankOfRepublicBelarus($this->createMock(ClientInterface::class));
 
         $this->assertSame('national_bank_of_republic_belarus', $service->getName());
     }

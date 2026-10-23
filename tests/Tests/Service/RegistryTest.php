@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-class RegistryTest extends TestCase
+final class RegistryTest extends TestCase
 {
     /**
      * Services that implement ExchangeRateService but are not providers.
@@ -30,7 +30,7 @@ class RegistryTest extends TestCase
     ];
 
     #[Test]
-    public function it_provides_all_services()
+    public function it_provides_all_services(): void
     {
         $missingServices = array_values(array_diff(self::findServiceClasses(), Registry::getServices(), self::NOT_REGISTERED));
 
@@ -41,7 +41,7 @@ class RegistryTest extends TestCase
     }
 
     #[Test]
-    public function it_uses_unique_identifiers_for_services()
+    public function it_uses_unique_identifiers_for_services(): void
     {
         $services = Registry::getServices();
         $duplicates = array_diff_key($services, array_unique($services));
@@ -54,7 +54,7 @@ class RegistryTest extends TestCase
 
     #[Test]
     #[DataProvider('provideRegisteredServices')]
-    public function it_uses_a_lowercase_snake_case_identifier(string $identifier, string $class)
+    public function it_uses_a_lowercase_snake_case_identifier(string $identifier, string $class): void
     {
         $this->assertMatchesRegularExpression('/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/', $identifier, \sprintf(
             'The registry identifier "%s" of %s must be lowercase snake_case, e.g. "national_bank_of_poland". Identifiers are public API, so choose it before the first release.',
@@ -68,7 +68,7 @@ class RegistryTest extends TestCase
      */
     #[Test]
     #[DataProvider('provideRegisteredServices')]
-    public function it_registers_each_service_under_its_name(string $identifier, string $class)
+    public function it_registers_each_service_under_its_name(string $identifier, string $class): void
     {
         $service = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
 

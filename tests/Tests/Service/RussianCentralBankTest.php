@@ -20,15 +20,15 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\RussianCentralBank;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class RussianCentralBankTest extends ServiceTestCase
+final class RussianCentralBankTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new RussianCentralBank($this->createMock(HttpClient::class));
+        $service = new RussianCentralBank($this->createMock(ClientInterface::class));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/RUB'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -36,7 +36,7 @@ class RussianCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported()
+    public function it_throws_an_exception_when_the_pair_is_not_supported(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "XXL/RUB" is not supported by the service "Exchanger\Service\RussianCentralBank".';
@@ -50,7 +50,7 @@ class RussianCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/RUB');
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp';
@@ -66,7 +66,7 @@ class RussianCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_nominational_rate()
+    public function it_fetches_a_nominational_rate(): void
     {
         $pair = CurrencyPair::createFromString('AMD/RUB');
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp';
@@ -82,7 +82,7 @@ class RussianCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('USD/RUB');
         $url = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=23.08.2016';
@@ -100,7 +100,7 @@ class RussianCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_historical_date_is_not_supported()
+    public function it_throws_an_exception_when_historical_date_is_not_supported(): void
     {
         $this->expectException(UnsupportedDateException::class);
         $expectedExceptionMessage = 'The date "1986-08-23" is not supported by the service "Exchanger\Service\RussianCentralBank".';
@@ -114,7 +114,7 @@ class RussianCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
+    public function it_throws_an_exception_when_the_pair_is_not_supported_historical(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "XXL/RUB" is not supported by the service "Exchanger\Service\RussianCentralBank".';
@@ -128,9 +128,9 @@ class RussianCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new RussianCentralBank($this->createMock(HttpClient::class));
+        $service = new RussianCentralBank($this->createMock(ClientInterface::class));
 
         $this->assertSame('russian_central_bank', $service->getName());
     }

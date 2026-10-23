@@ -110,7 +110,7 @@ final class ExchangerateHost extends HttpService
         return 'exchangeratehost';
     }
 
-    private function additionalQueryParameters(string $url, $exchangeRateQuery): string
+    private function additionalQueryParameters(string $url, ExchangeRateQuery $exchangeRateQuery): string
     {
         if (isset($this->options[self::OPTION_PLACES])) {
             $places = $this->options[self::OPTION_PLACES];

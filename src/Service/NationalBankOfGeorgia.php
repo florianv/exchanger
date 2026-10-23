@@ -90,7 +90,7 @@ final class NationalBankOfGeorgia extends HttpService
 
         $date = new DateTime((string) $element['date']);
 
-        $currencyInfo = array_values(array_filter($element['currencies'], function ($currency) use ($currencyPair) {
+        $currencyInfo = array_values(array_filter($element['currencies'], function (array $currency) use ($currencyPair): bool {
             return $currency['code'] === $currencyPair->getBaseCurrency();
         }));
         if (!empty($currencyInfo)) {

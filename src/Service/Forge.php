@@ -61,7 +61,9 @@ final class Forge extends HttpService
         $content = $this->request($url);
         $data = StringUtil::jsonToArray($content);
 
-        if ($result = reset($data)) {
+        $result = reset($data);
+
+        if (\is_array($result) && [] !== $result) {
             $date = new \DateTime();
 
             if (null !== $result['t']) {

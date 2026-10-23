@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Checks the conventions reviewers otherwise point out by hand on every new provider.
  */
-class RepositoryConventionsTest extends TestCase
+final class RepositoryConventionsTest extends TestCase
 {
     private const ROOT = __DIR__ . '/../..';
 
@@ -37,7 +37,7 @@ class RepositoryConventionsTest extends TestCase
 
     #[Test]
     #[DataProvider('provideRegisteredServiceClasses')]
-    public function it_has_a_test_for_each_service(string $class)
+    public function it_has_a_test_for_each_service(string $class): void
     {
         $relativePath = str_replace('\\', '/', substr($class, \strlen('Exchanger\\Service\\')));
 
@@ -46,7 +46,7 @@ class RepositoryConventionsTest extends TestCase
 
     #[Test]
     #[DataProvider('provideRegisteredServices')]
-    public function it_lists_each_service_in_the_readme(string $identifier, string $class)
+    public function it_lists_each_service_in_the_readme(string $identifier, string $class): void
     {
         if (isset(self::NOT_IN_README[$class])) {
             $this->markTestSkipped(self::NOT_IN_README[$class]);
@@ -61,7 +61,7 @@ class RepositoryConventionsTest extends TestCase
 
     #[Test]
     #[DataProvider('provideRegisteredServiceClasses')]
-    public function it_documents_each_service(string $class)
+    public function it_documents_each_service(string $class): void
     {
         $this->assertStringContainsString(
             '`' . $class . '`',
@@ -72,7 +72,7 @@ class RepositoryConventionsTest extends TestCase
 
     #[Test]
     #[DataProvider('providePhpFiles')]
-    public function it_has_the_licence_header(string $file)
+    public function it_has_the_licence_header(string $file): void
     {
         $this->assertStringContainsString(
             "/*\n * This file is part of Exchanger.\n",
@@ -83,7 +83,7 @@ class RepositoryConventionsTest extends TestCase
 
     #[Test]
     #[DataProvider('provideServiceFiles')]
-    public function it_depends_on_query_contracts_in_services(string $file)
+    public function it_depends_on_query_contracts_in_services(string $file): void
     {
         $this->assertDoesNotMatchRegularExpression(
             '/\bExchanger\\\\(?:Historical)?ExchangeRateQuery\b/',

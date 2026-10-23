@@ -24,10 +24,10 @@ use Exchanger\Service\PhpArray;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-class ChainTest extends TestCase
+final class ChainTest extends TestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
         // Supported
         $serviceOne = $this->createMock(ExchangeRateService::class);
@@ -69,7 +69,7 @@ class ChainTest extends TestCase
     }
 
     #[Test]
-    public function it_use_next_provider_in_the_chain()
+    public function it_use_next_provider_in_the_chain(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $query = new ExchangeRateQuery($pair);
@@ -119,7 +119,7 @@ class ChainTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_all_providers_fail()
+    public function it_throws_an_exception_when_all_providers_fail(): void
     {
         $exception = new Exception('Unsupported currency pair.');
         $serviceOne = $this->createMock(ExchangeRateService::class);
@@ -161,7 +161,7 @@ class ChainTest extends TestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
         $service = new Chain();
 
@@ -169,7 +169,7 @@ class ChainTest extends TestCase
     }
 
     #[Test]
-    public function it_can_convert_multiple_times()
+    public function it_can_convert_multiple_times(): void
     {
         $generator = function (): \Generator {
             $serviceOne = $this->createMock(ExchangeRateService::class);

@@ -81,12 +81,12 @@ final class NationalBankOfRomania extends HttpService
         $element = $this->parseXml($this->request(self::URL));
 
         $currencyPair = $exchangeQuery->getCurrencyPair();
-        $publishingDates = $element->xpath('//xmlns:PublishingDate');
+        $publishingDates = StringUtil::xpath($element, '//xmlns:PublishingDate');
         $xmlCurrency = $this->getXmlCurrency($currencyPair);
 
-        $elements = $element->xpath('//xmlns:Rate[@currency="' . $xmlCurrency . '"]');
+        $elements = StringUtil::xpath($element, '//xmlns:Rate[@currency="' . $xmlCurrency . '"]');
 
-        if (empty($elements) || empty($publishingDates)) {
+        if ([] === $elements || [] === $publishingDates) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
@@ -119,10 +119,10 @@ final class NationalBankOfRomania extends HttpService
         $formattedDate = $date->format('Y-m-d');
         $xmlCurrency = $this->getXmlCurrency($currencyPair);
 
-        $elements = $element->xpath('//xmlns:Cube[@date="' . $formattedDate . '"]/xmlns:Rate[@currency="' . $xmlCurrency . '"]');
+        $elements = StringUtil::xpath($element, '//xmlns:Cube[@date="' . $formattedDate . '"]/xmlns:Rate[@currency="' . $xmlCurrency . '"]');
 
-        if (empty($elements)) {
-            if (empty($element->xpath('//xmlns:Cube[@date="' . $formattedDate . '"]'))) {
+        if ([] === $elements) {
+            if ([] === StringUtil::xpath($element, '//xmlns:Cube[@date="' . $formattedDate . '"]')) {
                 throw new UnsupportedDateException($date, $this);
             }
 
@@ -168,8 +168,8 @@ final class NationalBankOfRomania extends HttpService
 
         $element = StringUtil::xmlToElement($content);
 
-        $namespaces = $element->getDocNamespaces() ?: [];
-        $element->registerXPathNamespace('xmlns', $namespaces[''] ?? 'https://www.bnr.ro/xsd');
+        $namespaces = $element->getDocNamespaces();
+        $element->registerXPathNamespace('xmlns', \is_array($namespaces) && isset($namespaces['']) ? $namespaces[''] : 'https://www.bnr.ro/xsd');
 
         return $element;
     }
@@ -195,7 +195,8 @@ final class NationalBankOfRomania extends HttpService
     private function getRateValue(\SimpleXMLElement $element, CurrencyPair $currencyPair): float
     {
         $rate = (float) (string) $element;
-        $rateValue = (!empty($element['multiplier'])) ? $rate / (float) $element['multiplier'] : $rate;
+        $multiplier = (float) (string) $element['multiplier'];
+        $rateValue = $multiplier > 0 ? $rate / $multiplier : $rate;
 
         if ('RON' === $currencyPair->getBaseCurrency()) {
             $rateValue = round(1.0 / $rateValue, 4);

@@ -19,10 +19,10 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\NationalBankOfGeorgia;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class NationalBankOfGeorgiaTest extends ServiceTestCase
+final class NationalBankOfGeorgiaTest extends ServiceTestCase
 {
     /** @var string $url */
     protected static $url;
@@ -63,7 +63,7 @@ class NationalBankOfGeorgiaTest extends ServiceTestCase
     /**
      * Create bank service.
      */
-    protected function createService()
+    protected function createService(): NationalBankOfGeorgia
     {
         return new NationalBankOfGeorgia($this->getHttpAdapterMock(self::$url, self::$content));
     }
@@ -71,22 +71,22 @@ class NationalBankOfGeorgiaTest extends ServiceTestCase
     /**
      * Create bank service for historical rates.
      */
-    protected function createServiceForHistoricalRates()
+    protected function createServiceForHistoricalRates(): NationalBankOfGeorgia
     {
         return new NationalBankOfGeorgia($this->getHttpAdapterMock(self::$historicalUrl, self::$historicalContent));
     }
 
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new NationalBankOfGeorgia($this->createMock(HttpClient::class));
+        $service = new NationalBankOfGeorgia($this->createMock(ClientInterface::class));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('GEL/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported()
+    public function it_throws_an_exception_when_the_pair_is_not_supported(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
@@ -95,7 +95,7 @@ class NationalBankOfGeorgiaTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/GEL');
         $service = $this->createService();
@@ -108,7 +108,7 @@ class NationalBankOfGeorgiaTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/GEL');
         $requestedDate = new \DateTime('2020-07-15');
@@ -122,7 +122,7 @@ class NationalBankOfGeorgiaTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_normalizes_a_rate()
+    public function it_normalizes_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('JPY/GEL');
         $service = $this->createService();
@@ -135,9 +135,9 @@ class NationalBankOfGeorgiaTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new NationalBankOfGeorgia($this->createMock(HttpClient::class));
+        $service = new NationalBankOfGeorgia($this->createMock(ClientInterface::class));
 
         $this->assertSame('national_bank_of_georgia', $service->getName());
     }

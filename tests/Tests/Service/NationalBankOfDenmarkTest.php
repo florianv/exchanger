@@ -19,7 +19,7 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\NationalBankOfDenmark;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -27,13 +27,13 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Exchanger\Tests\FileContents;
 
-class NationalBankOfDenmarkTest extends ServiceTestCase
+final class NationalBankOfDenmarkTest extends ServiceTestCase
 {
     #[Test]
     #[DataProvider('getSupportedCurrencies')]
     public function it_does_not_support_all_queries(string $currency): void
     {
-        $service = new NationalBankOfDenmark($this->createMock(HttpClient::class));
+        $service = new NationalBankOfDenmark($this->createMock(ClientInterface::class));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString($currency . '/DKK'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('DKK/' . $currency))));
@@ -196,7 +196,7 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name(): void
     {
-        $service = new NationalBankOfDenmark($this->createMock(HttpClient::class));
+        $service = new NationalBankOfDenmark($this->createMock(ClientInterface::class));
 
         $this->assertSame('national_bank_of_denmark', $service->getName());
     }
@@ -213,7 +213,7 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
      * Creates an adapter mock for the StatBank endpoint, checking that the request
      * is a POST with a JSON content type and the expected DNVALD query body.
      *
-     * @return \Http\Client\HttpClient
+     * @return \Psr\Http\Client\ClientInterface
      */
     private function getStatbankAdapterMock(string $content, string $currency, string $tid)
     {

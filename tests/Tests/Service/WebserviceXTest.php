@@ -18,22 +18,22 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\WebserviceX;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class WebserviceXTest extends ServiceTestCase
+final class WebserviceXTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new WebserviceX($this->createMock(HttpClient::class));
+        $service = new WebserviceX($this->createMock(ClientInterface::class));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'http://www.webservicex.net/currencyconvertor.asmx/ConversionRate?FromCurrency=EUR&ToCurrency=USD';
@@ -49,9 +49,9 @@ class WebserviceXTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new WebserviceX($this->createMock(HttpClient::class));
+        $service = new WebserviceX($this->createMock(ClientInterface::class));
 
         $this->assertSame('webservicex', $service->getName());
     }

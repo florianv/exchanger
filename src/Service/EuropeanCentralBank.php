@@ -47,14 +47,14 @@ final class EuropeanCentralBank extends HttpService
         $element->registerXPathNamespace('xmlns', 'http://www.ecb.int/vocabulary/2002-08-01/eurofxref');
 
         $quoteCurrency = $currencyPair->getQuoteCurrency();
-        $elements = $element->xpath('//xmlns:Cube[@currency="' . $quoteCurrency . '"]/@rate');
-        $dates = $element->xpath('//xmlns:Cube[@time]/@time');
+        $elements = StringUtil::xpath($element, '//xmlns:Cube[@currency="' . $quoteCurrency . '"]/@rate');
+        $dates = StringUtil::xpath($element, '//xmlns:Cube[@time]/@time');
 
-        if (empty($dates)) {
+        if ([] === $dates) {
             throw new Exception('The response of the European Central Bank has no rate date.');
         }
 
-        if (empty($elements)) {
+        if ([] === $elements) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
@@ -77,10 +77,10 @@ final class EuropeanCentralBank extends HttpService
         $formattedDate = $exchangeQuery->getDate()->format('Y-m-d');
         $quoteCurrency = $currencyPair->getQuoteCurrency();
 
-        $elements = $element->xpath('//xmlns:Cube[@time="' . $formattedDate . '"]/xmlns:Cube[@currency="' . $quoteCurrency . '"]/@rate');
+        $elements = StringUtil::xpath($element, '//xmlns:Cube[@time="' . $formattedDate . '"]/xmlns:Cube[@currency="' . $quoteCurrency . '"]/@rate');
 
-        if (empty($elements)) {
-            if (empty($element->xpath('//xmlns:Cube[@time="' . $formattedDate . '"]'))) {
+        if ([] === $elements) {
+            if ([] === StringUtil::xpath($element, '//xmlns:Cube[@time="' . $formattedDate . '"]')) {
                 throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
             }
 

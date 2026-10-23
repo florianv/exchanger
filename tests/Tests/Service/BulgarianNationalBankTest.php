@@ -20,17 +20,17 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\BulgarianNationalBank;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
 /**
  * @author Marin Bezhanov
  */
-class BulgarianNationalBankTest extends ServiceTestCase
+final class BulgarianNationalBankTest extends ServiceTestCase
 {
-    protected static $url;
+    protected static string $url = '';
 
-    protected static $historicalUrl;
+    protected static string $historicalUrl = '';
 
     #[\Override]
     public static function setUpBeforeClass(): void
@@ -40,9 +40,9 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new BulgarianNationalBank($this->createMock(HttpClient::class));
+        $service = new BulgarianNationalBank($this->createMock(ClientInterface::class));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/BGN'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -50,7 +50,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('USD/BGN');
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
@@ -65,7 +65,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_historical()
+    public function it_fetches_a_rate_historical(): void
     {
         $pair = CurrencyPair::createFromString('USD/BGN');
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
@@ -80,7 +80,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_with_ratio()
+    public function it_fetches_a_rate_with_ratio(): void
     {
         $pair = CurrencyPair::createFromString('IDR/BGN');
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
@@ -95,7 +95,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_with_ratio_historical()
+    public function it_fetches_a_rate_with_ratio_historical(): void
     {
         $pair = CurrencyPair::createFromString('IDR/BGN');
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/BulgarianNationalBank/success.xml');
@@ -110,7 +110,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_it_cannot_retrieve_an_xml_document_for_the_requested_date()
+    public function it_throws_an_exception_when_it_cannot_retrieve_an_xml_document_for_the_requested_date(): void
     {
         $this->expectException(UnsupportedDateException::class);
         $expectedExceptionMessage = 'The date "%s" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -124,7 +124,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_it_cannot_retrieve_an_xml_document_for_the_requested_date_historical()
+    public function it_throws_an_exception_when_it_cannot_retrieve_an_xml_document_for_the_requested_date_historical(): void
     {
         $this->expectException(UnsupportedDateException::class);
         $expectedExceptionMessage = 'The date "2019-02-01" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -138,7 +138,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported()
+    public function it_throws_an_exception_when_the_pair_is_not_supported(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "ABC/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -152,7 +152,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
+    public function it_throws_an_exception_when_the_pair_is_not_supported_historical(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "ABC/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -168,7 +168,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected()
+    public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected(): void
     {
         $this->expectException(UnsupportedDateException::class);
         $expectedExceptionMessage = 'The date "%s" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -182,7 +182,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected_historical()
+    public function it_throws_an_exception_when_the_date_field_for_the_pair_cannot_be_detected_historical(): void
     {
         $this->expectException(UnsupportedDateException::class);
         $expectedExceptionMessage = 'The date "2019-02-01" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -198,7 +198,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected()
+    public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "CAD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -212,7 +212,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected_historical()
+    public function it_throws_an_exception_when_the_ratio_field_for_the_pair_cannot_be_detected_historical(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "CAD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -228,7 +228,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected()
+    public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "USD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -242,7 +242,7 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected_historical()
+    public function it_throws_an_exception_when_the_rate_field_for_the_pair_cannot_be_detected_historical(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "USD/BGN" is not supported by the service "Exchanger\Service\BulgarianNationalBank".';
@@ -258,9 +258,9 @@ class BulgarianNationalBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new BulgarianNationalBank($this->createMock(HttpClient::class));
+        $service = new BulgarianNationalBank($this->createMock(ClientInterface::class));
 
         $this->assertSame('bulgarian_national_bank', $service->getName());
     }
