@@ -77,11 +77,13 @@ final class CentralBankOfRepublicTurkey extends HttpService
         $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
         $elements = $element->xpath('//Currency[@CurrencyCode="' . $currencyPair->getBaseCurrency() . '"]');
 
-        if (!empty($elements) || !$date) {
-            $rate = (float) $elements[0]->ForexSelling;
-            $unit = (int) $elements[0]->Unit ?? 1;
+        $currency = $elements[0] ?? null;
 
-            return $this->createRate($currencyPair, (float) ($rate / $unit), $date);
+        if (null !== $currency) {
+            $rate = (float) $currency->ForexSelling;
+            $unit = (float) $currency->Unit;
+
+            return $this->createRate($currencyPair, $rate / $unit, $date);
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);

@@ -93,7 +93,7 @@ final class CentralBankOfRepublicUzbekistan extends HttpService
         }));
         if (!empty($currencyInfo)) {
             $rate = (float) $currencyInfo[0]['Rate'];
-            $unit = (int) $currencyInfo[0]['Nominal'];
+            $unit = (float) $currencyInfo[0]['Nominal'];
 
             $date = new DateTime((string) $currencyInfo[0]['Date']);
 

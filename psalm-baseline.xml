@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="6.20.1@376425b8e67b79773add388e16b4f6be5693dc87">
-  <file src="src/Exception/UnsupportedCurrencyPairException.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getCurrencyPair]]></code>
-      <code><![CDATA[getService]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Exception/UnsupportedDateException.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getDate]]></code>
-      <code><![CDATA[getService]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Exception/UnsupportedExchangeQueryException.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getExchangeRateQuery]]></code>
-      <code><![CDATA[getService]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="src/ExchangeRateQueryBuilder.php">
     <PropertyTypeCoercion>
       <code><![CDATA[$date]]></code>
@@ -25,9 +7,6 @@
     </PropertyTypeCoercion>
   </file>
   <file src="src/Exchanger.php">
-    <PossiblyInvalidOperand>
-      <code><![CDATA[$cacheKeyPrefix]]></code>
-    </PossiblyInvalidOperand>
     <PossiblyNullPropertyAssignmentValue>
       <code><![CDATA[$cache]]></code>
     </PossiblyNullPropertyAssignmentValue>
@@ -45,56 +24,18 @@
       <code><![CDATA[$this->doCreateRate($url, $exchangeQuery->getCurrencyPair())]]></code>
     </NullableReturnStatement>
   </file>
-  <file src="src/Service/ApiLayer/Fixer.php">
-    <InvalidArrayOffset>
-      <code><![CDATA[$errors[$code]]]></code>
-    </InvalidArrayOffset>
-  </file>
-  <file src="src/Service/BulgarianNationalBank.php">
-    <InvalidOperand>
-      <code><![CDATA[$ratio]]></code>
-    </InvalidOperand>
-  </file>
   <file src="src/Service/CentralBankOfCzechRepublic.php">
-    <InvalidOperand>
-      <code><![CDATA[$rate / (int) $count]]></code>
-    </InvalidOperand>
     <PossiblyInvalidArrayAccess>
       <code><![CDATA[$words[0]]]></code>
     </PossiblyInvalidArrayAccess>
   </file>
   <file src="src/Service/CentralBankOfRepublicTurkey.php">
-    <InvalidOperand>
-      <code><![CDATA[$rate / $unit]]></code>
-    </InvalidOperand>
     <ParamNameMismatch>
       <code><![CDATA[$exchangeRateQuery]]></code>
     </ParamNameMismatch>
     <PossiblyNullArrayAccess>
       <code><![CDATA[$element->xpath('//Tarih_Date/@Date')[0]]]></code>
-      <code><![CDATA[$elements[0]]]></code>
     </PossiblyNullArrayAccess>
-    <PossiblyNullPropertyFetch>
-      <code><![CDATA[$elements[0]->ForexSelling]]></code>
-    </PossiblyNullPropertyFetch>
-    <RedundantCast>
-      <code><![CDATA[(float) ($rate / $unit)]]></code>
-    </RedundantCast>
-    <RedundantCondition>
-      <code><![CDATA[(int) $elements[0]->Unit]]></code>
-    </RedundantCondition>
-    <TypeDoesNotContainNull>
-      <code><![CDATA[1]]></code>
-    </TypeDoesNotContainNull>
-    <TypeDoesNotContainType>
-      <code><![CDATA[!$date]]></code>
-      <code><![CDATA[!$date]]></code>
-    </TypeDoesNotContainType>
-  </file>
-  <file src="src/Service/CentralBankOfRepublicUzbekistan.php">
-    <InvalidOperand>
-      <code><![CDATA[$rate / $unit]]></code>
-    </InvalidOperand>
   </file>
   <file src="src/Service/Chain.php">
     <PossiblyInvalidPropertyAssignmentValue>
@@ -102,9 +43,6 @@
     </PossiblyInvalidPropertyAssignmentValue>
   </file>
   <file src="src/Service/CoinLayer.php">
-    <InvalidArrayOffset>
-      <code><![CDATA[$errors[$code]]]></code>
-    </InvalidArrayOffset>
     <InvalidNullableReturnType>
       <code><![CDATA[ExchangeRateContract]]></code>
       <code><![CDATA[ExchangeRateContract]]></code>
@@ -129,9 +67,6 @@
     <ParamNameMismatch>
       <code><![CDATA[$exchangeRateQuery]]></code>
     </ParamNameMismatch>
-    <PossiblyFalseArgument>
-      <code><![CDATA[strtotime($data['currency'][0]['date'])]]></code>
-    </PossiblyFalseArgument>
   </file>
   <file src="src/Service/CurrencyLayer.php">
     <InvalidNullableReturnType>
@@ -155,48 +90,19 @@
       <code><![CDATA[!$date]]></code>
     </TypeDoesNotContainType>
   </file>
-  <file src="src/Service/Fixer.php">
-    <InvalidArrayOffset>
-      <code><![CDATA[$errors[$code]]]></code>
-    </InvalidArrayOffset>
-  </file>
   <file src="src/Service/Forge.php">
     <ParamNameMismatch>
       <code><![CDATA[$exchangeRateQuery]]></code>
     </ParamNameMismatch>
   </file>
-  <file src="src/Service/NationalBankOfGeorgia.php">
-    <InvalidOperand>
-      <code><![CDATA[$rate / $unit]]></code>
-    </InvalidOperand>
-  </file>
   <file src="src/Service/NationalBankOfRepublicBelarus.php">
-    <InvalidOperand>
-      <code><![CDATA[$rate / $scale]]></code>
-    </InvalidOperand>
-    <LessSpecificReturnStatement>
-      <code><![CDATA[$codes ??= StringUtil::jsonToArray(file_get_contents(__DIR__ . '/resources/nbrb-codes.json'))]]></code>
-    </LessSpecificReturnStatement>
-    <PossiblyFalseArgument>
-      <code><![CDATA[file_get_contents(__DIR__ . '/resources/nbrb-codes.json')]]></code>
-    </PossiblyFalseArgument>
     <PossiblyNullArgument>
       <code><![CDATA[$entry['Date'] ?? null]]></code>
     </PossiblyNullArgument>
   </file>
   <file src="src/Service/NationalBankOfRomania.php">
     <InvalidOperand>
-      <code><![CDATA[$rate]]></code>
       <code><![CDATA[1 / $rateValue]]></code>
-    </InvalidOperand>
-    <PossiblyInvalidOperand>
-      <code><![CDATA[$rateValue]]></code>
-    </PossiblyInvalidOperand>
-  </file>
-  <file src="src/Service/RussianCentralBank.php">
-    <InvalidOperand>
-      <code><![CDATA[$nominal]]></code>
-      <code><![CDATA[$rate]]></code>
     </InvalidOperand>
   </file>
 </files>

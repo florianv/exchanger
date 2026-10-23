@@ -60,6 +60,8 @@ final class UnsupportedDateException extends Exception
      * Gets the date.
      *
      * @return \DateTimeInterface
+     *
+     * @psalm-api
      */
     public function getDate(): \DateTimeInterface
     {
@@ -70,6 +72,8 @@ final class UnsupportedDateException extends Exception
      * Gets the service.
      *
      * @return ExchangeRateService
+     *
+     * @psalm-api
      */
     public function getService(): ExchangeRateService
     {

@@ -88,7 +88,7 @@ final class BulgarianNationalBank extends HttpService
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
-        return $this->createRate($currencyPair, (float) $rate / $ratio, $date);
+        return $this->createRate($currencyPair, (float) $rate / (float) $ratio, $date);
     }
 
     /**

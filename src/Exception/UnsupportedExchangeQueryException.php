@@ -59,6 +59,8 @@ final class UnsupportedExchangeQueryException extends Exception
      * Gets the unsupported exchange query.
      *
      * @return ExchangeRateQuery
+     *
+     * @psalm-api
      */
     public function getExchangeRateQuery(): ExchangeRateQuery
     {
@@ -69,6 +71,8 @@ final class UnsupportedExchangeQueryException extends Exception
      * Gets the service.
      *
      * @return ExchangeRateService
+     *
+     * @psalm-api
      */
     public function getService(): ExchangeRateService
     {

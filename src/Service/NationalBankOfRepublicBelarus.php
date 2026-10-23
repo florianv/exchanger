@@ -143,7 +143,18 @@ class NationalBankOfRepublicBelarus extends HttpService
     {
         static $codes;
 
-        return $codes ??= StringUtil::jsonToArray(file_get_contents(__DIR__ . '/resources/nbrb-codes.json'));
+        if (null === $codes) {
+            $json = file_get_contents(__DIR__ . '/resources/nbrb-codes.json');
+
+            if (false === $json) {
+                throw new \RuntimeException('Unable to read the bundled currency codes of the National Bank of the Republic of Belarus.');
+            }
+
+            /** @var list<array{Cur_Abbreviation: string, Cur_Periodicity: int, Cur_DateStart: string, Cur_DateEnd: string}> $codes */
+            $codes = StringUtil::jsonToArray($json);
+        }
+
+        return $codes;
     }
 
     /**
@@ -210,8 +221,8 @@ class NationalBankOfRepublicBelarus extends HttpService
             throw new UnsupportedDateException($requestedDate, $this);
         }
 
-        $rate = $entry['Cur_OfficialRate'];
-        $scale = $entry['Cur_Scale'] ?? 1;
+        $rate = (float) $entry['Cur_OfficialRate'];
+        $scale = (float) ($entry['Cur_Scale'] ?? 1);
 
         return $this->createRate($currencyPair, $rate / $scale, $date);
     }

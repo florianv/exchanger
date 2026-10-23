@@ -51,7 +51,7 @@ final class RussianCentralBank extends HttpService
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
         $nominal = str_replace(',', '.', (string) $elements['0']->Nominal);
 
-        return $this->createRate($currencyPair, (float) $rate / $nominal, $date);
+        return $this->createRate($currencyPair, (float) $rate / (float) $nominal, $date);
     }
 
     /** {@inheritdoc} */
@@ -79,7 +79,7 @@ final class RussianCentralBank extends HttpService
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
         $nominal = str_replace(',', '.', (string) $elements['0']->Nominal);
 
-        return $this->createRate($currencyPair, (float) ($rate / $nominal), $date);
+        return $this->createRate($currencyPair, (float) $rate / (float) $nominal, $date);
     }
 
     /** {@inheritdoc} */

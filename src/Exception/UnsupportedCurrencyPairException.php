@@ -61,6 +61,8 @@ final class UnsupportedCurrencyPairException extends Exception
      * Gets the unsupported currency pair.
      *
      * @return CurrencyPair
+     *
+     * @psalm-api
      */
     public function getCurrencyPair(): CurrencyPair
     {
@@ -71,6 +73,8 @@ final class UnsupportedCurrencyPairException extends Exception
      * Gets the service.
      *
      * @return ExchangeRateService
+     *
+     * @psalm-api
      */
     public function getService(): ExchangeRateService
     {
