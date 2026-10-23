@@ -18,10 +18,10 @@ use Exchanger\HistoricalExchangeRateQuery;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-class HistoricalExchangeRateQueryTest extends TestCase
+final class HistoricalExchangeRateQueryTest extends TestCase
 {
     #[Test]
-    public function it_serializes()
+    public function it_serializes(): void
     {
         $firstQuery = new HistoricalExchangeRateQuery(
             CurrencyPair::createFromString('EUR/USD'),

@@ -21,21 +21,21 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\EuropeanCentralBank;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class EuropeanCentralBankTest extends ServiceTestCase
+final class EuropeanCentralBankTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new EuropeanCentralBank($this->createMock(HttpClient::class));
+        $service = new EuropeanCentralBank($this->createMock(ClientInterface::class));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_rate_date_is_missing()
+    public function it_throws_an_exception_when_the_rate_date_is_missing(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The response of the European Central Bank has no rate date.');
@@ -48,7 +48,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported()
+    public function it_throws_an_exception_when_the_pair_is_not_supported(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "EUR/XXL" is not supported by the service "Exchanger\Service\EuropeanCentralBank".';
@@ -62,7 +62,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/EuropeanCentralBank/success.xml');
@@ -78,7 +78,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_within_90_days_back()
+    public function it_fetches_a_historical_rate_within_90_days_back(): void
     {
         // The service picks the 90-day feed by distance from today, so move the fixture's latest day to last week.
         $date = new \DateTime('-7 days midnight');
@@ -98,7 +98,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_older_than_90_days()
+    public function it_fetches_a_historical_rate_older_than_90_days(): void
     {
         $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml';
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/EuropeanCentralBank/historical.xml');
@@ -117,7 +117,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_historical_date_is_not_supported()
+    public function it_throws_an_exception_when_historical_date_is_not_supported(): void
     {
         $this->expectException(UnsupportedDateException::class);
         $expectedExceptionMessage = 'The date "2016-05-26" is not supported by the service "Exchanger\Service\EuropeanCentralBank".';
@@ -131,7 +131,7 @@ class EuropeanCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported_historical()
+    public function it_throws_an_exception_when_the_pair_is_not_supported_historical(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $expectedExceptionMessage = 'The currency pair "EUR/XXL" is not supported by the service "Exchanger\Service\EuropeanCentralBank".';
@@ -145,9 +145,9 @@ class EuropeanCentralBankTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new EuropeanCentralBank($this->createMock(HttpClient::class));
+        $service = new EuropeanCentralBank($this->createMock(ClientInterface::class));
 
         $this->assertSame('european_central_bank', $service->getName());
     }

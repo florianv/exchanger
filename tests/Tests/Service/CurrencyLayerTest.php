@@ -19,31 +19,31 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\CurrencyLayer;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
 /**
  * @author Pascal Hofmann <mail@pascalhofmann.de>
  */
-class CurrencyLayerTest extends ServiceTestCase
+final class CurrencyLayerTest extends ServiceTestCase
 {
     #[Test]
-    public function it_throws_an_exception_if_access_key_option_missing()
+    public function it_throws_an_exception_if_access_key_option_missing(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "access_key" option must be provided.');
-        new CurrencyLayer($this->createMock(HttpClient::class));
+        new CurrencyLayer($this->createMock(ClientInterface::class));
     }
 
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new CurrencyLayer($this->createMock(HttpClient::class), null, ['access_key' => 'secret']);
+        $service = new CurrencyLayer($this->createMock(ClientInterface::class), null, ['access_key' => 'secret']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
     }
 
     #[Test]
-    public function it_throws_an_exception_with_error_response()
+    public function it_throws_an_exception_with_error_response(): void
     {
         $this->expectException(Exception::class);
         $uri = 'http://www.apilayer.net/api/live?access_key=secret&currencies=EUR';
@@ -54,7 +54,7 @@ class CurrencyLayerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_normal_mode()
+    public function it_fetches_a_rate_normal_mode(): void
     {
         $uri = 'http://www.apilayer.net/api/live?access_key=secret&currencies=EUR';
         $expectedDate = new \DateTime();
@@ -72,7 +72,7 @@ class CurrencyLayerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_enterprise_mode()
+    public function it_fetches_a_rate_enterprise_mode(): void
     {
         $uri = 'https://www.apilayer.net/api/live?access_key=secret&source=USD&currencies=EUR';
         $expectedDate = new \DateTime();
@@ -90,7 +90,7 @@ class CurrencyLayerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_normal_mode()
+    public function it_fetches_a_historical_rate_normal_mode(): void
     {
         $pair = CurrencyPair::createFromString('USD/AED');
         $uri = 'http://apilayer.net/api/historical?access_key=secret&date=2015-05-06';
@@ -109,7 +109,7 @@ class CurrencyLayerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_enterprise_mode()
+    public function it_fetches_a_historical_rate_enterprise_mode(): void
     {
         $uri = 'https://apilayer.net/api/historical?access_key=secret&date=2015-05-06&source=USD';
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CurrencyLayer/historical_success.json');
@@ -128,9 +128,9 @@ class CurrencyLayerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new CurrencyLayer($this->createMock(HttpClient::class), null, ['access_key' => 'secret', 'enterprise' => true]);
+        $service = new CurrencyLayer($this->createMock(ClientInterface::class), null, ['access_key' => 'secret', 'enterprise' => true]);
 
         $this->assertSame('currency_layer', $service->getName());
     }

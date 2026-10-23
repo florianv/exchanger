@@ -23,31 +23,30 @@ use PHPUnit\Framework\Attributes\Test;
 use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\ExchangeRateService;
 use Psr\Http\Client\ClientInterface;
-use Http\Client\HttpClient;
 use Exchanger\Tests\FileContents;
 
-class UniRateApiTest extends HttpServiceContractTestCase
+final class UniRateApiTest extends HttpServiceContractTestCase
 {
     #[Test]
-    public function it_throws_an_exception_when_api_key_option_missing()
+    public function it_throws_an_exception_when_api_key_option_missing(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('api_key');
 
-        new UniRateApi($this->createMock(HttpClient::class));
+        new UniRateApi($this->createMock(ClientInterface::class));
     }
 
     #[Test]
-    public function it_supports_all_queries()
+    public function it_supports_all_queries(): void
     {
-        $service = new UniRateApi($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
+        $service = new UniRateApi($this->createMock(ClientInterface::class), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     #[Test]
-    public function it_fetches_a_latest_rate()
+    public function it_fetches_a_latest_rate(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $url = 'https://api.unirateapi.com/api/rates?api_key=secret&from=USD&to=EUR';
@@ -62,7 +61,7 @@ class UniRateApiTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $date = new \DateTime('2024-01-15');
@@ -79,7 +78,7 @@ class UniRateApiTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_response_has_error_field()
+    public function it_throws_an_exception_when_response_has_error_field(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Currency not found or no data available');
@@ -92,7 +91,7 @@ class UniRateApiTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_response_status_error()
+    public function it_throws_an_exception_when_response_status_error(): void
     {
         $this->expectException(Exception::class);
 
@@ -103,7 +102,7 @@ class UniRateApiTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_rate_field_missing()
+    public function it_throws_an_exception_when_rate_field_missing(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
@@ -114,9 +113,9 @@ class UniRateApiTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new UniRateApi($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
+        $service = new UniRateApi($this->createMock(ClientInterface::class), null, ['api_key' => 'secret']);
 
         $this->assertSame('unirate_api', $service->getName());
     }

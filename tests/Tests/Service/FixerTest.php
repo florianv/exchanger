@@ -19,37 +19,37 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\Fixer;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
 /**
  * @author Pascal Hofmann <mail@pascalhofmann.de>
  */
-class FixerTest extends ServiceTestCase
+final class FixerTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new Fixer($this->createMock(HttpClient::class), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock(ClientInterface::class), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
     #[Test]
-    public function it_supports_eur_base_normal_mode()
+    public function it_supports_eur_base_normal_mode(): void
     {
-        $service = new Fixer($this->createMock(HttpClient::class), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock(ClientInterface::class), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CAD'))));
     }
 
     #[Test]
-    public function it_does_not_support_other_than_eur_base_in_normal_mode()
+    public function it_does_not_support_other_than_eur_base_in_normal_mode(): void
     {
-        $service = new Fixer($this->createMock(HttpClient::class), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock(ClientInterface::class), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/CAD'))));
     }
 
     #[Test]
-    public function it_throws_an_exception_with_error_response()
+    public function it_throws_an_exception_with_error_response(): void
     {
         $this->expectException(Exception::class);
         $expectedExceptionMessage = 'The current subscription plan does not support this API endpoint.';
@@ -63,7 +63,7 @@ class FixerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_normal_mode()
+    public function it_fetches_a_rate_normal_mode(): void
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'http://data.fixer.io/api/latest?access_key=x';
@@ -79,7 +79,7 @@ class FixerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_enterprise_mode()
+    public function it_fetches_a_rate_enterprise_mode(): void
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'https://data.fixer.io/api/latest?base=EUR&access_key=x';
@@ -95,7 +95,7 @@ class FixerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_normal_mode()
+    public function it_fetches_a_historical_rate_normal_mode(): void
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'http://data.fixer.io/api/2000-01-03?access_key=x';
@@ -112,7 +112,7 @@ class FixerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_enterprise_mode()
+    public function it_fetches_a_historical_rate_enterprise_mode(): void
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://data.fixer.io/api/2000-01-03?base=EUR&access_key=x';
@@ -129,9 +129,9 @@ class FixerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new Fixer($this->createMock(HttpClient::class), null, ['access_key' => 'x', 'enterprise' => true]);
+        $service = new Fixer($this->createMock(ClientInterface::class), null, ['access_key' => 'x', 'enterprise' => true]);
 
         $this->assertSame('fixer', $service->getName());
     }

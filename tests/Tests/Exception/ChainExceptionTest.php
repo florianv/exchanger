@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 
 #[CoversClass(\Exchanger\Exception\ChainException::class)]
-class ChainExceptionTest extends TestCase
+final class ChainExceptionTest extends TestCase
 {
     /**
      * @var ChainException
@@ -49,7 +49,7 @@ class ChainExceptionTest extends TestCase
     }
 
     #[Test]
-    public function it_should_have_a_descriptive_error_message()
+    public function it_should_have_a_descriptive_error_message(): void
     {
         $this->assertSame("The chain resulted in 2 exception(s):\r\nException: Something bad happened.\r\nException: General exception.", $this->chainException->getMessage());
         $this->assertCount(2, $this->chainException->getExceptions());

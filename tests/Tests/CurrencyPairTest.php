@@ -18,18 +18,18 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class CurrencyPairTest extends TestCase
+final class CurrencyPairTest extends TestCase
 {
     #[Test]
     #[DataProvider('validStringProvider')]
-    public function it_creates_a_pair_from_a_valid_string($string, $baseCurrency, $quoteCurrency)
+    public function it_creates_a_pair_from_a_valid_string(string $string, string $baseCurrency, string $quoteCurrency): void
     {
         $pair = CurrencyPair::createFromString($string);
         $this->assertEquals($baseCurrency, $pair->getBaseCurrency());
         $this->assertEquals($quoteCurrency, $pair->getQuoteCurrency());
     }
 
-    public static function validStringProvider()
+    public static function validStringProvider(): array
     {
         return [
             ['EUR/USD', 'EUR', 'USD'],
@@ -41,13 +41,13 @@ class CurrencyPairTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidStringProvider')]
-    public function it_throws_an_exception_when_creating_from_an_invalid_string($string)
+    public function it_throws_an_exception_when_creating_from_an_invalid_string(string $string): void
     {
         $this->expectException(\InvalidArgumentException::class);
         CurrencyPair::createFromString($string);
     }
 
-    public static function invalidStringProvider()
+    public static function invalidStringProvider(): array
     {
         return [
             ['EUR'], ['EUR/'], ['EU/US'], ['EUR/US'], ['US/EUR'], ['00'], ['00/'], ['007/00'],
@@ -55,7 +55,7 @@ class CurrencyPairTest extends TestCase
     }
 
     #[Test]
-    public function it_can_be_converted_to_a_string()
+    public function it_can_be_converted_to_a_string(): void
     {
         $pair = new CurrencyPair('EUR', 'USD');
         $this->assertEquals('EUR/USD', (string) $pair);
@@ -63,7 +63,7 @@ class CurrencyPairTest extends TestCase
     }
 
     #[Test]
-    public function it_can_check_if_identical()
+    public function it_can_check_if_identical(): void
     {
         $pair = new CurrencyPair('EUR', 'USD');
         $this->assertFalse($pair->isIdentical());

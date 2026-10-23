@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Exchanger\Tests\Service;
 
 use PHPUnit\Framework\TestCase;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -58,13 +58,13 @@ abstract class ServiceTestCase extends TestCase
      * @param callable|null $requestCallback Optional extra check receiving the \Psr\Http\Message\RequestInterface,
      *                                       rejecting the request unless it returns a truthy value
      *
-     * @return \Http\Client\HttpClient
+     * @return \Psr\Http\Client\ClientInterface
      */
     protected function getHttpAdapterMock($url, $content, $statusCode = 200, ?callable $requestCallback = null)
     {
         $response = $this->getResponse($content, $statusCode);
 
-        $adapter = $this->createMock(HttpClient::class);
+        $adapter = $this->createMock(ClientInterface::class);
 
         $adapter
             ->expects($this->once())

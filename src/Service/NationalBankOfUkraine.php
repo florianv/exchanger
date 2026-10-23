@@ -24,6 +24,10 @@ use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
  * National Bank of Ukraine.
  *
  * @author Ilya Zelenin <ilya.zelenin@make.im>
+ *
+ * Not final for backward compatibility; make it final in 3.0.
+ *
+ * @psalm-suppress ClassMustBeFinal
  */
 class NationalBankOfUkraine extends HttpService
 {
@@ -45,9 +49,9 @@ class NationalBankOfUkraine extends HttpService
         $content = $this->request(self::URL);
         $element = StringUtil::xmlToElement($content);
 
-        $elements = $element->xpath('./currency[cc="' . $baseCurrency . '"]');
+        $elements = StringUtil::xpath($element, './currency[cc="' . $baseCurrency . '"]');
 
-        if (empty($elements)) {
+        if ([] === $elements) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
@@ -80,10 +84,10 @@ class NationalBankOfUkraine extends HttpService
         $content = $this->request(self::URL . '?' . http_build_query(['date' => $formattedDate]));
         $element = StringUtil::xmlToElement($content);
 
-        $elements = $element->xpath('./currency[cc="' . $baseCurrency . '"]');
+        $elements = StringUtil::xpath($element, './currency[cc="' . $baseCurrency . '"]');
 
-        if (empty($elements)) {
-            if ($element->xpath('./error')) {
+        if ([] === $elements) {
+            if ([] !== StringUtil::xpath($element, './error')) {
                 throw new UnsupportedDateException($date, $this);
             }
 

@@ -17,10 +17,10 @@ use Exchanger\StringUtil;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-class StringUtilTest extends TestCase
+final class StringUtilTest extends TestCase
 {
     #[Test]
-    public function it_converts_an_xml_string_to_element()
+    public function it_converts_an_xml_string_to_element(): void
     {
         $element = StringUtil::xmlToElement('<root>hello</root>');
 
@@ -29,21 +29,21 @@ class StringUtilTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_converting_invalid_xml()
+    public function it_throws_an_exception_when_converting_invalid_xml(): void
     {
         $this->expectException(\RuntimeException::class);
         StringUtil::xmlToElement('/');
     }
 
     #[Test]
-    public function it_converts_a_json_string_to_array()
+    public function it_converts_a_json_string_to_array(): void
     {
         $json = StringUtil::jsonToArray('{"license": "MIT"}');
         $this->assertEquals('MIT', $json['license']);
     }
 
     #[Test]
-    public function it_throws_an_exception_when_converting_invalid_json()
+    public function it_throws_an_exception_when_converting_invalid_json(): void
     {
         $this->expectException(\RuntimeException::class);
         StringUtil::jsonToArray('/');

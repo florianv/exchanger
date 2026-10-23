@@ -21,30 +21,30 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\FixerApiLayer;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Http\Message\RequestInterface;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class FixerApiLayerTest extends ServiceTestCase
+final class FixerApiLayerTest extends ServiceTestCase
 {
     #[Test]
-    public function it_throws_an_exception_if_api_key_option_missing()
+    public function it_throws_an_exception_if_api_key_option_missing(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "api_key" option must be provided to use fixer.io');
 
-        new FixerApiLayer($this->createStub(HttpClient::class));
+        new FixerApiLayer($this->createStub(ClientInterface::class));
     }
 
     #[Test]
-    public function it_supports_all_queries()
+    public function it_supports_all_queries(): void
     {
-        $service = new FixerApiLayer($this->createStub(HttpClient::class), null, ['api_key' => 'x']);
+        $service = new FixerApiLayer($this->createStub(ClientInterface::class), null, ['api_key' => 'x']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
     #[Test]
-    public function it_throws_an_exception_with_error_response()
+    public function it_throws_an_exception_with_error_response(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The current subscription plan does not support this API endpoint.');
@@ -57,7 +57,7 @@ class FixerApiLayerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported()
+    public function it_throws_an_exception_when_the_pair_is_not_supported(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
@@ -69,7 +69,7 @@ class FixerApiLayerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'https://api.apilayer.com/fixer/latest?base=EUR';
@@ -86,7 +86,7 @@ class FixerApiLayerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('USD/AUD');
         $uri = 'https://api.apilayer.com/fixer/2000-01-03?base=USD';
@@ -103,9 +103,9 @@ class FixerApiLayerTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new FixerApiLayer($this->createStub(HttpClient::class), null, ['api_key' => 'x']);
+        $service = new FixerApiLayer($this->createStub(ClientInterface::class), null, ['api_key' => 'x']);
 
         $this->assertSame('fixer_apilayer', $service->getName());
     }

@@ -41,10 +41,10 @@ final class RussianCentralBank extends HttpService
         $content = $this->request(self::URL);
         $element = StringUtil::xmlToElement($content);
 
-        $elements = $element->xpath('./Valute[CharCode="' . $baseCurrency . '"]');
+        $elements = StringUtil::xpath($element, './Valute[CharCode="' . $baseCurrency . '"]');
         $date = \DateTime::createFromFormat('!d.m.Y', (string) $element['Date']);
 
-        if (empty($elements) || !$date) {
+        if ([] === $elements || !$date) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
@@ -66,9 +66,9 @@ final class RussianCentralBank extends HttpService
         $content = $this->request(self::URL . '?' . http_build_query(['date_req' => $formattedDate]));
         $element = StringUtil::xmlToElement($content);
 
-        $elements = $element->xpath('./Valute[CharCode="' . $baseCurrency . '"]');
+        $elements = StringUtil::xpath($element, './Valute[CharCode="' . $baseCurrency . '"]');
 
-        if (empty($elements)) {
+        if ([] === $elements) {
             if ((string) $element['Date'] !== $date->format('d.m.Y')) {
                 throw new UnsupportedDateException($date, $this);
             }

@@ -19,18 +19,18 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\NationalBankOfRomania;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Exchanger\Tests\FileContents;
 
-class NationalBankOfRomaniaTest extends ServiceTestCase
+final class NationalBankOfRomaniaTest extends ServiceTestCase
 {
     #[Test]
     #[DataProvider('getSupportedCurrencies')]
     public function it_does_not_support_all_queries(string $currency): void
     {
-        $service = new NationalBankOfRomania($this->createMock(HttpClient::class));
+        $service = new NationalBankOfRomania($this->createMock(ClientInterface::class));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString($currency . '/RON'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('RON/' . $currency))));
@@ -185,7 +185,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name(): void
     {
-        $service = new NationalBankOfRomania($this->createMock(HttpClient::class));
+        $service = new NationalBankOfRomania($this->createMock(ClientInterface::class));
 
         $this->assertSame('national_bank_of_romania', $service->getName());
     }

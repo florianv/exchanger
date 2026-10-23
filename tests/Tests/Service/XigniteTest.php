@@ -19,30 +19,30 @@ use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\Xignite;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class XigniteTest extends ServiceTestCase
+final class XigniteTest extends ServiceTestCase
 {
     #[Test]
-    public function it_throws_an_exception_if_token_option_missing()
+    public function it_throws_an_exception_if_token_option_missing(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "token" option must be provided.');
-        new Xignite($this->createMock(HttpClient::class));
+        new Xignite($this->createMock(ClientInterface::class));
     }
 
     #[Test]
-    public function it_support_all_queries()
+    public function it_support_all_queries(): void
     {
-        $service = new Xignite($this->createMock(HttpClient::class), null, ['token' => 'token']);
+        $service = new Xignite($this->createMock(ClientInterface::class), null, ['token' => 'token']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     #[Test]
-    public function it_throws_an_exception_on_response_error()
+    public function it_throws_an_exception_on_response_error(): void
     {
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/Xignite/error.json');
@@ -61,7 +61,7 @@ class XigniteTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('GBP/AWG');
         $uri = 'https://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetRealTimeRates?Symbols=GBPAWG&_fields=Outcome,Message,Symbol,Date,Time,Bid&_Token=token';
@@ -77,7 +77,7 @@ class XigniteTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'http://globalcurrencies.xignite.com/xGlobalCurrencies.json/GetHistoricalRates?Symbols=EURUSD&AsOfDate=08/17/2016&_Token=token&FixingTime=&PriceType=Mid';
@@ -94,9 +94,9 @@ class XigniteTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new Xignite($this->createMock(HttpClient::class), null, ['token' => 'token']);
+        $service = new Xignite($this->createMock(ClientInterface::class), null, ['token' => 'token']);
 
         $this->assertSame('xignite', $service->getName());
     }

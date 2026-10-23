@@ -19,23 +19,23 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\ExchangerateHost;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
 /**
  * @author Pascal Hofmann <mail@pascalhofmann.de>
  */
-class ExchangerateHostTest extends ServiceTestCase
+final class ExchangerateHostTest extends ServiceTestCase
 {
     #[Test]
-    public function it_supports_all_queries()
+    public function it_supports_all_queries(): void
     {
-        $service = new ExchangerateHost($this->createMock(HttpClient::class));
+        $service = new ExchangerateHost($this->createMock(ClientInterface::class));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
     #[Test]
-    public function it_throws_an_exception_with_error_response()
+    public function it_throws_an_exception_with_error_response(): void
     {
         $this->expectException(Exception::class);
         $expectedExceptionMessage = '';
@@ -49,7 +49,7 @@ class ExchangerateHostTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'https://api.exchangerate.host/latest?base=EUR&v=' . date('Y-m-d');
@@ -65,7 +65,7 @@ class ExchangerateHostTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR';
@@ -82,7 +82,7 @@ class ExchangerateHostTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_uses_a_specific_source_option()
+    public function it_fetches_uses_a_specific_source_option(): void
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&source=ecb';
@@ -100,7 +100,7 @@ class ExchangerateHostTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_uses_a_specific_source_option_overridden_by_exchange_query_method()
+    public function it_fetches_uses_a_specific_source_option_overridden_by_exchange_query_method(): void
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&source=testing';
@@ -118,7 +118,7 @@ class ExchangerateHostTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_uses_a_specific_places_option_overridden_by_exchange_query_method()
+    public function it_fetches_uses_a_specific_places_option_overridden_by_exchange_query_method(): void
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&places=10';
@@ -136,7 +136,7 @@ class ExchangerateHostTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_uses_a_specific_places_option()
+    public function it_fetches_uses_a_specific_places_option(): void
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&places=6';
@@ -154,9 +154,9 @@ class ExchangerateHostTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new ExchangerateHost($this->createMock(HttpClient::class));
+        $service = new ExchangerateHost($this->createMock(ClientInterface::class));
 
         $this->assertSame('exchangeratehost', $service->getName());
     }

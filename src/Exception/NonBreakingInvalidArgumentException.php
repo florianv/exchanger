@@ -17,5 +17,9 @@ namespace Exchanger\Exception;
  * Generic InvalidArgumentException thrown by the library that doesn't break the chain.
  *
  * @author Florian Voutzinos <florian@voutzinos.com>
+ *
+ * Not final for backward compatibility; make it final in 3.0.
+ *
+ * @psalm-suppress ClassMustBeFinal
  */
 class NonBreakingInvalidArgumentException extends \Exception {}

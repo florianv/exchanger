@@ -18,24 +18,24 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\XchangeApi;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
 /**
  * @author xChangeApi.com <hello@xchangeapi.com>
  */
-class XchangeApiTest extends ServiceTestCase
+final class XchangeApiTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new XchangeApi($this->createMock(HttpClient::class), null, ['api-key' => 'secret']);
+        $service = new XchangeApi($this->createMock(ClientInterface::class), null, ['api-key' => 'secret']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('ABC/DEF'))));
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/GBP');
         $uri = 'https://api.xchangeapi.com/latest?base=EUR&api-key=secret';
@@ -51,7 +51,7 @@ class XchangeApiTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rates()
+    public function it_fetches_a_historical_rates(): void
     {
         $pair = CurrencyPair::createFromString('USD/JPY');
         $uri = 'https://api.xchangeapi.com/historical/2020-01-20?api-key=secret';
@@ -68,9 +68,9 @@ class XchangeApiTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new XchangeApi($this->createMock(HttpClient::class), null, ['api-key' => 'secret']);
+        $service = new XchangeApi($this->createMock(ClientInterface::class), null, ['api-key' => 'secret']);
 
         $this->assertSame('xchangeapi', $service->getName());
     }

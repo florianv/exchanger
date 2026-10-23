@@ -19,22 +19,22 @@ use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\CurrencyDataFeed;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class CurrencyDataFeedTest extends ServiceTestCase
+final class CurrencyDataFeedTest extends ServiceTestCase
 {
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new CurrencyDataFeed($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
+        $service = new CurrencyDataFeed($this->createMock(ClientInterface::class), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     #[Test]
-    public function it_throws_an_exception_when_rate_not_supported()
+    public function it_throws_an_exception_when_rate_not_supported(): void
     {
         $this->expectException(Exception::class);
         $url = 'https://currencydatafeed.com/api/data.php?token=secret&currency=EUR/ZZZ';
@@ -45,7 +45,7 @@ class CurrencyDataFeedTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $url = 'https://currencydatafeed.com/api/data.php?token=secret&currency=EUR/USD';
@@ -61,9 +61,9 @@ class CurrencyDataFeedTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new CurrencyDataFeed($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
+        $service = new CurrencyDataFeed($this->createMock(ClientInterface::class), null, ['api_key' => 'secret']);
 
         $this->assertSame('currency_data_feed', $service->getName());
     }

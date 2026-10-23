@@ -20,10 +20,10 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
+final class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
 {
     /**
      * @var string URL of CBRT exchange rates
@@ -78,7 +78,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_rate_date_is_missing()
+    public function it_throws_an_exception_when_the_rate_date_is_missing(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The response of the Central Bank of the Republic of Turkey has no rate date.');
@@ -90,16 +90,16 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_does_not_support_all_queries()
+    public function it_does_not_support_all_queries(): void
     {
-        $service = new CentralBankOfRepublicTurkey($this->createMock(HttpClient::class));
+        $service = new CentralBankOfRepublicTurkey($this->createMock(ClientInterface::class));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
     }
 
     #[Test]
-    public function it_throws_an_exception_when_the_pair_is_not_supported()
+    public function it_throws_an_exception_when_the_pair_is_not_supported(): void
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
@@ -110,7 +110,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate()
+    public function it_fetches_a_rate(): void
     {
         $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
@@ -126,7 +126,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate()
+    public function it_fetches_a_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/TRY');
         $requestedDate = new \DateTime('2013-04-23');
@@ -140,9 +140,9 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new CentralBankOfRepublicTurkey($this->createMock(HttpClient::class));
+        $service = new CentralBankOfRepublicTurkey($this->createMock(ClientInterface::class));
 
         $this->assertSame('central_bank_of_republic_turkey', $service->getName());
     }

@@ -24,16 +24,15 @@ use PHPUnit\Framework\Attributes\Test;
 use Exchanger\Contract\ExchangeRateService;
 use Psr\SimpleCache\CacheInterface;
 
-class ExchangerTest extends TestCase
+final class ExchangerTest extends TestCase
 {
     #[Test]
-    public function it_throws_an_exception_when_service_does_not_support_query()
+    public function it_throws_an_exception_when_service_does_not_support_query(): void
     {
         $this->expectException(UnsupportedExchangeQueryException::class);
         $service = $this->createMock(ExchangeRateService::class);
 
         $service
-            ->expects($this->any())
             ->method('supportQuery')
             ->willReturn(false);
 
@@ -44,7 +43,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_quotes_a_pair()
+    public function it_quotes_a_pair(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $exchangeRateQuery = new ExchangeRateQuery($pair);
@@ -52,7 +51,6 @@ class ExchangerTest extends TestCase
         $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
 
         $service
-            ->expects($this->any())
             ->method('supportQuery')
             ->willReturn(true);
 
@@ -67,7 +65,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_quotes_an_identical_pair()
+    public function it_quotes_an_identical_pair(): void
     {
         $service = $this->createMock(ExchangeRateService::class);
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'));
@@ -81,7 +79,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_does_not_cache_identical_pairs()
+    public function it_does_not_cache_identical_pairs(): void
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'));
         $service = $this->createMock(ExchangeRateService::class);
@@ -99,7 +97,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_from_cache()
+    public function it_fetches_a_rate_from_cache(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $exchangeRateQuery = new ExchangeRateQuery($pair);
@@ -108,7 +106,6 @@ class ExchangerTest extends TestCase
         $service = $this->createMock(ExchangeRateService::class);
 
         $service
-            ->expects($this->any())
             ->method('supportQuery')
             ->willReturn(true);
 
@@ -124,7 +121,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_caches_a_rate()
+    public function it_caches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $exchangeRateQuery = new ExchangeRateQuery($pair);
@@ -135,7 +132,6 @@ class ExchangerTest extends TestCase
         $service = $this->createMock(ExchangeRateService::class);
 
         $service
-            ->expects($this->any())
             ->method('supportQuery')
             ->willReturn(true);
 
@@ -164,7 +160,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_does_not_use_cache_if_cache_false()
+    public function it_does_not_use_cache_if_cache_false(): void
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache' => false]);
 
@@ -194,7 +190,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_supports_overrding_ttl_per_query()
+    public function it_supports_overrding_ttl_per_query(): void
     {
         $ttl = 3600;
         $pair = CurrencyPair::createFromString('EUR/USD');
@@ -205,7 +201,6 @@ class ExchangerTest extends TestCase
         $service = $this->createMock(ExchangeRateService::class);
 
         $service
-            ->expects($this->any())
             ->method('supportQuery')
             ->willReturn(true);
 
@@ -231,7 +226,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_supports_overrding_cache_prefix_per_query()
+    public function it_supports_overrding_cache_prefix_per_query(): void
     {
         $expectedKeyPrefix = 'expected-prefix';
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_key_prefix' => $expectedKeyPrefix]);
@@ -254,7 +249,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_if_cache_key_is_too_long()
+    public function it_throws_an_exception_if_cache_key_is_too_long(): void
     {
         $this->expectException(CacheException::class);
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
@@ -264,7 +259,6 @@ class ExchangerTest extends TestCase
         $cache = $this->createMock(CacheInterface::class);
 
         $service
-            ->expects($this->any())
             ->method('supportQuery')
             ->willReturn(true);
 
@@ -273,7 +267,7 @@ class ExchangerTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_if_service_cant_support_pair()
+    public function it_throws_an_exception_if_service_cant_support_pair(): void
     {
         $this->expectException(UnsupportedExchangeQueryException::class);
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));

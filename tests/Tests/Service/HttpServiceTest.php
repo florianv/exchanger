@@ -19,12 +19,11 @@ use Exchanger\Service\HttpService;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use PHPUnit\Framework\Attributes\Test;
-use Http\Client\HttpClient;
 
-class HttpServiceTest extends TestCase
+final class HttpServiceTest extends TestCase
 {
     #[Test]
-    public function initialize_with_http_client()
+    public function initialize_with_http_client(): void
     {
         if (false == interface_exists(ClientInterface::class)) {
             $this->markTestSkipped('PSR-18 client is not required.');
@@ -36,15 +35,16 @@ class HttpServiceTest extends TestCase
     }
 
     #[Test]
-    public function initialize_with_httplug_client()
+    public function initialize_with_httplug_client(): void
     {
-        $httpClient = $this->createMock(HttpClient::class);
+        /** @psalm-suppress DeprecatedInterface HttpService still accepts HTTPlug clients, which is what this test covers */
+        $httpClient = $this->createMock(\Http\Client\HttpClient::class);
         $this->expectNotToPerformAssertions();
         $this->createAnonymousClass($httpClient);
     }
 
     #[Test]
-    public function initialize_with_null_as_client()
+    public function initialize_with_null_as_client(): void
     {
         // When null is passed, HttpClientDiscovery auto-discovers a client.
         // php-http/mock-client (a dev dependency) provides client-implementation,
@@ -54,7 +54,7 @@ class HttpServiceTest extends TestCase
     }
 
     #[Test]
-    public function initialize_with_invalid_client()
+    public function initialize_with_invalid_client(): void
     {
         $httpClient = new \stdClass();
         $this->expectException(\LogicException::class);
@@ -62,9 +62,9 @@ class HttpServiceTest extends TestCase
         $this->createAnonymousClass($httpClient);
     }
 
-    private function createAnonymousClass($httpClient)
+    private function createAnonymousClass(mixed $httpClient): void
     {
-        return new class ($httpClient) extends HttpService {
+        new class ($httpClient) extends HttpService {
             #[\Override]
             public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
             {

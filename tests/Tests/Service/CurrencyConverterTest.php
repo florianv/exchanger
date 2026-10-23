@@ -18,7 +18,6 @@ use Exchanger\Exception\Exception;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\CurrencyConverter;
-use Http\Client\HttpClient;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use PHPUnit\Framework\Attributes\Test;
@@ -27,18 +26,18 @@ use Exchanger\Contract\ExchangeRateService;
 use Psr\Http\Client\ClientInterface;
 use Exchanger\Tests\FileContents;
 
-class CurrencyConverterTest extends HttpServiceContractTestCase
+final class CurrencyConverterTest extends HttpServiceContractTestCase
 {
     #[Test]
-    public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
+    public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "access_key" option must be provided.');
-        new CurrencyConverter($this->createMock(HttpClient::class), null, ['enterprise' => true]);
+        new CurrencyConverter($this->createMock(ClientInterface::class), null, ['enterprise' => true]);
     }
 
     #[Test]
-    public function it_throws_an_exception_with_error_response()
+    public function it_throws_an_exception_with_error_response(): void
     {
         $this->expectException(Exception::class);
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/error.json');
@@ -48,7 +47,7 @@ class CurrencyConverterTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_normal_mode()
+    public function it_fetches_a_rate_normal_mode(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/success.json');
@@ -62,7 +61,7 @@ class CurrencyConverterTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_enterprise_mode()
+    public function it_fetches_a_rate_enterprise_mode(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/success.json');
@@ -76,7 +75,7 @@ class CurrencyConverterTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_normal_mode()
+    public function it_fetches_a_historical_rate_normal_mode(): void
     {
         // The free plan only serves the past year.
         $day = (new \DateTime('-1 month'))->format('Y-m-d');
@@ -94,7 +93,7 @@ class CurrencyConverterTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_enterprise_mode()
+    public function it_fetches_a_historical_rate_enterprise_mode(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/historical_success.json');
@@ -110,9 +109,9 @@ class CurrencyConverterTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new CurrencyConverter($this->createMock(HttpClient::class), null, ['access_key' => 'secret']);
+        $service = new CurrencyConverter($this->createMock(ClientInterface::class), null, ['access_key' => 'secret']);
 
         $this->assertSame('currency_converter', $service->getName());
     }
@@ -123,13 +122,13 @@ class CurrencyConverterTest extends HttpServiceContractTestCase
      * @param string $content    The body content
      * @param int    $statusCode HTTP status code
      *
-     * @return HttpClient
+     * @return ClientInterface
      */
     protected function getAnyUrlHttpAdapterMock($content, $statusCode = 200)
     {
         $response = $this->getResponse($content, $statusCode);
 
-        $adapter = $this->createMock(HttpClient::class);
+        $adapter = $this->createMock(ClientInterface::class);
 
         $adapter
             ->expects($this->once())

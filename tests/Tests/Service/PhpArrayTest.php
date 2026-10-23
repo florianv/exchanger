@@ -20,10 +20,10 @@ use Exchanger\Service\PhpArray;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-class PhpArrayTest extends TestCase
+final class PhpArrayTest extends TestCase
 {
     #[Test]
-    public function it_supports_latest_queries()
+    public function it_supports_latest_queries(): void
     {
         $service = new PhpArray([]);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
@@ -35,7 +35,7 @@ class PhpArrayTest extends TestCase
     }
 
     #[Test]
-    public function it_supports_historical_queries()
+    public function it_supports_historical_queries(): void
     {
         $now = new \DateTimeImmutable();
 
@@ -55,7 +55,7 @@ class PhpArrayTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_fetching_latest_invalid_rate()
+    public function it_throws_an_exception_when_fetching_latest_invalid_rate(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Rates passed to the PhpArray service must be scalars, "array" given.');
@@ -67,7 +67,7 @@ class PhpArrayTest extends TestCase
     }
 
     #[Test]
-    public function it_fetches_a_latest_rate_from_rates()
+    public function it_fetches_a_latest_rate_from_rates(): void
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
 
@@ -82,7 +82,7 @@ class PhpArrayTest extends TestCase
     }
 
     #[Test]
-    public function it_fetches_a_latest_rate_from_scalars()
+    public function it_fetches_a_latest_rate_from_scalars(): void
     {
         $arrayProvider = new PhpArray([
             'EUR/USD' => 1.50,
@@ -112,7 +112,7 @@ class PhpArrayTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_fetching_historical_invalid_rate()
+    public function it_throws_an_exception_when_fetching_historical_invalid_rate(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $expectedExceptionMessage = 'Rates passed to the PhpArray service must be scalars, "array" given.';
@@ -131,7 +131,7 @@ class PhpArrayTest extends TestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_from_exchange_rates()
+    public function it_fetches_a_historical_rate_from_exchange_rates(): void
     {
         $now = new \DateTimeImmutable();
 
@@ -147,7 +147,7 @@ class PhpArrayTest extends TestCase
     }
 
     #[Test]
-    public function it_fetches_a_historical_rate_from_scalars()
+    public function it_fetches_a_historical_rate_from_scalars(): void
     {
         $now = new \DateTimeImmutable();
 
@@ -173,7 +173,7 @@ class PhpArrayTest extends TestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
         $service = new PhpArray([], []);
 

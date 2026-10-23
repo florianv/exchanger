@@ -22,22 +22,21 @@ use PHPUnit\Framework\Attributes\Test;
 use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\ExchangeRateService;
 use Psr\Http\Client\ClientInterface;
-use Http\Client\HttpClient;
 use Exchanger\Tests\FileContents;
 
-class FastForexTest extends HttpServiceContractTestCase
+final class FastForexTest extends HttpServiceContractTestCase
 {
     #[Test]
-    public function it_supports_all_queries()
+    public function it_supports_all_queries(): void
     {
-        $service = new FastForex($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
+        $service = new FastForex($this->createMock(ClientInterface::class), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
     }
 
     #[Test]
-    public function it_throws_an_exception_when_rate_not_supported()
+    public function it_throws_an_exception_when_rate_not_supported(): void
     {
         $this->expectException(Exception::class);
         $url = 'https://api.fastforex.io/fetch-one?from=EUR&to=ZZZ';
@@ -48,7 +47,7 @@ class FastForexTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_fetches_a_rate_when_response_symbol_matches()
+    public function it_fetches_a_rate_when_response_symbol_matches(): void
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $url = 'https://api.fastforex.io/fetch-one?from=USD&to=EUR';
@@ -63,7 +62,7 @@ class FastForexTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_response_symbol_does_not_match()
+    public function it_throws_an_exception_when_response_symbol_does_not_match(): void
     {
         $this->expectException(Exception::class);
         $url = 'https://api.fastforex.io/fetch-one?from=USD&to=AED';
@@ -74,7 +73,7 @@ class FastForexTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_throws_an_exception_when_response_status_error()
+    public function it_throws_an_exception_when_response_status_error(): void
     {
         $this->expectException(Exception::class);
         $url = 'https://api.fastforex.io/fetch-one?from=USD&to=AED';
@@ -84,9 +83,9 @@ class FastForexTest extends HttpServiceContractTestCase
     }
 
     #[Test]
-    public function it_has_a_name()
+    public function it_has_a_name(): void
     {
-        $service = new FastForex($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
+        $service = new FastForex($this->createMock(ClientInterface::class), null, ['api_key' => 'secret']);
 
         $this->assertSame('fastforex', $service->getName());
     }
