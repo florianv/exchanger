@@ -198,7 +198,7 @@ final class NationalBankOfRomania extends HttpService
         $rateValue = (!empty($element['multiplier'])) ? $rate / (float) $element['multiplier'] : $rate;
 
         if ('RON' === $currencyPair->getBaseCurrency()) {
-            $rateValue = round(1 / $rateValue, 4);
+            $rateValue = round(1.0 / $rateValue, 4);
         }
 
         return $rateValue;

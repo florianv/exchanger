@@ -100,9 +100,4 @@
       <code><![CDATA[$entry['Date'] ?? null]]></code>
     </PossiblyNullArgument>
   </file>
-  <file src="src/Service/NationalBankOfRomania.php">
-    <InvalidOperand>
-      <code><![CDATA[1 / $rateValue]]></code>
-    </InvalidOperand>
-  </file>
 </files>
