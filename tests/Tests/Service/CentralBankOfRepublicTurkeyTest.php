@@ -19,6 +19,8 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\CentralBankOfRepublicTurkey;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
 {
@@ -45,31 +47,23 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     /**
      * Set up variables before TestCase is being initialized.
      */
+    #[\Override]
     public static function setUpBeforeClass(): void
     {
         self::$url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
         self::$historicalUrl = 'https://www.tcmb.gov.tr/kurlar/201304/23042013.xml';
-        self::$content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
-        self::$historicalContent = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_historical.xml');
+        self::$content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
+        self::$historicalContent = FileContents::read(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_historical.xml');
     }
 
     /**
      * Clean variables after TestCase finish.
      */
+    #[\Override]
     public static function tearDownAfterClass(): void
     {
         self::$url = null;
         self::$content = null;
-    }
-
-    /**
-     * Create bank service.
-     *
-     * @return CentralBankOfRepublicTurkey
-     */
-    protected function createService()
-    {
-        return new CentralBankOfRepublicTurkey($this->getHttpAdapterMock(self::$url, self::$content));
     }
 
     /**
@@ -85,7 +79,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new CentralBankOfRepublicTurkey($this->createMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfRepublicTurkey($this->createMock(HttpClient::class));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
@@ -96,7 +90,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
         $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY')));
@@ -106,7 +100,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     public function it_fetches_a_rate()
     {
         $url = 'https://www.tcmb.gov.tr/kurlar/today.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicTurkey/cbrt_today.xml');
 
         $pair = CurrencyPair::createFromString('EUR/TRY');
         $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock($url, $content));
@@ -135,7 +129,7 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new CentralBankOfRepublicTurkey($this->createMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfRepublicTurkey($this->createMock(HttpClient::class));
 
         $this->assertSame('central_bank_of_republic_turkey', $service->getName());
     }

@@ -37,7 +37,7 @@ final class Chain implements ExchangeRateService
     /**
      * Creates a new chain service.
      *
-     * @param ExchangeRateService[] $services
+     * @param iterable<ExchangeRateService> $services
      */
     public function __construct(iterable $services = [])
     {

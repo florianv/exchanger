@@ -21,6 +21,8 @@ use Exchanger\Exception\UnsupportedExchangeQueryException;
 use Exchanger\Exchanger;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Exchanger\Contract\ExchangeRateService;
+use Psr\SimpleCache\CacheInterface;
 
 class ExchangerTest extends TestCase
 {
@@ -28,7 +30,7 @@ class ExchangerTest extends TestCase
     public function it_throws_an_exception_when_service_does_not_support_query()
     {
         $this->expectException(UnsupportedExchangeQueryException::class);
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock(ExchangeRateService::class);
 
         $service
             ->expects($this->any())
@@ -46,7 +48,7 @@ class ExchangerTest extends TestCase
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $exchangeRateQuery = new ExchangeRateQuery($pair);
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock(ExchangeRateService::class);
         $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
 
         $service
@@ -67,14 +69,14 @@ class ExchangerTest extends TestCase
     #[Test]
     public function it_quotes_an_identical_pair()
     {
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock(ExchangeRateService::class);
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'));
 
         $exchanger = new Exchanger($service);
         $rate = $exchanger->getExchangeRate($exchangeRateQuery);
 
         $this->assertSame(1.0, $rate->getValue());
-        $this->assertInstanceOf('\DateTime', $rate->getDate());
+        $this->assertInstanceOf(\DateTime::class, $rate->getDate());
         $this->assertEquals('null', $rate->getProviderName());
     }
 
@@ -82,8 +84,8 @@ class ExchangerTest extends TestCase
     public function it_does_not_cache_identical_pairs()
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'));
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
-        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
+        $service = $this->createMock(ExchangeRateService::class);
+        $cache = $this->createMock(CacheInterface::class);
 
         $cache
             ->expects($this->never())
@@ -103,14 +105,14 @@ class ExchangerTest extends TestCase
         $exchangeRateQuery = new ExchangeRateQuery($pair);
         $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
 
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock(ExchangeRateService::class);
 
         $service
             ->expects($this->any())
             ->method('supportQuery')
             ->willReturn(true);
 
-        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
+        $cache = $this->createMock(CacheInterface::class);
 
         $cache
             ->expects($this->once())
@@ -130,7 +132,7 @@ class ExchangerTest extends TestCase
         $ttl = 3600;
         $key = sha1(serialize($exchangeRateQuery));
 
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock(ExchangeRateService::class);
 
         $service
             ->expects($this->any())
@@ -142,7 +144,7 @@ class ExchangerTest extends TestCase
             ->method('getExchangeRate')
             ->willReturn($rate);
 
-        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
+        $cache = $this->createMock(CacheInterface::class);
 
         $cache
             ->expects($this->once())
@@ -166,7 +168,7 @@ class ExchangerTest extends TestCase
     {
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache' => false]);
 
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock(ExchangeRateService::class);
 
         $service
             ->expects($this->once())
@@ -177,7 +179,7 @@ class ExchangerTest extends TestCase
             ->expects($this->once())
             ->method('getExchangeRate');
 
-        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
+        $cache = $this->createMock(CacheInterface::class);
 
         $cache
             ->expects($this->never())
@@ -200,7 +202,7 @@ class ExchangerTest extends TestCase
         $rate = new ExchangeRate($pair, 1, new \DateTime(), __CLASS__);
         $key = sha1(serialize($exchangeRateQuery));
 
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock(ExchangeRateService::class);
 
         $service
             ->expects($this->any())
@@ -212,7 +214,7 @@ class ExchangerTest extends TestCase
             ->method('getExchangeRate')
             ->willReturn($rate);
 
-        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
+        $cache = $this->createMock(CacheInterface::class);
 
         $cache
             ->expects($this->once())
@@ -234,8 +236,8 @@ class ExchangerTest extends TestCase
         $expectedKeyPrefix = 'expected-prefix';
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), ['cache_key_prefix' => $expectedKeyPrefix]);
 
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
-        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
+        $service = $this->createMock(ExchangeRateService::class);
+        $cache = $this->createMock(CacheInterface::class);
 
         $service
             ->expects($this->once())
@@ -257,9 +259,9 @@ class ExchangerTest extends TestCase
         $this->expectException(CacheException::class);
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
 
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock(ExchangeRateService::class);
 
-        $cache = $this->createMock('Psr\SimpleCache\CacheInterface');
+        $cache = $this->createMock(CacheInterface::class);
 
         $service
             ->expects($this->any())
@@ -276,7 +278,7 @@ class ExchangerTest extends TestCase
         $this->expectException(UnsupportedExchangeQueryException::class);
         $exchangeRateQuery = new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'));
 
-        $service = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $service = $this->createMock(ExchangeRateService::class);
 
         $service
             ->expects($this->once())

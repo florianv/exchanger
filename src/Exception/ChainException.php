@@ -23,14 +23,14 @@ final class ChainException extends Exception
     /**
      * The exceptions.
      *
-     * @var Exception[]
+     * @var \Throwable[]
      */
     private $exceptions;
 
     /**
      * Creates a new chain exception.
      *
-     * @param Exception[] $exceptions
+     * @param \Throwable[] $exceptions
      */
     public function __construct(array $exceptions)
     {
@@ -56,7 +56,7 @@ final class ChainException extends Exception
     /**
      * Gets the exceptions indexed by service class name.
      *
-     * @return Exception[]
+     * @return \Throwable[]
      */
     public function getExceptions(): array
     {

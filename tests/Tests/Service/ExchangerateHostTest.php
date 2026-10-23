@@ -19,6 +19,8 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\ExchangerateHost;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 /**
  * @author Pascal Hofmann <mail@pascalhofmann.de>
@@ -28,7 +30,7 @@ class ExchangerateHostTest extends ServiceTestCase
     #[Test]
     public function it_supports_all_queries()
     {
-        $service = new ExchangerateHost($this->createMock('Http\Client\HttpClient'));
+        $service = new ExchangerateHost($this->createMock(HttpClient::class));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
@@ -40,7 +42,7 @@ class ExchangerateHostTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $uri = 'https://api.exchangerate.host/latest?base=USD&v=' . date('Y-m-d');
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/error.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/error.json');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -51,7 +53,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'https://api.exchangerate.host/latest?base=EUR&v=' . date('Y-m-d');
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/latest.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/latest.json');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -67,7 +69,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content));
@@ -84,7 +86,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&source=ecb';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['source' => 'ecb']);
@@ -102,7 +104,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&source=testing';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['source' => 'ecb']);
@@ -120,7 +122,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&places=10';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['places' => 6]);
@@ -138,7 +140,7 @@ class ExchangerateHostTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://api.exchangerate.host/2000-01-03?base=EUR&places=6';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/ExchangerateHost/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new ExchangerateHost($this->getHttpAdapterMock($uri, $content), null, ['places' => 6]);
@@ -154,7 +156,7 @@ class ExchangerateHostTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new ExchangerateHost($this->createMock('Http\Client\HttpClient'));
+        $service = new ExchangerateHost($this->createMock(HttpClient::class));
 
         $this->assertSame('exchangeratehost', $service->getName());
     }

@@ -83,6 +83,10 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
     #[Test]
     public function it_skips_only_contract_tests_and_explains_why(): void
     {
+        if ([] === $this->skippedTests) {
+            $this->expectNotToPerformAssertions();
+        }
+
         foreach ($this->skippedTests as $test => $reason) {
             $this->assertTrue(
                 str_starts_with($test, 'it_') && method_exists(self::class, $test),
@@ -90,8 +94,6 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
             );
             $this->assertNotSame('', trim($reason), \sprintf('$skippedTests must give a reason for skipping "%s".', $test));
         }
-
-        $this->addToAssertionCount(1);
     }
 
     #[Test]

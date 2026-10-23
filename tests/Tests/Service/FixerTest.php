@@ -19,6 +19,8 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\Fixer;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 /**
  * @author Pascal Hofmann <mail@pascalhofmann.de>
@@ -28,21 +30,21 @@ class FixerTest extends ServiceTestCase
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock(HttpClient::class), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
     }
 
     #[Test]
     public function it_supports_eur_base_normal_mode()
     {
-        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock(HttpClient::class), null, ['access_key' => 'x']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/CAD'))));
     }
 
     #[Test]
     public function it_does_not_support_other_than_eur_base_in_normal_mode()
     {
-        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x']);
+        $service = new Fixer($this->createMock(HttpClient::class), null, ['access_key' => 'x']);
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/CAD'))));
     }
 
@@ -54,7 +56,7 @@ class FixerTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $uri = 'http://data.fixer.io/api/latest?access_key=x';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/error.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/Fixer/error.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -65,7 +67,7 @@ class FixerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'http://data.fixer.io/api/latest?access_key=x';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/latest.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/Fixer/latest.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -81,7 +83,7 @@ class FixerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/CHF');
         $uri = 'https://data.fixer.io/api/latest?base=EUR&access_key=x';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/latest.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/Fixer/latest.json');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -97,7 +99,7 @@ class FixerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'http://data.fixer.io/api/2000-01-03?access_key=x';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/historical.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/Fixer/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x']);
@@ -114,7 +116,7 @@ class FixerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/AUD');
         $uri = 'https://data.fixer.io/api/2000-01-03?base=EUR&access_key=x';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Fixer/historical.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/Fixer/historical.json');
         $date = new \DateTime('2000-01-03');
 
         $service = new Fixer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'x', 'enterprise' => true]);
@@ -129,7 +131,7 @@ class FixerTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new Fixer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'x', 'enterprise' => true]);
+        $service = new Fixer($this->createMock(HttpClient::class), null, ['access_key' => 'x', 'enterprise' => true]);
 
         $this->assertSame('fixer', $service->getName());
     }

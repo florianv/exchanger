@@ -18,13 +18,15 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\WebserviceX;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 class WebserviceXTest extends ServiceTestCase
 {
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new WebserviceX($this->createMock('Http\Client\HttpClient'));
+        $service = new WebserviceX($this->createMock(HttpClient::class));
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -35,7 +37,7 @@ class WebserviceXTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'http://www.webservicex.net/currencyconvertor.asmx/ConversionRate?FromCurrency=EUR&ToCurrency=USD';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/WebserviceX/success.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/WebserviceX/success.xml');
 
         $service = new WebserviceX($this->getHttpAdapterMock($uri, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -49,7 +51,7 @@ class WebserviceXTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new WebserviceX($this->createMock('Http\Client\HttpClient'));
+        $service = new WebserviceX($this->createMock(HttpClient::class));
 
         $this->assertSame('webservicex', $service->getName());
     }

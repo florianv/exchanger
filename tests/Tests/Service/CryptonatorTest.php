@@ -18,6 +18,8 @@ use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\Cryptonator;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 class CryptonatorTest extends ServiceTestCase
 {
@@ -26,7 +28,7 @@ class CryptonatorTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $uri = 'https://api.cryptonator.com/api/ticker/btc-isk';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Cryptonator/error.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/Cryptonator/error.json');
 
         $service = new Cryptonator($this->getHttpAdapterMock($uri, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/ISK')));
@@ -37,13 +39,13 @@ class CryptonatorTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('BTC/USD');
         $url = 'https://api.cryptonator.com/api/ticker/btc-usd';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/Cryptonator/success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/Cryptonator/success.json');
 
         $service = new Cryptonator($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(4194.86340277, $rate->getValue());
-        $this->assertInstanceOf('\DateTime', $rate->getDate());
+        $this->assertInstanceOf(\DateTime::class, $rate->getDate());
         $this->assertEquals('cryptonator', $rate->getProviderName());
         $this->assertSame($pair, $rate->getCurrencyPair());
     }
@@ -51,7 +53,7 @@ class CryptonatorTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new Cryptonator($this->createMock('Http\Client\HttpClient'));
+        $service = new Cryptonator($this->createMock(HttpClient::class));
 
         $this->assertSame('cryptonator', $service->getName());
     }

@@ -36,6 +36,7 @@ class ChainExceptionTest extends TestCase
      */
     private $exception2;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->exception1 = new \Exception('Something bad happened.');

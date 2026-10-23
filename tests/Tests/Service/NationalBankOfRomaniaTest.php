@@ -22,6 +22,7 @@ use Exchanger\Service\NationalBankOfRomania;
 use Http\Client\HttpClient;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Exchanger\Tests\FileContents;
 
 class NationalBankOfRomaniaTest extends ServiceTestCase
 {
@@ -47,7 +48,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $this->expectException(UnsupportedCurrencyPairException::class);
 
         $url = 'https://curs.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/RON')));
@@ -58,7 +59,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/RON');
         $url = 'https://curs.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -74,7 +75,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('HUF/RON');
         $url = 'https://curs.bnr.ro/nbrfxrates.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -95,7 +96,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $content = str_replace(
             'xmlns="http://www.bnr.ro/xsd"',
             'xmlns="https://www.bnr.ro/xsd"',
-            file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml'),
+            FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates.xml'),
             $count,
         );
         $this->assertSame(1, $count);
@@ -114,7 +115,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/RON');
         $url = 'https://curs.bnr.ro/files/xml/years/nbrfxrates2018.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(
@@ -136,7 +137,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $content = str_replace(
             'xmlns="http://www.bnr.ro/xsd"',
             'xmlns="https://www.bnr.ro/xsd"',
-            file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml'),
+            FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml'),
             $count,
         );
         $this->assertSame(1, $count);
@@ -159,7 +160,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $this->expectExceptionMessage("The date \"2018-02-25\" is not supported by the service \"Exchanger\Service\NationalBankOfRomania\".");
 
         $url = 'https://curs.bnr.ro/files/xml/years/nbrfxrates2018.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(
@@ -173,7 +174,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
         $this->expectExceptionMessage("The currency pair \"RON/XXL\" is not supported by the service \"Exchanger\Service\NationalBankOfRomania\".");
         $this->expectException(UnsupportedCurrencyPairException::class);
         $url = 'https://curs.bnr.ro/files/xml/years/nbrfxrates2018.xml';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfRomania/nbrfxrates2018.xml');
 
         $service = new NationalBankOfRomania($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(
@@ -184,7 +185,7 @@ class NationalBankOfRomaniaTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name(): void
     {
-        $service = new NationalBankOfRomania($this->createMock('Http\Client\HttpClient'));
+        $service = new NationalBankOfRomania($this->createMock(HttpClient::class));
 
         $this->assertSame('national_bank_of_romania', $service->getName());
     }

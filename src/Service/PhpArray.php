@@ -29,22 +29,22 @@ final class PhpArray extends Service
     /**
      * The latest rates.
      *
-     * @var ExchangeRate[]|string[]
+     * @var array<string, float|int|string>
      */
     private $latestRates;
 
     /**
      * The historical rates.
      *
-     * @var ExchangeRate[][]|string[][]
+     * @var array<string, array<string, float|int|string>>
      */
     private $historicalRates;
 
     /**
      * Constructor.
      *
-     * @param ExchangeRate[]|string[]     $latestRates     An array of rates indexed by the corresponding currency pair symbol
-     * @param ExchangeRate[][]|string[][] $historicalRates An array of rates indexed by the date in Y-m-d format
+     * @param array<string, float|int|string>                $latestRates     Scalar rates indexed by the corresponding currency pair symbol
+     * @param array<string, array<string, float|int|string>> $historicalRates Scalar rates indexed by the date in Y-m-d format, then by currency pair
      */
     public function __construct(array $latestRates, array $historicalRates = [])
     {

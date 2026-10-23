@@ -19,6 +19,8 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\CoinLayer;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 /**
  * @author Florian Voutzinos <florian@voutzinos.com>
@@ -30,13 +32,13 @@ class CoinLayerTest extends ServiceTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "access_key" option must be provided.');
-        new CoinLayer($this->createMock('Http\Client\HttpClient'));
+        new CoinLayer($this->createMock(HttpClient::class));
     }
 
     #[Test]
     public function it_supports_all_queries()
     {
-        $service = new CoinLayer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret']);
+        $service = new CoinLayer($this->createMock(HttpClient::class), null, ['access_key' => 'secret']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
     }
 
@@ -45,7 +47,7 @@ class CoinLayerTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $uri = 'http://api.coinlayer.com/api/live?access_key=secret&symbols=BTC&target=USD';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/error.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CoinLayer/error.json');
 
         $service = new CoinLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('BTC/USD')));
@@ -57,7 +59,7 @@ class CoinLayerTest extends ServiceTestCase
         $uri = 'http://api.coinlayer.com/api/live?access_key=secret&symbols=BTC&target=USD';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1583227144);
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CoinLayer/success.json');
 
         $pair = CurrencyPair::createFromString('BTC/USD');
         $service = new CoinLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret']);
@@ -75,7 +77,7 @@ class CoinLayerTest extends ServiceTestCase
         $uri = 'https://api.coinlayer.com/api/live?access_key=secret&symbols=BTC&target=USD';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1583227144);
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CoinLayer/success.json');
 
         $pair = CurrencyPair::createFromString('BTC/USD');
         $service = new CoinLayer($this->getHttpAdapterMock($uri, $content), null, ['access_key' => 'secret', 'paid' => true]);
@@ -92,7 +94,7 @@ class CoinLayerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('ETH/USD');
         $uri = 'http://api.coinlayer.com/api/2015-05-06?access_key=secret&symbols=ETH&target=USD';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/historical_success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CoinLayer/historical_success.json');
         $date = new \DateTime('2015-05-06');
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1577923149);
@@ -111,7 +113,7 @@ class CoinLayerTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('ETH/USD');
         $uri = 'https://api.coinlayer.com/api/2015-05-06?access_key=secret&symbols=ETH&target=USD';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CoinLayer/historical_success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CoinLayer/historical_success.json');
         $date = new \DateTime('2015-05-06');
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1577923149);
@@ -128,7 +130,7 @@ class CoinLayerTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new CoinLayer($this->createMock('Http\Client\HttpClient'), null, ['access_key' => 'secret', 'enterprise' => true]);
+        $service = new CoinLayer($this->createMock(HttpClient::class), null, ['access_key' => 'secret', 'enterprise' => true]);
 
         $this->assertSame('coin_layer', $service->getName());
     }

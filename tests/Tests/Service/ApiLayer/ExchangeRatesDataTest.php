@@ -23,6 +23,8 @@ use Exchanger\Service\ApiLayer\CurrencyData;
 use Exchanger\Service\ApiLayer\ExchangeRatesData;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 /**
  * @author Florian Voutzinos <florian@voutzinos.com>
@@ -34,14 +36,14 @@ class ExchangeRatesDataTest extends ServiceTestCase
     {
         $this->expectException(NonBreakingInvalidArgumentException::class);
         $this->expectExceptionMessage('The "api_key" option must be provided to use Exchange Rates Data (https://exchangeratesapi.io).');
-        new ExchangeRatesData($this->createMock('Http\Client\HttpClient'));
+        new ExchangeRatesData($this->createMock(HttpClient::class));
     }
 
     #[Test]
     public function it_does_support_all_queries()
     {
         $service = new ExchangeRatesData(
-            $this->createMock('Http\Client\HttpClient'),
+            $this->createMock(HttpClient::class),
             null,
             ['api_key' => 'x'],
         );
@@ -60,7 +62,7 @@ class ExchangeRatesDataTest extends ServiceTestCase
     ) {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
-        $content = file_get_contents($contentPath);
+        $content = FileContents::read($contentPath);
 
         $service = new ExchangeRatesData(
             $this->getHttpAdapterMock($uri, $content),
@@ -106,7 +108,8 @@ class ExchangeRatesDataTest extends ServiceTestCase
         ];
     }
 
-    // Note: This test was not run in the original codebase (lacked @test). The data provider has bugs.
+    #[Test]
+    #[DataProvider('errorResponsesProvider')]
     public function it_throws_an_exception_with_error_response(
         string $contentPath,
         string $uri,
@@ -119,7 +122,7 @@ class ExchangeRatesDataTest extends ServiceTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 
-        $content = file_get_contents($contentPath);
+        $content = FileContents::read($contentPath);
 
         $service = new ExchangeRatesData(
             $this->getHttpAdapterMock($uri, $content),
@@ -137,38 +140,38 @@ class ExchangeRatesDataTest extends ServiceTestCase
 
     public static function errorResponsesProvider(): array
     {
-        $dir = __DIR__ . '/../../Fixtures/Service/ExchangeRatesData/';
+        $dir = __DIR__ . '/../../../Fixtures/Service/ApiLayer/ExchangeRatesData/';
 
         return [
-            'invalid_api_key' => [
-                $dir . 'invalid_api_key.json',
-                sprintf(ExchangeRatesData::LATEST_URL, $accessKey = 'invalid', $currency = 'USD'),
-                $accessKey,
-                'EUR/' . $currency,
+            'invalid_access_key' => [
+                $dir . 'invalid_access_key.json',
+                sprintf(ExchangeRatesData::LATEST_URL, 'EUR', 'invalid', 'USD'),
+                'invalid',
+                'EUR/USD',
                 'You have not supplied a valid API Access Key. [Technical Support: support@apilayer.com]',
             ],
             'base_currency_access_restricted' => [
                 $dir . 'base_currency_access_restricted.json',
-                sprintf(ExchangeRatesData::LATEST_URL, $baseCurrency = 'USD', $accessKey = 'valid', $currency = 'EUR'),
-                $accessKey,
-                $baseCurrency . '/' . $currency,
+                sprintf(ExchangeRatesData::LATEST_URL, 'USD', 'valid', 'EUR'),
+                'valid',
+                'USD/EUR',
                 'An unexpected error ocurred. [Technical Support: support@apilayer.com]',
             ],
             'https_access_restricted' => [
                 $dir . 'https_access_restricted.json',
-                sprintf(ExchangeRatesData::LATEST_URL, $baseCurrency = 'EUR', $accessKey = 'valid', $currency = 'USD'),
-                $accessKey,
-                $baseCurrency . '/' . $currency,
+                sprintf(ExchangeRatesData::LATEST_URL, 'EUR', 'valid', 'USD'),
+                'valid',
+                'EUR/USD',
                 'Access Restricted - Your current Subscription Plan does not support HTTPS Encryption.',
             ],
             'invalid_date' => [
                 $dir . 'invalid_date.json',
-                sprintf(ExchangeRatesData::HISTORICAL_URL, $date = '2056-01-01', $accessKey = 'valid', $currency = 'USD'),
-                $accessKey,
-                $baseCurrency . '/' . $currency,
+                sprintf(ExchangeRatesData::HISTORICAL_URL, '2056-01-01', 'EUR', 'valid', 'USD'),
+                'valid',
+                'EUR/USD',
                 'You have entered an invalid date. [Required format: date=YYYY-MM-DD]',
                 true,
-                $date,
+                '2056-01-01',
             ],
         ];
     }
@@ -178,7 +181,7 @@ class ExchangeRatesDataTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'https://api.apilayer.com/exchangerates_data/latest?base=EUR&apikey=x&symbols=USD';
-        $content = file_get_contents(__DIR__ . '/../../../Fixtures/Service/ApiLayer/ExchangeRatesData/latest.json');
+        $content = FileContents::read(__DIR__ . '/../../../Fixtures/Service/ApiLayer/ExchangeRatesData/latest.json');
 
         $service = new ExchangeRatesData(
             $this->getHttpAdapterMock($uri, $content),
@@ -198,7 +201,7 @@ class ExchangeRatesDataTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $uri = 'https://api.apilayer.com/exchangerates_data/2021-04-15?base=EUR&apikey=x&symbols=USD';
-        $content = file_get_contents(__DIR__ . '/../../../Fixtures/Service/ApiLayer/ExchangeRatesData/historical.json');
+        $content = FileContents::read(__DIR__ . '/../../../Fixtures/Service/ApiLayer/ExchangeRatesData/historical.json');
         $date = new \DateTime('2021-04-15');
 
         $service = new ExchangeRatesData(
@@ -217,7 +220,7 @@ class ExchangeRatesDataTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new ExchangeRatesData($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'x']);
+        $service = new ExchangeRatesData($this->createMock(HttpClient::class), null, ['api_key' => 'x']);
 
         $this->assertSame('apilayer_exchange_rates_data', $service->getName());
     }

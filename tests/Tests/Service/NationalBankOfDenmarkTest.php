@@ -25,6 +25,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Exchanger\Tests\FileContents;
 
 class NationalBankOfDenmarkTest extends ServiceTestCase
 {
@@ -49,7 +50,7 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
     {
         $this->expectException(UnsupportedCurrencyPairException::class);
 
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/currencyratesxml.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/currencyratesxml.xml');
 
         $service = new NationalBankOfDenmark($this->getHttpAdapterMock(NationalBankOfDenmark::LATEST_URL, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/DKK')));
@@ -59,7 +60,7 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
     public function it_fetches_a_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/DKK');
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/currencyratesxml.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/currencyratesxml.xml');
 
         $service = new NationalBankOfDenmark($this->getHttpAdapterMock(NationalBankOfDenmark::LATEST_URL, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -74,7 +75,7 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
     public function it_fetches_a_rate_when_dkk_is_base(): void
     {
         $pair = CurrencyPair::createFromString('DKK/EUR');
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/currencyratesxml.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/currencyratesxml.xml');
 
         $service = new NationalBankOfDenmark($this->getHttpAdapterMock(NationalBankOfDenmark::LATEST_URL, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -129,7 +130,7 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
     public function it_fetches_an_old_historical_rate(): void
     {
         $pair = CurrencyPair::createFromString('EUR/DKK');
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/statbank-eur.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/statbank-eur.json');
 
         $service = new NationalBankOfDenmark($this->getStatbankAdapterMock($content, 'EUR', '2024M03D14'));
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, new \DateTime('2024-03-14')));
@@ -144,7 +145,7 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
     public function it_fetches_an_old_historical_rate_when_dkk_is_base(): void
     {
         $pair = CurrencyPair::createFromString('DKK/EUR');
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/statbank-eur.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/statbank-eur.json');
 
         $service = new NationalBankOfDenmark($this->getStatbankAdapterMock($content, 'EUR', '2024M03D14'));
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, new \DateTime('2024-03-14')));
@@ -161,7 +162,7 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
         $this->expectException(UnsupportedDateException::class);
         $this->expectExceptionMessage("The date \"2024-03-16\" is not supported by the service \"Exchanger\Service\NationalBankOfDenmark\".");
 
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/statbank-notfound-date.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/statbank-notfound-date.json');
 
         $service = new NationalBankOfDenmark($this->getStatbankAdapterMock($content, 'EUR', '2024M03D16'));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/DKK'), new \DateTime('2024-03-16')));
@@ -171,7 +172,7 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
     public function it_posts_to_statbank_using_the_injected_stream_factory(): void
     {
         $pair = CurrencyPair::createFromString('EUR/DKK');
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/statbank-eur.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/statbank-eur.json');
         $expectedBody = $this->buildStatbankRequestBody('EUR', '2024M03D14');
 
         $streamFactory = $this->createMock(StreamFactoryInterface::class);
@@ -195,13 +196,14 @@ class NationalBankOfDenmarkTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name(): void
     {
-        $service = new NationalBankOfDenmark($this->createMock('Http\Client\HttpClient'));
+        $service = new NationalBankOfDenmark($this->createMock(HttpClient::class));
 
         $this->assertSame('national_bank_of_denmark', $service->getName());
     }
 
     public static function getSupportedCurrencies(): array
     {
+        /** @var list<string> $currencies */
         $currencies = (new \ReflectionClassConstant(NationalBankOfDenmark::class, 'SUPPORTED_CURRENCIES'))->getValue();
 
         return array_map(static fn(string $currency): array => [$currency], $currencies);

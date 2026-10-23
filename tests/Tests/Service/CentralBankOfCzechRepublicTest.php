@@ -18,6 +18,8 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\CentralBankOfCzechRepublic;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 /**
  * @author Petr Kramar <petr.kramar@perlur.cz>
@@ -47,17 +49,19 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     /**
      * Set up variables before TestCase is being initialized.
      */
+    #[\Override]
     public static function setUpBeforeClass(): void
     {
         self::$url = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=' . date('d.m.Y');
         self::$historicalUrl = 'https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=23.04.2000';
-        self::$content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfCzechRepublic/cnb_today.txt');
-        self::$historicalContent = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfCzechRepublic/cnb_historical.txt');
+        self::$content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CentralBankOfCzechRepublic/cnb_today.txt');
+        self::$historicalContent = FileContents::read(__DIR__ . '/../../Fixtures/Service/CentralBankOfCzechRepublic/cnb_historical.txt');
     }
 
     /**
      * Clean variables after TestCase finish.
      */
+    #[\Override]
     public static function tearDownAfterClass(): void
     {
         self::$url = null;
@@ -67,7 +71,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new CentralBankOfCzechRepublic($this->createMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfCzechRepublic($this->createMock(HttpClient::class));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('CZK/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/TRY'))));
@@ -140,7 +144,7 @@ class CentralBankOfCzechRepublicTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new CentralBankOfCzechRepublic($this->createMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfCzechRepublic($this->createMock(HttpClient::class));
 
         $this->assertSame('central_bank_of_czech_republic', $service->getName());
     }

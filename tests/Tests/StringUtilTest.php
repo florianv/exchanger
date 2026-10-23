@@ -24,7 +24,7 @@ class StringUtilTest extends TestCase
     {
         $element = StringUtil::xmlToElement('<root>hello</root>');
 
-        $this->assertInstanceOf('\SimpleXMLElement', $element);
+        $this->assertInstanceOf(\SimpleXMLElement::class, $element);
         $this->assertEquals('hello', (string) $element);
     }
 

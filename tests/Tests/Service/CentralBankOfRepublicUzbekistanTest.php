@@ -19,6 +19,8 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\CentralBankOfRepublicUzbekistan;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
 {
@@ -37,17 +39,19 @@ class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
     /**
      * Set up variables before TestCase is being initialized.
      */
+    #[\Override]
     public static function setUpBeforeClass(): void
     {
         self::$url = 'https://cbu.uz/common/json';
         self::$historicalUrl = 'https://cbu.uz/common/json?date=15.07.2020';
-        self::$content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicUzbekistan/cbru_today.json');
-        self::$historicalContent = file_get_contents(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicUzbekistan/cbru_historical.json');
+        self::$content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicUzbekistan/cbru_today.json');
+        self::$historicalContent = FileContents::read(__DIR__ . '/../../Fixtures/Service/CentralBankOfRepublicUzbekistan/cbru_historical.json');
     }
 
     /**
      * Clean variables after TestCase finish.
      */
+    #[\Override]
     public static function tearDownAfterClass(): void
     {
         self::$url = null;
@@ -75,7 +79,7 @@ class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new CentralBankOfRepublicUzbekistan($this->createMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfRepublicUzbekistan($this->createMock(HttpClient::class));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('UZS/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
@@ -133,7 +137,7 @@ class CentralBankOfRepublicUzbekistanTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new CentralBankOfRepublicUzbekistan($this->createMock('Http\Client\HttpClient'));
+        $service = new CentralBankOfRepublicUzbekistan($this->createMock(HttpClient::class));
 
         $this->assertSame('central_bank_of_republic_uzbekistan', $service->getName());
     }

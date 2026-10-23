@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="6.16.1@f1f5de594dc76faf8784e02d3dc4716c91c6f6ac">
-  <file src="src/Contract/ExchangeRate.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getCurrencyPair]]></code>
-      <code><![CDATA[getDate]]></code>
-      <code><![CDATA[getProviderName]]></code>
-      <code><![CDATA[getValue]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Contract/ExchangeRateService.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getName]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Exception/ChainException.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[getExceptions]]></code>
-    </PossiblyUnusedMethod>
-  </file>
+<files psalm-version="6.20.1@376425b8e67b79773add388e16b4f6be5693dc87">
   <file src="src/Exception/UnsupportedCurrencyPairException.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[getCurrencyPair]]></code>
@@ -115,12 +97,6 @@
     </InvalidOperand>
   </file>
   <file src="src/Service/Chain.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA[$exceptions]]></code>
-    </ArgumentTypeCoercion>
-    <NoValue>
-      <code><![CDATA[$services]]></code>
-    </NoValue>
     <PossiblyInvalidPropertyAssignmentValue>
       <code><![CDATA[$services]]></code>
     </PossiblyInvalidPropertyAssignmentValue>
@@ -189,11 +165,6 @@
       <code><![CDATA[$exchangeRateQuery]]></code>
     </ParamNameMismatch>
   </file>
-  <file src="src/Service/HttpService.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[__construct]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="src/Service/NationalBankOfGeorgia.php">
     <InvalidOperand>
       <code><![CDATA[$rate / $unit]]></code>
@@ -221,15 +192,6 @@
     <PossiblyInvalidOperand>
       <code><![CDATA[$rateValue]]></code>
     </PossiblyInvalidOperand>
-  </file>
-  <file src="src/Service/PhpArray.php">
-    <InvalidCast>
-      <code><![CDATA[$this->historicalRates[$date->format('Y-m-d')][(string) $currencyPair]]]></code>
-      <code><![CDATA[$this->latestRates[(string) $currencyPair]]]></code>
-    </InvalidCast>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[__construct]]></code>
-    </PossiblyUnusedMethod>
   </file>
   <file src="src/Service/RussianCentralBank.php">
     <InvalidOperand>

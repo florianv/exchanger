@@ -30,14 +30,14 @@ class ChainTest extends TestCase
     public function it_does_not_support_all_queries()
     {
         // Supported
-        $serviceOne = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $serviceOne = $this->createMock(ExchangeRateService::class);
 
         $serviceOne
             ->expects($this->once())
             ->method('supportQuery')
             ->willReturn(true);
 
-        $serviceTwo = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $serviceTwo = $this->createMock(ExchangeRateService::class);
 
         $serviceTwo
             ->expects($this->never())
@@ -49,14 +49,14 @@ class ChainTest extends TestCase
         $this->assertTrue($chain->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('TRY/EUR'))));
 
         // Not Supported
-        $serviceOne = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $serviceOne = $this->createMock(ExchangeRateService::class);
 
         $serviceOne
             ->expects($this->once())
             ->method('supportQuery')
             ->willReturn(false);
 
-        $serviceTwo = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $serviceTwo = $this->createMock(ExchangeRateService::class);
 
         $serviceTwo
             ->expects($this->once())
@@ -75,7 +75,7 @@ class ChainTest extends TestCase
         $query = new ExchangeRateQuery($pair);
         $rate = new ExchangeRate($pair, 1.0, new \DateTime(), PhpArray::class);
 
-        $serviceOne = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $serviceOne = $this->createMock(ExchangeRateService::class);
 
         $serviceOne
             ->expects($this->once())
@@ -88,7 +88,7 @@ class ChainTest extends TestCase
             ->with($query)
             ->will($this->throwException(new Exception()));
 
-        $serviceTwo = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $serviceTwo = $this->createMock(ExchangeRateService::class);
 
         $serviceTwo
             ->expects($this->once())
@@ -101,7 +101,7 @@ class ChainTest extends TestCase
             ->with($query)
             ->willReturn($rate);
 
-        $serviceThree = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $serviceThree = $this->createMock(ExchangeRateService::class);
 
         $serviceThree
             ->expects($this->never())
@@ -122,7 +122,7 @@ class ChainTest extends TestCase
     public function it_throws_an_exception_when_all_providers_fail()
     {
         $exception = new Exception('Unsupported currency pair.');
-        $serviceOne = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $serviceOne = $this->createMock(ExchangeRateService::class);
 
         $serviceOne
             ->expects($this->once())
@@ -134,7 +134,7 @@ class ChainTest extends TestCase
             ->method('supportQuery')
             ->willReturn(true);
 
-        $serviceTwo = $this->createMock('Exchanger\Contract\ExchangeRateService');
+        $serviceTwo = $this->createMock(ExchangeRateService::class);
 
         $serviceTwo
             ->expects($this->once())

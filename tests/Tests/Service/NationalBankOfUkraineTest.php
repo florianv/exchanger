@@ -20,6 +20,8 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\NationalBankOfUkraine;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 /**
  * Tests for National Bank of Ukraine.
@@ -31,7 +33,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new NationalBankOfUkraine($this->createMock('Http\Client\HttpClient'));
+        $service = new NationalBankOfUkraine($this->createMock(HttpClient::class));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/UAH'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -46,7 +48,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/success.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/success.xml');
 
         $service = new NationalBankOfUkraine($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXL/UAH')));
@@ -57,7 +59,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/UAH');
         $url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/success.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/success.xml');
 
         $service = new NationalBankOfUkraine($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -73,7 +75,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('AMD/UAH');
         $url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/success.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/success.xml');
 
         $service = new NationalBankOfUkraine($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -89,7 +91,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/UAH');
         $url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date=20190101';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/historical.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/historical.xml');
 
         $service = new NationalBankOfUkraine($this->getHttpAdapterMock($url, $content));
         $rate = $service->getExchangeRate(
@@ -110,7 +112,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date=19900101';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/historical_error.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/historical_error.xml');
 
         $service = new NationalBankOfUkraine($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/UAH'), new \DateTime('1990-01-01')));
@@ -124,7 +126,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date=20190101';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/historical.xml');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfUkraine/historical.xml');
 
         $service = new NationalBankOfUkraine($this->getHttpAdapterMock($url, $content));
         $service->getExchangeRate(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('XXL/UAH'), new \DateTime('2019-01-01')));
@@ -133,7 +135,7 @@ class NationalBankOfUkraineTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new NationalBankOfUkraine($this->createMock('Http\Client\HttpClient'));
+        $service = new NationalBankOfUkraine($this->createMock(HttpClient::class));
 
         $this->assertSame('national_bank_of_ukraine', $service->getName());
     }
