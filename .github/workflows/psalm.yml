@@ -23,3 +23,23 @@ jobs:
 
       - name: Run Psalm
         run: vendor/bin/psalm --no-progress
+
+  baseline:
+    name: Psalm baseline does not grow
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check for new baseline entries
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          added=$(git diff -U0 "origin/$BASE_REF...HEAD" -- psalm-baseline.xml | grep -c '^+[[:space:]]*<code>' || true)
+          if [ "$added" -gt 0 ]; then
+            echo "::error file=psalm-baseline.xml::This PR adds $added suppressed Psalm issue(s) to psalm-baseline.xml. Fix them in code instead."
+            exit 1
+          fi
