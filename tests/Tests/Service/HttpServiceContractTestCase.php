@@ -20,17 +20,17 @@ use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\Exception\UnsupportedExchangeQueryException;
 use Exchanger\HistoricalExchangeRateQuery;
-use Psr\Http\Client\ClientInterface;
 use Http\Mock\Client;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use Psr\Http\Client\ClientInterface;
 
 /**
  * Behaviour every HTTP-based exchange rate service must share.
  *
  * Extend it from the service test and implement the abstract methods. To opt out of a test,
- * list it in $skippedTests with the reason; reviewers see the reason in the test output.
+ * list it in $skippedTests with the reason; the reason is shown in the test output.
  */
 abstract class HttpServiceContractTestCase extends ServiceTestCase
 {
@@ -40,7 +40,7 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
     protected const SECRET = 'contract-test-secret';
 
     /**
-     * @var array<string, string> test method name => reason
+     * @var array<string, string> contract test method name => reason
      */
     protected array $skippedTests = [];
 
@@ -55,6 +55,13 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
     abstract protected function validOptions(): array;
 
     /**
+     * Option keys the constructor must reject when missing. Return [] for a service that needs no options.
+     *
+     * @return list<string>
+     */
+    abstract protected function requiredOptions(): array;
+
+    /**
      * A query the service supports, answered by successfulResponseBody().
      */
     abstract protected function supportedQuery(): ExchangeRateQuery;
@@ -65,13 +72,25 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
     abstract protected function successfulResponseBody(): string;
 
     /**
-     * Option keys the constructor must reject when missing.
-     *
-     * @return list<string>
+     * A historical query supportQuery() rejects, or null if the service supports every date.
      */
-    protected function requiredOptions(): array
+    protected function unsupportedHistoricalQuery(): ?ExchangeRateQuery
     {
-        return [];
+        return new HistoricalExchangeRateQuery($this->supportedQuery()->getCurrencyPair(), new \DateTimeImmutable('2000-01-03'));
+    }
+
+    #[Test]
+    public function it_skips_only_contract_tests_and_explains_why(): void
+    {
+        foreach ($this->skippedTests as $test => $reason) {
+            $this->assertTrue(
+                str_starts_with($test, 'it_') && method_exists(self::class, $test),
+                \sprintf('$skippedTests lists "%s", which is not a test of %s.', $test, self::class),
+            );
+            $this->assertNotSame('', trim($reason), \sprintf('$skippedTests must give a reason for skipping "%s".', $test));
+        }
+
+        $this->addToAssertionCount(1);
     }
 
     #[Test]
@@ -99,13 +118,12 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
 
         $exception = $this->catchException($this->createServiceRespondingWith($statusCode, $body), $this->supportedQuery());
 
-        $this->assertNotUnsupportedException($exception);
+        $this->assertServiceError($exception);
         $this->assertStringContainsString(
             (string) $statusCode,
             $exception->getMessage(),
             'Include the HTTP status code in the message, so an outage is distinguishable from a provider error.',
         );
-        $this->assertStringNotContainsString(self::SECRET, $exception->getMessage(), 'Error messages must not contain API keys.');
     }
 
     #[Test]
@@ -114,30 +132,30 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
     {
         $this->skipIfListed(__FUNCTION__);
 
-        $exception = $this->catchException($this->createServiceRespondingWith(200, $body), $this->supportedQuery());
-
-        $this->assertNotUnsupportedException($exception);
-        $this->assertStringNotContainsString(self::SECRET, $exception->getMessage(), 'Error messages must not contain API keys.');
+        $this->assertServiceError($this->catchException($this->createServiceRespondingWith(200, $body), $this->supportedQuery()));
     }
 
     #[Test]
-    public function it_does_not_answer_historical_queries_it_does_not_support(): void
+    public function it_rejects_historical_queries_it_does_not_support(): void
     {
         $this->skipIfListed(__FUNCTION__);
 
-        $query = new HistoricalExchangeRateQuery($this->supportedQuery()->getCurrencyPair(), new \DateTimeImmutable('2000-01-03'));
+        $query = $this->unsupportedHistoricalQuery();
         $service = $this->createServiceRespondingWith(200, $this->successfulResponseBody());
 
-        if ($service->supportQuery($query)) {
-            $this->addToAssertionCount(1);
-
-            return;
+        if (null === $query || $service->supportQuery($query)) {
+            $this->markTestSkipped('The service supports every historical date. Override unsupportedHistoricalQuery() if some dates are not supported.');
         }
 
-        $this->assertInstanceOf(
-            \Throwable::class,
-            $this->catchException($service, $query),
-            'getExchangeRate() must not return a rate for a query supportQuery() rejects.',
+        $exception = $this->catchException($service, $query);
+
+        $this->assertTrue(
+            $exception instanceof UnsupportedDateException || $exception instanceof UnsupportedExchangeQueryException,
+            \sprintf(
+                'getExchangeRate() must throw UnsupportedDateException or UnsupportedExchangeQueryException for a query supportQuery() rejects, %s thrown: %s',
+                $exception::class,
+                $exception->getMessage(),
+            ),
         );
     }
 
@@ -146,7 +164,21 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
     {
         $this->skipIfListed(__FUNCTION__);
 
-        foreach ($this->requiredOptions() as $option) {
+        $requiredOptions = $this->requiredOptions();
+
+        $this->assertSame(
+            [],
+            array_values(array_diff($requiredOptions, array_keys($this->validOptions()))),
+            'Every option in requiredOptions() must also be set in validOptions().',
+        );
+
+        if ([] === $requiredOptions) {
+            $this->assertInstanceOf(ExchangeRateService::class, $this->createService(new Client(), []), 'requiredOptions() is empty, so the service must work without options.');
+
+            return;
+        }
+
+        foreach ($requiredOptions as $option) {
             $options = $this->validOptions();
             unset($options[$option]);
 
@@ -157,15 +189,14 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
                 $this->assertStringContainsString($option, $exception->getMessage(), 'Name the missing option in the message.');
             }
         }
-
-        $this->addToAssertionCount(1);
     }
 
     public static function provideHttpErrors(): iterable
     {
         yield 'empty 500' => [500, ''];
         yield 'HTML 502 from a gateway' => [502, '<html><body><h1>502 Bad Gateway</h1></body></html>'];
-        yield 'JSON 503' => [503, '{"message":"Service Unavailable"}'];
+        yield 'JSON 503 with a message field' => [503, '{"message":"Service Unavailable"}'];
+        yield 'JSON 503 with an error field' => [503, '{"error":"Service Unavailable"}'];
         yield 'plain-text 429' => [429, 'Too Many Requests'];
     }
 
@@ -195,8 +226,18 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
         $this->fail('Expected getExchangeRate() to throw.');
     }
 
-    private function assertNotUnsupportedException(\Throwable $exception): void
+    /**
+     * A transport or parsing failure must be a deliberate service error: not a PHP error, not an
+     * "unsupported" answer (Chain callers and users treat those as permanent), and without the API key.
+     */
+    private function assertServiceError(\Throwable $exception): void
     {
+        $this->assertNotInstanceOf(
+            \Error::class,
+            $exception,
+            \sprintf('A failed request must be handled, not crash with %s: %s', $exception::class, $exception->getMessage()),
+        );
+
         foreach ([UnsupportedCurrencyPairException::class, UnsupportedDateException::class, UnsupportedExchangeQueryException::class] as $class) {
             $this->assertNotInstanceOf(
                 $class,
@@ -204,6 +245,8 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
                 'A transport or parsing failure must not look like an unsupported pair or date: Chain callers and users treat those as permanent.',
             );
         }
+
+        $this->assertStringNotContainsString(self::SECRET, $exception->getMessage(), 'Error messages must not contain API keys.');
     }
 
     private function skipIfListed(string $test): void

@@ -102,6 +102,10 @@ final class UniRateApi extends HttpService
                 ? $data['error']
                 : sprintf('Failed with HTTP response code %d', $response->getStatusCode());
 
+            if (isset($data['error']) && is_string($data['error']) && $response->getStatusCode() !== 200) {
+                $message .= sprintf(' (HTTP response code %d)', $response->getStatusCode());
+            }
+
             throw new Exception($message);
         }
 

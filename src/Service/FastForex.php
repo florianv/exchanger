@@ -111,6 +111,10 @@ final class FastForex extends HttpService
                 ? sprintf('Failed with HTTP response code %d', $response->getStatusCode())
                 : $result['error'];
 
+            if (!empty($result['error']) && is_string($result['error']) && $response->getStatusCode() !== 200) {
+                $message .= sprintf(' (HTTP response code %d)', $response->getStatusCode());
+            }
+
             throw new \Exchanger\Exception\Exception($message);
         }
 
