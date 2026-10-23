@@ -17,9 +17,6 @@
     </PossiblyInvalidArrayAccess>
   </file>
   <file src="src/Service/CentralBankOfRepublicTurkey.php">
-    <ParamNameMismatch>
-      <code><![CDATA[$exchangeRateQuery]]></code>
-    </ParamNameMismatch>
     <PossiblyNullArrayAccess>
       <code><![CDATA[$element->xpath('//Tarih_Date/@Date')[0]]]></code>
     </PossiblyNullArrayAccess>
@@ -29,16 +26,6 @@
       <code><![CDATA[$services]]></code>
     </PossiblyInvalidPropertyAssignmentValue>
   </file>
-  <file src="src/Service/CurrencyConverter.php">
-    <ParamNameMismatch>
-      <code><![CDATA[$exchangeRateQuery]]></code>
-    </ParamNameMismatch>
-  </file>
-  <file src="src/Service/CurrencyDataFeed.php">
-    <ParamNameMismatch>
-      <code><![CDATA[$exchangeRateQuery]]></code>
-    </ParamNameMismatch>
-  </file>
   <file src="src/Service/EuropeanCentralBank.php">
     <PossiblyNullArrayAccess>
       <code><![CDATA[$element->xpath('//xmlns:Cube[@time]/@time')[0]]]></code>
@@ -47,11 +34,6 @@
       <code><![CDATA[!$date]]></code>
       <code><![CDATA[!$date]]></code>
     </TypeDoesNotContainType>
-  </file>
-  <file src="src/Service/Forge.php">
-    <ParamNameMismatch>
-      <code><![CDATA[$exchangeRateQuery]]></code>
-    </ParamNameMismatch>
   </file>
   <file src="src/Service/NationalBankOfRepublicBelarus.php">
     <PossiblyNullArgument>
