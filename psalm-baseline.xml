@@ -11,19 +11,6 @@
       <code><![CDATA[$cache]]></code>
     </PossiblyNullPropertyAssignmentValue>
   </file>
-  <file src="src/Service/ApiLayer/CurrencyData.php">
-    <InvalidNullableReturnType>
-      <code><![CDATA[ExchangeRateContract]]></code>
-      <code><![CDATA[ExchangeRateContract]]></code>
-    </InvalidNullableReturnType>
-    <MismatchingDocblockReturnType>
-      <code><![CDATA[ExchangeRate|null]]></code>
-    </MismatchingDocblockReturnType>
-    <NullableReturnStatement>
-      <code><![CDATA[$this->doCreateRate($url, $currencyPair)]]></code>
-      <code><![CDATA[$this->doCreateRate($url, $exchangeQuery->getCurrencyPair())]]></code>
-    </NullableReturnStatement>
-  </file>
   <file src="src/Service/CentralBankOfCzechRepublic.php">
     <PossiblyInvalidArrayAccess>
       <code><![CDATA[$words[0]]]></code>
@@ -42,22 +29,6 @@
       <code><![CDATA[$services]]></code>
     </PossiblyInvalidPropertyAssignmentValue>
   </file>
-  <file src="src/Service/CoinLayer.php">
-    <InvalidNullableReturnType>
-      <code><![CDATA[ExchangeRateContract]]></code>
-      <code><![CDATA[ExchangeRateContract]]></code>
-    </InvalidNullableReturnType>
-    <MismatchingDocblockReturnType>
-      <code><![CDATA[ExchangeRate|null]]></code>
-    </MismatchingDocblockReturnType>
-    <NullableReturnStatement>
-      <code><![CDATA[$this->doCreateRate($url, $currencyPair)]]></code>
-      <code><![CDATA[$this->doCreateRate($url, $currencyPair)]]></code>
-    </NullableReturnStatement>
-    <UnusedMethod>
-      <code><![CDATA[getErrorMessage]]></code>
-    </UnusedMethod>
-  </file>
   <file src="src/Service/CurrencyConverter.php">
     <ParamNameMismatch>
       <code><![CDATA[$exchangeRateQuery]]></code>
@@ -67,19 +38,6 @@
     <ParamNameMismatch>
       <code><![CDATA[$exchangeRateQuery]]></code>
     </ParamNameMismatch>
-  </file>
-  <file src="src/Service/CurrencyLayer.php">
-    <InvalidNullableReturnType>
-      <code><![CDATA[ExchangeRateContract]]></code>
-      <code><![CDATA[ExchangeRateContract]]></code>
-    </InvalidNullableReturnType>
-    <MismatchingDocblockReturnType>
-      <code><![CDATA[ExchangeRate|null]]></code>
-    </MismatchingDocblockReturnType>
-    <NullableReturnStatement>
-      <code><![CDATA[$this->doCreateRate($url, $currencyPair)]]></code>
-      <code><![CDATA[$this->doCreateRate($url, $exchangeQuery->getCurrencyPair())]]></code>
-    </NullableReturnStatement>
   </file>
   <file src="src/Service/EuropeanCentralBank.php">
     <PossiblyNullArrayAccess>

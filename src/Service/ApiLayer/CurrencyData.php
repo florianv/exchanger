@@ -92,7 +92,7 @@ final class CurrencyData extends HttpService
      * @param string       $url
      * @param CurrencyPair $currencyPair
      *
-     * @return ExchangeRate|null
+     * @return ExchangeRate
      *
      * @throws Exception
      */
