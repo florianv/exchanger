@@ -61,11 +61,9 @@ final class AllRatesToday extends HttpService
         }
 
         $currencyPair = $exchangeQuery->getCurrencyPair();
-        $url = sprintf(
-            self::URL,
-            urlencode($currencyPair->getBaseCurrency()),
-            urlencode($currencyPair->getQuoteCurrency()),
-        );
+        $baseCurrency = strtoupper($currencyPair->getBaseCurrency());
+        $quoteCurrency = strtoupper($currencyPair->getQuoteCurrency());
+        $url = sprintf(self::URL, urlencode($baseCurrency), urlencode($quoteCurrency));
 
         $response = $this->getResponse($url, [
             'Accept' => 'application/json',
@@ -75,7 +73,8 @@ final class AllRatesToday extends HttpService
         $statusCode = $response->getStatusCode();
         $body = $response->getBody()->__toString();
 
-        // The API answers an invalid or unsupported currency code with HTTP 400.
+        // The request only sends the two currency codes, so of the documented causes of a 400
+        // only an invalid currency code applies.
         if ($statusCode === 400) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
@@ -100,37 +99,52 @@ final class AllRatesToday extends HttpService
             throw new Exception($message);
         }
 
-        $quoteCurrency = strtoupper($currencyPair->getQuoteCurrency());
+        // The API always answers with a list of rows, one per target currency.
+        if (!array_is_list($data)) {
+            throw new Exception('Unexpected response: expected a list of rates');
+        }
 
         foreach ($data as $row) {
-            if (!is_array($row) || !isset($row['target'], $row['rate'])) {
+            if (!is_array($row) || !isset($row['source'], $row['target']) || !is_string($row['source']) || !is_string($row['target'])) {
+                throw new Exception('Unexpected response: a rate is missing its currency codes');
+            }
+
+            if (strtoupper($row['source']) !== $baseCurrency || strtoupper($row['target']) !== $quoteCurrency) {
                 continue;
             }
 
-            if (!is_string($row['target']) || strtoupper($row['target']) !== $quoteCurrency) {
-                continue;
+            if (!isset($row['rate']) || !is_numeric($row['rate']) || (float) $row['rate'] <= 0) {
+                throw new Exception(sprintf('Unexpected response: invalid rate for %s/%s', $baseCurrency, $quoteCurrency));
             }
 
-            if (!is_numeric($row['rate']) || (float) $row['rate'] <= 0) {
-                continue;
-            }
-
-            try {
-                $date = isset($row['time']) && is_string($row['time']) ? new \DateTime($row['time']) : new \DateTime();
-            } catch (\Throwable $thrown) {
-                $date = new \DateTime();
-            }
-
-            return $this->createRate($currencyPair, (float) $row['rate'], $date);
+            return $this->createRate($currencyPair, (float) $row['rate'], $this->parseTime($row['time'] ?? null));
         }
 
         throw new UnsupportedCurrencyPairException($currencyPair, $this);
+    }
+
+    /**
+     * Parses the time the rate was observed, which the API sends in ISO 8601 (UTC).
+     *
+     * @throws Exception when the time is missing or not a date
+     */
+    private function parseTime(mixed $time): \DateTimeImmutable
+    {
+        if (!is_string($time) || $time === '') {
+            throw new Exception('Unexpected response: the rate has no time');
+        }
+
+        try {
+            return new \DateTimeImmutable($time);
+        } catch (\Exception $thrown) {
+            throw new Exception(sprintf('Unexpected response: invalid time "%s"', $time), 0, $thrown);
+        }
     }
 
     /** {@inheritdoc} */
     #[\Override]
     public function getName(): string
     {
-        return 'allratestoday';
+        return 'all_rates_today';
     }
 }

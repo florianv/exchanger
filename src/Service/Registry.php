@@ -60,7 +60,7 @@ final class Registry
             'apilayer_currency_data' => ApiLayer\CurrencyData::class,
             'apilayer_exchange_rates_data' => ApiLayer\ExchangeRatesData::class,
             'unirate_api' => UniRateApi::class,
-            'allratestoday' => AllRatesToday::class,
+            'all_rates_today' => AllRatesToday::class,
         ];
     }
 }
