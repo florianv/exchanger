@@ -32,7 +32,6 @@ reviews:
     # Review once per PR; re-run with `@coderabbitai review` after follow-up pushes.
     auto_incremental_review: false
   path_filters:
-    - "!psalm-baseline.xml"
     - "!composer.lock"
   path_instructions:
     - path: "src/Service/**/*.php"

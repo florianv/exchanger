@@ -41,7 +41,8 @@ This is where most provider bugs are. `Chain` and callers rely on the exception 
 
 ## Tests and fixtures
 
-- Tests use `#[Test]` with snake_case method names. A `/** @test */` docblock runs zero tests on PHPUnit 12, while the PHP 8.2 job (PHPUnit 11) stays green.
+- A new HTTP provider's test extends `HttpServiceContractTestCase`, which checks error mapping, option validation and historical query support. Flag `$skippedTests` entries whose reason doesn't hold.
+- Tests use `#[Test]` with snake_case method names; CI fails on `/** @test */` docblocks.
 - Reuse `ServiceTestCase::getHttpAdapterMock()` (it takes a status code and an optional request callback) instead of a new mock helper.
 - Each error branch needs a test that only that branch can satisfy. A test that expects `Exception::class` also passes when `UnsupportedCurrencyPairException` is thrown, and an empty 500 body never reaches a status-code check.
 - Prefer fixtures captured from the real API, including its documented error responses. Trim them to the currencies the assertions use.
