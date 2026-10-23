@@ -34,22 +34,33 @@ class RegistryTest extends TestCase
     {
         $missingServices = array_values(array_diff(self::findServiceClasses(), Registry::getServices(), self::NOT_REGISTERED));
 
-        $this->assertSame([], $missingServices, 'Add these services to Registry::getServices().');
+        $this->assertSame([], $missingServices, \sprintf(
+            "These services are not registered. Add each one to Registry::getServices() under a lowercase snake_case identifier, e.g. 'national_bank_of_poland' => NationalBankOfPoland::class:\n- %s",
+            implode("\n- ", $missingServices),
+        ));
     }
 
     #[Test]
     public function it_uses_unique_identifiers_for_services()
     {
         $services = Registry::getServices();
+        $duplicates = array_diff_key($services, array_unique($services));
 
-        $this->assertSame(array_values($services), array_values(array_unique($services)));
+        $this->assertSame([], $duplicates, \sprintf(
+            'Each service must be registered once, but these identifiers point to a class that is already registered: %s. Keep one identifier per class.',
+            implode(', ', array_keys($duplicates)),
+        ));
     }
 
     #[Test]
     #[DataProvider('provideRegisteredServices')]
     public function it_uses_a_lowercase_snake_case_identifier(string $identifier, string $class)
     {
-        $this->assertMatchesRegularExpression('/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/', $identifier);
+        $this->assertMatchesRegularExpression('/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/', $identifier, \sprintf(
+            'The registry identifier "%s" of %s must be lowercase snake_case, e.g. "national_bank_of_poland". Identifiers are public API, so choose it before the first release.',
+            $identifier,
+            $class,
+        ));
     }
 
     #[Test]
@@ -59,7 +70,12 @@ class RegistryTest extends TestCase
         /** @var ExchangeRateService $service */
         $service = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
 
-        $this->assertSame($identifier, $service->getName(), \sprintf('%s::getName() must return its registry identifier.', $class));
+        $this->assertSame($identifier, $service->getName(), \sprintf(
+            '%s is registered as "%s" but getName() returns "%s". Return the registry identifier from getName(); it is also the provider name on every rate.',
+            $class,
+            $identifier,
+            $service->getName(),
+        ));
     }
 
     public static function provideRegisteredServices(): iterable
