@@ -16,7 +16,7 @@ namespace Exchanger\Service;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
-use Exchanger\HistoricalExchangeRateQuery;
+use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
