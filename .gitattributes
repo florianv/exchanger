@@ -10,3 +10,4 @@
 psalm.xml export-ignore
 phpunit.xml.dist export-ignore
 CONTRIBUTING.md export-ignore
+.coderabbit.yaml export-ignore
