@@ -95,7 +95,7 @@ final class NationalBankOfGeorgia extends HttpService
         }));
         if (!empty($currencyInfo)) {
             $rate = (float) $currencyInfo[0]['rate'];
-            $unit = (int) $currencyInfo[0]['quantity'];
+            $unit = (float) $currencyInfo[0]['quantity'];
 
             return $this->createRate($currencyPair, ($rate / $unit), $date);
         }

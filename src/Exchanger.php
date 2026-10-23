@@ -87,7 +87,7 @@ final class Exchanger implements ExchangeRateProviderContract
         $cacheKeyPrefix = $exchangeQuery->getOption('cache_key_prefix', $cacheKeyPrefix);
 
         // Replace characters reserved in PSR-6
-        $cacheKeyPrefix = preg_replace('#[\{\}\(\)/\\\@\:]#', '-', $cacheKeyPrefix);
+        $cacheKeyPrefix = (string) preg_replace('#[\{\}\(\)/\\\@\:]#', '-', (string) $cacheKeyPrefix);
 
         $cacheKey = $cacheKeyPrefix . sha1(serialize($exchangeQuery));
         if (\strlen($cacheKey) > 64) {

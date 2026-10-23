@@ -15,6 +15,7 @@ namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
+use Exchanger\Exception\Exception;
 use Exchanger\StringUtil;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
@@ -58,7 +59,13 @@ final class CurrencyDataFeed extends HttpService
         $data = StringUtil::jsonToArray($content);
 
         if (!empty($data) && $data['status'] && !isset($data['currency'][0]['error'])) {
-            $date = (new \DateTime())->setTimestamp(strtotime($data['currency'][0]['date']));
+            $timestamp = strtotime($data['currency'][0]['date']);
+
+            if (false === $timestamp) {
+                throw new Exception(\sprintf('Unable to parse the rate date "%s".', $data['currency'][0]['date']));
+            }
+
+            $date = (new \DateTime())->setTimestamp($timestamp);
 
             return $this->createRate($currencyPair, (float) ($data['currency'][0]['value']), $date);
         }

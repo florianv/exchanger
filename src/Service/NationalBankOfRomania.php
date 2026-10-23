@@ -194,13 +194,13 @@ final class NationalBankOfRomania extends HttpService
      */
     private function getRateValue(\SimpleXMLElement $element, CurrencyPair $currencyPair): float
     {
-        $rate = (string) $element;
-        $rateValue = (!empty($element['multiplier'])) ? $rate / (int) $element['multiplier'] : $rate;
+        $rate = (float) (string) $element;
+        $rateValue = (!empty($element['multiplier'])) ? $rate / (float) $element['multiplier'] : $rate;
 
         if ('RON' === $currencyPair->getBaseCurrency()) {
-            $rateValue = number_format(1 / $rateValue, 4, '.', '');
+            $rateValue = round(1.0 / $rateValue, 4);
         }
 
-        return (float) $rateValue;
+        return $rateValue;
     }
 }

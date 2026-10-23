@@ -133,7 +133,7 @@ final class CoinLayer extends HttpService
     /**
      * Gets the error message corresponding to the error code.
      *
-     * @param string $code The error code
+     * @param int $code The error code
      *
      * @return string
      */
