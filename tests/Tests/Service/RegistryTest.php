@@ -63,11 +63,13 @@ class RegistryTest extends TestCase
         ));
     }
 
+    /**
+     * @param class-string<ExchangeRateService> $class
+     */
     #[Test]
     #[DataProvider('provideRegisteredServices')]
     public function it_registers_each_service_under_its_name(string $identifier, string $class)
     {
-        /** @var ExchangeRateService $service */
         $service = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
 
         $this->assertSame($identifier, $service->getName(), \sprintf(
@@ -88,7 +90,7 @@ class RegistryTest extends TestCase
     /**
      * Scans src/Service instead of relying on get_declared_classes(), so a service is found even when no test loads it.
      *
-     * @return list<class-string<ExchangeRateService>>
+     * @return list<class-string>
      */
     private static function findServiceClasses(): array
     {

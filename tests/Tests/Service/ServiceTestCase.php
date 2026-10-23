@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Exchanger\Tests\Service;
 
 use PHPUnit\Framework\TestCase;
+use Http\Client\HttpClient;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 abstract class ServiceTestCase extends TestCase
 {
@@ -27,13 +30,13 @@ abstract class ServiceTestCase extends TestCase
      */
     private function getResponse($content, $statusCode = 200)
     {
-        $body = $this->createMock('Psr\Http\Message\StreamInterface');
+        $body = $this->createMock(StreamInterface::class);
         $body
             ->expects($this->once())
             ->method('__toString')
             ->willReturn($content);
 
-        $response = $this->createMock('Psr\Http\Message\ResponseInterface');
+        $response = $this->createMock(ResponseInterface::class);
         $response
             ->expects($this->once())
             ->method('getBody')
@@ -61,7 +64,7 @@ abstract class ServiceTestCase extends TestCase
     {
         $response = $this->getResponse($content, $statusCode);
 
-        $adapter = $this->createMock('Http\Client\HttpClient');
+        $adapter = $this->createMock(HttpClient::class);
 
         $adapter
             ->expects($this->once())

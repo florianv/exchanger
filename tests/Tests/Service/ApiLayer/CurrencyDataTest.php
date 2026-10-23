@@ -20,6 +20,8 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\ApiLayer\CurrencyData;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 /**
  * @author Florian Voutzinos <florian@voutzinos.com>
@@ -31,13 +33,13 @@ class CurrencyDataTest extends ServiceTestCase
     {
         $this->expectException(NonBreakingInvalidArgumentException::class);
         $this->expectExceptionMessage('The "api_key" option must be provided to use CurrencyData (https://currencylayer.com).');
-        new CurrencyData($this->createMock('Http\Client\HttpClient'));
+        new CurrencyData($this->createMock(HttpClient::class));
     }
 
     #[Test]
     public function it_supports_all_queries()
     {
-        $service = new CurrencyData($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new CurrencyData($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
     }
 
@@ -46,7 +48,7 @@ class CurrencyDataTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $uri = 'https://api.apilayer.com/currency_data/live?apikey=secret&currencies=EUR';
-        $content = file_get_contents(__DIR__ . '/../../../Fixtures/Service/ApiLayer/CurrencyData/error.json');
+        $content = FileContents::read(__DIR__ . '/../../../Fixtures/Service/ApiLayer/CurrencyData/error.json');
 
         $service = new CurrencyData($this->getHttpAdapterMock($uri, $content), null, ['api_key' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -58,7 +60,7 @@ class CurrencyDataTest extends ServiceTestCase
         $uri = 'https://api.apilayer.com/currency_data/live?apikey=secret&currencies=EUR';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
-        $content = file_get_contents(__DIR__ . '/../../../Fixtures/Service/ApiLayer/CurrencyData/success.json');
+        $content = FileContents::read(__DIR__ . '/../../../Fixtures/Service/ApiLayer/CurrencyData/success.json');
 
         $pair = CurrencyPair::createFromString('USD/EUR');
         $service = new CurrencyData($this->getHttpAdapterMock($uri, $content), null, ['api_key' => 'secret']);
@@ -75,7 +77,7 @@ class CurrencyDataTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/AED');
         $uri = 'https://api.apilayer.com/currency_data/historical?apikey=secret&date=2015-05-06';
-        $content = file_get_contents(__DIR__ . '/../../../Fixtures/Service/ApiLayer/CurrencyData/historical_success.json');
+        $content = FileContents::read(__DIR__ . '/../../../Fixtures/Service/ApiLayer/CurrencyData/historical_success.json');
         $date = new \DateTime('2015-05-06');
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1430870399);
@@ -92,7 +94,7 @@ class CurrencyDataTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new CurrencyData($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new CurrencyData($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
 
         $this->assertSame('apilayer_currency_data', $service->getName());
     }

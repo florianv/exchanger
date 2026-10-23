@@ -19,13 +19,15 @@ use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\CurrencyDataFeed;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 class CurrencyDataFeedTest extends ServiceTestCase
 {
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new CurrencyDataFeed($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new CurrencyDataFeed($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertFalse($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -36,7 +38,7 @@ class CurrencyDataFeedTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $url = 'https://currencydatafeed.com/api/data.php?token=secret&currency=EUR/ZZZ';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyDataFeed/error.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CurrencyDataFeed/error.json');
         $service = new CurrencyDataFeed($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/ZZZ')));
@@ -47,7 +49,7 @@ class CurrencyDataFeedTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/USD');
         $url = 'https://currencydatafeed.com/api/data.php?token=secret&currency=EUR/USD';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyDataFeed/success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/CurrencyDataFeed/success.json');
         $service = new CurrencyDataFeed($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -61,7 +63,7 @@ class CurrencyDataFeedTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new CurrencyDataFeed($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new CurrencyDataFeed($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
 
         $this->assertSame('currency_data_feed', $service->getName());
     }

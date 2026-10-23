@@ -18,6 +18,8 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\XchangeApi;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 /**
  * @author xChangeApi.com <hello@xchangeapi.com>
@@ -27,7 +29,7 @@ class XchangeApiTest extends ServiceTestCase
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new XchangeApi($this->createMock('Http\Client\HttpClient'), null, ['api-key' => 'secret']);
+        $service = new XchangeApi($this->createMock(HttpClient::class), null, ['api-key' => 'secret']);
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('ABC/DEF'))));
     }
@@ -37,7 +39,7 @@ class XchangeApiTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('EUR/GBP');
         $uri = 'https://api.xchangeapi.com/latest?base=EUR&api-key=secret';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/XchangeApi/latest.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/XchangeApi/latest.json');
 
         $service = new XchangeApi($this->getHttpAdapterMock($uri, $content), null, ['api-key' => 'secret']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -53,7 +55,7 @@ class XchangeApiTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/JPY');
         $uri = 'https://api.xchangeapi.com/historical/2020-01-20?api-key=secret';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/XchangeApi/historical.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/XchangeApi/historical.json');
         $date = new \DateTime('2020-01-20');
 
         $service = new XchangeApi($this->getHttpAdapterMock($uri, $content), null, ['api-key' => 'secret']);
@@ -68,7 +70,7 @@ class XchangeApiTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new XchangeApi($this->createMock('Http\Client\HttpClient'), null, ['api-key' => 'secret']);
+        $service = new XchangeApi($this->createMock(HttpClient::class), null, ['api-key' => 'secret']);
 
         $this->assertSame('xchangeapi', $service->getName());
     }

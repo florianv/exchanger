@@ -60,7 +60,8 @@ class PhpArrayTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Rates passed to the PhpArray service must be scalars, "array" given.');
 
-        $arrayProvider = new PhpArray([
+        /** @psalm-suppress InvalidArgument the invalid rate is the point of this test */
+        new PhpArray([
             'EUR/USD' => [],
         ]);
     }
@@ -119,6 +120,7 @@ class PhpArrayTest extends TestCase
 
         $now = new \DateTimeImmutable();
 
+        /** @psalm-suppress InvalidArgument the invalid rate is the point of this test */
         $arrayProvider = new PhpArray([], [
             $now->format('Y-m-d') => [
                 'EUR/USD' => [],

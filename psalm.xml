@@ -10,8 +10,15 @@
 >
     <projectFiles>
         <directory name="src" />
+        <directory name="tests" />
         <ignoreFiles>
             <directory name="vendor" />
+            <directory name="tests/Fixtures" />
+            <!-- Needs packages that are not dev dependencies; PHPUnit excludes it too. -->
+            <directory name="tests/Tests/Integration" />
         </ignoreFiles>
     </projectFiles>
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
 </psalm>

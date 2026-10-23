@@ -19,6 +19,8 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\NationalBankOfGeorgia;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 class NationalBankOfGeorgiaTest extends ServiceTestCase
 {
@@ -37,17 +39,19 @@ class NationalBankOfGeorgiaTest extends ServiceTestCase
     /**
      * Set up variables before TestCase is being initialized.
      */
+    #[\Override]
     public static function setUpBeforeClass(): void
     {
         self::$url = 'https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json';
         self::$historicalUrl = 'https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json?date=2020-07-15';
-        self::$content = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfGeorgia/nbog_today.json');
-        self::$historicalContent = file_get_contents(__DIR__ . '/../../Fixtures/Service/NationalBankOfGeorgia/nbog_historical.json');
+        self::$content = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfGeorgia/nbog_today.json');
+        self::$historicalContent = FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfGeorgia/nbog_historical.json');
     }
 
     /**
      * Clean variables after TestCase finish.
      */
+    #[\Override]
     public static function tearDownAfterClass(): void
     {
         self::$url = null;
@@ -75,7 +79,7 @@ class NationalBankOfGeorgiaTest extends ServiceTestCase
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new NationalBankOfGeorgia($this->createMock('Http\Client\HttpClient'));
+        $service = new NationalBankOfGeorgia($this->createMock(HttpClient::class));
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('GEL/EUR'))));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/GBP'))));
@@ -133,7 +137,7 @@ class NationalBankOfGeorgiaTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new NationalBankOfGeorgia($this->createMock('Http\Client\HttpClient'));
+        $service = new NationalBankOfGeorgia($this->createMock(HttpClient::class));
 
         $this->assertSame('national_bank_of_georgia', $service->getName());
     }

@@ -20,6 +20,8 @@ use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\CurrencyPair;
 use Exchanger\Service\OpenExchangeRates;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 class OpenExchangeRatesTest extends ServiceTestCase
 {
@@ -28,13 +30,13 @@ class OpenExchangeRatesTest extends ServiceTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "app_id" option must be provided.');
-        new OpenExchangeRates($this->createMock('Http\Client\HttpClient'));
+        new OpenExchangeRates($this->createMock(HttpClient::class));
     }
 
     #[Test]
     public function it_does_not_support_all_queries()
     {
-        $service = new OpenExchangeRates($this->createMock('Http\Client\HttpClient'), null, ['app_id' => 'secret']);
+        $service = new OpenExchangeRates($this->createMock(HttpClient::class), null, ['app_id' => 'secret']);
 
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/EUR'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'), new \DateTime())));
@@ -45,7 +47,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     {
         $this->expectException(Exception::class);
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&show_alternative=1';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/error.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/error.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
@@ -58,7 +60,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&show_alternative=1';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -76,7 +78,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $uri = 'https://openexchangerates.org/api/latest.json?app_id=secret&base=USD&symbols=EUR&show_alternative=1';
         $expectedDate = new \DateTime();
         $expectedDate->setTimestamp(1399748450);
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($uri, $content), null, ['app_id' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -92,7 +94,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/AED');
         $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&show_alternative=1';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
         $rate = $service->getExchangeRate(
@@ -113,7 +115,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&base=USD&symbols=EUR&show_alternative=1';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(
@@ -137,7 +139,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://openexchangerates.org/api/historical/1900-08-23.json?app_id=secret&show_alternative=1';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_error.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_error.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
 
@@ -154,7 +156,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $url = 'https://openexchangerates.org/api/historical/2016-08-23.json?app_id=secret&show_alternative=1';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/OpenExchangeRates/historical_success.json');
 
         $service = new OpenExchangeRates($this->getHttpAdapterMock($url, $content), null, ['app_id' => 'secret']);
 
@@ -166,7 +168,7 @@ class OpenExchangeRatesTest extends ServiceTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new OpenExchangeRates($this->createMock('Http\Client\HttpClient'), null, ['app_id' => 'secret']);
+        $service = new OpenExchangeRates($this->createMock(HttpClient::class), null, ['app_id' => 'secret']);
 
         $this->assertSame('open_exchange_rates', $service->getName());
     }

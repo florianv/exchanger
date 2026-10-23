@@ -19,6 +19,7 @@ use Exchanger\Service\HttpService;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use PHPUnit\Framework\Attributes\Test;
+use Http\Client\HttpClient;
 
 class HttpServiceTest extends TestCase
 {
@@ -29,7 +30,7 @@ class HttpServiceTest extends TestCase
             $this->markTestSkipped('PSR-18 client is not required.');
         }
 
-        $httpClient = $this->createMock('Psr\Http\Client\ClientInterface');
+        $httpClient = $this->createMock(ClientInterface::class);
         $this->expectNotToPerformAssertions();
         $this->createAnonymousClass($httpClient);
     }
@@ -37,7 +38,7 @@ class HttpServiceTest extends TestCase
     #[Test]
     public function initialize_with_httplug_client()
     {
-        $httpClient = $this->createMock('Http\Client\HttpClient');
+        $httpClient = $this->createMock(HttpClient::class);
         $this->expectNotToPerformAssertions();
         $this->createAnonymousClass($httpClient);
     }
@@ -64,6 +65,7 @@ class HttpServiceTest extends TestCase
     private function createAnonymousClass($httpClient)
     {
         return new class ($httpClient) extends HttpService {
+            #[\Override]
             public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate
             {
                 return new \Exchanger\ExchangeRate(
@@ -74,11 +76,13 @@ class HttpServiceTest extends TestCase
                 );
             }
 
+            #[\Override]
             public function supportQuery(ExchangeRateQuery $exchangeQuery): bool
             {
                 return true;
             }
 
+            #[\Override]
             public function getName(): string
             {
                 return 'mock';

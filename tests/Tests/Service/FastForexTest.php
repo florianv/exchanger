@@ -22,13 +22,15 @@ use PHPUnit\Framework\Attributes\Test;
 use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\ExchangeRateService;
 use Psr\Http\Client\ClientInterface;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 class FastForexTest extends HttpServiceContractTestCase
 {
     #[Test]
     public function it_supports_all_queries()
     {
-        $service = new FastForex($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new FastForex($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -39,7 +41,7 @@ class FastForexTest extends HttpServiceContractTestCase
     {
         $this->expectException(Exception::class);
         $url = 'https://api.fastforex.io/fetch-one?from=EUR&to=ZZZ';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/FastForex/error-unsupported.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/FastForex/error-unsupported.json');
         $service = new FastForex($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/ZZZ')));
@@ -50,7 +52,7 @@ class FastForexTest extends HttpServiceContractTestCase
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $url = 'https://api.fastforex.io/fetch-one?from=USD&to=EUR';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/FastForex/one-usd-eur.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/FastForex/one-usd-eur.json');
         $service = new FastForex($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -65,7 +67,7 @@ class FastForexTest extends HttpServiceContractTestCase
     {
         $this->expectException(Exception::class);
         $url = 'https://api.fastforex.io/fetch-one?from=USD&to=AED';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/FastForex/one-usd-eur.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/FastForex/one-usd-eur.json');
         $service = new FastForex($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/AED')));
@@ -84,7 +86,7 @@ class FastForexTest extends HttpServiceContractTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new FastForex($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new FastForex($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
 
         $this->assertSame('fastforex', $service->getName());
     }
@@ -122,6 +124,6 @@ class FastForexTest extends HttpServiceContractTestCase
     #[\Override]
     protected function successfulResponseBody(): string
     {
-        return file_get_contents(__DIR__ . '/../../Fixtures/Service/FastForex/one-usd-eur.json');
+        return FileContents::read(__DIR__ . '/../../Fixtures/Service/FastForex/one-usd-eur.json');
     }
 }

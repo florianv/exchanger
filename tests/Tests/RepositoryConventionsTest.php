@@ -36,8 +36,8 @@ class RepositoryConventionsTest extends TestCase
     ];
 
     #[Test]
-    #[DataProvider('provideRegisteredServices')]
-    public function it_has_a_test_for_each_service(string $identifier, string $class)
+    #[DataProvider('provideRegisteredServiceClasses')]
+    public function it_has_a_test_for_each_service(string $class)
     {
         $relativePath = str_replace('\\', '/', substr($class, \strlen('Exchanger\\Service\\')));
 
@@ -54,18 +54,18 @@ class RepositoryConventionsTest extends TestCase
 
         $this->assertStringContainsString(
             '`' . $identifier . '`',
-            file_get_contents(self::ROOT . '/README.md'),
+            FileContents::read(self::ROOT . '/README.md'),
             \sprintf('Add a row for `%s` to the provider table in README.md.', $identifier),
         );
     }
 
     #[Test]
-    #[DataProvider('provideRegisteredServices')]
-    public function it_documents_each_service(string $identifier, string $class)
+    #[DataProvider('provideRegisteredServiceClasses')]
+    public function it_documents_each_service(string $class)
     {
         $this->assertStringContainsString(
             '`' . $class . '`',
-            file_get_contents(self::ROOT . '/doc/readme.md'),
+            FileContents::read(self::ROOT . '/doc/readme.md'),
             \sprintf('Add `%s` to the "Commercial services" or "Public services" table in doc/readme.md.', $class),
         );
     }
@@ -76,7 +76,7 @@ class RepositoryConventionsTest extends TestCase
     {
         $this->assertStringContainsString(
             "/*\n * This file is part of Exchanger.\n",
-            file_get_contents($file),
+            FileContents::read($file),
             'Copy the licence header from any other PHP file.',
         );
     }
@@ -87,7 +87,7 @@ class RepositoryConventionsTest extends TestCase
     {
         $this->assertDoesNotMatchRegularExpression(
             '/\bExchanger\\\\(?:Historical)?ExchangeRateQuery\b/',
-            file_get_contents($file),
+            FileContents::read($file),
             'Use Exchanger\Contract\ExchangeRateQuery and Exchanger\Contract\HistoricalExchangeRateQuery; '
             . 'an instanceof check on the concrete class misses other implementations of the contract.',
         );
@@ -97,6 +97,13 @@ class RepositoryConventionsTest extends TestCase
     {
         foreach (Registry::getServices() as $identifier => $class) {
             yield $identifier => [$identifier, $class];
+        }
+    }
+
+    public static function provideRegisteredServiceClasses(): iterable
+    {
+        foreach (Registry::getServices() as $identifier => $class) {
+            yield $identifier => [$class];
         }
     }
 

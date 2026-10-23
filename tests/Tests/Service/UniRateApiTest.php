@@ -23,6 +23,8 @@ use PHPUnit\Framework\Attributes\Test;
 use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
 use Exchanger\Contract\ExchangeRateService;
 use Psr\Http\Client\ClientInterface;
+use Http\Client\HttpClient;
+use Exchanger\Tests\FileContents;
 
 class UniRateApiTest extends HttpServiceContractTestCase
 {
@@ -32,13 +34,13 @@ class UniRateApiTest extends HttpServiceContractTestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('api_key');
 
-        new UniRateApi($this->createMock('Http\Client\HttpClient'));
+        new UniRateApi($this->createMock(HttpClient::class));
     }
 
     #[Test]
     public function it_supports_all_queries()
     {
-        $service = new UniRateApi($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new UniRateApi($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
 
         $this->assertTrue($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
@@ -49,7 +51,7 @@ class UniRateApiTest extends HttpServiceContractTestCase
     {
         $pair = CurrencyPair::createFromString('USD/EUR');
         $url = 'https://api.unirateapi.com/api/rates?api_key=secret&from=USD&to=EUR';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/UniRateApi/rate-usd-eur.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/UniRateApi/rate-usd-eur.json');
         $service = new UniRateApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
@@ -65,7 +67,7 @@ class UniRateApiTest extends HttpServiceContractTestCase
         $pair = CurrencyPair::createFromString('USD/EUR');
         $date = new \DateTime('2024-01-15');
         $url = 'https://api.unirateapi.com/api/historical/rates?api_key=secret&date=2024-01-15&from=USD&to=EUR';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/UniRateApi/historical-usd-eur.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/UniRateApi/historical-usd-eur.json');
         $service = new UniRateApi($this->getHttpAdapterMock($url, $content), null, ['api_key' => 'secret']);
 
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
@@ -83,7 +85,7 @@ class UniRateApiTest extends HttpServiceContractTestCase
         $this->expectExceptionMessage('Currency not found or no data available');
 
         $url = 'https://api.unirateapi.com/api/rates?api_key=secret&from=USD&to=ZZZ';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/UniRateApi/error-invalid-currency.json');
+        $content = FileContents::read(__DIR__ . '/../../Fixtures/Service/UniRateApi/error-invalid-currency.json');
         $service = new UniRateApi($this->getHttpAdapterMock($url, $content, 404), null, ['api_key' => 'secret']);
 
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/ZZZ')));
@@ -114,7 +116,7 @@ class UniRateApiTest extends HttpServiceContractTestCase
     #[Test]
     public function it_has_a_name()
     {
-        $service = new UniRateApi($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
+        $service = new UniRateApi($this->createMock(HttpClient::class), null, ['api_key' => 'secret']);
 
         $this->assertSame('unirate_api', $service->getName());
     }
@@ -152,6 +154,6 @@ class UniRateApiTest extends HttpServiceContractTestCase
     #[\Override]
     protected function successfulResponseBody(): string
     {
-        return file_get_contents(__DIR__ . '/../../Fixtures/Service/UniRateApi/rate-usd-eur.json');
+        return FileContents::read(__DIR__ . '/../../Fixtures/Service/UniRateApi/rate-usd-eur.json');
     }
 }
