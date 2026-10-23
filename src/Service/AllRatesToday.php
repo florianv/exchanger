@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Exchanger\Service;
 
+use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 use Exchanger\Contract\ExchangeRateQuery;
+use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
-use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\StringUtil;
-use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
 /**
  * AllRatesToday Service.
@@ -37,9 +37,11 @@ final class AllRatesToday extends HttpService
     #[\Override]
     public function processOptions(array &$options): void
     {
-        if (!isset($options[self::API_KEY_OPTION])) {
+        if (!isset($options[self::API_KEY_OPTION]) || !is_string($options[self::API_KEY_OPTION]) || trim($options[self::API_KEY_OPTION]) === '') {
             throw new \InvalidArgumentException('The "api_key" option must be provided.');
         }
+
+        $options[self::API_KEY_OPTION] = trim($options[self::API_KEY_OPTION]);
     }
 
     /** {@inheritdoc} */
@@ -65,37 +67,47 @@ final class AllRatesToday extends HttpService
             'Authorization' => 'Bearer ' . (string) $this->options[self::API_KEY_OPTION],
         ]);
 
-        try {
-            $data = StringUtil::jsonToArray($response->getBody()->__toString());
-        } catch (\Throwable $thrown) {
-            $data = ['error' => 'Failed to parse response'];
+        $statusCode = $response->getStatusCode();
+        $body = $response->getBody()->__toString();
+
+        // The API answers an invalid or unsupported currency code with HTTP 400.
+        if ($statusCode === 400) {
+            throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
-        if ($response->getStatusCode() !== 200 || isset($data['error'])) {
-            $message = isset($data['error']) && is_string($data['error'])
+        try {
+            $data = StringUtil::jsonToArray($body);
+        } catch (\Throwable $thrown) {
+            throw new Exception(sprintf('Failed to parse response (HTTP response code %d)', $statusCode), 0, $thrown);
+        }
+
+        if ($statusCode !== 200 || isset($data['error'])) {
+            $message = isset($data['error']) && is_string($data['error']) && $data['error'] !== ''
                 ? $data['error']
-                : sprintf('Failed with HTTP response code %d', $response->getStatusCode());
+                : sprintf('Failed with HTTP response code %d', $statusCode);
 
             throw new Exception($message);
         }
+
+        $quoteCurrency = strtoupper($currencyPair->getQuoteCurrency());
 
         foreach ($data as $row) {
             if (!is_array($row) || !isset($row['target'], $row['rate'])) {
                 continue;
             }
 
-            if ($row['target'] !== $currencyPair->getQuoteCurrency() || !is_numeric($row['rate'])) {
+            if (!is_string($row['target']) || strtoupper($row['target']) !== $quoteCurrency) {
                 continue;
             }
 
-            $date = new \DateTime();
+            if (!is_numeric($row['rate']) || (float) $row['rate'] <= 0) {
+                continue;
+            }
 
-            if (isset($row['time']) && is_string($row['time'])) {
-                try {
-                    $date = new \DateTime($row['time']);
-                } catch (\Exception $exception) {
-                    // Keep the current date when the time cannot be parsed.
-                }
+            try {
+                $date = isset($row['time']) && is_string($row['time']) ? new \DateTime($row['time']) : new \DateTime();
+            } catch (\Throwable $thrown) {
+                $date = new \DateTime();
             }
 
             return $this->createRate($currencyPair, (float) $row['rate'], $date);
