@@ -5,9 +5,17 @@ on:
     branches: [master]
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   psalm:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v6
@@ -19,7 +27,9 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --no-interaction --prefer-dist
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: highest
 
       - name: Run Psalm
         run: vendor/bin/psalm --no-progress
@@ -28,18 +38,23 @@ jobs:
     name: Psalm baseline does not grow
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
+      # The pull_request checkout is a merge commit; its first parent is the base branch tip.
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
-      - name: Check for new baseline entries
-        env:
-          BASE_REF: ${{ github.base_ref }}
+      # Compares the total number of entries, so regenerated or renamed entries do not count as new.
+      - name: Compare baseline entry counts
         run: |
-          added=$(git diff -U0 "origin/$BASE_REF...HEAD" -- psalm-baseline.xml | grep -c '^+[[:space:]]*<code>' || true)
-          if [ "$added" -gt 0 ]; then
-            echo "::error file=psalm-baseline.xml::This PR adds $added suppressed Psalm issue(s) to psalm-baseline.xml. Fix them in code instead."
+          set -euo pipefail
+          count() { { grep -o '<code>' || true; } | wc -l | tr -d ' '; }
+          before=$(git show HEAD^1:psalm-baseline.xml | count)
+          after=$(count < psalm-baseline.xml)
+          echo "psalm-baseline.xml entries: $before before, $after after"
+          if [ "$after" -gt "$before" ]; then
+            echo "::error file=psalm-baseline.xml::This PR adds $((after - before)) suppressed Psalm issue(s) to psalm-baseline.xml. Fix the issues in code; run 'composer psalm' locally to see them. If an entry is unavoidable, explain why in the PR description."
             exit 1
           fi

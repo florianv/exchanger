@@ -6,7 +6,9 @@
          cacheDirectory=".phpunit.cache"
          failOnEmptyTestSuite="true"
          failOnWarning="true"
-         failOnPhpunitDeprecation="true">
+         failOnPhpunitDeprecation="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnPhpunitDeprecations="true">
     <testsuites>
         <testsuite name="Exchanger Tests Suite">
             <directory>tests</directory>
