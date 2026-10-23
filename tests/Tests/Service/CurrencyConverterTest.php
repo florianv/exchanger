@@ -19,12 +19,14 @@ use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
 use Exchanger\Service\CurrencyConverter;
 use Http\Client\HttpClient;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use PHPUnit\Framework\Attributes\Test;
+use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
+use Exchanger\Contract\ExchangeRateService;
+use Psr\Http\Client\ClientInterface;
 
-class CurrencyConverterTest extends TestCase
+class CurrencyConverterTest extends HttpServiceContractTestCase
 {
     #[Test]
     public function it_throws_an_exception_if_access_key_option_missing_in_enterprise_mode()
@@ -41,7 +43,7 @@ class CurrencyConverterTest extends TestCase
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=XXX_YYY&date=2000-01-01';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/error.json');
 
-        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
+        $service = new CurrencyConverter($this->getAnyUrlHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/YYY')));
     }
 
@@ -52,7 +54,7 @@ class CurrencyConverterTest extends TestCase
         $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/success.json');
 
-        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
+        $service = new CurrencyConverter($this->getAnyUrlHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(0.726804, $rate->getValue());
@@ -67,7 +69,7 @@ class CurrencyConverterTest extends TestCase
         $uri = 'https://api.currencyconverterapi.com/api/v6/convert?q=USD_EUR';
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/success.json');
 
-        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
+        $service = new CurrencyConverter($this->getAnyUrlHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new ExchangeRateQuery($pair));
 
         $this->assertSame(0.726804, $rate->getValue());
@@ -78,12 +80,14 @@ class CurrencyConverterTest extends TestCase
     #[Test]
     public function it_fetches_a_historical_rate_normal_mode()
     {
+        // The free plan only serves the past year.
+        $day = (new \DateTime('-1 month'))->format('Y-m-d');
         $pair = CurrencyPair::createFromString('USD/EUR');
-        $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR&date=2017-01-01';
-        $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/historical_success.json');
-        $date = new \DateTime('2017-01-01 UTC');
+        $uri = 'https://free.currencyconverterapi.com/api/v6/convert?q=USD_EUR&date=' . $day;
+        $content = str_replace('2017-01-01', $day, file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/historical_success.json'));
+        $date = new \DateTime($day . ' UTC');
 
-        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
+        $service = new CurrencyConverter($this->getAnyUrlHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret']);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertSame(0.726804, $rate->getValue());
@@ -100,7 +104,7 @@ class CurrencyConverterTest extends TestCase
         $content = file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/historical_success.json');
         $date = new \DateTime('2017-01-01 UTC');
 
-        $service = new CurrencyConverter($this->getHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
+        $service = new CurrencyConverter($this->getAnyUrlHttpAdapterMock($uri, $content, 200), null, ['access_key' => 'secret', 'enterprise' => true]);
         $rate = $service->getExchangeRate(new HistoricalExchangeRateQuery($pair, $date));
 
         $this->assertSame(0.726804, $rate->getValue());
@@ -118,7 +122,7 @@ class CurrencyConverterTest extends TestCase
     }
 
     /**
-     * Create a mocked Http adapter.
+     * Create a mocked Http adapter that accepts any URL.
      *
      * @param string $url        The url
      * @param string $content    The body content
@@ -126,7 +130,7 @@ class CurrencyConverterTest extends TestCase
      *
      * @return HttpClient
      */
-    protected function getHttpAdapterMock($url, $content, $statusCode = 200)
+    protected function getAnyUrlHttpAdapterMock($url, $content, $statusCode = 200)
     {
         $response = $this->getResponse($content, $statusCode);
 
@@ -168,5 +172,35 @@ class CurrencyConverterTest extends TestCase
             ->willReturn($statusCode);
 
         return $response;
+    }
+
+    #[\Override]
+    protected function createService(ClientInterface $httpClient, array $options): ExchangeRateService
+    {
+        return new CurrencyConverter($httpClient, null, $options);
+    }
+
+    #[\Override]
+    protected function validOptions(): array
+    {
+        return ['access_key' => self::SECRET];
+    }
+
+    #[\Override]
+    protected function requiredOptions(): array
+    {
+        return ['access_key'];
+    }
+
+    #[\Override]
+    protected function supportedQuery(): ExchangeRateQueryContract
+    {
+        return new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'));
+    }
+
+    #[\Override]
+    protected function successfulResponseBody(): string
+    {
+        return file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/success.json');
     }
 }

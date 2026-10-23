@@ -20,8 +20,11 @@ use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\UniRateApi;
 use PHPUnit\Framework\Attributes\Test;
+use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
+use Exchanger\Contract\ExchangeRateService;
+use Psr\Http\Client\ClientInterface;
 
-class UniRateApiTest extends ServiceTestCase
+class UniRateApiTest extends HttpServiceContractTestCase
 {
     #[Test]
     public function it_throws_an_exception_when_api_key_option_missing()
@@ -114,5 +117,41 @@ class UniRateApiTest extends ServiceTestCase
         $service = new UniRateApi($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
 
         $this->assertSame('unirate_api', $service->getName());
+    }
+
+    #[\Override]
+    protected function createService(ClientInterface $httpClient, array $options): ExchangeRateService
+    {
+        return new UniRateApi($httpClient, null, $options);
+    }
+
+    #[\Override]
+    protected function validOptions(): array
+    {
+        return ['api_key' => self::SECRET];
+    }
+
+    #[\Override]
+    protected function requiredOptions(): array
+    {
+        return ['api_key'];
+    }
+
+    #[\Override]
+    protected function supportedQuery(): ExchangeRateQueryContract
+    {
+        return new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'));
+    }
+
+    #[\Override]
+    protected function unsupportedHistoricalQuery(): ?ExchangeRateQueryContract
+    {
+        return null;
+    }
+
+    #[\Override]
+    protected function successfulResponseBody(): string
+    {
+        return file_get_contents(__DIR__ . '/../../Fixtures/Service/UniRateApi/rate-usd-eur.json');
     }
 }

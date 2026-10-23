@@ -103,13 +103,17 @@ final class FastForex extends HttpService
                 $response->getBody()->__toString(),
             );
         } catch (\Throwable $thrown) {
-            $result = ['error' => 'Failed to parse response'];
+            throw new \Exchanger\Exception\Exception(sprintf('Failed to parse the response (HTTP response code %d)', $response->getStatusCode()), 0, $thrown);
         }
 
         if ($response->getStatusCode() !== 200 || isset($result['error'])) {
             $message = empty($result['error']) || !is_string($result['error'])
                 ? sprintf('Failed with HTTP response code %d', $response->getStatusCode())
                 : $result['error'];
+
+            if (!empty($result['error']) && is_string($result['error']) && $response->getStatusCode() !== 200) {
+                $message .= sprintf(' (HTTP response code %d)', $response->getStatusCode());
+            }
 
             throw new \Exchanger\Exception\Exception($message);
         }

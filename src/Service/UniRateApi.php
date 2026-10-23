@@ -94,13 +94,17 @@ final class UniRateApi extends HttpService
         try {
             $data = StringUtil::jsonToArray($response->getBody()->__toString());
         } catch (\Throwable $thrown) {
-            $data = ['error' => 'Failed to parse response'];
+            throw new Exception(sprintf('Failed to parse the response (HTTP response code %d)', $response->getStatusCode()), 0, $thrown);
         }
 
         if ($response->getStatusCode() !== 200 || isset($data['error'])) {
             $message = isset($data['error']) && is_string($data['error'])
                 ? $data['error']
                 : sprintf('Failed with HTTP response code %d', $response->getStatusCode());
+
+            if (isset($data['error']) && is_string($data['error']) && $response->getStatusCode() !== 200) {
+                $message .= sprintf(' (HTTP response code %d)', $response->getStatusCode());
+            }
 
             throw new Exception($message);
         }
