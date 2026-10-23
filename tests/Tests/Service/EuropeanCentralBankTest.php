@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRateQuery;
@@ -31,6 +32,19 @@ class EuropeanCentralBankTest extends ServiceTestCase
         $service = new EuropeanCentralBank($this->createMock(HttpClient::class));
         $this->assertFalse($service->supportQuery(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'))));
         $this->assertTrue($service->supportQuery(new HistoricalExchangeRateQuery(CurrencyPair::createFromString('EUR/USD'), new \DateTime())));
+    }
+
+    #[Test]
+    public function it_throws_an_exception_when_the_rate_date_is_missing()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The response of the European Central Bank has no rate date.');
+
+        $url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
+        $content = str_replace(" time='2015-01-07'", '', FileContents::read(__DIR__ . '/../../Fixtures/Service/EuropeanCentralBank/success.xml'));
+
+        $service = new EuropeanCentralBank($this->getHttpAdapterMock($url, $content));
+        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/USD')));
     }
 
     #[Test]

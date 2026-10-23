@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Exchanger\Tests\Service;
 
+use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\HistoricalExchangeRateQuery;
@@ -74,6 +75,18 @@ class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     protected function createServiceForHistoricalRates()
     {
         return new CentralBankOfRepublicTurkey($this->getHttpAdapterMock(self::$historicalUrl, self::$historicalContent));
+    }
+
+    #[Test]
+    public function it_throws_an_exception_when_the_rate_date_is_missing()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The response of the Central Bank of the Republic of Turkey has no rate date.');
+
+        $content = str_replace(' Date="03/15/2016"', '', self::$content);
+
+        $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock(self::$url, $content));
+        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/TRY')));
     }
 
     #[Test]

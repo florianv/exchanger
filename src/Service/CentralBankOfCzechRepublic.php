@@ -108,7 +108,7 @@ final class CentralBankOfCzechRepublic extends HttpService
     {
         $words = preg_split('/[\s]+/', $line);
 
-        return $words[0];
+        return false === $words ? '' : $words[0];
     }
 
     /**

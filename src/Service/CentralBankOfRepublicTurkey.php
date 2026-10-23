@@ -16,6 +16,7 @@ namespace Exchanger\Service;
 use DateTimeInterface;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
+use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
@@ -80,7 +81,13 @@ final class CentralBankOfRepublicTurkey extends HttpService
 
         $element = StringUtil::xmlToElement($content);
 
-        $date = new \DateTime((string) $element->xpath('//Tarih_Date/@Date')[0]);
+        $dates = $element->xpath('//Tarih_Date/@Date');
+
+        if (empty($dates)) {
+            throw new Exception('The response of the Central Bank of the Republic of Turkey has no rate date.');
+        }
+
+        $date = new \DateTime((string) $dates[0]);
         $elements = $element->xpath('//Currency[@CurrencyCode="' . $currencyPair->getBaseCurrency() . '"]');
 
         $currency = $elements[0] ?? null;

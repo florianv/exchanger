@@ -40,7 +40,7 @@ final class Exchanger implements ExchangeRateProviderContract
     /**
      * The cache item pool.
      *
-     * @var CacheInterface
+     * @var CacheInterface|null
      */
     private $cache;
 
