@@ -20,6 +20,7 @@ use Exchanger\Contract\CurrencyPair;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
+use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\ExchangeRate;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
@@ -114,6 +115,10 @@ final class CurrencyConverter extends HttpService
     #[\Override]
     protected function getHistoricalExchangeRate(HistoricalExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
+        if (!$this->supportQuery($exchangeQuery)) {
+            throw new UnsupportedDateException($exchangeQuery->getDate(), $this);
+        }
+
         $historicalDateTime = $this->getAdoptedDateTime($exchangeQuery->getDate());
 
         if ($this->isEnterprise()) {
@@ -152,7 +157,8 @@ final class CurrencyConverter extends HttpService
         $response = $this->getResponse($url);
 
         if (200 !== $response->getStatusCode()) {
-            throw new Exception("Unexpected response status {$response->getReasonPhrase()}, $url");
+            // The URL carries the API key, so it must not end up in the message.
+            throw new Exception(sprintf('Unexpected response status %d %s', $response->getStatusCode(), $response->getReasonPhrase()));
         }
 
         $responsePayload = StringUtil::jsonToArray($response->getBody()->__toString());

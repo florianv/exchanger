@@ -19,8 +19,11 @@ use Exchanger\CurrencyPair;
 use Exchanger\ExchangeRateQuery;
 use Exchanger\Service\FastForex;
 use PHPUnit\Framework\Attributes\Test;
+use Exchanger\Contract\ExchangeRateQuery as ExchangeRateQueryContract;
+use Exchanger\Contract\ExchangeRateService;
+use Psr\Http\Client\ClientInterface;
 
-class FastForexTest extends ServiceTestCase
+class FastForexTest extends HttpServiceContractTestCase
 {
     #[Test]
     public function it_supports_all_queries()
@@ -84,5 +87,30 @@ class FastForexTest extends ServiceTestCase
         $service = new FastForex($this->createMock('Http\Client\HttpClient'), null, ['api_key' => 'secret']);
 
         $this->assertSame('fastforex', $service->getName());
+    }
+
+    protected function createService(ClientInterface $httpClient, array $options): ExchangeRateService
+    {
+        return new FastForex($httpClient, null, $options);
+    }
+
+    protected function validOptions(): array
+    {
+        return ['api_key' => self::SECRET];
+    }
+
+    protected function requiredOptions(): array
+    {
+        return ['api_key'];
+    }
+
+    protected function supportedQuery(): ExchangeRateQueryContract
+    {
+        return new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'));
+    }
+
+    protected function successfulResponseBody(): string
+    {
+        return file_get_contents(__DIR__ . '/../../Fixtures/Service/FastForex/one-usd-eur.json');
     }
 }
