@@ -66,10 +66,37 @@ $rate->getProviderName();          // 'fastforex'
 $amountInEUR = 100.00;
 $amountInUSD = $amountInEUR * $rate->getValue();
 
-// Historical rate
-$query = (new ExchangeRateQueryBuilder('EUR/USD'))
-    ->setDate((new \DateTime())->modify('-15 days'))
-    ->build();
+| Service | Base Currency | Quote Currency | Historical |
+|---------------------------------------------------------------------------|----------------------|----------------|----------------|
+| [Fixer](https://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
+| [Currency Data](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
+| [Exchange Rates Data](https://exchangeratesapi.io) | USD (free), * (paid) | * | Yes |
+| [Abstract](https://www.abstractapi.com) | * | * | Yes |
+| [coinlayer](https://coinlayer.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies) | Yes |
+| [Fixer](https://fixer.io) | EUR (free, no SSL), * (paid) | * | Yes |
+| [currencylayer](https://currencylayer.com) | USD (free), * (paid) | * | Yes |
+| [exchangeratesapi](https://exchangeratesapi.io) | USD (free), * (paid) | * | Yes |
+| [European Central Bank](https://www.ecb.europa.eu/home/html/index.en.html) | EUR | * | Yes |
+| [National Bank of Georgia](https://nbg.gov.ge) | * | GEL | Yes |
+| [National Bank of the Republic of Belarus](https://www.nbrb.by) | * | BYN (from 01-07-2016),<br>BYR (01-01-2000 - 30-06-2016),<br>BYB (25-05-1992 - 31-12-1999) | Yes |
+| [National Bank of Romania](http://www.bnr.ro) | RON, AED, AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EGP, EUR, GBP, HRK, HUF, INR, JPY, KRW, MDL, MXN, NOK, NZD, PLN, RSD, RUB, SEK, TRY, UAH, USD, XAU, XDR, ZAR | RON, AED, AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, EGP, EUR, GBP, HRK, HUF, INR, JPY, KRW, MDL, MXN, NOK, NZD, PLN, RSD, RUB, SEK, TRY, UAH, USD, XAU, XDR, ZAR | Yes |
+| [National Bank of Ukranie](https://bank.gov.ua) | * | UAH | Yes |
+| [Central Bank of the Republic of Turkey](http://www.tcmb.gov.tr) | * | TRY | Yes |
+| [Central Bank of the Republic of Uzbekistan](https://cbu.uz) | * | UZS | Yes |
+| [Central Bank of the Czech Republic](https://www.cnb.cz) | * | CZK | Yes |
+| [Central Bank of Russia](https://cbr.ru) | * | RUB | Yes |
+| [Bulgarian National Bank](http://bnb.bg) | * | BGN | Yes |
+| [WebserviceX](http://www.webservicex.net) | * | * | No |
+| [1Forge](https://1forge.com) | * (free but limited or paid) | * (free but limited or paid) | No |
+| [Cryptonator](https://www.cryptonator.com) | * Crypto (Limited standard currencies) | * Crypto (Limited standard currencies)  | No |
+| [CurrencyDataFeed](https://currencydatafeed.com) | * (free but limited or paid) | * (free but limited or paid) | No |
+| [Open Exchange Rates](https://openexchangerates.org) | USD (free), * (paid) | * | Yes |
+| [Xignite](https://www.xignite.com) | * | * | Yes |
+| [Currency Converter API](https://www.currencyconverterapi.com) | * | * | Yes (free but limited or paid) |
+| [xChangeApi.com](https://xchangeapi.com) | * | * | Yes |
+| [fastFOREX.io](https://www.fastforex.io) | USD (free), * (paid) | * | No |
+| [exchangerate.host](https://www.exchangerate.host) | * | * | Yes |
+| Array | * | * | Yes |
 
 $rate = $exchanger->getExchangeRate($query);
 ```
@@ -148,19 +175,20 @@ Exchanger ships 30+ exchange rate provider implementations. Each is registered i
 
 ### Public providers (no API key required)
 
-| Service                                    | Identifier                            | Base           | Quote          | Historical |
-|--------------------------------------------|---------------------------------------|----------------|----------------|------------|
-| Bulgarian National Bank                    | `bulgarian_national_bank`             | *              | BGN            | Yes        |
-| Central Bank of the Czech Republic         | `central_bank_of_czech_republic`      | *              | CZK            | Yes        |
-| Central Bank of the Republic of Turkey     | `central_bank_of_republic_turkey`     | *              | TRY            | Yes        |
-| Central Bank of the Republic of Uzbekistan | `central_bank_of_republic_uzbekistan` | *              | UZS            | Yes        |
-| European Central Bank                      | `european_central_bank`               | EUR            | *              | Yes        |
-| National Bank of Denmark                   | `national_bank_of_denmark`            | (limited list) | (limited list) | Yes        |
-| National Bank of Georgia                   | `national_bank_of_georgia`            | *              | GEL            | Yes        |
-| National Bank of Romania                   | `national_bank_of_romania`            | (limited list) | (limited list) | Yes        |
-| National Bank of the Republic of Belarus   | `national_bank_of_republic_belarus`   | *              | BYN            | Yes        |
-| National Bank of Ukraine                   | `national_bank_of_ukraine`            | *              | UAH            | Yes        |
-| Russian Central Bank                       | `russian_central_bank`                | *              | RUB            | Yes        |
+| Service                                    | Identifier                          | Base         | Quote          | Historical |
+|--------------------------------------------|-------------------------------------|--------------|----------------|------------|
+| Bulgarian National Bank                    | `bulgarian_national_bank`           | *            | BGN            | Yes        |
+| Central Bank of the Czech Republic         | `central_bank_of_czech_republic`    | *            | CZK            | Yes        |
+| Central Bank of the Republic of Turkey     | `central_bank_of_republic_turkey`   | *            | TRY            | Yes        |
+| Central Bank of the Republic of Uzbekistan | `central_bank_of_republic_uzbekistan` | *            | UZS            | Yes        |
+| European Central Bank                      | `european_central_bank`             | EUR          | *              | Yes        |
+| National Bank of Denmark                   | `national_bank_of_denmark`          | (limited list) | (limited list) | Yes        |
+| National Bank of Georgia                   | `national_bank_of_georgia`          | *            | GEL            | Yes        |
+| National Bank of Poland                    | `narodowy_bank_polski`               | PLN          | PLN            | Yes        |
+| National Bank of Romania                   | `national_bank_of_romania`          | (limited list) | (limited list) | Yes        |
+| National Bank of the Republic of Belarus   | `national_bank_of_republic_belarus` | *            | BYN            | Yes        |
+| National Bank of Ukraine                   | `national_bank_of_ukraine`          | *            | UAH            | Yes        |
+| Russian Central Bank                       | `russian_central_bank`              | *            | RUB            | Yes        |
 
 You can also add your own provider by implementing the `Exchanger\Contract\ExchangeRateService` interface (see the [documentation](doc/readme.md)).
 
