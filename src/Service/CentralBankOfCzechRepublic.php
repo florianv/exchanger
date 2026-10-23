@@ -20,6 +20,7 @@ use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\ExchangeRate;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
+use Exchanger\Exception\Exception;
 
 /**
  * Central Bank of Czech Republic (CNB) Service.
@@ -89,8 +90,13 @@ final class CentralBankOfCzechRepublic extends HttpService
 
             if ($code === $currencyPair->getBaseCurrency()) {
                 $rate = (float) str_replace(',', '.', $rate);
+                $count = (float) $count;
 
-                return $this->createRate($currencyPair, round($rate / (float) $count, 10), $date);
+                if ($count <= 0) {
+                    throw new Exception(\sprintf('The response has an invalid unit for %s.', $currencyPair));
+                }
+
+                return $this->createRate($currencyPair, round($rate / $count, 10), $date);
             }
         }
 

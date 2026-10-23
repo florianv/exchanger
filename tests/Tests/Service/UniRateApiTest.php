@@ -120,6 +120,18 @@ final class UniRateApiTest extends HttpServiceContractTestCase
         $this->assertSame('unirate_api', $service->getName());
     }
 
+    #[Test]
+    public function it_reports_the_status_when_the_error_field_is_empty(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Failed with HTTP response code 500');
+
+        $url = 'https://api.unirateapi.com/api/rates?api_key=secret&from=USD&to=EUR';
+        $service = new UniRateApi($this->getHttpAdapterMock($url, '{"error":""}', 500), null, ['api_key' => 'secret']);
+
+        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR')));
+    }
+
     #[\Override]
     protected function createService(ClientInterface $httpClient, array $options): ExchangeRateService
     {

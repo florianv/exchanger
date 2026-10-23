@@ -76,7 +76,7 @@ final class RepositoryConventionsTest extends TestCase
     {
         $this->assertStringContainsString(
             "/*\n * This file is part of Exchanger.\n",
-            FileContents::read($file),
+            str_replace("\r\n", "\n", FileContents::read($file)),
             'Copy the licence header from any other PHP file.',
         );
     }

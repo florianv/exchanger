@@ -15,11 +15,11 @@ namespace Exchanger\Service;
 
 use DateTime;
 use DateTimeInterface;
-use Exception;
 use Exchanger\Contract\ExchangeRate;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Exception\Exception;
 use Exchanger\StringUtil;
 
 /**
@@ -96,6 +96,10 @@ final class NationalBankOfGeorgia extends HttpService
         if (!empty($currencyInfo)) {
             $rate = (float) $currencyInfo[0]['rate'];
             $unit = (float) $currencyInfo[0]['quantity'];
+
+            if ($unit <= 0) {
+                throw new Exception(\sprintf('The response has an invalid unit for %s.', $currencyPair));
+            }
 
             return $this->createRate($currencyPair, ($rate / $unit), $date);
         }

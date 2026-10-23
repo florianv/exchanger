@@ -36,7 +36,8 @@ interface ExchangeRateProvider
      *                                   UnsupportedExchangeQueryException, ChainException (Chain)
      *                                   or CacheException (Exchanger).
      * @throws ClientExceptionInterface  When the HTTP request to the provider fails.
-     * @throws \RuntimeException         When the provider's response cannot be parsed.
+     * @throws \RuntimeException         When the provider's response cannot be parsed, for services that don't wrap
+     *                                   parse errors in Exception yet.
      * @throws InvalidArgumentException  When the PSR-16 cache rejects the cache key (Exchanger with a cache).
      */
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRate;

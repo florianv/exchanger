@@ -17,6 +17,7 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
+use Exchanger\Exception\Exception;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
@@ -44,14 +45,22 @@ final class RussianCentralBank extends HttpService
         $elements = StringUtil::xpath($element, './Valute[CharCode="' . $baseCurrency . '"]');
         $date = \DateTime::createFromFormat('!d.m.Y', (string) $element['Date']);
 
-        if ([] === $elements || !$date) {
+        if (!$date) {
+            throw new Exception('The response of the Russian Central Bank has no valid rate date.');
+        }
+
+        if ([] === $elements) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
-        $nominal = str_replace(',', '.', (string) $elements['0']->Nominal);
+        $nominal = (float) str_replace(',', '.', (string) $elements['0']->Nominal);
 
-        return $this->createRate($currencyPair, (float) $rate / (float) $nominal, $date);
+        if ($nominal <= 0) {
+            throw new Exception(\sprintf('The response has an invalid unit for %s.', $currencyPair));
+        }
+
+        return $this->createRate($currencyPair, (float) $rate / $nominal, $date);
     }
 
     /** {@inheritdoc} */
@@ -77,9 +86,13 @@ final class RussianCentralBank extends HttpService
         }
 
         $rate = str_replace(',', '.', (string) $elements['0']->Value);
-        $nominal = str_replace(',', '.', (string) $elements['0']->Nominal);
+        $nominal = (float) str_replace(',', '.', (string) $elements['0']->Nominal);
 
-        return $this->createRate($currencyPair, (float) $rate / (float) $nominal, $date);
+        if ($nominal <= 0) {
+            throw new Exception(\sprintf('The response has an invalid unit for %s.', $currencyPair));
+        }
+
+        return $this->createRate($currencyPair, (float) $rate / $nominal, $date);
     }
 
     /** {@inheritdoc} */

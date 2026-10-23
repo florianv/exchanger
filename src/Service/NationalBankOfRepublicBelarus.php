@@ -19,6 +19,7 @@ use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
 use Exchanger\Exception\UnsupportedExchangeQueryException;
+use Exchanger\Exception\Exception;
 use Exchanger\StringUtil;
 
 /**
@@ -227,6 +228,10 @@ class NationalBankOfRepublicBelarus extends HttpService
 
         $rate = $entry['Cur_OfficialRate'];
         $scale = (float) ($entry['Cur_Scale'] ?? 1);
+
+        if ($scale <= 0) {
+            throw new Exception(\sprintf('The response has an invalid unit for %s.', $currencyPair));
+        }
 
         return $this->createRate($currencyPair, $rate / $scale, $date);
     }

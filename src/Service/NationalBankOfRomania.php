@@ -18,6 +18,7 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
+use Exchanger\Exception\Exception;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 
@@ -86,7 +87,11 @@ final class NationalBankOfRomania extends HttpService
 
         $elements = StringUtil::xpath($element, '//xmlns:Rate[@currency="' . $xmlCurrency . '"]');
 
-        if ([] === $elements || [] === $publishingDates) {
+        if ([] === $publishingDates) {
+            throw new Exception('The response of the National Bank of Romania has no rate date.');
+        }
+
+        if ([] === $elements) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 

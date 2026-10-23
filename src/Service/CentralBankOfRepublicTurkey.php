@@ -96,6 +96,10 @@ final class CentralBankOfRepublicTurkey extends HttpService
             $rate = (float) $currency->ForexSelling;
             $unit = (float) $currency->Unit;
 
+            if ($unit <= 0) {
+                throw new Exception(\sprintf('The response has an invalid unit for %s.', $currencyPair));
+            }
+
             return $this->createRate($currencyPair, $rate / $unit, $date);
         }
 

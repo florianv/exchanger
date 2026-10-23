@@ -15,11 +15,11 @@ namespace Exchanger\Service;
 
 use DateTime;
 use DateTimeInterface;
-use Exception;
 use Exchanger\Contract\ExchangeRate;
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Exception\Exception;
 use Exchanger\StringUtil;
 
 /**
@@ -94,6 +94,10 @@ final class CentralBankOfRepublicUzbekistan extends HttpService
         if (!empty($currencyInfo)) {
             $rate = (float) $currencyInfo[0]['Rate'];
             $unit = (float) $currencyInfo[0]['Nominal'];
+
+            if ($unit <= 0) {
+                throw new Exception(\sprintf('The response has an invalid unit for %s.', $currencyPair));
+            }
 
             $date = new DateTime((string) $currencyInfo[0]['Date']);
 
