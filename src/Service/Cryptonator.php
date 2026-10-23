@@ -15,7 +15,7 @@ namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Exception\Exception;
-use Exchanger\HistoricalExchangeRateQuery;
+use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\StringUtil;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
 

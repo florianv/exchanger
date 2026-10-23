@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Exchanger\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
-use Exchanger\HistoricalExchangeRateQuery;
+use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\StringUtil;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Contract\ExchangeRate as ExchangeRateContract;
