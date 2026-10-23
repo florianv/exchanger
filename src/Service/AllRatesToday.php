@@ -18,6 +18,7 @@ use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\HistoricalExchangeRateQuery;
 use Exchanger\Exception\Exception;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
+use Exchanger\Exception\UnsupportedExchangeQueryException;
 use Exchanger\StringUtil;
 
 /**
@@ -55,6 +56,10 @@ final class AllRatesToday extends HttpService
     #[\Override]
     public function getExchangeRate(ExchangeRateQuery $exchangeQuery): ExchangeRateContract
     {
+        if (!$this->supportQuery($exchangeQuery)) {
+            throw new UnsupportedExchangeQueryException($exchangeQuery, $this);
+        }
+
         $currencyPair = $exchangeQuery->getCurrencyPair();
         $url = sprintf(
             self::URL,
@@ -82,9 +87,15 @@ final class AllRatesToday extends HttpService
         }
 
         if ($statusCode !== 200 || isset($data['error'])) {
-            $message = isset($data['error']) && is_string($data['error']) && $data['error'] !== ''
-                ? $data['error']
-                : sprintf('Failed with HTTP response code %d', $statusCode);
+            $error = isset($data['error']) && is_string($data['error']) && $data['error'] !== '' ? $data['error'] : null;
+
+            if ($error === null) {
+                $message = sprintf('Failed with HTTP response code %d', $statusCode);
+            } elseif ($statusCode !== 200) {
+                $message = sprintf('%s (HTTP response code %d)', $error, $statusCode);
+            } else {
+                $message = $error;
+            }
 
             throw new Exception($message);
         }
