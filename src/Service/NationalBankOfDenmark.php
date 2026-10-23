@@ -90,7 +90,11 @@ final class NationalBankOfDenmark extends HttpService
         $elements = StringUtil::xpath($element, '//currency[@code="' . $foreignCurrency . '"]/@rate');
         $dates = StringUtil::xpath($element, '//dailyrates/@id');
 
-        if ([] === $elements || [] === $dates) {
+        if ([] === $dates) {
+            throw new Exception('The response of the National Bank of Denmark has no rate date.');
+        }
+
+        if ([] === $elements) {
             throw new UnsupportedCurrencyPairException($currencyPair, $this);
         }
 

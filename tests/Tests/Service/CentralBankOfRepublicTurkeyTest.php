@@ -78,6 +78,19 @@ final class CentralBankOfRepublicTurkeyTest extends ServiceTestCase
     }
 
     #[Test]
+    public function it_throws_an_exception_when_the_unit_is_zero(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The response has an invalid unit for USD/TRY.');
+
+        $content = preg_replace('#(<Currency CrossOrder="0" Kod="USD" CurrencyCode="USD">\s*<Unit>)1(</Unit>)#', '${1}0${2}', self::$content, 1, $count);
+        $this->assertSame(1, $count);
+
+        $service = new CentralBankOfRepublicTurkey($this->getHttpAdapterMock(self::$url, (string) $content));
+        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('USD/TRY')));
+    }
+
+    #[Test]
     public function it_throws_an_exception_when_the_rate_date_is_missing(): void
     {
         $this->expectException(Exception::class);

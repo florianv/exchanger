@@ -22,6 +22,7 @@ use Exchanger\Service\NationalBankOfDenmark;
 use Psr\Http\Client\ClientInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\Attributes\Test;
+use Exchanger\Exception\Exception;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -54,6 +55,18 @@ final class NationalBankOfDenmarkTest extends ServiceTestCase
 
         $service = new NationalBankOfDenmark($this->getHttpAdapterMock(NationalBankOfDenmark::LATEST_URL, $content));
         $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('XXX/DKK')));
+    }
+
+    #[Test]
+    public function it_throws_an_exception_when_the_rate_date_is_missing(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The response of the National Bank of Denmark has no rate date.');
+
+        $content = str_replace('<dailyrates id="2026-07-13">', '<dailyrates>', FileContents::read(__DIR__ . '/../../Fixtures/Service/NationalBankOfDenmark/currencyratesxml.xml'));
+
+        $service = new NationalBankOfDenmark($this->getHttpAdapterMock(NationalBankOfDenmark::LATEST_URL, $content));
+        $service->getExchangeRate(new ExchangeRateQuery(CurrencyPair::createFromString('EUR/DKK')));
     }
 
     #[Test]
