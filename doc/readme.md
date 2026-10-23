@@ -251,6 +251,7 @@ Commercial services take an HTTP client, a request factory (both can be `null`),
 | ⭐ **`Exchanger\Service\FastForex`**           | **`api_key`**   |                       |
 |                                                |                 |                       |
 | `Exchanger\Service\AbstractApi`                | `api_key`       |                       |
+| `Exchanger\Service\AllRatesToday`              | `api_key`       |                       |
 | `Exchanger\Service\ApiLayer\CurrencyData`      | `api_key`       |                       |
 | `Exchanger\Service\ApiLayer\ExchangeRatesData` | `api_key`       |                       |
 | `Exchanger\Service\ApiLayer\Fixer`             | `api_key`       |                       |

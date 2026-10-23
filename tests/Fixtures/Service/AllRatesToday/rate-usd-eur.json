@@ -1,0 +1,14 @@
+[
+    {
+        "source": "USD",
+        "target": "GBP",
+        "rate": 0.77,
+        "time": "2026-10-22T12:00:00Z"
+    },
+    {
+        "source": "USD",
+        "target": "EUR",
+        "rate": 0.85,
+        "time": "2026-10-22T12:00:00Z"
+    }
+]
