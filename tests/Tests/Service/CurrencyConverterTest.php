@@ -174,26 +174,31 @@ class CurrencyConverterTest extends HttpServiceContractTestCase
         return $response;
     }
 
+    #[\Override]
     protected function createService(ClientInterface $httpClient, array $options): ExchangeRateService
     {
         return new CurrencyConverter($httpClient, null, $options);
     }
 
+    #[\Override]
     protected function validOptions(): array
     {
         return ['access_key' => self::SECRET];
     }
 
+    #[\Override]
     protected function requiredOptions(): array
     {
         return ['access_key'];
     }
 
+    #[\Override]
     protected function supportedQuery(): ExchangeRateQueryContract
     {
         return new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'));
     }
 
+    #[\Override]
     protected function successfulResponseBody(): string
     {
         return file_get_contents(__DIR__ . '/../../Fixtures/Service/CurrencyConverter/success.json');

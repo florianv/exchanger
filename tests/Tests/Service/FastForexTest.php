@@ -89,26 +89,31 @@ class FastForexTest extends HttpServiceContractTestCase
         $this->assertSame('fastforex', $service->getName());
     }
 
+    #[\Override]
     protected function createService(ClientInterface $httpClient, array $options): ExchangeRateService
     {
         return new FastForex($httpClient, null, $options);
     }
 
+    #[\Override]
     protected function validOptions(): array
     {
         return ['api_key' => self::SECRET];
     }
 
+    #[\Override]
     protected function requiredOptions(): array
     {
         return ['api_key'];
     }
 
+    #[\Override]
     protected function supportedQuery(): ExchangeRateQueryContract
     {
         return new ExchangeRateQuery(CurrencyPair::createFromString('USD/EUR'));
     }
 
+    #[\Override]
     protected function successfulResponseBody(): string
     {
         return file_get_contents(__DIR__ . '/../../Fixtures/Service/FastForex/one-usd-eur.json');
