@@ -1,7 +1,15 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
-# Repository review rules live in .github/skills/code-review/SKILL.md,
-# which CodeRabbit auto-discovers; keep them there, not here.
+# Repository review rules live in .github/skills/code-review/SKILL.md, shared with
+# Copilot code review; keep them there, not here. CodeRabbit does not auto-discover
+# .github/skills, so knowledge_base below points it at the file.
 language: en-US
+
+knowledge_base:
+  code_guidelines:
+    filePatterns:
+      # Object form: a plain string entry would scope the rules to .github/skills/code-review/ only.
+      - files: ".github/skills/code-review/SKILL.md"
+        applyTo: "**"
 
 reviews:
   # Inline comments only for important findings; minor ones are grouped in the review summary.
