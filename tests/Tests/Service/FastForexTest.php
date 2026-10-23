@@ -114,6 +114,12 @@ class FastForexTest extends HttpServiceContractTestCase
     }
 
     #[\Override]
+    protected function unsupportedHistoricalQuery(): ?ExchangeRateQueryContract
+    {
+        return null;
+    }
+
+    #[\Override]
     protected function successfulResponseBody(): string
     {
         return file_get_contents(__DIR__ . '/../../Fixtures/Service/FastForex/one-usd-eur.json');

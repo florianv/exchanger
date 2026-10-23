@@ -15,6 +15,7 @@ namespace Exchanger\Tests\Service;
 
 use Exchanger\Contract\ExchangeRateQuery;
 use Exchanger\Contract\ExchangeRateService;
+use Exchanger\Contract\HistoricalExchangeRateQuery as HistoricalExchangeRateQueryContract;
 use Exchanger\Exception\NonBreakingInvalidArgumentException;
 use Exchanger\Exception\UnsupportedCurrencyPairException;
 use Exchanger\Exception\UnsupportedDateException;
@@ -72,7 +73,7 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
     abstract protected function successfulResponseBody(): string;
 
     /**
-     * A historical query supportQuery() rejects, or null if the service supports every date.
+     * A historical query supportQuery() rejects. Return null if the service supports every date.
      */
     protected function unsupportedHistoricalQuery(): ?ExchangeRateQuery
     {
@@ -143,9 +144,14 @@ abstract class HttpServiceContractTestCase extends ServiceTestCase
         $query = $this->unsupportedHistoricalQuery();
         $service = $this->createServiceRespondingWith(200, $this->successfulResponseBody());
 
-        if (null === $query || $service->supportQuery($query)) {
-            $this->markTestSkipped('The service supports every historical date. Override unsupportedHistoricalQuery() if some dates are not supported.');
+        if (null === $query) {
+            $this->markTestSkipped('unsupportedHistoricalQuery() returns null: the service supports every historical date.');
         }
+
+        $this->assertFalse($service->supportQuery($query), \sprintf(
+            'supportQuery() accepts the historical query for %s from unsupportedHistoricalQuery(). Return a query the service rejects, or null if it supports every date.',
+            $query instanceof HistoricalExchangeRateQueryContract ? $query->getDate()->format('Y-m-d') : 'the latest rate',
+        ));
 
         $exception = $this->catchException($service, $query);
 
